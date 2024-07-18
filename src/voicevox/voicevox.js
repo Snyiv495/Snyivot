@@ -17,9 +17,9 @@ module.exports = {
 
 require('dotenv').config();
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const vv_cmd = require('./command');
+const vv_cmd = require('./cmd');
 const vv_read = require('./read');
-const vv_observe = require('./observeVC');
+const vv_observe = require('./observe');
 
 //スピーカーの取得
 async function getSpeakers(){
@@ -64,8 +64,8 @@ function autoStop(oldState, channel_map, subsc_map){
 }
 
 //強制終了
-function compulsionEnd(oldState, newState, channel_map, subsc_map){
-    vv_observe.compulsionEnd(oldState, newState, channel_map, subsc_map);
+function compulsionEnd(oldState, channel_map, subsc_map){
+    vv_observe.compulsionEnd(oldState, channel_map, subsc_map);
 }
 
 //強制移動
