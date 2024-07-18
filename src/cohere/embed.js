@@ -10,25 +10,13 @@ module.exports = {
 
 const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 
-function invoke(rep, opt){
+function invoke(resTxt){
     const embed = new EmbedBuilder();
     
-    switch(opt){
-        case 0:{
-            embed.setTitle("🤖");
-            embed.addFields({name: rep.substr(0, 256), value: "~~知らんけど~~"});
-            embed.setFooter({text: "Cohere"});
-            embed.setColor(0x00FF00);
-            break;
-        }
-        case 1:{
-            embed.setTitle("呼ばれた気がしました🫡");
-            embed.setFooter({text: "聞きたいことがあれば聞いてください"});
-            embed.setColor(0x00FF00);
-            break;
-        }
-        default: embed.setTitle("undefined").setColor(0x000000);
-    }
+    embed.setTitle("A.");
+    embed.addFields({name: resTxt.substr(0, 256), value: "\n"});
+    embed.setFooter({text: "Cohere AIによる生成"});
+    embed.setColor(0x00FF00);
 
     return {embeds: [embed]};
 }
