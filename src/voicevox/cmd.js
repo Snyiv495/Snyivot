@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/06/29    
+    2024/07/22    
 *****************/
 
 module.exports = {
@@ -39,7 +39,7 @@ function getCmd(){
 async function voicevox(interaction, channel_map, subsc_map, speakers){
 
     //voicevoxコマンド
-    if(!interaction.options.get("speaker") && !interaction.options.get("style")){
+    if(interaction.isButton() || (!interaction.options.get("speaker") && !interaction.options.get("style"))){
         const textCh = interaction.channel;
         const voiceCh = interaction.member.voice.channel;
         const connectingCh = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.SNYIVOT_ID)); 
@@ -127,7 +127,7 @@ async function voicevox(interaction, channel_map, subsc_map, speakers){
         await interaction.reply(embed.read(textCh, voiceCh, sel));
     }
 
-    if(interaction.options.get("speaker") || interaction.options.get("style")){
+    if(!interaction.isButton() && (interaction.options.get("speaker") || interaction.options.get("style"))){
         const userInfo = await db.getInfo(interaction.user.id);
 
         //speakerオプション

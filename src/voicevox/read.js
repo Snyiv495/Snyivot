@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/06/27        
+    2024/07/20        
 *****************/
 
 module.exports = {
@@ -14,7 +14,7 @@ const {Readable} = require("stream");
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
 
-//マークダウンから声質を決定するメソッド
+//マークダウンから声質を決定
 function choiceScale(voiceInfo, text){
 
     //引用
@@ -85,8 +85,16 @@ function choiceScale(voiceInfo, text){
     return {voiceInfo: voiceInfo, text: text};
 }
 
-//英語をローマ字読みに変換するメソッド
-function convRoma(text){
+//かな変換
+function toKana(text){
+    //#の検出
+    text = text.replace("#", "シャープ");
+
+    //草
+    text = text.replace(/www/gi, "わらわら");
+    text = text.replace(/w$/i, "わら");
+    
+    //アルファベット
     if(text.match(/[a-zA-Z]/)){
         text = text.replace(/x/gi, "ks");
         text = text.replace(/kya/gi, "きゃ");
@@ -257,37 +265,40 @@ function convRoma(text){
     return text;
 }
 
-//文章を成形するメソッド
+//文章成形
 function formText(voiceInfo, message){
     //メッセージの文字列化
     let text = message.cleanContent;
+
     //1行目だけ取得
     text = text.split(/\r\n|\r|\n/)[0];
+
     //マークダウンの検出
     const choicedScale = choiceScale(voiceInfo, text);
     text = choicedScale.text;
+
     //URL
     text = text.replace(/(https?|ftp)(:\/\/[\w\/:%#\$&\?\(\)~\.=\+\-]+)/g, "URL省略");
+
     //カスタム絵文字
     text = text.replace(/:[a-zA-Z0-9_~]+:/g, "");
-    //#の検出
-    text = text.replace("#", "シャープ");
-    //www
-    text = text.replace(/ww+$/, "わらわら");
-    //英語のローマ字読み
-    text = convRoma(text);
+
+    //かな変換
+    text = toKana(text);
+
     //文字数制限
     if(text.length > 53){
         text = text.substr(0, 50);
         text += "以下略";
     }
+
     //名前
-    text = convRoma(message.member.displayName) + "さん、" + text;
+    text = toKana(message.member.displayName) + "さん、" + text;
 
     return {voiceInfo: choicedScale.voiceInfo, text: text};
 }
 
-//wavを作成するメソッド
+//wav作成
 async function createWav(voiceInfo, text){
     let wav = null;
 
@@ -325,7 +336,7 @@ async function createWav(voiceInfo, text){
     return wav;
 }
 
-//読み上げメソッド
+//読み上げ
 async function read(message, subsc){
     const voiceInfo = {style_id: (await db.getInfo(message.author.id)).style_id, speedScale: 1.00, pitchScale: 0.00, intonationScale: 1.00, volumeScale: 1.00};
     const formedText = formText(voiceInfo, message);
