@@ -1,8 +1,0 @@
-{
-    "files.exclude": {
-        "**/.vscode": true,
-        "**/*.sqlite": true,
-        "**/node_modules": true,
-        "**/package-lock.json": true
-    }
-}

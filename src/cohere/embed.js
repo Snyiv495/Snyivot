@@ -1,14 +1,14 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/05/23
+    2024/07/22
 *****************/
 
 module.exports = {
     invoke: invoke
 }
 
-const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 function invoke(resTxt){
     const embed = new EmbedBuilder();

@@ -1,13 +1,15 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/07/08
+    2024/07/22
 *****************/
 
 module.exports = {
     readme: readme,
     cohere: cohere,
-    voicevox: voicevox
+    voicevox: voicevox,
+    menu_home: menu_home,
+    menu_help: menu_help,
 }
 
 const {EmbedBuilder, AttachmentBuilder,  ButtonBuilder, ButtonStyle, ActionRowBuilder} = require('discord.js');
@@ -17,6 +19,7 @@ function readme(){
     const attachment = new AttachmentBuilder();
     
     embed.setTitle("Snyivotの使い方は\nこれを読めばばっちりなのだ");
+    embed.setURL("https://github.com/Snyiv495/Snyivot");
     embed.setThumbnail("attachment://icon.png");
     embed.setFooter({text: "Discordのファイルプレビューではマークダウンが綺麗に表示されないため読みにくいです"});
     embed.setColor(0x00FF00);
@@ -46,7 +49,6 @@ function cohere(){
 function voicevox(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
-    const button = new ButtonBuilder();
 
     embed.setTitle("voicevoxの使い方を教えるのだ");
     embed.setURL("https://voicevox.hiroshiba.jp/");
@@ -61,7 +63,7 @@ function voicevox(){
     embed.addFields({name: "speakerオプションとstyleオプションは併用できるのだ", value: "例：/voicevox speaker ずんだもん style あまあま"});
     embed.addFields({name: "オプションを併用したときのstyleの選択肢は、speakerオプションに入力したキャラクターのスタイルが出るのだ", value: "例：/voicevox speaker ずんだもん style"});
     embed.addFields({name: "speakerオプションを「ランダム」にすると、styleオプションの選択肢にも「ランダム」が出るのだ", value: "例：/voicevox speaker ランダム style ランダム"});
-    embed.setFooter({text: "わからなくても適当に試してみてください"});
+    embed.setFooter({text: "公式サイトからキャラクターを確認できます(1行目をクリック)"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("img/face/zunmon001.png");
@@ -70,18 +72,70 @@ function voicevox(){
 
 }
 
+function menu_home(){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    const buttons = new ActionRowBuilder();
+    const voicevox = new ButtonBuilder();
+    const help = new ButtonBuilder();
 
-async function getButton(message){
-    const homeMenu = new EmbedBuilder()
-        .setTitle("呼ばれたのだ！\n何がしたいのだ？")
-        .setFooter({text: "ボタンを押してください"})
-        .setColor(0x00FF00);
+    embed.setTitle("呼ばれたのだ！\n何がしたいのだ？")
+    embed.setThumbnail("attachment://icon.png")
+    embed.setFooter({text: "ボタンを押してください"})
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("img/face/zunmon_3004.png");
+    
+    voicevox.setCustomId("voicevox");
+    voicevox.setStyle(ButtonStyle.Primary);
+    voicevox.setLabel("読み上げ");
+    voicevox.setDisabled(false);
 
-    const button = new ButtonBuilder()
-        .setCustomId("abc")
-        .setStyle(ButtonStyle.Primary)
-        .setLabel("test")
-        .setDisabled(true);
+    help.setCustomId("help");
+    help.setStyle(ButtonStyle.Secondary);
+    help.setLabel("使い方");
+    help.setDisabled(false);
 
-    message.reply({embeds: [homeMenu], components: [new ActionRowBuilder().setComponents(button)]});
+    buttons.addComponents(voicevox);
+    buttons.addComponents(help);
+
+    return {files: [attachment], embeds: [embed], components: [buttons]};
+}
+
+function menu_help(){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    const buttons = new ActionRowBuilder();
+    const cohere = new ButtonBuilder();
+    const voicevox = new ButtonBuilder();
+    const readme = new ButtonBuilder();
+
+    embed.setTitle("何について知りたいのだ？")
+    embed.setThumbnail("attachment://icon.png")
+    embed.setFooter({text: "ボタンを押してください"})
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("img/face/zunmon_3004.png");
+
+    
+    cohere.setCustomId("help_cohere");
+    cohere.setStyle(ButtonStyle.Primary);
+    cohere.setLabel("会話AI");
+    cohere.setDisabled(false);
+
+    voicevox.setCustomId("help_voicevox");
+    voicevox.setStyle(ButtonStyle.Primary);
+    voicevox.setLabel("読み上げ");
+    voicevox.setDisabled(false);
+
+    readme.setCustomId("readme");
+    readme.setStyle(ButtonStyle.Primary);
+    readme.setLabel("Snyivot");
+    readme.setDisabled(false);
+
+    buttons.addComponents(cohere);
+    buttons.addComponents(voicevox);
+    buttons.addComponents(readme);
+
+    return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
 }

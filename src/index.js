@@ -1,11 +1,12 @@
 /*****************
     index.js
     スニャイヴ
-    2024/06/29    
+    2024/07/22    
 *****************/
 
 require('dotenv').config();
-const {Client, GatewayIntentBits, Sweepers} = require('discord.js');
+const {Client, GatewayIntentBits} = require('discord.js');
+const fs = require('fs');
 const help = require('./help/help');
 const cohere = require('./cohere/cohere');
 const voicevox = require('./voicevox/voicevox');
@@ -13,6 +14,7 @@ const voicevox = require('./voicevox/voicevox');
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
 const channel_map = new Map();
 const subsc_map = new Map();
+let readme;
 let vv_speakers;
 
 //botのログイン
@@ -20,6 +22,14 @@ client.login(process.env.SNYIVOT_TOKEN);
 
 //起動動作
 client.once('ready', async () => {
+    //READMEの取得
+    try{
+        readme = fs.readFileSync("./README.md", {encoding: "utf8"});
+    }catch(e){
+        console.log("### READMEの取得に失敗しました ###\n### 再起動してください ###\n");
+        process.exit();
+    }
+
     //voicevoxのスピーカーの取得
     vv_speakers = await voicevox.getSpeakers();
 
@@ -47,12 +57,13 @@ client.on('messageCreate', async message => {
     if(message.mentions.users.has(client.user.id)){
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.SNYIVOT_ID+'>$'))){
+            help.menu_home(message);
             return;
         }
        
         //内容があれば回答
         else{
-            await cohere.invoke(message);
+            await cohere.invoke(message, readme);
             return;
         }
         
@@ -108,6 +119,31 @@ client.on('interactionCreate', async (interaction) => {
 //ボタン動作
 client.on('interactionCreate', async (interaction) => {
     if(!interaction.isButton()){
+        return;
+    }
+
+    if(interaction.customId === "help"){
+        help.menu_help(interaction);
+        return;
+    }
+
+    if(interaction.customId === "help_cohere"){
+        help.help(interaction);
+        return;
+    }
+
+    if(interaction.customId === "help_voicevox"){
+        help.help(interaction);
+        return;
+    }
+
+    if(interaction.customId === "readme"){
+        help.help(interaction);
+        return;
+    }
+
+    if(interaction.customId === "voicevox"){
+        voicevox.voicevox(interaction, channel_map, subsc_map, vv_speakers);
         return;
     }
 })
