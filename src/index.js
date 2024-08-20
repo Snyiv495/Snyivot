@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/08/19    
+    2024/08/20    
 *****************/
 
 require('dotenv').config();
@@ -109,7 +109,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //voicevox_setting_serverコマンド
     if(interaction.commandName === "voicevox_setting_server"){
-        voicevox.setServer(interaction);
+        voicevox.setServer(interaction, vv_speakers);
         return;
     }
 
@@ -122,8 +122,8 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //voicevox_setting_userコマンド
-    if(interaction.commandName === "voicevox_setting_user"){
+    //voicevox_setting_*コマンド
+    if(interaction.commandName === "voicevox_setting_user" || interaction.commandName === "voicevox_setting_server"){
         await voicevox.autocomplete(interaction, vv_speakers);
         return;
     }

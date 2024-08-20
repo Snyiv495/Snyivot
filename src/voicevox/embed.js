@@ -68,11 +68,11 @@ async function setUser(userInfo, displayName, selEmb){
         embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
         embed.setDescription(`${displayName}さんの読み上げ音声を\n${userInfo.name_speaker}(${userInfo.name_style})に設定したのだ`)
         embed.addFields([
-            {name : 'username', value : `${userInfo.name_user}`},
-            {name : 'speed', value : `${userInfo.speed}`},
-            {name : 'pitch', value : `${userInfo.pitch}`},
-            {name : 'intonation', value : `${userInfo.intonation}`},
-            {name : 'volume', value : `${userInfo.volume}`}
+            {name : 'username', value : `${userInfo.name_user}`, inline : true},
+            {name : 'speed', value : `${userInfo.speed}`, inline : true},
+            {name : 'pitch', value : `${userInfo.pitch}`, inline : true},
+            {name : 'intonation', value : `${userInfo.intonation}`, inline : true},
+            {name : 'volume', value : `${userInfo.volume}`, inline : true}
         ])
         embed.setImage("attachment://icon.jpg");
         embed.setFooter({text: `VOICEVOX:${userInfo.name_speaker}`});
@@ -108,21 +108,67 @@ async function setServer(serverInfo, serverName, selEmb){
                 attachment.setFile("zundamon/face/dumb.png");
                 break;
             }
+            case 3 : {
+                embed.setTitle("そんなスピーカー知らないのだ");
+                embed.setThumbnail("attachment://icon.png");
+                embed.setFooter({text: "存在しないスピーカーが入力されました"});
+                embed.setColor(0xFF0000);
+                attachment.setName("icon.png");
+                attachment.setFile("zundamon/face/dumb.png");
+                break;
+            }
+            case 4 : {
+                embed.setTitle("そんなスタイル知らないのだ");
+                embed.setThumbnail("attachment://icon.png");
+                embed.setFooter({text: "存在しないスタイルが入力されました"});
+                embed.setColor(0xFF0000);
+                attachment.setName("icon.png");
+                attachment.setFile("zundamon/face/dumb.png");
+                break;
+            }
             default : embed.setTitle("undefined").setColor(0x000000);
         }
     }else{
-        embed.setTitle(`${serverName}での設定を変更したのだ`);
-        embed.setThumbnail("attachment://icon.png");
+        let policy;
+        let style_infos;
+        let icon;
+
+        await axios.get(`speaker_info?speaker_uuid=${serverInfo.uuid}`).then(
+            function(res){
+                policy = res.data.policy;
+                style_infos = res.data.style_infos;
+            }
+        ).catch(function(){
+            console.log("### VOICEVOXサーバとの接続が不安定です ###");}
+        );
+        
+        for(let i=0; i<style_infos.length; i++){
+            if(style_infos[i].id === serverInfo.id){
+                icon = style_infos[i].icon;
+                break;
+            }
+        }
+
+        embed.setTitle("利用規約");
+        embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
+        embed.setDescription(`${serverName}の読み上げ音声を\n${serverInfo.name_speaker}(${serverInfo.name_style})に設定したのだ`)
         embed.addFields([
-            {name : 'sudo', value : `${serverInfo.sudo}`},
-            {name : 'name', value : `${serverInfo.name}`},
-            {name : 'continue_name', value : `${serverInfo.continue_name}`},
-            {name : 'continue_line', value : `${serverInfo.continue_line}`},
-            {name : 'maxwords', value : `${serverInfo.maxwords}`}
+            {name : 'sudo', value : `${serverInfo.sudo}`, inline : true},
+            {name : 'name', value : `${serverInfo.name}`, inline : true},
+            {name : 'continue_name', value : `${serverInfo.continue_name}`, inline : true},
+            {name : 'continue_line', value : `${serverInfo.continue_line}`, inline : true},
+            {name : 'maxwords', value : `${serverInfo.maxwords}`, inline : true},
+            {name : 'unif', value : `${serverInfo.unif}`, inline : true},
+            {name : 'speed', value : `${serverInfo.speed}`, inline : true},
+            {name : 'pitch', value : `${serverInfo.pitch}`, inline : true},
+            {name : 'intonation', value : `${serverInfo.intonation}`, inline : true},
+            {name : 'volume', value : `${serverInfo.volume}`, inline : true}
         ])
+        embed.setImage("attachment://icon.jpg");
+        embed.setFooter({text: `VOICEVOX:${serverInfo.name_speaker}`});
         embed.setColor(0x00FF00);        
-        attachment.setName("icon.png");
-        attachment.setFile("zundamon/face/normal.png");
+        attachment.setName("icon.jpg");
+        attachment.setFile(Buffer.from(icon, 'base64'));
     }
 
     return {files: [attachment], embeds: [embed],  ephemeral: false};

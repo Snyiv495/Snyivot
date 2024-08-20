@@ -53,25 +53,25 @@ function getCmd(){
         )
         .addNumberOption(option => option
             .setName("speed")
-            .setDescription("読み上げの速度を入力してください")
+            .setDescription("読み上げの速度を入力してください[0.5~2.0]")
             .setMaxValue(2.0)
             .setMinValue(0.5)
         )
         .addNumberOption(option => option
             .setName("pitch")
-            .setDescription("読み上げの高さを入力してください")
+            .setDescription("読み上げの高さを入力してください[-0.15~0.15]")
             .setMaxValue(0.15)
             .setMinValue(-0.15)
         )
         .addNumberOption(option => option
             .setName("intonation")
-            .setDescription("読み上げの抑揚を入力してください")
+            .setDescription("読み上げの抑揚を入力してください[0.0~2.0]")
             .setMaxValue(2.0)
             .setMinValue(0.0)
         )
         .addNumberOption(option => option
             .setName("volume")
-            .setDescription("読み上げの音量を入力してください")
+            .setDescription("読み上げの音量を入力してください[0.0~2.0]")
             .setMaxValue(2.0)
             .setMinValue(0.0)
         )
@@ -98,11 +98,99 @@ function getCmd(){
         )
         .addIntegerOption(option => option
             .setName("maxwords")
-            .setDescription("読み上げる最大文字数")
+            .setDescription("読み上げる最大文字数[10~50]")
             .setMaxValue(50)
             .setMinValue(10)
         )
+        .addBooleanOption(option => option
+            .setName("unif")
+            .setDescription("全員の読み上げ音声をこの設定で統一する")
+        )
+        .addStringOption(option => option
+            .setName("speaker")
+            .setDescription("キャラ名を入力してください")
+            .setAutocomplete(true)
+        )
+        .addStringOption(option => option
+            .setName("style")
+            .setDescription("キャラのスタイルを入力してください")
+            .setAutocomplete(true)
+        )
+        .addNumberOption(option => option
+            .setName("speed")
+            .setDescription("読み上げの速度を入力してください[0.5~2.0]")
+            .setMaxValue(2.0)
+            .setMinValue(0.5)
+        )
+        .addNumberOption(option => option
+            .setName("pitch")
+            .setDescription("読み上げの高さを入力してください[-0.15~0.15]")
+            .setMaxValue(0.15)
+            .setMinValue(-0.15)
+        )
+        .addNumberOption(option => option
+            .setName("intonation")
+            .setDescription("読み上げの抑揚を入力してください[0.0~2.0]")
+            .setMaxValue(2.0)
+            .setMinValue(0.0)
+        )
+        .addNumberOption(option => option
+            .setName("volume")
+            .setDescription("読み上げの音量を入力してください[0.0~2.0]")
+            .setMaxValue(2.0)
+            .setMinValue(0.0)
+        )
     ;
+
+    const voicevox_dictionary_add = new SlashCommandBuilder()
+        .setName("voicevox_dictionary_add")
+        .setDescription("voicevoxの辞書追加コマンド")
+        .addStringOption(option => option
+            .setName("serface")
+            .setDescription("読み方を指定したい言葉を入力してください")
+            .setRequired(true)
+        )
+        .addStringOption(option => option
+            .setName("pronunciation")
+            .setDescription("読み方をカタカナで入力してください")
+            .setRequired(true)
+        )
+        .addIntegerOption(option => option
+            .setName("accent")
+            .setDescription("音が下がる場所(カタカナの何文字目か)を入力してください")
+            .setRequired(true)
+        )
+        .addStringOption(option => option
+            .setName("type")
+            .setDescription("言葉の種類を入力してください")
+            .addChoices(
+                {name : "指定なし", value : null},
+                {name : "固有名詞", value : "PROPER_NOUN"},
+                {name : "普通名詞", value : "COMMON_NOUN"},
+                {name : "動詞", value : "VERB"},
+                {name : "形容詞", value : "ADJECTIVE"},
+                {name : "語尾", value : "SUFFIX"}
+            )
+        )
+        .addIntegerOption(option => option
+            .setName("priority")
+            .setDescription("読み替えの優先度[1~7](数字が大きいほど優先度が高い)")
+            .setMaxValue(7)
+            .setMinValue(1)
+        )
+    ;
+
+    const voicevox_dictionary_delete = new SlashCommandBuilder()
+        .setName("voicevox_dictionary_delete")
+        .setDescription("voicevoxの辞書削除コマンド")
+        .addStringOption(option => option
+            .setName("uuid")
+            .setDescription("削除したい言葉のuuid([⑧-④-④-④-⑫]の形の文字列)を入力してください")
+        )
+        .addBooleanOption(option => option
+            .setName("deleteall")
+            .setDescription("全ての言葉を削除する")
+        )
 
     return [voicevox, voicevox_setting_user, voicevox_setting_server];
 }
@@ -206,7 +294,7 @@ async function setUser(interaction, speakers){
 }
 
 //サーバー情報の設定
-async function setServer(interaction){
+async function setServer(interaction, speakers){
     const serverInfo = await db.getServerInfo(interaction.guild.id);
     let selEmb = 0;
 
@@ -243,6 +331,82 @@ async function setServer(interaction){
             //maxwordsオプション
             if(interaction.options.get("maxwords")){
                 serverInfo.maxwords = interaction.options.get("maxwords").value;
+            }
+
+            //unifオプション
+            if(interaction.options.get("unif")){
+                serverInfo.unif = interaction.options.get("unif").value;
+            }
+
+            //speakerオプション
+            if(interaction.options.get("speaker")){
+                if(interaction.options.get("speaker").value === "ランダム"){
+                    const rand = Math.floor(Math.random()*speakers.length);
+                    serverInfo.name_speaker = speakers[rand].name;
+                    serverInfo.uuid = speakers[rand].speaker_uuid;
+                    serverInfo.name_style = speakers[rand].styles[0].name;
+                    serverInfo.id = speakers[rand].styles[0].id; 
+                }else{
+                    for(let i=0; i<speakers.length; i++){
+                        if(speakers[i].name === interaction.options.get("speaker").value){
+                            serverInfo.name_speaker = speakers[i].name;
+                            serverInfo.uuid = speakers[i].speaker_uuid;
+                            serverInfo.name_style = speakers[i].styles[0].name;
+                            serverInfo.id = speakers[i].styles[0].id; 
+                            break;
+                        }
+
+                        if(i == speakers.length-1){
+                            selEmb = 3;
+                        }
+                    }
+                }
+            }
+
+            //styleオプション
+            if(!selEmb && interaction.options.get("style")){
+                for(let i=0; i<speakers.length; i++){
+                    if(serverInfo.name_speaker === speakers[i].name){
+                        if(interaction.options.get("style").value === "ランダム"){
+                            const rand = Math.floor(Math.random()*speakers[i].styles.length);
+                            serverInfo.name_style = speakers[i].styles[rand].name;
+                            serverInfo.id = speakers[i].styles[rand].id;
+                        }else{
+                            for(let j=0; j<speakers[i].styles.length; j++){
+                                if(speakers[i].styles[j].name === interaction.options.get("style").value){
+                                    serverInfo.name_style = speakers[i].styles[j].name;
+                                    serverInfo.id = speakers[i].styles[j].id;
+                                    break;
+                                }
+
+                                if(j == speakers[i].styles.length-1){
+                                    selEmb = 4;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+
+            //speedオプション
+            if(interaction.options.get("speed")){
+                serverInfo.speed = interaction.options.get("speed").value;
+            }
+
+            //pitchオプション
+            if(interaction.options.get("pitch")){
+                serverInfo.pitch = interaction.options.get("pitch").value;
+            }
+
+            //intonationオプション
+            if(interaction.options.get("intonation")){
+                serverInfo.intonation = interaction.options.get("intonation").value;
+            }
+
+            //volumeオプション
+            if(interaction.options.get("volume")){
+                serverInfo.volume = interaction.options.get("volume").value;
             }
 
         }

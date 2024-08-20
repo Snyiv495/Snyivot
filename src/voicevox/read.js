@@ -307,17 +307,22 @@ async function formText(message, userInfo, serverInfo){
 
 //wav作成
 async function createWav(text, userInfo, serverInfo){
+    let id = serverInfo.unif ? serverInfo.id : (userInfo.uuid ? userInfo.id : serverInfo.id);
+    let speed = serverInfo.unif ? serverInfo.speed : (userInfo.uuid ? userInfo.speed : serverInfo.speed);
+    let pitch = serverInfo.unif ? serverInfo.pitch : (userInfo.uuid ? userInfo.pitch : serverInfo.pitch);
+    let intonation = serverInfo.unif ? serverInfo.intonation : (userInfo.uuid ? userInfo.intonation : serverInfo.intonation);
+    let volume = serverInfo.unif ? serverInfo.volume : (userInfo.uuid ? userInfo.volume : serverInfo.volume);
     let wav = null;
 
     //合成音声の取得
-    await axios.post(`audio_query?text=${encodeURI(text)}&speaker=${userInfo.id}`, {headers:{"accept" : "application/json"}})
+    await axios.post(`audio_query?text=${encodeURI(text)}&speaker=${id}`, {headers:{"accept" : "application/json"}})
         .then(async function(res){
-            res.data.speedScale = userInfo.speed;
-            res.data.pitchScale = userInfo.pitch;
-            res.data.intonationScale = userInfo.intonation;
-            res.data.volumeScale = userInfo.volume;
+            res.data.speedScale = speed;
+            res.data.pitchScale = pitch;
+            res.data.intonationScale = intonation;
+            res.data.volumeScale = volume;
 
-            await axios.post(`synthesis?speaker=${userInfo.id}&enable_interrogative_upspeak=true`, JSON.stringify(res.data),
+            await axios.post(`synthesis?speaker=${id}&enable_interrogative_upspeak=true`, JSON.stringify(res.data),
                 {responseType: "arraybuffer",
                     headers: {
                         "accept" : "audio/wav",

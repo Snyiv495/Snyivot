@@ -1,7 +1,7 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/08/19
+    2024/08/20
 ******************/
 
 module.exports = {
@@ -52,8 +52,8 @@ async function setUser(interaction, speakers){
 }
 
 //サーバー情報の設定
-async function setServer(interaction){
-    await vv_cmd.setServer(interaction);
+async function setServer(interaction, speakers){
+    await vv_cmd.setServer(interaction, speakers);
 }
 
 //voicevoxコマンドの補助
