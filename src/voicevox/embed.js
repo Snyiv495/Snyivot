@@ -1,93 +1,199 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/06/29
+    2024/08/19
 *****************/
 
 module.exports = {
-    read: read,
-    speaker: speaker,
-    observeVC: observeVC
+    setUser: setUser,
+    setServer: setServer,
+    start: start,
+    end: end,
+    autoEnd: autoEnd,
+    compulsionEnd: compulsionEnd,
+    compulsionMove: compulsionMove,
 }
 
 const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 
-function read(textCh, voiceCh, sel){
+async function setUser(userInfo, displayName, selEmb){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+
+    if(selEmb){
+        switch(selEmb){
+            case 1 : {
+                embed.setTitle("そんなスピーカー知らないのだ");
+                embed.setThumbnail("attachment://icon.png");
+                embed.setFooter({text: "存在しないスピーカーが入力されました"});
+                embed.setColor(0xFF0000);
+                attachment.setName("icon.png");
+                attachment.setFile("zundamon/face/dumb.png");
+                break;
+            }
+            case 2 : {
+                embed.setTitle("そんなスタイル知らないのだ");
+                embed.setThumbnail("attachment://icon.png");
+                embed.setFooter({text: "存在しないスタイルが入力されました"});
+                embed.setColor(0xFF0000);
+                attachment.setName("icon.png");
+                attachment.setFile("zundamon/face/dumb.png");
+                break;
+            }
+            default : embed.setTitle("undefined").setColor(0x000000);
+        }
+    }else{
+        let policy;
+        let style_infos;
+        let icon;
+
+        await axios.get(`speaker_info?speaker_uuid=${userInfo.uuid}`).then(
+            function(res){
+                policy = res.data.policy;
+                style_infos = res.data.style_infos;
+            }
+        ).catch(function(){
+            console.log("### VOICEVOXサーバとの接続が不安定です ###");}
+        );
+        
+        for(let i=0; i<style_infos.length; i++){
+            if(style_infos[i].id === userInfo.id){
+                icon = style_infos[i].icon;
+                break;
+            }
+        }
+
+        embed.setTitle("利用規約");
+        embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
+        embed.setDescription(`${displayName}さんの読み上げ音声を\n${userInfo.name_speaker}(${userInfo.name_style})に設定したのだ`)
+        embed.addFields([
+            {name : 'username', value : `${userInfo.name_user}`},
+            {name : 'speed', value : `${userInfo.speed}`},
+            {name : 'pitch', value : `${userInfo.pitch}`},
+            {name : 'intonation', value : `${userInfo.intonation}`},
+            {name : 'volume', value : `${userInfo.volume}`}
+        ])
+        embed.setImage("attachment://icon.jpg");
+        embed.setFooter({text: `VOICEVOX:${userInfo.name_speaker}`});
+        embed.setColor(0x00FF00);        
+        attachment.setName("icon.jpg");
+        attachment.setFile(Buffer.from(icon, 'base64'));
+    }
+
+    return {files: [attachment], embeds: [embed],  ephemeral: true};
+}
+
+async function setServer(serverInfo, serverName, selEmb){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+
+    if(selEmb){
+        switch(selEmb){
+            case 1 : {
+                embed.setTitle("君に管理者権限がないのだ");
+                embed.setThumbnail("attachment://icon.png");
+                embed.setFooter({text: "管理者権限が必要な設定にされています"});
+                embed.setColor(0xFF0000);
+                attachment.setName("icon.png");
+                attachment.setFile("zundamon/face/dumb.png");
+                break;
+            }
+            case 2 : {
+                embed.setTitle("管理者権限がないのだ");
+                embed.setThumbnail("attachment://icon.png");
+                embed.setFooter({text: "sudoオプションの利用には管理者権限が必要です"});
+                embed.setColor(0xFF0000);
+                attachment.setName("icon.png");
+                attachment.setFile("zundamon/face/dumb.png");
+                break;
+            }
+            default : embed.setTitle("undefined").setColor(0x000000);
+        }
+    }else{
+        embed.setTitle(`${serverName}での設定を変更したのだ`);
+        embed.setThumbnail("attachment://icon.png");
+        embed.addFields([
+            {name : 'sudo', value : `${serverInfo.sudo}`},
+            {name : 'name', value : `${serverInfo.name}`},
+            {name : 'continue_name', value : `${serverInfo.continue_name}`},
+            {name : 'continue_line', value : `${serverInfo.continue_line}`},
+            {name : 'maxwords', value : `${serverInfo.maxwords}`}
+        ])
+        embed.setColor(0x00FF00);        
+        attachment.setName("icon.png");
+        attachment.setFile("zundamon/face/normal.png");
+    }
+
+    return {files: [attachment], embeds: [embed],  ephemeral: false};
+}
+
+function start(textCh, voiceCh, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
     
-    switch(sel){
-        case 0:{
+    switch(selEmb){
+        case 0 : {
             embed.setTitle(`# ${textCh.name}の文章を\n🔊${voiceCh.name}で読み上げるのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "VOICEVOX:ずんだもん"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon001.png");
+ 	        attachment.setFile("zundamon/face/normal.png");
             break;
         }
-        case 1:{
+        case 1 : {
             embed.setTitle(`#${textCh.name}での読み上げは専門外なのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "テキストチャンネルにのみ対応してます"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3003.png");
+ 	        attachment.setFile("zundamon/face/sad.png");
             break;
         }
-        case 2:{
+        case 2 : {
+            embed.setTitle("これ以上ぼくに何を要求するのだ...");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "既に読み上げを行っています"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/sad.png");
+            break;
+        }
+        case 3 : {
             embed.setTitle(`ぼくは#${textCh.name}に入れてもらってないのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "Snyivotをメンバーに加えてください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3003.png");
+ 	        attachment.setFile("zundamon/face/sad.png");
             break;
         }
-        case 3:{
+        case 4 : {
             embed.setTitle("ぼくはどこで読み上げをすればいいのだ？");
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "ボイスチャンネルに入ってから呼んでください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3004.png");
+ 	        attachment.setFile("zundamon/face/dumb.png");
             break;
         }
-        case 4:{
+        case 5 : {
             embed.setTitle(`🔊${voiceCh.name}に参加できないのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "ボイスチャンネルのメンバーや許容人数を確認してください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3003.png");
+ 	        attachment.setFile("zundamon/face/sad.png");
             break;
         }
-        case 5:{
+        case 6 : {
             embed.setTitle(`ぼくは🔊${voiceCh.name}で喋れないのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "Snyivotに喋る権限を与えてください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3003.png");
-            break;
-        }
-        case 6:{
-            embed.setTitle("君にそんな権限はないのだ");
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "読み上げを行っているボイスチャンネルに接続してから使用してください"});
-            embed.setColor(0xFF0000);
-            attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3002.png");
-            break;
-        }
-        case 7:{
-            embed.setTitle("お疲れ様なのだ");
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${voiceCh.name}での読み上げを終了します`});
-            embed.setColor(0x00FF00);
-            attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3001.png");
+ 	        attachment.setFile("zundamon/face/sad.png");
             break;
         }
         default: embed.setTitle("undefined").setColor(0x000000);
@@ -96,75 +202,91 @@ function read(textCh, voiceCh, sel){
     return {files: [attachment], embeds: [embed]};
 }
 
-async function speaker(display_name, speaker_name, speaker_uuid, style_name, style_id){
+function end(textCh, voiceCh, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
-    let policy;
-    let style_infos;
-    let icon;
-
-    await axios.get(`speaker_info?speaker_uuid=${speaker_uuid}`).then(
-        function(res){
-            policy = res.data.policy;
-            style_infos = res.data.style_infos;
-        }
-    ).catch(function(){
-        console.log("### VOICEVOXサーバとの接続が不安定です ###");}
-    );
     
-    for(let i=0; i<style_infos.length; i++){
-        if(style_infos[i].id === style_id){
-            icon = style_infos[i].icon;
+    switch(selEmb){
+        case 0 : {
+            embed.setTitle("お疲れ様なのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "読み上げを終了します"});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/normal.png");
             break;
         }
+        case 1 : {
+            embed.setTitle(`#${textCh.name}で読み上げをしてないのだ`);
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "読み上げを行ってるチャンネルで使用してください"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/smug.png");
+            break;
+        }
+        case 2 : {
+            embed.setTitle("君にそんな権限はないのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "読み上げを行っているボイスチャンネルに接続してから使用してください"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+            attachment.setFile("zundamon/face/smug.png");
+            break;
+        }
+        case 3 : {
+            embed.setTitle("お疲れ様なのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: `🔊${voiceCh.name}での読み上げを終了します`});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/normal.png");
+            break;
+        }
+        default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    embed.setTitle("利用規約");
-    embed.setURL(policy.match(/https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/)[0]);
-    embed.setDescription(`${display_name}さんの読み上げ音声を\n${speaker_name}(${style_name})に設定したのだ`)
-    embed.setImage("attachment://icon.jpg");
-    embed.setFooter({text: `VOICEVOX:${speaker_name}`});
-    embed.setColor(0x00FF00);        
- 	attachment.setName("icon.jpg");
- 	attachment.setFile(Buffer.from(icon, 'base64'));
-
-    return {files: [attachment], embeds: [embed],  ephemeral: true};
+    return {files: [attachment], embeds: [embed]};
 }
 
-function observeVC(oldVoiceChName, newVoiceChName, opt){
+function autoEnd(oldVoiceChName){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
-    
-    switch(opt){
-        case 0:{
-            embed.setTitle("誰もいないしぼくも帰るのだ");
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
-            embed.setColor(0x00FF00);
-            attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon001.png");
-            break;
-        }
-        case 1:{
-            embed.setTitle("追い出されたのだ");
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
-            embed.setColor(0x00FF00);
-            attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3003.png");
-            break;
-        }
-        case 2:{
-            embed.setTitle("ボイスチャンネルを移動させられたのだ");
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動しました`});
-            embed.setColor(0x00FF00);
-            attachment.setName("icon.png");
- 	        attachment.setFile("img/face/zunmon_3003.png");
-            break;
-        }
-        default: embed.setTitle("undefined").setColor(0x000000);
-    }
+
+    embed.setTitle("誰もいないしぼくも帰るのだ");
+    embed.setThumbnail("attachment://icon.png");
+    embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("zundamon/face/happy.png");
+
+    return {files: [attachment], embeds: [embed]};
+}
+
+function compulsionEnd(oldVoiceChName){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+
+    embed.setTitle("追い出されたのだ");
+    embed.setThumbnail("attachment://icon.png");
+    embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("zundamon/face/sad.png");
+
+    return {files: [attachment], embeds: [embed]};
+}
+
+function compulsionMove(oldVoiceChName, newVoiceChName){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+
+    embed.setTitle("ボイスチャンネルを移動させられたのだ");
+    embed.setThumbnail("attachment://icon.png");
+    embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動しました`});
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("zundamon/face/sad.png");
 
     return {files: [attachment], embeds: [embed]};
 }

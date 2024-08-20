@@ -14,35 +14,29 @@ const {Readable} = require("stream");
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
 
-//マークダウンから声質を決定
-function choiceScale(voiceInfo, text){
+//マークダウン検出
+function detectMarkdown(text){
 
     //引用
     if(text.match(/(?<=^(#{0,3}\s)?)>\s/)){
         text = text.replace(/(?<=^(#{0,3}\s)?)>\s/, "");
-        voiceInfo.speedScale = 1.5;
     }else if(text.match(/(?<=^(#{0,3}\s)?)>>>\s/)){
         text = text.replace(/(?<=^(#{0,3}\s)?)>>>\s/, "");
-        voiceInfo.speedScale = 2.0;
     }
 
     //見出し
     if(text.match(/^#\s/)){
         text = text.replace(/^#\s/, "");
-        voiceInfo.volumeScale = 2.00;
     }else if(text.match(/^##\s/)){
         text = text.replace(/^##\s/, "");
-        voiceInfo.volumeScale = 1.66;
     }else if(text.match(/^###\s/)){
         text = text.replace(/^###\s/, "");
-        voiceInfo.volumeScale = 1.33;
     }
 
     //太字
     for(let i=0; i<2; i++){
         if(text.match(/(?<=^[|_~`]*)\*\*+([^(\*\*)\\]+)\*\*+(?=[|_~`]*$)/)){
             text = text.replace(/(?<=^[|_~`]*)\*\*([^(\*\*)]+)\*\*(?=[|_~`]*$)/, '$1');
-            voiceInfo.pitchScale = voiceInfo.pitchScale - 0.05;
         }else{
             break;
         }
@@ -52,7 +46,6 @@ function choiceScale(voiceInfo, text){
     for(let i=0; i<2; i++){
         if(text.match(/(?<=^[|*~`]*)__+([^(__)]+)__+(?=[|*~`]*$)/)){
             text = text.replace(/(?<=^[|*~`]*)__([^(__)]+)__(?=[|*~`]*$)/, '$1');
-            voiceInfo.pitchScale = voiceInfo.pitchScale + 0.05;
         }else{
             break;
         }
@@ -61,34 +54,28 @@ function choiceScale(voiceInfo, text){
     //斜体*
     if(text.match(/(?<=^[|_~`]*)\*([^(\*)]+)\*(?=[|_~`]*$)/)){
         text = text.replace(/(?<=^[|_~`]*)\*([^(\*)]+)\*(?=[|_~`]*$)/, '$1');
-        voiceInfo.pitchScale = voiceInfo.pitchScale - 0.05;
     }
 
     //斜体_
     if(text.match(/(?<=^[|*~`]*)_([^(_)]+)__(?=[|*~`]*$)/)){
         text = text.replace(/(?<=^[|*~`]*)_([^(_)]+)_(?=[|*~`]*$)/, '$1');
-        voiceInfo.pitchScale = voiceInfo.pitchScale + 0.05;
     }
 
     //取り消し線
     if(text.match(/(?<=^[|*_`]*)~~([^(~~)]+)~~(?=[|*_`]*$)/)){
         text = text.replace(/(?<=^[|*_`]*)~~([^(~~)]+)~~(?=[|*_`]*$)/, '$1');
-        voiceInfo.volumeScale = voiceInfo.volumeScale - 0.50;
     }
     
     //コードブロック
     if(text.match(/(?<=^[|*_~]*)`([^(`)]+)`(?=[|*_~]*$)/)){
         text = text.replace(/(?<=^[|*_~]*)`([^(`)]+)`(?=[|*_~]*$)/, '$1');
-        voiceInfo.intonationScale = voiceInfo.intonationScale - 1.00;
     }
 
-    return {voiceInfo: voiceInfo, text: text};
+    return text;
 }
 
 //かな変換
 function toKana(text){
-    //#の検出
-    text = text.replace("#", "シャープ");
 
     //草
     text = text.replace(/www/gi, "わらわら");
@@ -266,51 +253,71 @@ function toKana(text){
 }
 
 //文章成形
-function formText(voiceInfo, message){
+async function formText(message, userInfo, serverInfo){
     //メッセージの文字列化
     let text = message.cleanContent;
 
     //1行目だけ取得
-    text = text.split(/\r\n|\r|\n/)[0];
+    if(!serverInfo.continue_line){
+        text = text.split(/\r\n|\r|\n/)[0];
+    }
 
     //マークダウンの検出
-    const choicedScale = choiceScale(voiceInfo, text);
-    text = choicedScale.text;
+    text = detectMarkdown(text);
 
-    //URL
+    //URLの検出
     text = text.replace(/(https?|ftp)(:\/\/[\w\/:%#\$&\?\(\)~\.=\+\-]+)/g, "URL省略");
 
-    //カスタム絵文字
+    //カスタム絵文字の検出
     text = text.replace(/:[a-zA-Z0-9_~]+:/g, "");
 
     //かな変換
     text = toKana(text);
 
+    //#の検出
+    text = text.replace("#", "シャープ");
+
     //文字数制限
-    if(text.length > 53){
-        text = text.substr(0, 50);
+    if(text.length > serverInfo.maxwords+5){
+        text = text.substr(0, serverInfo.maxwords);
         text += "以下略";
     }
 
     //名前
-    text = toKana(message.member.displayName) + "さん、" + text;
+    if(serverInfo.name){
+        let beforeUserId = null;
 
-    return {voiceInfo: choicedScale.voiceInfo, text: text};
+        if(!serverInfo.continue_name){
+            await message.channel.messages.fetch({before: message.id, limit:1})
+                .then(messages => {
+                    beforeUserId = messages.first().member.id;
+                })
+                .catch(function(){
+                    console.log("### 直前のメッセージはありません ###");
+                })
+        }
+
+        if(beforeUserId != message.member.id){
+            text = userInfo.name_user ? ((toKana(userInfo.name_user)).substr(0, 10) + "さん、" + text) : ((toKana(message.member.displayName)).substr(0, 10) + "さん、" + text);
+        }
+    }
+
+    return text;
 }
 
 //wav作成
-async function createWav(voiceInfo, text){
+async function createWav(text, userInfo, serverInfo){
     let wav = null;
 
     //合成音声の取得
-    await axios.post(`audio_query?text=${encodeURI(text)}&speaker=${voiceInfo.style_id}`, {headers:{"accept" : "application/json"}})
+    await axios.post(`audio_query?text=${encodeURI(text)}&speaker=${userInfo.id}`, {headers:{"accept" : "application/json"}})
         .then(async function(res){
-            res.data.speedScale = voiceInfo.speedScale;
-            res.data.pitchScale = voiceInfo.pitchScale;
-            res.data.intonationScale = voiceInfo.intonationScale;
-            res.data.volumeScale = voiceInfo.volumeScale;
+            res.data.speedScale = userInfo.speed;
+            res.data.pitchScale = userInfo.pitch;
+            res.data.intonationScale = userInfo.intonation;
+            res.data.volumeScale = userInfo.volume;
 
-            await axios.post(`synthesis?speaker=${voiceInfo.style_id}&enable_interrogative_upspeak=true`, JSON.stringify(res.data),
+            await axios.post(`synthesis?speaker=${userInfo.id}&enable_interrogative_upspeak=true`, JSON.stringify(res.data),
                 {responseType: "arraybuffer",
                     headers: {
                         "accept" : "audio/wav",
@@ -338,9 +345,10 @@ async function createWav(voiceInfo, text){
 
 //読み上げ
 async function read(message, subsc){
-    const voiceInfo = {style_id: (await db.getInfo(message.author.id)).style_id, speedScale: 1.00, pitchScale: 0.00, intonationScale: 1.00, volumeScale: 1.00};
-    const formedText = formText(voiceInfo, message);
-    const wav = await createWav(formedText.voiceInfo, formedText.text);
+    const userInfo = await db.getUserInfo(message.member.id);
+    const serverInfo = await db.getServerInfo(message.guild.id);
+    const text = await formText(message, userInfo, serverInfo);
+    const wav = await createWav(text, userInfo, serverInfo);
 
     if(wav){
         const player = subsc.player;

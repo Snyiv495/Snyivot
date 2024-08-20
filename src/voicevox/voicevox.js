@@ -1,16 +1,19 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/06/12
+    2024/08/19
 ******************/
 
 module.exports = {
     getSpeakers: getSpeakers,
     getCmd: getCmd,
-    voicevox: voicevox,
-    voicevox_autocomplete: voicevox_autocomplete,
+    setUser: setUser,
+    setServer: setServer,
+    autocomplete: autocomplete,
+    start: start,
     read: read,
-    autoStop: autoStop,
+    end: end,
+    autoEnd: autoEnd,
     compulsionEnd: compulsionEnd,
     compulsionMove: compulsionMove,
 }
@@ -43,14 +46,24 @@ function getCmd(){
     return vv_cmd.getCmd();
 }
 
-//voicevoxコマンド
-async function voicevox(interaction, channel_map, subsc_map, speakers){
-    await vv_cmd.voicevox(interaction, channel_map, subsc_map, speakers);
+//ユーザー情報の設定
+async function setUser(interaction, speakers){
+    await vv_cmd.setUser(interaction, speakers);
+}
+
+//サーバー情報の設定
+async function setServer(interaction){
+    await vv_cmd.setServer(interaction);
 }
 
 //voicevoxコマンドの補助
-async function voicevox_autocomplete(interaction, channel_map, speakers){
-    await vv_cmd.voicevox_autocomplete(interaction, channel_map, speakers);
+async function autocomplete(interaction, channel_map, speakers){
+    await vv_cmd.autocomplete(interaction, channel_map, speakers);
+}
+
+//開始
+function start(interaction, channel_map, subsc_map){
+    vv_cmd.start(interaction, channel_map, subsc_map);
 }
 
 //読み上げ
@@ -58,9 +71,14 @@ async function read(message, subsc){
     await vv_read.read(message, subsc);
 }
 
+//終了
+async function end(interaction, channel_map, subsc_map){
+    vv_cmd.end(interaction, channel_map, subsc_map);
+}
+
 //自動停止
-function autoStop(oldState, channel_map, subsc_map){
-    vv_observe.autoStop(oldState, channel_map, subsc_map);
+function autoEnd(oldState, channel_map, subsc_map){
+    vv_observe.autoEnd(oldState, channel_map, subsc_map);
 }
 
 //強制終了

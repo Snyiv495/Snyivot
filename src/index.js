@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/07/22    
+    2024/08/19    
 *****************/
 
 require('dotenv').config();
@@ -18,7 +18,7 @@ let readme;
 let vv_speakers;
 
 //botのログイン
-client.login(process.env.SNYIVOT_TOKEN);
+client.login(process.env.BOT_TOKEN);
 
 //起動動作
 client.once('ready', async () => {
@@ -35,7 +35,7 @@ client.once('ready', async () => {
 
     //コマンドの登録
     try{
-        await client.application.commands.set([help.getCmd(), voicevox.getCmd(vv_speakers)]);
+        await client.application.commands.set([help.getCmd(), voicevox.getCmd(vv_speakers)[0], voicevox.getCmd(vv_speakers)[1], voicevox.getCmd(vv_speakers)[2]]);
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
@@ -49,14 +49,14 @@ client.once('ready', async () => {
 //メッセージ動作
 client.on('messageCreate', async message => {
     //botの発言, コードブロックのメッセージを除外
-    if(message.author.bot || (message.content.match(/```.*?```/))){
+    if(message.author.bot || (message.content.match(/^```.*?```$/))){
         return;
     }
 
     //メンションに反応
     if(message.mentions.users.has(client.user.id)){
         //内容がなければヘルプ
-        if(message.content.match(new RegExp('^<@'+process.env.SNYIVOT_ID+'>$'))){
+        if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
             help.menu_home(message);
             return;
         }
@@ -68,7 +68,7 @@ client.on('messageCreate', async message => {
         }
         
     }
-
+    
     //読み上げ
     if(channel_map.get(message.channelId)){
         await voicevox.read(message, subsc_map.get(channel_map.get(message.channelId)));
@@ -93,10 +93,25 @@ client.on('interactionCreate', async (interaction) => {
 
     //voicevoxコマンド
     if(interaction.commandName === "voicevox"){
-        voicevox.voicevox(interaction, channel_map, subsc_map, vv_speakers);
+        if(!interaction.options.get("endoption")){
+            voicevox.start(interaction, channel_map, subsc_map);
+        }else{
+            voicevox.end(interaction, channel_map, subsc_map);
+        }
         return;   
     }
 
+    //voicevox_setting_userコマンド
+    if(interaction.commandName === "voicevox_setting_user"){
+        voicevox.setUser(interaction, vv_speakers);
+        return;
+    }
+
+    //voicevox_setting_serverコマンド
+    if(interaction.commandName === "voicevox_setting_server"){
+        voicevox.setServer(interaction);
+        return;
+    }
 
     return;
 })
@@ -107,9 +122,9 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //voicevoxコマンド
-    if(interaction.commandName === "voicevox"){
-        await voicevox.voicevox_autocomplete(interaction, channel_map, vv_speakers);
+    //voicevox_setting_userコマンド
+    if(interaction.commandName === "voicevox_setting_user"){
+        await voicevox.autocomplete(interaction, vv_speakers);
         return;
     }
 
@@ -143,7 +158,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if(interaction.customId === "voicevox"){
-        voicevox.voicevox(interaction, channel_map, subsc_map, vv_speakers);
+        voicevox.start(interaction, channel_map, subsc_map, vv_speakers);
         return;
     }
 })
@@ -152,18 +167,18 @@ client.on('interactionCreate', async (interaction) => {
 client.on('voiceStateUpdate', (oldState, newState) => {
     //自動終了
     if(subsc_map.get(oldState.channelId) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
-        voicevox.autoStop(oldState, channel_map, subsc_map);
+        voicevox.autoEnd(oldState, channel_map, subsc_map);
         return;
     }
 
     //強制退出時の処理
-    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.SNYIVOT_ID) && !newState.channel){
+    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
         voicevox.compulsionEnd(oldState, channel_map, subsc_map);
         return;
     }
 
     //強制移動時の処理
-    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.SNYIVOT_ID) && newState.channel){
+    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
         voicevox.compulsionMove(oldState, newState, channel_map, subsc_map);
         return;
     }

@@ -1,11 +1,11 @@
 /*******************
     observe.js    
     スニャイヴ
-    2024/06/12
+    2024/08/19
 *******************/
 
 module.exports = {
-    autoStop: autoStop,
+    autoEnd: autoEnd,
     compulsionEnd: compulsionEnd,
     compulsionMove: compulsionMove,
 }
@@ -14,8 +14,8 @@ require('dotenv').config();
 const {joinVoiceChannel, createAudioPlayer} = require('@discordjs/voice');
 const embed = require('./embed');
 
-//自動停止
-function autoStop(oldState, channel_map, subsc_map){
+//自動終了
+function autoEnd(oldState, channel_map, subsc_map){
     let textCh = null;
 
     oldState.guild.channels.cache.forEach((channel) => {
@@ -32,7 +32,7 @@ function autoStop(oldState, channel_map, subsc_map){
     }
     subsc_map.delete(oldState.channelId);
 
-    textCh.send(embed.observeVC(oldState.channel.name, null, 0));
+    textCh.send(embed.autoEnd(oldState.channel.name));
 
     return;
 }
@@ -50,7 +50,7 @@ function compulsionEnd(oldState, channel_map, subsc_map){
 
     subsc_map.delete(oldState.channelId);
 
-    textCh.send(embed.observeVC(oldState.channel.name, null, 1));
+    textCh.send(embed.compulsionEnd(oldState.channel.name));
 
     return;
 }
@@ -78,7 +78,7 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
         subsc_map.set(newState.channelId, connection.subscribe(createAudioPlayer()));
         subsc_map.delete(oldState.channelId);
 
-        textCh.send(embed.observeVC(oldState.channel.name, newState.channel.name, 2));
+        textCh.send(embed.compulsionMove(oldState.channel.name, newState.channel.name));
     }catch(e){
         console.log("### 強制移動エラー ###");
     }
