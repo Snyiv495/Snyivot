@@ -48,8 +48,8 @@ client.once('ready', async () => {
 
 //メッセージ動作
 client.on('messageCreate', async message => {
-    //botの発言, コードブロックのメッセージを除外
-    if(message.author.bot || (message.content.match(/^```.*?```$/))){
+    //botの発言, スポイラー, コードブロックのメッセージを除外
+    if(message.author.bot || (message.content.match(/^\|\|.*?\|\|$/)) || (message.content.match(/^```.*?```$/))){
         return;
     }
 

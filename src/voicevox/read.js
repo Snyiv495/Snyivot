@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/07/20        
+    2024/08/21        
 *****************/
 
 module.exports = {
@@ -75,184 +75,6 @@ function detectMarkdown(text){
     return text;
 }
 
-//かな変換
-function toKana(text){
-
-    //草
-    text = text.replace(/www/gi, "わらわら");
-    text = text.replace(/w$/i, "わら");
-    
-    //アルファベット
-    if(text.match(/[a-zA-Z]/)){
-        text = text.replace(/x/gi, "ks");
-        text = text.replace(/kya/gi, "きゃ");
-        text = text.replace(/kyu/gi, "きゅ");
-        text = text.replace(/kyo/gi, "きょ");
-        text = text.replace(/sya/gi, "しゃ");
-        text = text.replace(/sha/gi, "しゃ");
-        text = text.replace(/syu/gi, "しゅ");
-        text = text.replace(/shu/gi, "しゅ");
-        text = text.replace(/syo/gi, "しょ");
-        text = text.replace(/sho/gi, "しょ");
-        text = text.replace(/tya/gi, "ちゃ");
-        text = text.replace(/cha/gi, "ちゃ");
-        text = text.replace(/tyu/gi, "ちゅ");
-        text = text.replace(/chu/gi, "ちゅ");
-        text = text.replace(/tyo/gi, "ちょ");
-        text = text.replace(/cho/gi, "ちょ");
-        text = text.replace(/nya/gi, "にゃ");
-        text = text.replace(/nyu/gi, "にゅ");
-        text = text.replace(/nyo/gi, "にょ");
-        text = text.replace(/hya/gi, "ひゃ");
-        text = text.replace(/hyu/gi, "ひゅ");
-        text = text.replace(/hyo/gi, "ひょ");
-        text = text.replace(/mya/gi, "みゃ");
-        text = text.replace(/myu/gi, "みゅ");
-        text = text.replace(/myo/gi, "みょ");
-        text = text.replace(/rya/gi, "りゃ");
-        text = text.replace(/ryu/gi, "りゅ");
-        text = text.replace(/ryo/gi, "りょ");
-        text = text.replace(/gya/gi, "ぎゃ");
-        text = text.replace(/gyu/gi, "ぎゅ");
-        text = text.replace(/gyo/gi, "ぎょ");
-        text = text.replace(/zya/gi, "じゃ");
-        text = text.replace(/ja/gi, "じゃ");
-        text = text.replace(/zyu/gi, "じゅ");
-        text = text.replace(/ju/gi, "じゅ");
-        text = text.replace(/zyo/gi, "じょ");
-        text = text.replace(/jo/gi, "じょ");
-        text = text.replace(/dya/gi, "ぢゃ");
-        text = text.replace(/dyu/gi, "ぢゅ");
-        text = text.replace(/dyo/gi, "ぢょ");
-        text = text.replace(/bya/gi, "びゃ");
-        text = text.replace(/byu/gi, "びゅ");
-        text = text.replace(/byo/gi, "びょ");
-        text = text.replace(/ka/gi, "か");
-        text = text.replace(/ki/gi, "き");
-        text = text.replace(/ku/gi, "く");
-        text = text.replace(/qu/gi, "く");
-        text = text.replace(/ke/gi, "け");
-        text = text.replace(/che/gi, "け");
-        text = text.replace(/ko/gi, "こ");
-        text = text.replace(/sa/gi, "さ");
-        text = text.replace(/si/gi, "し");
-        text = text.replace(/shi/gi, "し");
-        text = text.replace(/su/gi, "す");
-        text = text.replace(/se/gi, "せ");
-        text = text.replace(/so/gi, "そ");
-        text = text.replace(/ta/gi, "た");
-        text = text.replace(/ti/gi, "ち");
-        text = text.replace(/chi/gi, "ち");
-        text = text.replace(/tu/gi, "つ");
-        text = text.replace(/te/gi, "て");
-        text = text.replace(/to/gi, "と");
-        text = text.replace(/na/gi, "な");
-        text = text.replace(/ni/gi, "に");
-        text = text.replace(/nu/gi, "ぬ");
-        text = text.replace(/ne/gi, "ね");
-        text = text.replace(/no/gi, "の");
-        text = text.replace(/ha/gi, "は");
-        text = text.replace(/hi/gi, "ひ");
-        text = text.replace(/hu/gi, "ふ");
-        text = text.replace(/fu/gi, "ふ");
-        text = text.replace(/he/gi, "へ");
-        text = text.replace(/ho/gi, "ほ");
-        text = text.replace(/ma/gi, "ま");
-        text = text.replace(/mi/gi, "み");
-        text = text.replace(/mu/gi, "む");
-        text = text.replace(/me/gi, "め");
-        text = text.replace(/mo/gi, "も");
-        text = text.replace(/ya/gi, "や");
-        text = text.replace(/yu/gi, "ゆ");
-        text = text.replace(/yo/gi, "よ");
-        text = text.replace(/ra/gi, "ら");
-        text = text.replace(/ri/gi, "り");
-        text = text.replace(/ru/gi, "る");
-        text = text.replace(/re/gi, "れ");
-        text = text.replace(/ro/gi, "ろ");
-        text = text.replace(/wa/gi, "わ");
-        text = text.replace(/wo/gi, "を");
-        text = text.replace(/nn/gi, "ん");
-        text = text.replace(/ga/gi, "が");
-        text = text.replace(/gi/gi, "ぎ");
-        text = text.replace(/gu/gi, "ぐ");
-        text = text.replace(/ge/gi, "げ");
-        text = text.replace(/go/gi, "ご");
-        text = text.replace(/za/gi, "ざ");
-        text = text.replace(/zi/gi, "じ");
-        text = text.replace(/ji/gi, "じ");
-        text = text.replace(/zu/gi, "ず");
-        text = text.replace(/ze/gi, "ぜ");
-        text = text.replace(/zo/gi, "ぞ");
-        text = text.replace(/da/gi, "だ");
-        text = text.replace(/di/gi, "でぃ");
-        text = text.replace(/du/gi, "どぅ");
-        text = text.replace(/de/gi, "で");
-        text = text.replace(/do/gi, "ど");
-        text = text.replace(/ba/gi, "ば");
-        text = text.replace(/bi/gi, "び");
-        text = text.replace(/bu/gi, "ぶ");
-        text = text.replace(/be/gi, "べ");
-        text = text.replace(/bo/gi, "ぼ");
-        text = text.replace(/pa/gi, "ぱ");
-        text = text.replace(/pi/gi, "ぴ");
-        text = text.replace(/pu/gi, "ぷ");
-        text = text.replace(/pe/gi, "ぺ");
-        text = text.replace(/po/gi, "ぽ");
-        text = text.replace(/qa/gi, "くぁ");
-        text = text.replace(/qi/gi, "くぃ");
-        text = text.replace(/qe/gi, "くぇ");
-        text = text.replace(/qo/gi, "くぉ");
-        text = text.replace(/fa/gi, "ふぁ");
-        text = text.replace(/fi/gi, "ふぃ");
-        text = text.replace(/fe/gi, "ふぇ");
-        text = text.replace(/fo/gi, "ふぉ");
-        text = text.replace(/la/gi, "ら");
-        text = text.replace(/li/gi, "り");
-        text = text.replace(/lu/gi, "る");
-        text = text.replace(/le/gi, "れ");
-        text = text.replace(/lo/gi, "ろ");
-        text = text.replace(/ca/gi, "きゃ");
-        text = text.replace(/ci/gi, "し");
-        text = text.replace(/cu/gi, "きゅ");
-        text = text.replace(/ce/gi, "せ");
-        text = text.replace(/co/gi, "こ");
-        text = text.replace(/va/gi, "ヴぁ");
-        text = text.replace(/vi/gi, "ヴぃ");
-        text = text.replace(/vu/gi, "ヴ");
-        text = text.replace(/ve/gi, "ヴぇ");
-        text = text.replace(/vo/gi, "ヴぉ");
-
-        text = text.replace(/a/gi, "あ");
-        text = text.replace(/b/gi, "ぶ");
-        text = text.replace(/c/gi, "く");
-        text = text.replace(/d/gi, "どぅ");
-        text = text.replace(/e/gi, "え");
-        text = text.replace(/f/gi, "ふ");
-        text = text.replace(/g/gi, "ぐ");
-        text = text.replace(/h/gi, "ふ");
-        text = text.replace(/i/gi, "い");
-        text = text.replace(/j/gi, "じゅ");
-        text = text.replace(/k/gi, "く");
-        text = text.replace(/l/gi, "る");
-        text = text.replace(/m/gi, "む");
-        text = text.replace(/n/gi, "ん");
-        text = text.replace(/o/gi, "お");
-        text = text.replace(/p/gi, "ぷ");
-        text = text.replace(/q/gi, "く");
-        text = text.replace(/r/gi, "る");
-        text = text.replace(/s/gi, "す");
-        text = text.replace(/t/gi, "つ");
-        text = text.replace(/u/gi, "う");
-        text = text.replace(/v/gi, "ヴ");
-        text = text.replace(/w/gi, "わ");
-        text = text.replace(/y/gi, "ゆ");
-        text = text.replace(/z/gi, "ず");
-    }
-
-    return text;
-}
-
 //文章成形
 async function formText(message, userInfo, serverInfo){
     //メッセージの文字列化
@@ -296,7 +118,7 @@ async function formText(message, userInfo, serverInfo){
         }
 
         if(beforeUserId != message.member.id){
-            text = userInfo.name_user ? ((toKana(userInfo.name_user)).substr(0, 10) + "さん、" + text) : ((toKana(message.member.displayName)).substr(0, 10) + "さん、" + text);
+            text = userInfo.name_user ? (userInfo.name_user).substr(0, 10) + "さん、" + text : (message.member.displayName).substr(0, 10) + "さん、" + text;
         }
     }
 
