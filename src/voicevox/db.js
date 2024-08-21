@@ -31,7 +31,7 @@ async function setUserInfo(id, info){
 //サーバ情報を取得する
 async function getServerInfo(id){
     server.on('error', e => console.error('データベースの接続に失敗しました:', e));
-    return (await server.get(id)) || {sudo: false, name: true, continue_name: true, continue_line: true, maxwords: 50, unif: false, name_speaker: "ずんだもん", uuid: "388f246b-8c41-4ac1-8e2d-5d79f3ff56d9", name_style: "ノーマル", id: 3, speed: 1.00, pitch: 0.00, intonation: 1.00, volume: 1.00, dict: null};
+    return (await server.get(id)) || {sudo: false, name: true, continue_name: true, continue_line: true, maxwords: 50, unif: false, name_speaker: "ずんだもん", uuid: "388f246b-8c41-4ac1-8e2d-5d79f3ff56d9", name_style: "ノーマル", id: 3, speed: 1.00, pitch: 0.00, intonation: 1.00, volume: 1.00, dict: {}};
 }
 
 //サーバ情報を保存する

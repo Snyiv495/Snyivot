@@ -11,11 +11,15 @@ module.exports = {
     autocomplete: autocomplete,
     start: start,
     end: end,
+    dictAdd: dictAdd,
+    dictDel: dictDel,
 }
 
 require('dotenv').config();
 const {SlashCommandBuilder} = require('discord.js');
 const {joinVoiceChannel, createAudioPlayer} = require('@discordjs/voice');
+const fs = require('fs');
+const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
 const embed = require('./embed');
 
@@ -146,7 +150,7 @@ function getCmd(){
         .setName("voicevox_dictionary_add")
         .setDescription("voicevoxの辞書追加コマンド")
         .addStringOption(option => option
-            .setName("serface")
+            .setName("surface")
             .setDescription("読み方を指定したい言葉を入力してください")
             .setRequired(true)
         )
@@ -159,18 +163,6 @@ function getCmd(){
             .setName("accent")
             .setDescription("音が下がる場所(カタカナの何文字目か)を入力してください")
             .setRequired(true)
-        )
-        .addStringOption(option => option
-            .setName("type")
-            .setDescription("言葉の種類を入力してください")
-            .addChoices(
-                {name : "指定なし", value : null},
-                {name : "固有名詞", value : "PROPER_NOUN"},
-                {name : "普通名詞", value : "COMMON_NOUN"},
-                {name : "動詞", value : "VERB"},
-                {name : "形容詞", value : "ADJECTIVE"},
-                {name : "語尾", value : "SUFFIX"}
-            )
         )
         .addIntegerOption(option => option
             .setName("priority")
@@ -191,8 +183,9 @@ function getCmd(){
             .setName("deleteall")
             .setDescription("全ての言葉を削除する")
         )
-
-    return [voicevox, voicevox_setting_user, voicevox_setting_server];
+    ;
+    
+    return [voicevox, voicevox_setting_user, voicevox_setting_server, voicevox_dictionary_add, voicevox_dictionary_delete];
 }
 
 //ユーザー情報の設定
@@ -621,4 +614,104 @@ function end(interaction, channel_map, subsc_map){
     }
 
     interaction.reply(embed.end(textCh, voiceCh, selEmb));
+}
+
+//辞書の追加
+async function dictAdd(interaction){
+    const serverInfo = await db.getServerInfo(interaction.guild.id);
+    let surface = interaction.options.get("surface").value;
+    let pronunciation = interaction.options.get("pronunciation").value;
+    let accent = interaction.options.get("accent").value;
+    let priority = 1;
+    let uuid = null;
+    let selEmb = 0;
+
+    //カタカナ以外を検出
+    if(pronunciation.match(/[^ァ-ヴー]/)){
+        selEmb = 1;
+    }
+
+    //クヮ, グヮ以外のヮを検出
+    if(pronunciation.match(/[^クグ]?ヮ/)){
+        selEmb = 2;
+    }
+
+    //正しくないアクセント位置を検出
+    if(accent <= 0 || pronunciation.length < accent){
+        selEmb = 3;
+    }
+
+    //優先度の確認
+    if(interaction.options.get("priority")){
+        priority = interaction.options.get("priority").value;
+    }
+
+    //問題がなければ保存
+    if(!selEmb){
+        //辞書ファイルの削除
+        fs.unlink(`${process.env.VOICEVOX_DICTIONARY}`, (e) => {});
+
+        //既存の辞書のインポート
+        await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}})
+            .then(async function(){
+                //新規ワードの追加
+                await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority+2}`, {headers:{"accept" : "application/json"}})
+                    .then(async function(res){
+                        uuid = res.data;
+
+                        //追加後の辞書を取得
+                        await axios.get("user_dict", {headers:{"accept" : "application/json"}})
+                            .then(function(res){
+                                serverInfo.dict = res.data;
+                            })
+                            .catch(function(){
+                                console.log("### VOICEVOXサーバとの接続が不安定です ###");
+                            })
+                    })
+                    .catch(function(){
+                        console.log("### VOICEVOXサーバとの接続が不安定です ###");
+                    })
+            })
+            .catch(function(){
+                console.log("### VOICEVOXサーバとの接続が不安定です ###");
+            })
+        ;
+
+        await db.setServerInfo(interaction.guild.id, serverInfo);
+    }
+
+    interaction.reply(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
+}
+
+//辞書の削除
+async function dictDel(interaction){
+    const serverInfo = await db.getServerInfo(interaction.guild.id);
+    let uuid = interaction.options.get("uuid") ? interaction.options.get("uuid").value : null
+    let surface = null;
+    let selEmb = 0;
+
+    if(interaction.options.get("deleteall")){
+        serverInfo.dict = {};
+        selEmb = 1; 
+    }
+
+    else if(!uuid){
+        selEmb = 2;
+    }
+    
+    else if(!serverInfo.dict[uuid]){
+        selEmb = 3;
+    }
+
+    if(!selEmb){
+        surface = serverInfo.dict[uuid].surface
+        delete serverInfo.dict[uuid];
+    }
+
+    //問題がなければ保存
+    if(selEmb < 2){
+        await db.setServerInfo(interaction.guild.id, serverInfo);
+    }
+
+    interaction.reply(embed.dictDel(serverInfo.dict, surface, selEmb));
 }

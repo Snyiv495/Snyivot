@@ -35,7 +35,7 @@ client.once('ready', async () => {
 
     //コマンドの登録
     try{
-        await client.application.commands.set([help.getCmd(), voicevox.getCmd(vv_speakers)[0], voicevox.getCmd(vv_speakers)[1], voicevox.getCmd(vv_speakers)[2]]);
+        await client.application.commands.set([help.getCmd(), voicevox.getCmd(vv_speakers)[0], voicevox.getCmd(vv_speakers)[1], voicevox.getCmd(vv_speakers)[2], voicevox.getCmd(vv_speakers)[3], voicevox.getCmd(vv_speakers)[4]]);
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
@@ -110,6 +110,18 @@ client.on('interactionCreate', async (interaction) => {
     //voicevox_setting_serverコマンド
     if(interaction.commandName === "voicevox_setting_server"){
         voicevox.setServer(interaction, vv_speakers);
+        return;
+    }
+
+    //voicevox_dictionary_addコマンド
+    if(interaction.commandName === "voicevox_dictionary_add"){
+        voicevox.dictAdd(interaction);
+        return;
+    }
+
+    //voicevox_dictionary_deleteコマンド
+    if(interaction.commandName === "voicevox_dictionary_delete"){
+        voicevox.dictDel(interaction);
         return;
     }
 

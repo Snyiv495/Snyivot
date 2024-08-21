@@ -10,6 +10,7 @@ module.exports = {
 
 require('dotenv').config();
 const {createAudioResource, entersState, AudioPlayerStatus, StreamType} = require('@discordjs/voice');
+const fs = require('fs');
 const {Readable} = require("stream");
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
@@ -271,9 +272,6 @@ async function formText(message, userInfo, serverInfo){
     //カスタム絵文字の検出
     text = text.replace(/:[a-zA-Z0-9_~]+:/g, "");
 
-    //かな変換
-    text = toKana(text);
-
     //#の検出
     text = text.replace("#", "シャープ");
 
@@ -314,36 +312,47 @@ async function createWav(text, userInfo, serverInfo){
     let volume = serverInfo.unif ? serverInfo.volume : (userInfo.uuid ? userInfo.volume : serverInfo.volume);
     let wav = null;
 
-    //合成音声の取得
-    await axios.post(`audio_query?text=${encodeURI(text)}&speaker=${id}`, {headers:{"accept" : "application/json"}})
-        .then(async function(res){
-            res.data.speedScale = speed;
-            res.data.pitchScale = pitch;
-            res.data.intonationScale = intonation;
-            res.data.volumeScale = volume;
+    //辞書ファイルの削除
+    fs.unlink(`${process.env.VOICEVOX_DICTIONARY}`, (e) => {});
 
-            await axios.post(`synthesis?speaker=${id}&enable_interrogative_upspeak=true`, JSON.stringify(res.data),
-                {responseType: "arraybuffer",
-                    headers: {
-                        "accept" : "audio/wav",
-                        "Content-Type" : "application/json"
-                    }
-                })
-                .then(function(res){
-                    const stream = new Readable();
-                    stream.push(res.data);
-                    stream.push(null);
-                    wav = createAudioResource(stream, {inputType: StreamType.Arbitrary});
+    //辞書のインポート
+    await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}})
+        .then(async function(){
+            //合成音声の取得
+            await axios.post(`audio_query?text=${encodeURI(text)}&speaker=${id}`, {headers:{"accept" : "application/json"}})
+                .then(async function(res){
+                    res.data.speedScale = speed;
+                    res.data.pitchScale = pitch;
+                    res.data.intonationScale = intonation;
+                    res.data.volumeScale = volume;
+
+                    await axios.post(`synthesis?speaker=${id}&enable_interrogative_upspeak=true`, JSON.stringify(res.data),
+                        {responseType: "arraybuffer",
+                            headers: {
+                                "accept" : "audio/wav",
+                                "Content-Type" : "application/json"
+                            }
+                        })
+                        .then(function(res){
+                            const stream = new Readable();
+                            stream.push(res.data);
+                            stream.push(null);
+                            wav = createAudioResource(stream, {inputType: StreamType.Arbitrary});
+                        })
+                        .catch(function(){
+                            console.log("### VOICEVOXサーバとの接続が不安定です ###");
+                        }
+                    )
                 })
                 .catch(function(){
                     console.log("### VOICEVOXサーバとの接続が不安定です ###");
-                }
-            )
+                })
+            ;
         })
         .catch(function(){
             console.log("### VOICEVOXサーバとの接続が不安定です ###");
-        }
-    );
+        })
+    ;
     
     return wav;
 }

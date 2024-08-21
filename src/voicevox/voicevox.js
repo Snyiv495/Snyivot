@@ -16,6 +16,8 @@ module.exports = {
     autoEnd: autoEnd,
     compulsionEnd: compulsionEnd,
     compulsionMove: compulsionMove,
+    dictAdd: dictAdd,
+    dictDel: dictDel,
 }
 
 require('dotenv').config();
@@ -89,4 +91,14 @@ function compulsionEnd(oldState, channel_map, subsc_map){
 //強制移動
 function compulsionMove(oldState, newState, channel_map, subsc_map){
     vv_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
+}
+
+//辞書の追加
+async function dictAdd(interaction){
+    await vv_cmd.dictAdd(interaction);
+}
+
+//辞書の削除
+function dictDel(interaction){
+    vv_cmd.dictDel(interaction);
 }

@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/08/19
+    2024/08/21
 *****************/
 
 module.exports = {
@@ -12,6 +12,8 @@ module.exports = {
     autoEnd: autoEnd,
     compulsionEnd: compulsionEnd,
     compulsionMove: compulsionMove,
+    dictAdd: dictAdd,
+    dictDel: dictDel,
 }
 
 const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
@@ -335,4 +337,106 @@ function compulsionMove(oldVoiceChName, newVoiceChName){
     attachment.setFile("zundamon/face/sad.png");
 
     return {files: [attachment], embeds: [embed]};
+}
+
+function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    
+    switch(selEmb){
+        case 0 : {
+            embed.setTitle("新しい言葉を覚えたのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.addFields(
+                {name : "言葉", value : `${surface}`, inline : true},
+                {name : "読み", value : `${pronunciation}`, inline : true},
+                {name : "アクセント", value : `${accent}文字目`, inline : true},
+                {name : "優先度", value : `${priority}`, inline : true},                
+                {name : "uuid", value : `${uuid}`, inline : true},
+            )
+            embed.setFooter({text: "読み方が変わらない場合は優先度を上げてください"});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/happy.png");
+            break;
+        }
+        case 1 : {
+            embed.setTitle("こんなカタカナ知らないのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "有効なカタカナを入力してください"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/dumb.png");
+            break;
+        }
+        case 2 : {
+            embed.setTitle("その「ヮ」はどう読むのだ...");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "クヮ, グヮ以外のヮは指定できません"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+            attachment.setFile("zundamon/face/dumb.png");
+            break;
+        }
+        case 3 : {
+            embed.setTitle("アクセントの位置がおかしいのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "文字数を確認してください"});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/smug.png");
+            break;
+        }
+        default : embed.setTitle("undefined").setColor(0x000000);
+    }
+
+    return {files: [attachment], embeds: [embed]};
+}
+
+function dictDel(dict, surface, selEmb){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    
+    switch(selEmb){
+        case 0 : {
+            embed.setTitle(`${surface}の読み方を忘れたのだ`);
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: `${surface}を辞書から削除しました`});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/dumb.png");
+            break;
+        }
+        case 1 : {
+            embed.setTitle("なにもかも忘れたのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "辞書を削除しました"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/dumb.png");
+            break;
+        }
+        case 2 : {
+            embed.setTitle("今覚えてる言葉はこんな感じなのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "辞書の削除にはuuidを利用してください"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+            attachment.setFile("zundamon/face/smug.png");
+            break;
+        }
+        case 3 : {
+            embed.setTitle("そのuuidに一致する言葉は覚えてないのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "uuidに間違いがないか確認してください"});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("zundamon/face/dumb.png");
+            break;
+        }
+        default : embed.setTitle("undefined").setColor(0x000000);
+    }
+
+    return {files: [attachment], embeds: [embed]};
+
 }
