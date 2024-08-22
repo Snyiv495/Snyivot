@@ -24,7 +24,7 @@ function readme(){
     embed.setFooter({text: "Discordのファイルプレビューではマークダウンが綺麗に表示されないため読みにくいです"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("img/face/zunmon_3002.png");
+    attachment.setFile("zundamon/face/happy.png");
     
     return {files: ["./README.md", attachment], embeds: [embed], ephemeral: true};
 }
@@ -41,7 +41,7 @@ function cohere(){
     embed.setFooter({text: "わからなくても適当に試してみてください"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("img/face/zunmon001.png");
+    attachment.setFile("zundamon/face/normal.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -66,7 +66,7 @@ function voicevox(){
     embed.setFooter({text: "公式サイトからキャラクターを確認できます(1行目をクリック)"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("img/face/zunmon001.png");
+    attachment.setFile("zundamon/face/normal.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 
@@ -84,7 +84,7 @@ function menu_home(){
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("img/face/zunmon_3004.png");
+    attachment.setFile("zundamon/face/dumb.png");
     
     voicevox.setCustomId("voicevox");
     voicevox.setStyle(ButtonStyle.Primary);
@@ -115,7 +115,7 @@ function menu_help(){
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("img/face/zunmon_3004.png");
+    attachment.setFile("zundamon/face/dumb.png");
 
     
     cohere.setCustomId("help_cohere");

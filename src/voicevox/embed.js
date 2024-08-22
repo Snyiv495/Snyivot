@@ -382,7 +382,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setTitle("アクセントの位置がおかしいのだ");
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "文字数を確認してください"});
-            embed.setColor(0x00FF00);
+            embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/smug.png");
             break;
@@ -402,7 +402,7 @@ function dictDel(dict, surface, selEmb){
             embed.setTitle(`${surface}の読み方を忘れたのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: `${surface}を辞書から削除しました`});
-            embed.setColor(0x00FF00);
+            embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/dumb.png");
             break;
@@ -411,7 +411,7 @@ function dictDel(dict, surface, selEmb){
             embed.setTitle("なにもかも忘れたのだ");
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "辞書を削除しました"});
-            embed.setColor(0xFF0000);
+            embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/dumb.png");
             break;
@@ -420,7 +420,7 @@ function dictDel(dict, surface, selEmb){
             embed.setTitle("今覚えてる言葉はこんな感じなのだ");
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "辞書の削除にはuuidを利用してください"});
-            embed.setColor(0xFF0000);
+            embed.setColor(0x00FF00);
             attachment.setName("icon.png");
             attachment.setFile("zundamon/face/smug.png");
             break;
@@ -437,6 +437,6 @@ function dictDel(dict, surface, selEmb){
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed]};
+    return JSON.stringify(dict);
 
 }

@@ -626,13 +626,15 @@ async function dictAdd(interaction){
     let uuid = null;
     let selEmb = 0;
 
+    interaction.deferReply();
+
     //カタカナ以外を検出
     if(pronunciation.match(/[^ァ-ヴー]/)){
         selEmb = 1;
     }
 
     //クヮ, グヮ以外のヮを検出
-    if(pronunciation.match(/[^クグ]?ヮ/)){
+    if(pronunciation.match(/(?<!(ク|グ))ヮ/)){
         selEmb = 2;
     }
 
@@ -680,7 +682,7 @@ async function dictAdd(interaction){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
 
-    interaction.reply(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
+    interaction.editReply(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
 }
 
 //辞書の削除
