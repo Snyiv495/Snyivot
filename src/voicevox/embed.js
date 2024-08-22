@@ -393,20 +393,23 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
     return {files: [attachment], embeds: [embed]};
 }
 
-function dictDel(dict, surface, selEmb){
+function dictDel(dictCsv, surface, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
+
+    //辞書の送信
+    if(!selEmb){
+        embed.setTitle("今覚えてる言葉とuuidはこんな感じなのだ");
+        embed.setThumbnail("attachment://icon.png");
+        embed.setFooter({text: "辞書の削除にはuuidを利用してください"});
+        embed.setColor(0x00FF00);
+        attachment.setName("icon.png");
+        attachment.setFile("zundamon/face/happy.png");
+        
+        return {files: [dictCsv, attachment], embeds: [embed]};
+    }
     
     switch(selEmb){
-        case 0 : {
-            embed.setTitle(`${surface}の読み方を忘れたのだ`);
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `${surface}を辞書から削除しました`});
-            embed.setColor(0xFFFF00);
-            attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/dumb.png");
-            break;
-        }
         case 1 : {
             embed.setTitle("なにもかも忘れたのだ");
             embed.setThumbnail("attachment://icon.png");
@@ -417,12 +420,12 @@ function dictDel(dict, surface, selEmb){
             break;
         }
         case 2 : {
-            embed.setTitle("今覚えてる言葉はこんな感じなのだ");
+            embed.setTitle(`${surface}の読み方を忘れたのだ`);
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "辞書の削除にはuuidを利用してください"});
-            embed.setColor(0x00FF00);
+            embed.setFooter({text: `${surface}を辞書から削除しました`});
+            embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
-            attachment.setFile("zundamon/face/smug.png");
+ 	        attachment.setFile("zundamon/face/dumb.png");
             break;
         }
         case 3 : {
@@ -437,6 +440,6 @@ function dictDel(dict, surface, selEmb){
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return JSON.stringify(dict);
+    return {files: [attachment], embeds: [embed]};
 
 }

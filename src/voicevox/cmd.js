@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/08/19    
+    2024/08/23    
 *****************/
 
 module.exports = {
@@ -166,8 +166,8 @@ function getCmd(){
         )
         .addIntegerOption(option => option
             .setName("priority")
-            .setDescription("読み替えの優先度[1~7](数字が大きいほど優先度が高い)")
-            .setMaxValue(7)
+            .setDescription("読み替えの優先度[1~9](数字が大きいほど優先度が高い)")
+            .setMaxValue(9)
             .setMinValue(1)
         )
     ;
@@ -177,10 +177,10 @@ function getCmd(){
         .setDescription("voicevoxの辞書削除コマンド")
         .addStringOption(option => option
             .setName("uuid")
-            .setDescription("削除したい言葉のuuid([⑧-④-④-④-⑫]の形の文字列)を入力してください")
+            .setDescription("削除したい言葉のuuidを入力してください")
         )
         .addBooleanOption(option => option
-            .setName("deleteall")
+            .setName("delall")
             .setDescription("全ての言葉を削除する")
         )
     ;
@@ -283,7 +283,7 @@ async function setUser(interaction, speakers){
         await db.setUserInfo(interaction.user.id, userInfo);
     }
 
-    interaction.reply(await embed.setUser(userInfo, interaction.user.displayName, selEmb));
+    interaction.editReply(await embed.setUser(userInfo, interaction.user.displayName, selEmb));
 }
 
 //サーバー情報の設定
@@ -415,7 +415,7 @@ async function setServer(interaction, speakers){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
     
-    interaction.reply(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
+    interaction.editReply(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
 }
 
 //voicevox_setting_userコマンドの補助
@@ -545,7 +545,7 @@ function start(interaction, channel_map, subsc_map){
         }
     }
 
-    interaction.reply(embed.start(textCh, voiceCh, selEmb));
+    interaction.editReply(embed.start(textCh, voiceCh, selEmb));
 }
 
 //読み上げ終了
@@ -613,7 +613,7 @@ function end(interaction, channel_map, subsc_map){
         }
     }
 
-    interaction.reply(embed.end(textCh, voiceCh, selEmb));
+    interaction.editReply(embed.end(textCh, voiceCh, selEmb));
 }
 
 //辞書の追加
@@ -622,11 +622,9 @@ async function dictAdd(interaction){
     let surface = interaction.options.get("surface").value;
     let pronunciation = interaction.options.get("pronunciation").value;
     let accent = interaction.options.get("accent").value;
-    let priority = 1;
+    let priority = 5;
     let uuid = null;
     let selEmb = 0;
-
-    interaction.deferReply();
 
     //カタカナ以外を検出
     if(pronunciation.match(/[^ァ-ヴー]/)){
@@ -636,11 +634,6 @@ async function dictAdd(interaction){
     //クヮ, グヮ以外のヮを検出
     if(pronunciation.match(/(?<!(ク|グ))ヮ/)){
         selEmb = 2;
-    }
-
-    //正しくないアクセント位置を検出
-    if(accent <= 0 || pronunciation.length < accent){
-        selEmb = 3;
     }
 
     //優先度の確認
@@ -657,7 +650,7 @@ async function dictAdd(interaction){
         await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}})
             .then(async function(){
                 //新規ワードの追加
-                await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority+2}`, {headers:{"accept" : "application/json"}})
+                await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority}`, {headers:{"accept" : "application/json"}})
                     .then(async function(res){
                         uuid = res.data;
 
@@ -671,14 +664,14 @@ async function dictAdd(interaction){
                             })
                     })
                     .catch(function(){
-                        console.log("### VOICEVOXサーバとの接続が不安定です ###");
+                        selEmb = 3;
                     })
             })
             .catch(function(){
                 console.log("### VOICEVOXサーバとの接続が不安定です ###");
             })
         ;
-
+            
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
 
@@ -688,32 +681,48 @@ async function dictAdd(interaction){
 //辞書の削除
 async function dictDel(interaction){
     const serverInfo = await db.getServerInfo(interaction.guild.id);
+    let dictCsv = `dict_${interaction.guild.id}.csv`;
     let uuid = interaction.options.get("uuid") ? interaction.options.get("uuid").value : null
     let surface = null;
     let selEmb = 0;
 
-    if(interaction.options.get("deleteall")){
+    //全削除オプション
+    if(interaction.options.get("delall")){
         serverInfo.dict = {};
         selEmb = 1; 
     }
 
-    else if(!uuid){
+    //任意のuuidの言葉を削除する
+    else if(uuid){
+        surface = serverInfo.dict[uuid].surface
+        delete serverInfo.dict[uuid];
         selEmb = 2;
     }
     
-    else if(!serverInfo.dict[uuid]){
+    //存在しないuuid
+    else if(uuid && !serverInfo.dict[uuid]){
         selEmb = 3;
     }
 
-    if(!selEmb){
-        surface = serverInfo.dict[uuid].surface
-        delete serverInfo.dict[uuid];
-    }
-
     //問題がなければ保存
-    if(selEmb < 2){
+    if(selEmb == 1 || selEmb == 2){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
 
-    interaction.reply(embed.dictDel(serverInfo.dict, surface, selEmb));
+    //辞書ファイルの作成
+    if(!selEmb){
+        const uuids = Object.keys(serverInfo.dict);
+        let csvStr = "言葉,読み方,uuid,優先度,アクセント位置\n";
+
+        for(let i=0; i<uuids.length; i++){
+            csvStr = csvStr + `${serverInfo.dict[uuids[i]].surface},${serverInfo.dict[uuids[i]].pronunciation},${uuids[i]},${serverInfo.dict[uuids[i]].priority},${serverInfo.dict[uuids[i]].accent_type}\n`;
+        }
+
+        fs.writeFile(dictCsv, csvStr, (e) => {});
+        
+    }
+
+    await interaction.editReply(embed.dictDel(dictCsv, surface, selEmb));
+
+    fs.unlink(dictCsv, (e) => {});
 }

@@ -1,7 +1,7 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/08/20
+    2024/08/23
 ******************/
 
 module.exports = {
@@ -49,18 +49,18 @@ function getCmd(){
 }
 
 //ユーザー情報の設定
-async function setUser(interaction, speakers){
-    await vv_cmd.setUser(interaction, speakers);
+function setUser(interaction, speakers){
+    vv_cmd.setUser(interaction, speakers);
 }
 
 //サーバー情報の設定
-async function setServer(interaction, speakers){
-    await vv_cmd.setServer(interaction, speakers);
+function setServer(interaction, speakers){
+    vv_cmd.setServer(interaction, speakers);
 }
 
 //voicevoxコマンドの補助
-async function autocomplete(interaction, channel_map, speakers){
-    await vv_cmd.autocomplete(interaction, channel_map, speakers);
+function autocomplete(interaction, channel_map, speakers){
+    vv_cmd.autocomplete(interaction, channel_map, speakers);
 }
 
 //開始
@@ -69,8 +69,8 @@ function start(interaction, channel_map, subsc_map){
 }
 
 //読み上げ
-async function read(message, subsc){
-    await vv_read.read(message, subsc);
+function read(message, subsc){
+    vv_read.read(message, subsc);
 }
 
 //終了
@@ -94,8 +94,8 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
 }
 
 //辞書の追加
-async function dictAdd(interaction){
-    await vv_cmd.dictAdd(interaction);
+function dictAdd(interaction){
+    vv_cmd.dictAdd(interaction);
 }
 
 //辞書の削除

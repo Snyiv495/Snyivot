@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/07/22
+    2024/08/23
 *****************/
 
 module.exports = {
@@ -37,19 +37,19 @@ async function help(interaction){
 
     //helpコマンド
     if((interaction.isCommand() && !interaction.options.get("content")) || (interaction.isButton() && interaction.customId === "readme")){
-        interaction.reply(embed.readme());
+        interaction.editReply(embed.readme());
         return;
     }
 
     //cohereのhelp
     if((interaction.isCommand() && interaction.options.get("content").value === "cohere") ||  (interaction.isButton() && interaction.customId === "help_cohere")){
-        interaction.reply(embed.cohere());
+        interaction.editReply(embed.cohere());
         return;
     }
 
     //voicevoxのhelp
     if((interaction.isCommand() && interaction.options.get("content").value === "voicevox") ||  (interaction.isButton() && interaction.customId === "help_voicevox")){
-        interaction.reply(embed.voicevox());
+        interaction.editReply(embed.voicevox());
         return;
     }
 }
@@ -62,6 +62,6 @@ function menu_home(message){
 
 //ヘルプメニュー
 function menu_help(interaction){
-    interaction.reply(embed.menu_help());
+    interaction.editReply(embed.menu_help());
     return;
 }

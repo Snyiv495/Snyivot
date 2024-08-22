@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/08/20    
+    2024/08/23    
 *****************/
 
 require('dotenv').config();
@@ -35,7 +35,14 @@ client.once('ready', async () => {
 
     //コマンドの登録
     try{
-        await client.application.commands.set([help.getCmd(), voicevox.getCmd(vv_speakers)[0], voicevox.getCmd(vv_speakers)[1], voicevox.getCmd(vv_speakers)[2], voicevox.getCmd(vv_speakers)[3], voicevox.getCmd(vv_speakers)[4]]);
+        await client.application.commands.set([
+            help.getCmd(),
+            voicevox.getCmd(vv_speakers)[0],
+            voicevox.getCmd(vv_speakers)[1],
+            voicevox.getCmd(vv_speakers)[2],
+            voicevox.getCmd(vv_speakers)[3],
+            voicevox.getCmd(vv_speakers)[4]
+        ]);
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
@@ -84,15 +91,17 @@ client.on('interactionCreate', async (interaction) => {
     if(!interaction.isCommand() || !interaction.guild){
         return;
     }
-    
+
     //helpコマンド
     if(interaction.commandName === "help"){
+        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     //voicevoxコマンド
     if(interaction.commandName === "voicevox"){
+        await interaction.deferReply({ephemeral: false});
         if(!interaction.options.get("endoption")){
             voicevox.start(interaction, channel_map, subsc_map);
         }else{
@@ -103,24 +112,28 @@ client.on('interactionCreate', async (interaction) => {
 
     //voicevox_setting_userコマンド
     if(interaction.commandName === "voicevox_setting_user"){
+        await interaction.deferReply({ephemeral: true});
         voicevox.setUser(interaction, vv_speakers);
         return;
     }
 
     //voicevox_setting_serverコマンド
     if(interaction.commandName === "voicevox_setting_server"){
+        await interaction.deferReply({ephemeral: false});
         voicevox.setServer(interaction, vv_speakers);
         return;
     }
 
     //voicevox_dictionary_addコマンド
     if(interaction.commandName === "voicevox_dictionary_add"){
+        await interaction.deferReply({ephemeral: false});
         voicevox.dictAdd(interaction);
         return;
     }
 
     //voicevox_dictionary_deleteコマンド
     if(interaction.commandName === "voicevox_dictionary_delete"){
+        await interaction.deferReply({ephemeral: false});
         voicevox.dictDel(interaction);
         return;
     }
@@ -150,26 +163,31 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if(interaction.customId === "help"){
+        await interaction.deferReply({ephemeral: true});
         help.menu_help(interaction);
         return;
     }
 
     if(interaction.customId === "help_cohere"){
+        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     if(interaction.customId === "help_voicevox"){
+        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     if(interaction.customId === "readme"){
+        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     if(interaction.customId === "voicevox"){
+        await interaction.deferReply({ephemeral: false});
         voicevox.start(interaction, channel_map, subsc_map, vv_speakers);
         return;
     }
