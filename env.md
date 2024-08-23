@@ -10,6 +10,7 @@
 androidとストレージの共有
 ```
 termux-setup-storage
+termux-wake-lock
 ```
 アップデートとインストール
 ```
