@@ -26,7 +26,7 @@ function readme(){
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/happy.png");
     
-    return {files: ["./tmp.csv", attachment], embeds: [embed], ephemeral: true};
+    return {files: ["./README.md", attachment], embeds: [embed], ephemeral: true};
 }
 
 function cohere(){

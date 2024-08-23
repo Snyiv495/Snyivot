@@ -4,6 +4,7 @@
 3. [**python**](#3-python)
 4. [**voicevox**](#4-voicevox)
 5. [**nodejs**](#5-nodejs)
+6. [**Snyivot**](#6-Snyivot)
 
 ## 1. Termux
 androidとストレージの共有
@@ -52,8 +53,6 @@ echo "export PULSE_SERVER=127.0.0.2 \n alias cvlc='cvlc --play-and-exit'" >> .ba
 termuxの再起動を行う
 ```
 exit
-exit
-exit
 ```
 
 ## 3. python
@@ -65,6 +64,7 @@ cd Python-3.11.1
 ./configure
 make -j8
 sudo make altinstall
+pip update
 ```
 
 ## 4. voicevox
@@ -76,23 +76,35 @@ cd voicevox_engine && python3.11 -m pip install -r requirements.txt
 完全版[voicevox_engine](https://github.com/VOICEVOX/voicevox_engine/releases), [voicevox_core](https://github.com/VOICEVOX/voicevox_core/releases/)の作成
 
 ```
-wget https://github.com/VOICEVOX/voicevox_engine/releases/download/0.19.0/voicevox_engine-linux-cpu-0.19.0.7z.001
-7z x voicevox_engine-linux-cpu-0.19.0.7z
-cp voicevox_engine/voicevox_engine linux-cpu/
+cd && wget https://github.com/VOICEVOX/voicevox_engine/releases/download/0.20.0/voicevox_engine-linux-cpu-0.20.0.7z.001
+7z x voicevox_engine-linux-cpu-0.20.0.7z.001
+cp -r voicevox_engine/voicevox_engine linux-cpu/
 cp voicevox_engine/run.py linux-cpu/
+sudo rm -r voicevox_engine
 mv linux-cpu voicevox
 cd voicevox
-wget https://github.com/VOICEVOX/voicevox_core/releases/download/0.15.3/download-linux-arm64
+wget https://github.com/VOICEVOX/voicevox_core/releases/download/0.15.4/download-linux-arm64
 chmod +x ./download-linux-arm64 && ./download-linux-arm64
 ```
 voicevox起動スクリプトの作成
 ```
 echo "python3.11 ~/voicevox/run.py --voicelib_dir=~/voicevox/voicevox_core --port 50000" > startvoicevox.sh
 ```
+[kanayomi-dict](https://github.com/WariHima/KanaYomi-dict-GPL2/releases)をダウンロードしてvoicevox/resources/にdefault.csvの名前で配置する
 
 ## 5. nodejs
 nvmを利用して[nodejs](https://nodejs.org/en/download/package-manager)をインストールする
+`nvm install`の前に再起動する
 ```
+cd
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 nvm install 20
+```
+
+## 6. Snyivot
+[Snyivot](https://github.com/Snyiv495/Snyivot.git)をクローンして環境構築を行う
+```
+git clone https://github.com/Snyiv495/Snyivot.git
+cd Snyivot
+npm install
 ```
