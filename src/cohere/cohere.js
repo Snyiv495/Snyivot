@@ -11,5 +11,5 @@ module.exports = {
 const co_invoke = require('./invoke');
 
 async function invoke(message, readme){
-    await co_invoke.invoke(message, readme);
+    co_invoke.invoke(message, readme);
 }

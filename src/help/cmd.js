@@ -1,13 +1,14 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/08/23
+    2024/08/26
 *****************/
 
 module.exports = {
     getCmd: getCmd,
     help: help,
     menu_home: menu_home,
+    menu_voicevox: menu_voicevox,
     menu_help: menu_help,
 }
 
@@ -33,7 +34,7 @@ function getCmd(){
 }
 
 //helpコマンド
-async function help(interaction){
+function help(interaction){
 
     //helpコマンド
     if((interaction.isCommand() && !interaction.options.get("content")) || (interaction.isButton() && interaction.customId === "readme")){
@@ -52,11 +53,19 @@ async function help(interaction){
         interaction.editReply(embed.voicevox());
         return;
     }
+
+    return;
 }
 
 //ホームメニュー
 function menu_home(message){
     message.reply(embed.menu_home());
+    return;
+}
+
+//voicevoxメニュー
+function menu_voicevox(interaction){
+    interaction.reply(embed.menu_voicevox());
     return;
 }
 

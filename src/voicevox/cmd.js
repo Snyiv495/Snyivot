@@ -193,89 +193,80 @@ async function setUser(interaction, speakers){
     const userInfo = await db.getUserInfo(interaction.user.id);
     let selEmb = 0;
 
-    //コマンドによる利用
-    if(interaction.isCommand()){
-
-        //speakerオプション
-        if(interaction.options.get("speaker")){
-            if(interaction.options.get("speaker").value === "ランダム"){
-                const rand = Math.floor(Math.random()*speakers.length);
-                userInfo.name_speaker = speakers[rand].name;
-                userInfo.uuid = speakers[rand].speaker_uuid;
-                userInfo.name_style = speakers[rand].styles[0].name;
-                userInfo.id = speakers[rand].styles[0].id; 
-            }else{
-                for(let i=0; i<speakers.length; i++){
-                    if(speakers[i].name === interaction.options.get("speaker").value){
-                        userInfo.name_speaker = speakers[i].name;
-                        userInfo.uuid = speakers[i].speaker_uuid;
-                        userInfo.name_style = speakers[i].styles[0].name;
-                        userInfo.id = speakers[i].styles[0].id; 
-                        break;
-                    }
-
-                    if(i == speakers.length-1){
-                        selEmb = 1;
-                    }
-                }
-            }
-        }
-
-        //styleオプション
-        if(!selEmb && interaction.options.get("style")){
+    //speakerオプション
+    if(interaction.options.get("speaker")){
+        if(interaction.options.get("speaker").value === "ランダム"){
+            const rand = Math.floor(Math.random()*speakers.length);
+            userInfo.name_speaker = speakers[rand].name;
+            userInfo.uuid = speakers[rand].speaker_uuid;
+            userInfo.name_style = speakers[rand].styles[0].name;
+            userInfo.id = speakers[rand].styles[0].id; 
+        }else{
             for(let i=0; i<speakers.length; i++){
-                if(userInfo.name_speaker === speakers[i].name){
-                    if(interaction.options.get("style").value === "ランダム"){
-                        const rand = Math.floor(Math.random()*speakers[i].styles.length);
-                        userInfo.name_style = speakers[i].styles[rand].name;
-                        userInfo.id = speakers[i].styles[rand].id;
-                    }else{
-                        for(let j=0; j<speakers[i].styles.length; j++){
-                            if(speakers[i].styles[j].name === interaction.options.get("style").value){
-                                userInfo.name_style = speakers[i].styles[j].name;
-                                userInfo.id = speakers[i].styles[j].id;
-                                break;
-                            }
-
-                            if(j == speakers[i].styles.length-1){
-                                selEmb = 2;
-                            }
-                        }
-                    }
+                if(speakers[i].name === interaction.options.get("speaker").value){
+                    userInfo.name_speaker = speakers[i].name;
+                    userInfo.uuid = speakers[i].speaker_uuid;
+                    userInfo.name_style = speakers[i].styles[0].name;
+                    userInfo.id = speakers[i].styles[0].id; 
                     break;
                 }
+
+                if(i == speakers.length-1){
+                    selEmb = 1;
+                }
             }
-        }
-
-        //usernameオプション
-        if(interaction.options.get("username")){
-            userInfo.name_user = (interaction.options.get("username").value).substr(0, 10);
-        }
-
-        //speedオプション
-        if(interaction.options.get("speed")){
-            userInfo.speed = interaction.options.get("speed").value;
-        }
-
-        //pitchオプション
-        if(interaction.options.get("pitch")){
-            userInfo.pitch = interaction.options.get("pitch").value;
-        }
-
-        //intonationオプション
-        if(interaction.options.get("intonation")){
-            userInfo.intonation = interaction.options.get("intonation").value;
-        }
-
-        //volumeオプション
-        if(interaction.options.get("volume")){
-            userInfo.volume = interaction.options.get("volume").value;
         }
     }
 
-    //ボタンによる利用
-    if(interaction.isButton()){
+    //styleオプション
+    if(!selEmb && interaction.options.get("style")){
+        for(let i=0; i<speakers.length; i++){
+            if(userInfo.name_speaker === speakers[i].name){
+                if(interaction.options.get("style").value === "ランダム"){
+                    const rand = Math.floor(Math.random()*speakers[i].styles.length);
+                    userInfo.name_style = speakers[i].styles[rand].name;
+                    userInfo.id = speakers[i].styles[rand].id;
+                }else{
+                    for(let j=0; j<speakers[i].styles.length; j++){
+                        if(speakers[i].styles[j].name === interaction.options.get("style").value){
+                            userInfo.name_style = speakers[i].styles[j].name;
+                            userInfo.id = speakers[i].styles[j].id;
+                            break;
+                        }
 
+                        if(j == speakers[i].styles.length-1){
+                            selEmb = 2;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    //usernameオプション
+    if(interaction.options.get("username")){
+        userInfo.name_user = (interaction.options.get("username").value).substr(0, 10);
+    }
+
+    //speedオプション
+    if(interaction.options.get("speed")){
+        userInfo.speed = interaction.options.get("speed").value;
+    }
+
+    //pitchオプション
+    if(interaction.options.get("pitch")){
+        userInfo.pitch = interaction.options.get("pitch").value;
+    }
+
+    //intonationオプション
+    if(interaction.options.get("intonation")){
+        userInfo.intonation = interaction.options.get("intonation").value;
+    }
+
+    //volumeオプション
+    if(interaction.options.get("volume")){
+        userInfo.volume = interaction.options.get("volume").value;
     }
 
     //問題がなければ保存
@@ -294,120 +285,111 @@ async function setServer(interaction, speakers){
     if(serverInfo.sudo && !interaction.memberPermissions.has("Administrator")){
         selEmb = 1;
     }else{
-        //コマンドによる利用
-        if(interaction.isCommand()){
-
-            //sudoオプション
-            if(interaction.options.get("sudo")){
-                if(interaction.memberPermissions.has("Administrator")){
-                    serverInfo.sudo = interaction.options.get("sudo").value;
-                }else{
-                    selEmb = 2;
-                }
+        //sudoオプション
+        if(interaction.options.get("sudo")){
+            if(interaction.memberPermissions.has("Administrator")){
+                serverInfo.sudo = interaction.options.get("sudo").value;
+            }else{
+                selEmb = 2;
             }
+        }
 
-            //nameオプション
-            if(interaction.options.get("name")){
-                serverInfo.name = interaction.options.get("name").value;
-            }
+        //nameオプション
+        if(interaction.options.get("name")){
+            serverInfo.name = interaction.options.get("name").value;
+        }
 
-            //continue_nameオプション
-            if(interaction.options.get("continue_name")){
-                serverInfo.continue_name = interaction.options.get("continue_name").value;
-            }
+        //continue_nameオプション
+        if(interaction.options.get("continue_name")){
+            serverInfo.continue_name = interaction.options.get("continue_name").value;
+        }
 
-            //continue_lineオプション
-            if(interaction.options.get("continue_line")){
-                serverInfo.continue_line = interaction.options.get("continue_line").value;
-            }
+        //continue_lineオプション
+        if(interaction.options.get("continue_line")){
+            serverInfo.continue_line = interaction.options.get("continue_line").value;
+        }
 
-            //maxwordsオプション
-            if(interaction.options.get("maxwords")){
-                serverInfo.maxwords = interaction.options.get("maxwords").value;
-            }
+        //maxwordsオプション
+        if(interaction.options.get("maxwords")){
+            serverInfo.maxwords = interaction.options.get("maxwords").value;
+        }
 
-            //unifオプション
-            if(interaction.options.get("unif")){
-                serverInfo.unif = interaction.options.get("unif").value;
-            }
+        //unifオプション
+        if(interaction.options.get("unif")){
+            serverInfo.unif = interaction.options.get("unif").value;
+        }
 
-            //speakerオプション
-            if(interaction.options.get("speaker")){
-                if(interaction.options.get("speaker").value === "ランダム"){
-                    const rand = Math.floor(Math.random()*speakers.length);
-                    serverInfo.name_speaker = speakers[rand].name;
-                    serverInfo.uuid = speakers[rand].speaker_uuid;
-                    serverInfo.name_style = speakers[rand].styles[0].name;
-                    serverInfo.id = speakers[rand].styles[0].id; 
-                }else{
-                    for(let i=0; i<speakers.length; i++){
-                        if(speakers[i].name === interaction.options.get("speaker").value){
-                            serverInfo.name_speaker = speakers[i].name;
-                            serverInfo.uuid = speakers[i].speaker_uuid;
-                            serverInfo.name_style = speakers[i].styles[0].name;
-                            serverInfo.id = speakers[i].styles[0].id; 
-                            break;
-                        }
-
-                        if(i == speakers.length-1){
-                            selEmb = 3;
-                        }
-                    }
-                }
-            }
-
-            //styleオプション
-            if(!selEmb && interaction.options.get("style")){
+        //speakerオプション
+        if(interaction.options.get("speaker")){
+            if(interaction.options.get("speaker").value === "ランダム"){
+                const rand = Math.floor(Math.random()*speakers.length);
+                serverInfo.name_speaker = speakers[rand].name;
+                serverInfo.uuid = speakers[rand].speaker_uuid;
+                serverInfo.name_style = speakers[rand].styles[0].name;
+                serverInfo.id = speakers[rand].styles[0].id; 
+            }else{
                 for(let i=0; i<speakers.length; i++){
-                    if(serverInfo.name_speaker === speakers[i].name){
-                        if(interaction.options.get("style").value === "ランダム"){
-                            const rand = Math.floor(Math.random()*speakers[i].styles.length);
-                            serverInfo.name_style = speakers[i].styles[rand].name;
-                            serverInfo.id = speakers[i].styles[rand].id;
-                        }else{
-                            for(let j=0; j<speakers[i].styles.length; j++){
-                                if(speakers[i].styles[j].name === interaction.options.get("style").value){
-                                    serverInfo.name_style = speakers[i].styles[j].name;
-                                    serverInfo.id = speakers[i].styles[j].id;
-                                    break;
-                                }
-
-                                if(j == speakers[i].styles.length-1){
-                                    selEmb = 4;
-                                }
-                            }
-                        }
+                    if(speakers[i].name === interaction.options.get("speaker").value){
+                        serverInfo.name_speaker = speakers[i].name;
+                        serverInfo.uuid = speakers[i].speaker_uuid;
+                        serverInfo.name_style = speakers[i].styles[0].name;
+                        serverInfo.id = speakers[i].styles[0].id; 
                         break;
                     }
+
+                    if(i == speakers.length-1){
+                        selEmb = 3;
+                    }
                 }
             }
-
-            //speedオプション
-            if(interaction.options.get("speed")){
-                serverInfo.speed = interaction.options.get("speed").value;
-            }
-
-            //pitchオプション
-            if(interaction.options.get("pitch")){
-                serverInfo.pitch = interaction.options.get("pitch").value;
-            }
-
-            //intonationオプション
-            if(interaction.options.get("intonation")){
-                serverInfo.intonation = interaction.options.get("intonation").value;
-            }
-
-            //volumeオプション
-            if(interaction.options.get("volume")){
-                serverInfo.volume = interaction.options.get("volume").value;
-            }
-
         }
 
-        //ボタンによる利用
-        if(interaction.isButton()){
+        //styleオプション
+        if(!selEmb && interaction.options.get("style")){
+            for(let i=0; i<speakers.length; i++){
+                if(serverInfo.name_speaker === speakers[i].name){
+                    if(interaction.options.get("style").value === "ランダム"){
+                        const rand = Math.floor(Math.random()*speakers[i].styles.length);
+                        serverInfo.name_style = speakers[i].styles[rand].name;
+                        serverInfo.id = speakers[i].styles[rand].id;
+                    }else{
+                        for(let j=0; j<speakers[i].styles.length; j++){
+                            if(speakers[i].styles[j].name === interaction.options.get("style").value){
+                                serverInfo.name_style = speakers[i].styles[j].name;
+                                serverInfo.id = speakers[i].styles[j].id;
+                                break;
+                            }
 
+                            if(j == speakers[i].styles.length-1){
+                                selEmb = 4;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
         }
+
+        //speedオプション
+        if(interaction.options.get("speed")){
+            serverInfo.speed = interaction.options.get("speed").value;
+        }
+
+        //pitchオプション
+        if(interaction.options.get("pitch")){
+            serverInfo.pitch = interaction.options.get("pitch").value;
+        }
+
+        //intonationオプション
+        if(interaction.options.get("intonation")){
+            serverInfo.intonation = interaction.options.get("intonation").value;
+        }
+
+        //volumeオプション
+        if(interaction.options.get("volume")){
+            serverInfo.volume = interaction.options.get("volume").value;
+        }
+
     }
     
     //問題がなければ保存

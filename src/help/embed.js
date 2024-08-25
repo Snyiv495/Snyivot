@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/07/22
+    2024/08/26
 *****************/
 
 module.exports = {
@@ -9,6 +9,7 @@ module.exports = {
     cohere: cohere,
     voicevox: voicevox,
     menu_home: menu_home,
+    menu_voicevox: menu_voicevox,
     menu_help: menu_help,
 }
 
@@ -21,7 +22,7 @@ function readme(){
     embed.setTitle("Snyivotの使い方は\nこれを読めばばっちりなのだ");
     embed.setURL("https://github.com/Snyiv495/Snyivot");
     embed.setThumbnail("attachment://icon.png");
-    embed.setFooter({text: "Discordのファイルプレビューではマークダウンが綺麗に表示されないため読みにくいです"});
+    embed.setFooter({text: "プレビューでは読みにくいのでリンクから飛んでください"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/happy.png");
@@ -38,7 +39,7 @@ function cohere(){
     embed.setThumbnail("attachment://icon.png");
     embed.addFields({name: "ぼくにメンションしながら質問をしてくれたら答えるのだ", value: "例：@Snyivot チャットの読み上げを開始する方法を教えて"});
     embed.addFields({name: "使い方以外の質問も大歓迎なのだ", value: "例：@Snyivot ダジャレを言ってみて"});
-    embed.setFooter({text: "わからなくても適当に試してみてください"});
+    embed.setFooter({text: "出力は最大でも200文字程度です"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/normal.png");
@@ -53,17 +54,13 @@ function voicevox(){
     embed.setTitle("voicevoxの使い方を教えるのだ");
     embed.setURL("https://voicevox.hiroshiba.jp/");
     embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで読み上げの制御ができるのだ", value: "例：/voicevox"});
-    embed.addFields({name: "ぼくが読み上げをしてないボイチャにいる時にコマンドを打つと、読み上げを開始するのだ", value: "すでに読み上げをしているボイチャにいる時にコマンドを打つと、読み上げを終了するのだ"});
-    embed.addFields({name: "読み上げの音声を変更するオプションも存在するのだ", value: "例：/voicevox speaker ずんだもん"});
-    embed.addFields({name: "キャラクターの名前を途中まで入力するとその文字が含まれてるキャラクターが選択肢にでるのだ", value: "例：/voicevox speaker ず"});
-    embed.addFields({name: "キャラクターの名前を何も入力してないときは「ランダム」の選択肢が出るのだ", value: "例：/voicevox speaker "});
-    embed.addFields({name: "キャラクターのスタイルを変更するオプションも存在するのだ", value: "例：/voicevox style ノーマル"});
-    embed.addFields({name: "スタイルを何も入力してないときは、現在設定されているキャラクターのスタイル一覧が選択肢として出るのだ", value: "例：/voicevox style"});
-    embed.addFields({name: "speakerオプションとstyleオプションは併用できるのだ", value: "例：/voicevox speaker ずんだもん style あまあま"});
-    embed.addFields({name: "オプションを併用したときのstyleの選択肢は、speakerオプションに入力したキャラクターのスタイルが出るのだ", value: "例：/voicevox speaker ずんだもん style"});
-    embed.addFields({name: "speakerオプションを「ランダム」にすると、styleオプションの選択肢にも「ランダム」が出るのだ", value: "例：/voicevox speaker ランダム style ランダム"});
-    embed.setFooter({text: "公式サイトからキャラクターを確認できます(1行目をクリック)"});
+    embed.addFields({name: "スラッシュコマンドで読み上げを開始できるのだ", value: "/voicevox"});
+    embed.addFields({name: "endオプションを加えると読み上げを終了できるのだ", value: "例：/voicevox endoption end"});
+    embed.addFields({name: "読み上げのユーザー情報を変更するコマンドがあるのだ", value: "例：/voicevox_setting_user speaker ずんだもん speed 1.5"});
+    embed.addFields({name: "読み上げのサーバー情報を変更するコマンドがあるのだ", value: "例：/voicevox_setting_server maxwords 20"});
+    embed.addFields({name: "読み方の辞書を追加するコマンドがあるのだ", value: "例：/voicevox_dictionary_add surface 摩訶不思議 pronunciation パルプンテ accent 4"});
+    embed.addFields({name: "読み方の辞書を削除するコマンドがあるのだ", value: "例：/voicevox_dictionary_delete uuid xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"});
+    embed.setFooter({text: "公式サイトから読み上げるキャラクター一覧を確認できます(1行目をクリック)"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/normal.png");
@@ -100,6 +97,36 @@ function menu_home(){
     buttons.addComponents(help);
 
     return {files: [attachment], embeds: [embed], components: [buttons]};
+}
+
+function menu_voicevox(){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    const buttons = new ActionRowBuilder();
+    const start = new ButtonBuilder();
+    const end = new ButtonBuilder();
+
+    embed.setTitle("読み上げの開始か終了をするのだ？")
+    embed.setThumbnail("attachment://icon.png")
+    embed.setFooter({text: "ボタンを押してください"})
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("zundamon/face/dumb.png");
+    
+    start.setCustomId("vv_start");
+    start.setStyle(ButtonStyle.Primary);
+    start.setLabel("開始");
+    start.setDisabled(false);
+
+    end.setCustomId("vv_end");
+    end.setStyle(ButtonStyle.Primary);
+    end.setLabel("修了");
+    end.setDisabled(false);
+
+    buttons.addComponents(start);
+    buttons.addComponents(end);
+
+    return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
 }
 
 function menu_help(){

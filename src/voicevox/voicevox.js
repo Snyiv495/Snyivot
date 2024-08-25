@@ -1,7 +1,7 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/08/23
+    2024/08/26
 ******************/
 
 module.exports = {
@@ -49,56 +49,73 @@ function getCmd(){
 }
 
 //ユーザー情報の設定
-function setUser(interaction, speakers){
+async function setUser(interaction, speakers){
+    await interaction.deferReply({ephemeral: true});
     vv_cmd.setUser(interaction, speakers);
+    return;
 }
 
 //サーバー情報の設定
-function setServer(interaction, speakers){
+async function setServer(interaction, speakers){
+    await interaction.deferReply({ephemeral: false});
     vv_cmd.setServer(interaction, speakers);
+    return;
 }
 
 //voicevoxコマンドの補助
 function autocomplete(interaction, channel_map, speakers){
     vv_cmd.autocomplete(interaction, channel_map, speakers);
+    return;
 }
 
 //開始
-function start(interaction, channel_map, subsc_map){
+async function start(interaction, channel_map, subsc_map){
+    await interaction.deferReply({ephemeral: false});
     vv_cmd.start(interaction, channel_map, subsc_map);
+    return;
 }
 
 //読み上げ
 function read(message, subsc){
     vv_read.read(message, subsc);
+    return;
 }
 
 //終了
 async function end(interaction, channel_map, subsc_map){
+    await interaction.deferReply({ephemeral: false});
     vv_cmd.end(interaction, channel_map, subsc_map);
+    return;
 }
 
 //自動停止
 function autoEnd(oldState, channel_map, subsc_map){
     vv_observe.autoEnd(oldState, channel_map, subsc_map);
+    return;
 }
 
 //強制終了
 function compulsionEnd(oldState, channel_map, subsc_map){
     vv_observe.compulsionEnd(oldState, channel_map, subsc_map);
+    return;
 }
 
 //強制移動
 function compulsionMove(oldState, newState, channel_map, subsc_map){
     vv_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
+    return;
 }
 
 //辞書の追加
-function dictAdd(interaction){
+async function dictAdd(interaction){
+    await interaction.deferReply({ephemeral: false});
     vv_cmd.dictAdd(interaction);
+    return;
 }
 
 //辞書の削除
-function dictDel(interaction){
+async function dictDel(interaction){
+    await interaction.deferReply({ephemeral: false});
     vv_cmd.dictDel(interaction);
+    return;
 }

@@ -70,7 +70,7 @@ client.on('messageCreate', async message => {
        
         //内容があれば回答
         else{
-            await cohere.invoke(message, readme);
+            cohere.invoke(message, readme);
             return;
         }
         
@@ -78,7 +78,7 @@ client.on('messageCreate', async message => {
     
     //読み上げ
     if(channel_map.get(message.channelId)){
-        await voicevox.read(message, subsc_map.get(channel_map.get(message.channelId)));
+        voicevox.read(message, subsc_map.get(channel_map.get(message.channelId)));
         return;
     }
     
@@ -94,46 +94,41 @@ client.on('interactionCreate', async (interaction) => {
 
     //helpコマンド
     if(interaction.commandName === "help"){
-        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     //voicevoxコマンド
-    if(interaction.commandName === "voicevox"){
-        await interaction.deferReply({ephemeral: false});
-        if(!interaction.options.get("endoption")){
-            voicevox.start(interaction, channel_map, subsc_map);
-        }else{
-            voicevox.end(interaction, channel_map, subsc_map);
-        }
+    if(interaction.commandName === "voicevox" && !interaction.options.get("endoption")){
+        voicevox.start(interaction, channel_map, subsc_map);
         return;   
+    }
+
+    if(interaction.commandName === "voicevox" && interaction.options.get("endoption")){
+        voicevox.end(interaction, channel_map, subsc_map);
+        return;
     }
 
     //voicevox_setting_userコマンド
     if(interaction.commandName === "voicevox_setting_user"){
-        await interaction.deferReply({ephemeral: true});
         voicevox.setUser(interaction, vv_speakers);
         return;
     }
 
     //voicevox_setting_serverコマンド
     if(interaction.commandName === "voicevox_setting_server"){
-        await interaction.deferReply({ephemeral: false});
         voicevox.setServer(interaction, vv_speakers);
         return;
     }
 
     //voicevox_dictionary_addコマンド
     if(interaction.commandName === "voicevox_dictionary_add"){
-        await interaction.deferReply({ephemeral: false});
         voicevox.dictAdd(interaction);
         return;
     }
 
     //voicevox_dictionary_deleteコマンド
     if(interaction.commandName === "voicevox_dictionary_delete"){
-        await interaction.deferReply({ephemeral: false});
         voicevox.dictDel(interaction);
         return;
     }
@@ -149,7 +144,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //voicevox_setting_*コマンド
     if(interaction.commandName === "voicevox_setting_user" || interaction.commandName === "voicevox_setting_server"){
-        await voicevox.autocomplete(interaction, vv_speakers);
+        voicevox.autocomplete(interaction, vv_speakers);
         return;
     }
 
@@ -163,34 +158,41 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if(interaction.customId === "help"){
-        await interaction.deferReply({ephemeral: true});
         help.menu_help(interaction);
         return;
     }
 
     if(interaction.customId === "help_cohere"){
-        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     if(interaction.customId === "help_voicevox"){
-        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     if(interaction.customId === "readme"){
-        await interaction.deferReply({ephemeral: true});
         help.help(interaction);
         return;
     }
 
     if(interaction.customId === "voicevox"){
-        await interaction.deferReply({ephemeral: false});
-        voicevox.start(interaction, channel_map, subsc_map, vv_speakers);
+        help.menu_voicevox(interaction);
         return;
     }
+
+    if(interaction.customId === "vv_start"){
+        voicevox.start(interaction, channel_map, subsc_map);
+        return;
+    }
+
+    if(interaction.customId === "vv_end"){
+        voicevox.end(interaction, channel_map, subsc_map);
+        return;
+    }
+
+    return;
 })
 
 //ボイスチャンネル動作
