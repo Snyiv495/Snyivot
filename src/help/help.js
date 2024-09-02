@@ -1,7 +1,7 @@
 /*****************
     help.js
     スニャイヴ
-    2024/08/26    
+    2024/09/03    
 *****************/
 
 module.exports = {
@@ -10,6 +10,8 @@ module.exports = {
     menu_home: menu_home,
     menu_voicevox: menu_voicevox,
     menu_help: menu_help,
+    menu_help_voicevox_1: menu_help_voicevox_1,
+    menu_help_voicevox_2: menu_help_voicevox_2,
 }
 
 const help_cmd = require('./cmd');
@@ -33,13 +35,29 @@ function menu_home(message){
 }
 
 //voicevoxメニュー
-function menu_voicevox(interaction){
+async function menu_voicevox(interaction){
+    await interaction.deferReply({ephemeral: true});
     help_cmd.menu_voicevox(interaction);
     return;
 }
 
 //ヘルプメニュー
-function menu_help(interaction){
+async function menu_help(interaction){
+    await interaction.deferReply({ephemeral: true});
     help_cmd.menu_help(interaction);
+    return;
+}
+
+//voicevoxヘルプメニュー1
+async function menu_help_voicevox_1(interaction){
+    await interaction.deferReply({ephemeral: true});
+    help_cmd.menu_help_voicevox_1(interaction);
+    return;
+}
+
+//voicevoxヘルプメニュー2
+async function menu_help_voicevox_2(interaction){
+    await interaction.deferReply({ephemeral: true});
+    help_cmd.menu_help_voicevox_2(interaction);
     return;
 }

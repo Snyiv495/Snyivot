@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/08/23    
+    2024/09/03    
 *****************/
 
 require('dotenv').config();
@@ -41,7 +41,8 @@ client.once('ready', async () => {
             voicevox.getCmd(vv_speakers)[1],
             voicevox.getCmd(vv_speakers)[2],
             voicevox.getCmd(vv_speakers)[3],
-            voicevox.getCmd(vv_speakers)[4]
+            voicevox.getCmd(vv_speakers)[4],
+            voicevox.getCmd(vv_speakers)[5]
         ]);
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
@@ -98,13 +99,14 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //voicevoxコマンド
-    if(interaction.commandName === "voicevox" && !interaction.options.get("endoption")){
+    //voicevox_startコマンド
+    if(interaction.commandName === "voicevox_start"){
         voicevox.start(interaction, channel_map, subsc_map);
         return;   
     }
 
-    if(interaction.commandName === "voicevox" && interaction.options.get("endoption")){
+    //voicevox_endコマンド
+    if(interaction.commandName === "voicevox_end"){
         voicevox.end(interaction, channel_map, subsc_map);
         return;
     }
@@ -157,26 +159,6 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    if(interaction.customId === "help"){
-        help.menu_help(interaction);
-        return;
-    }
-
-    if(interaction.customId === "help_cohere"){
-        help.help(interaction);
-        return;
-    }
-
-    if(interaction.customId === "help_voicevox"){
-        help.help(interaction);
-        return;
-    }
-
-    if(interaction.customId === "readme"){
-        help.help(interaction);
-        return;
-    }
-
     if(interaction.customId === "voicevox"){
         help.menu_voicevox(interaction);
         return;
@@ -189,6 +171,31 @@ client.on('interactionCreate', async (interaction) => {
 
     if(interaction.customId === "vv_end"){
         voicevox.end(interaction, channel_map, subsc_map);
+        return;
+    }
+
+    if(interaction.customId === "vv_end_all"){
+        voicevox.end(interaction, channel_map, subsc_map);
+        return;
+    }
+
+    if(interaction.customId === "help"){
+        help.menu_help(interaction);
+        return;
+    }
+
+    if(interaction.customId === "help_voicevox" || interaction.customId === "to_menu_help_voicevox_1"){
+        help.menu_help_voicevox_1(interaction);
+        return;
+    }
+
+    if(interaction.customId === "to_menu_help_voicevox_2"){
+        help.menu_help_voicevox_2(interaction);
+        return;
+    }
+
+    if(interaction.customId === "readme" || interaction.customId === "help_cohere" || interaction.customId === "help_voicevox_start" || interaction.customId === "help_voicevox_end" || interaction.customId === "help_voicevox_setting_user" || interaction.customId === "help_voicevox_setting_server" || interaction.customId === "help_voicevox_dictAdd" || interaction.customId === "help_voicevox_dictDel"){
+        help.help(interaction);
         return;
     }
 

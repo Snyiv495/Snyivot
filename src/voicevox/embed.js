@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/08/21
+    2024/08/26
 *****************/
 
 module.exports = {
@@ -68,16 +68,16 @@ async function setUser(userInfo, displayName, selEmb){
 
         embed.setTitle("利用規約");
         embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
-        embed.setDescription(`${displayName}さんの読み上げ音声を\n${userInfo.name_speaker}(${userInfo.name_style})に設定したのだ`)
+        embed.setDescription(`${displayName}さんの読み上げ音声を\n${userInfo.speaker}(${userInfo.style})に設定したのだ`)
         embed.addFields([
-            {name : 'username', value : `${userInfo.name_user}`, inline : true},
             {name : 'speed', value : `${userInfo.speed}`, inline : true},
             {name : 'pitch', value : `${userInfo.pitch}`, inline : true},
             {name : 'intonation', value : `${userInfo.intonation}`, inline : true},
-            {name : 'volume', value : `${userInfo.volume}`, inline : true}
+            {name : 'volume', value : `${userInfo.volume}`, inline : true},
+            {name : 'username', value : `${userInfo.username}`, inline : true}
         ])
         embed.setImage("attachment://icon.jpg");
-        embed.setFooter({text: `VOICEVOX:${userInfo.name_speaker}`});
+        embed.setFooter({text: `VOICEVOX:${userInfo.speaker}`});
         embed.setColor(0x00FF00);        
         attachment.setName("icon.jpg");
         attachment.setFile(Buffer.from(icon, 'base64'));
@@ -153,10 +153,10 @@ async function setServer(serverInfo, serverName, selEmb){
 
         embed.setTitle("利用規約");
         embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
-        embed.setDescription(`${serverName}の読み上げ音声を\n${serverInfo.name_speaker}(${serverInfo.name_style})に設定したのだ`)
+        embed.setDescription(`${serverName}の読み上げ音声を\n${serverInfo.speaker}(${serverInfo.style})に設定したのだ`)
         embed.addFields([
-            {name : 'sudo', value : `${serverInfo.sudo}`, inline : true},
-            {name : 'name', value : `${serverInfo.name}`, inline : true},
+            {name : 'need_sudo', value : `${serverInfo.need_sudo}`, inline : true},
+            {name : 'read_name', value : `${serverInfo.read_name}`, inline : true},
             {name : 'continue_name', value : `${serverInfo.continue_name}`, inline : true},
             {name : 'continue_line', value : `${serverInfo.continue_line}`, inline : true},
             {name : 'maxwords', value : `${serverInfo.maxwords}`, inline : true},
@@ -167,7 +167,7 @@ async function setServer(serverInfo, serverName, selEmb){
             {name : 'volume', value : `${serverInfo.volume}`, inline : true}
         ])
         embed.setImage("attachment://icon.jpg");
-        embed.setFooter({text: `VOICEVOX:${serverInfo.name_speaker}`});
+        embed.setFooter({text: `VOICEVOX:${serverInfo.speaker}`});
         embed.setColor(0x00FF00);        
         attachment.setName("icon.jpg");
         attachment.setFile(Buffer.from(icon, 'base64'));
@@ -349,10 +349,10 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setThumbnail("attachment://icon.png");
             embed.addFields(
                 {name : "言葉", value : `${surface}`, inline : true},
-                {name : "読み", value : `${pronunciation}`, inline : true},
-                {name : "アクセント", value : `${accent}文字目`, inline : true},
-                {name : "優先度", value : `${priority}`, inline : true},                
+                {name : "発音", value : `${pronunciation}`, inline : true},
                 {name : "uuid", value : `${uuid}`, inline : true},
+                {name : "低語調位置", value : `${accent}文字目`, inline : true},
+                {name : "優先度", value : `${priority}`, inline : true}
             )
             embed.setFooter({text: "読み方が変わらない場合は優先度を上げてください"});
             embed.setColor(0x00FF00);
@@ -361,7 +361,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             break;
         }
         case 1 : {
-            embed.setTitle("こんなカタカナ知らないのだ");
+            embed.setTitle("知らないカタカナが含まれているのだ");
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "有効なカタカナを入力してください"});
             embed.setColor(0xFF0000);
@@ -379,9 +379,9 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             break;
         }
         case 3 : {
-            embed.setTitle("アクセントの位置がおかしいのだ");
+            embed.setTitle("語調低下の位置がおかしいのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "文字数を確認してください"});
+            embed.setFooter({text: "文字数を確認してください(拗音は直前の文字と合わせて1文字と判断される場合があります)"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/smug.png");

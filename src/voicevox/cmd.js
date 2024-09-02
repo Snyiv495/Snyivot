@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/08/23    
+    2024/08/26    
 *****************/
 
 module.exports = {
@@ -25,22 +25,23 @@ const embed = require('./embed');
 
 //コマンドの取得
 function getCmd(){
-    const voicevox = new SlashCommandBuilder()
-        .setName("voicevox")
-        .setDescription("voicevoxの始終コマンド")
-        .addStringOption(option => option
-            .setName("endoption")
-            .setDescription("voicevox終了用オプション")
-            .addChoices(
-                {name: "end", value: "end"},
-                {name: "end*", value: "end*"}
-            )
+    const voicevox_start = new SlashCommandBuilder()
+        .setName("voicevox_start")
+        .setDescription("voicevoxの開始コマンド")
+    ;
+
+    const voicevox_end = new SlashCommandBuilder()
+        .setName("voicevox_end")
+        .setDescription("voicevoxの終了コマンド")
+        .addBooleanOption(option => option
+            .setName("all")
+            .setDescription("サーバー全体の読み上げを終了する？")
         )
     ;
 
     const voicevox_setting_user = new SlashCommandBuilder()
         .setName("voicevox_setting_user")
-        .setDescription("voicevoxのユーザ用設定コマンド")
+        .setDescription("voicevoxのユーザー用設定コマンド")
         .addStringOption(option => option
             .setName("speaker")
             .setDescription("キャラ名を入力してください")
@@ -50,10 +51,6 @@ function getCmd(){
             .setName("style")
             .setDescription("キャラのスタイルを入力してください")
             .setAutocomplete(true)
-        )
-        .addStringOption(option => option
-            .setName("username")
-            .setDescription("読み上げに使うあなたの名前を入力してください")
         )
         .addNumberOption(option => option
             .setName("speed")
@@ -79,36 +76,40 @@ function getCmd(){
             .setMaxValue(2.0)
             .setMinValue(0.0)
         )
+        .addStringOption(option => option
+            .setName("username")
+            .setDescription("読み上げに使うあなたの名前を入力してください")
+        )
     ;
 
     const voicevox_setting_server = new SlashCommandBuilder()
         .setName("voicevox_setting_server")
-        .setDescription("voicevoxのサーバ用設定コマンド")
+        .setDescription("voicevoxのサーバー用設定コマンド")
         .addBooleanOption(option => option
-            .setName("sudo")
-            .setDescription("管理者のみがこのコマンドを利用できる")
+            .setName("need_sudo")
+            .setDescription("このコマンドの利用に管理者権限を必要とする？")
         )
         .addBooleanOption(option => option
-            .setName("name")
-            .setDescription("読み上げ時に名前を読み上げる")
+            .setName("read_name")
+            .setDescription("読み上げ時に名前を読み上げる？")
         )
         .addBooleanOption(option => option
             .setName("continue_name")
-            .setDescription("発言者が連続しても名前を読み上げる")
+            .setDescription("発言者が連続しても名前を読み上げる？")
         )
         .addBooleanOption(option => option
             .setName("continue_line")
-            .setDescription("複数行の文章も全て読み上げる")
+            .setDescription("複数行の文章も全て読み上げる？")
         )
         .addIntegerOption(option => option
             .setName("maxwords")
-            .setDescription("読み上げる最大文字数[10~50]")
+            .setDescription("読み上げる最大文字数を入力してください[10~50]")
             .setMaxValue(50)
             .setMinValue(10)
         )
         .addBooleanOption(option => option
             .setName("unif")
-            .setDescription("全員の読み上げ音声をこの設定で統一する")
+            .setDescription("全員の読み上げ音声をこのコマンド設定で統一する？")
         )
         .addStringOption(option => option
             .setName("speaker")
@@ -151,22 +152,21 @@ function getCmd(){
         .setDescription("voicevoxの辞書追加コマンド")
         .addStringOption(option => option
             .setName("surface")
-            .setDescription("読み方を指定したい言葉を入力してください")
+            .setDescription("言葉を入力してください")
             .setRequired(true)
         )
         .addStringOption(option => option
             .setName("pronunciation")
-            .setDescription("読み方をカタカナで入力してください")
+            .setDescription("発音をカタカナで入力してください")
             .setRequired(true)
         )
         .addIntegerOption(option => option
             .setName("accent")
-            .setDescription("音が下がる場所(カタカナの何文字目か)を入力してください")
-            .setRequired(true)
+            .setDescription("語調が下がるのが何文字目かを入力してください")
         )
         .addIntegerOption(option => option
             .setName("priority")
-            .setDescription("読み替えの優先度[1~9](数字が大きいほど優先度が高い)")
+            .setDescription("読み替えを行う優先度を入力してください")
             .setMaxValue(9)
             .setMinValue(1)
         )
@@ -179,13 +179,9 @@ function getCmd(){
             .setName("uuid")
             .setDescription("削除したい言葉のuuidを入力してください")
         )
-        .addBooleanOption(option => option
-            .setName("delall")
-            .setDescription("全ての言葉を削除する")
-        )
     ;
     
-    return [voicevox, voicevox_setting_user, voicevox_setting_server, voicevox_dictionary_add, voicevox_dictionary_delete];
+    return [voicevox_start, voicevox_end, voicevox_setting_user, voicevox_setting_server, voicevox_dictionary_add, voicevox_dictionary_delete];
 }
 
 //ユーザー情報の設定
@@ -197,16 +193,16 @@ async function setUser(interaction, speakers){
     if(interaction.options.get("speaker")){
         if(interaction.options.get("speaker").value === "ランダム"){
             const rand = Math.floor(Math.random()*speakers.length);
-            userInfo.name_speaker = speakers[rand].name;
+            userInfo.speaker = speakers[rand].name;
             userInfo.uuid = speakers[rand].speaker_uuid;
-            userInfo.name_style = speakers[rand].styles[0].name;
+            userInfo.style = speakers[rand].styles[0].name;
             userInfo.id = speakers[rand].styles[0].id; 
         }else{
             for(let i=0; i<speakers.length; i++){
                 if(speakers[i].name === interaction.options.get("speaker").value){
-                    userInfo.name_speaker = speakers[i].name;
+                    userInfo.speaker = speakers[i].name;
                     userInfo.uuid = speakers[i].speaker_uuid;
-                    userInfo.name_style = speakers[i].styles[0].name;
+                    userInfo.style = speakers[i].styles[0].name;
                     userInfo.id = speakers[i].styles[0].id; 
                     break;
                 }
@@ -221,15 +217,15 @@ async function setUser(interaction, speakers){
     //styleオプション
     if(!selEmb && interaction.options.get("style")){
         for(let i=0; i<speakers.length; i++){
-            if(userInfo.name_speaker === speakers[i].name){
+            if(userInfo.speaker === speakers[i].name){
                 if(interaction.options.get("style").value === "ランダム"){
                     const rand = Math.floor(Math.random()*speakers[i].styles.length);
-                    userInfo.name_style = speakers[i].styles[rand].name;
+                    userInfo.style = speakers[i].styles[rand].name;
                     userInfo.id = speakers[i].styles[rand].id;
                 }else{
                     for(let j=0; j<speakers[i].styles.length; j++){
                         if(speakers[i].styles[j].name === interaction.options.get("style").value){
-                            userInfo.name_style = speakers[i].styles[j].name;
+                            userInfo.style = speakers[i].styles[j].name;
                             userInfo.id = speakers[i].styles[j].id;
                             break;
                         }
@@ -242,11 +238,6 @@ async function setUser(interaction, speakers){
                 break;
             }
         }
-    }
-
-    //usernameオプション
-    if(interaction.options.get("username")){
-        userInfo.name_user = (interaction.options.get("username").value).substr(0, 10);
     }
 
     //speedオプション
@@ -268,6 +259,11 @@ async function setUser(interaction, speakers){
     if(interaction.options.get("volume")){
         userInfo.volume = interaction.options.get("volume").value;
     }
+    
+    //usernameオプション
+    if(interaction.options.get("username")){
+        userInfo.username = (interaction.options.get("username").value === "null") ? null : (interaction.options.get("username").value).substr(0, 10);
+    }
 
     //問題がなければ保存
     if(!selEmb){
@@ -282,21 +278,21 @@ async function setServer(interaction, speakers){
     const serverInfo = await db.getServerInfo(interaction.guild.id);
     let selEmb = 0;
 
-    if(serverInfo.sudo && !interaction.memberPermissions.has("Administrator")){
+    if(serverInfo.need_sudo && !interaction.memberPermissions.has("Administrator")){
         selEmb = 1;
     }else{
-        //sudoオプション
-        if(interaction.options.get("sudo")){
+        //need_sudoオプション
+        if(interaction.options.get("need_sudo")){
             if(interaction.memberPermissions.has("Administrator")){
-                serverInfo.sudo = interaction.options.get("sudo").value;
+                serverInfo.need_sudo = interaction.options.get("need_sudo").value;
             }else{
                 selEmb = 2;
             }
         }
 
         //nameオプション
-        if(interaction.options.get("name")){
-            serverInfo.name = interaction.options.get("name").value;
+        if(interaction.options.get("read_name")){
+            serverInfo.read_name = interaction.options.get("read_name").value;
         }
 
         //continue_nameオプション
@@ -323,16 +319,16 @@ async function setServer(interaction, speakers){
         if(interaction.options.get("speaker")){
             if(interaction.options.get("speaker").value === "ランダム"){
                 const rand = Math.floor(Math.random()*speakers.length);
-                serverInfo.name_speaker = speakers[rand].name;
+                serverInfo.speaker = speakers[rand].name;
                 serverInfo.uuid = speakers[rand].speaker_uuid;
-                serverInfo.name_style = speakers[rand].styles[0].name;
+                serverInfo.style = speakers[rand].styles[0].name;
                 serverInfo.id = speakers[rand].styles[0].id; 
             }else{
                 for(let i=0; i<speakers.length; i++){
                     if(speakers[i].name === interaction.options.get("speaker").value){
-                        serverInfo.name_speaker = speakers[i].name;
+                        serverInfo.speaker = speakers[i].name;
                         serverInfo.uuid = speakers[i].speaker_uuid;
-                        serverInfo.name_style = speakers[i].styles[0].name;
+                        serverInfo.style = speakers[i].styles[0].name;
                         serverInfo.id = speakers[i].styles[0].id; 
                         break;
                     }
@@ -347,15 +343,15 @@ async function setServer(interaction, speakers){
         //styleオプション
         if(!selEmb && interaction.options.get("style")){
             for(let i=0; i<speakers.length; i++){
-                if(serverInfo.name_speaker === speakers[i].name){
+                if(serverInfo.speaker === speakers[i].name){
                     if(interaction.options.get("style").value === "ランダム"){
                         const rand = Math.floor(Math.random()*speakers[i].styles.length);
-                        serverInfo.name_style = speakers[i].styles[rand].name;
+                        serverInfo.style = speakers[i].styles[rand].name;
                         serverInfo.id = speakers[i].styles[rand].id;
                     }else{
                         for(let j=0; j<speakers[i].styles.length; j++){
                             if(speakers[i].styles[j].name === interaction.options.get("style").value){
-                                serverInfo.name_style = speakers[i].styles[j].name;
+                                serverInfo.style = speakers[i].styles[j].name;
                                 serverInfo.id = speakers[i].styles[j].id;
                                 break;
                             }
@@ -400,7 +396,7 @@ async function setServer(interaction, speakers){
     interaction.editReply(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
 }
 
-//voicevox_setting_userコマンドの補助
+//voicevox_setting_*コマンドの補助
 async function autocomplete(interaction, speakers){
     const focusedOpt = interaction.options.getFocused(true);
     const choices = new Array();
@@ -558,40 +554,30 @@ function end(interaction, channel_map, subsc_map){
 
         //読み上げ終了
         else{
-            if(interaction.isCommand()){
-
-                //endオプション
-                if(interaction.options.get("endoption").value == "end"){
-                    interaction.guild.channels.cache.forEach((channel) => {
-                        if(channel_map.get(channel.id) && channel.id != textCh){
-                            channel_map.delete(textCh.id);
-                            selEmb = 3;
-                            return;
-                        }
-                    });
-                }
-
-                //end*オプション
-                if(!selEmb || interaction.options.get("endoption").value == "end*"){
-                    try{
-                        subsc_map.get(voiceCh.id).connection.destroy();
-                    }catch(e){
-                        console.log("### ボイチャ切断エラー ###");
+            if((interaction.isButton() && interaction.customId === "vv_end") || (interaction.isCommand() && (!interaction.options.get("all") || !interaction.options.get("all").value))){
+                interaction.guild.channels.cache.forEach((channel) => {
+                    if(channel_map.get(channel.id) && channel.id != textCh){
+                        channel_map.delete(textCh.id);
+                        selEmb = 3;
+                        return;
                     }
-                    subsc_map.delete(voiceCh.id);
-                    interaction.guild.channels.cache.forEach((channel) => {
-                        if(channel_map.get(channel.id)){
-                            channel_map.delete(channel.id);
-                        }
-                    });
+                });
+            }
+
+            //allオプション
+            if(!selEmb || (interaction.isButton() && interaction.customId === "vv_end_all") || (interaction.isCommand() && interaction.options.get("all").value)){
+                try{
+                    subsc_map.get(voiceCh.id).connection.destroy();
+                }catch(e){
+                    console.log("### ボイチャ切断エラー ###");
                 }
-                
+                subsc_map.delete(voiceCh.id);
+                interaction.guild.channels.cache.forEach((channel) => {
+                    if(channel_map.get(channel.id)){
+                        channel_map.delete(channel.id);
+                    }
+                });
             }
-
-            if(interaction.isButton()){
-
-            }
-            
         }
     }
 
@@ -603,7 +589,7 @@ async function dictAdd(interaction){
     const serverInfo = await db.getServerInfo(interaction.guild.id);
     let surface = interaction.options.get("surface").value;
     let pronunciation = interaction.options.get("pronunciation").value;
-    let accent = interaction.options.get("accent").value;
+    let accent = 1;
     let priority = 5;
     let uuid = null;
     let selEmb = 0;
@@ -616,6 +602,12 @@ async function dictAdd(interaction){
     //クヮ, グヮ以外のヮを検出
     if(pronunciation.match(/(?<!(ク|グ))ヮ/)){
         selEmb = 2;
+    }
+
+
+    //アクセントの確認
+    if(interaction.options.get("accent")){
+        accent = interaction.options.get("accent").value;
     }
 
     //優先度の確認
@@ -668,14 +660,14 @@ async function dictDel(interaction){
     let surface = null;
     let selEmb = 0;
 
-    //全削除オプション
-    if(interaction.options.get("delall")){
+    //全削除uuid
+    if(uuid === "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" || uuid === "********-****-****-****-************"){
         serverInfo.dict = {};
         selEmb = 1; 
     }
 
     //任意のuuidの言葉を削除する
-    else if(uuid){
+    else if(uuid && serverInfo.dict[uuid]){
         surface = serverInfo.dict[uuid].surface
         delete serverInfo.dict[uuid];
         selEmb = 2;
@@ -694,10 +686,10 @@ async function dictDel(interaction){
     //辞書ファイルの作成
     if(!selEmb){
         const uuids = Object.keys(serverInfo.dict);
-        let csvStr = "言葉,読み方,uuid,優先度,アクセント位置\n";
+        let csvStr = "言葉,発音,uuid,低語調位置,優先度\n";
 
         for(let i=0; i<uuids.length; i++){
-            csvStr = csvStr + `${serverInfo.dict[uuids[i]].surface},${serverInfo.dict[uuids[i]].pronunciation},${uuids[i]},${serverInfo.dict[uuids[i]].priority},${serverInfo.dict[uuids[i]].accent_type}\n`;
+            csvStr = csvStr + `${serverInfo.dict[uuids[i]].surface},${serverInfo.dict[uuids[i]].pronunciation},${uuids[i]},${serverInfo.dict[uuids[i]].accent_type},${serverInfo.dict[uuids[i]].priority}\n`;
         }
 
         fs.writeFile(dictCsv, csvStr, (e) => {});

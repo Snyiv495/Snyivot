@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/08/21        
+    2024/08/26        
 *****************/
 
 module.exports = {
@@ -104,7 +104,7 @@ async function formText(message, userInfo, serverInfo){
     }
 
     //名前
-    if(serverInfo.name){
+    if(serverInfo.read_name){
         let beforeUserId = null;
 
         if(!serverInfo.continue_name){
@@ -118,7 +118,7 @@ async function formText(message, userInfo, serverInfo){
         }
 
         if(beforeUserId != message.member.id){
-            text = userInfo.name_user ? (userInfo.name_user).substr(0, 10) + "さん、" + text : (message.member.displayName).substr(0, 10) + "さん、" + text;
+            text = userInfo.username ? (userInfo.username).substr(0, 10) + "さん、" + text : (message.member.displayName).substr(0, 10) + "さん、" + text;
         }
     }
 
