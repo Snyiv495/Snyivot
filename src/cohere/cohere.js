@@ -1,7 +1,7 @@
 /*****************
     cohere.js
     スニャイヴ
-    2024/07/22    
+    2024/09/03    
 *****************/
 
 module.exports = {
@@ -11,5 +11,6 @@ module.exports = {
 const co_invoke = require('./invoke');
 
 async function invoke(message, readme){
-    co_invoke.invoke(message, readme);
+    await co_invoke.invoke(message, readme);
+    return;
 }

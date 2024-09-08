@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/07/22
+    2024/09/03
 *****************/
 
 module.exports = {
@@ -10,11 +10,20 @@ module.exports = {
 
 const {EmbedBuilder} = require('discord.js');
 
-function invoke(resTxt){
+function invoke(question, anser){
     const embed = new EmbedBuilder();
+
+    if(question > 4000){
+        question = question.substr(0, 3992) + "...<以下略>";
+    }
+
+    if(anser > 1000){
+        anser = anser.substr(0, 992) + "...<以下略>";
+    }
     
-    embed.setTitle("A.");
-    embed.addFields({name: resTxt.substr(0, 256), value: "\n"});
+    embed.setTitle("Q.");
+    embed.setDescription(question)
+    embed.addFields({name: "A.", value: anser});
     embed.setFooter({text: "Cohere AIによる生成"});
     embed.setColor(0x00FF00);
 

@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/08/26    
+    2024/09/09    
 *****************/
 
 module.exports = {
@@ -270,7 +270,9 @@ async function setUser(interaction, speakers){
         await db.setUserInfo(interaction.user.id, userInfo);
     }
 
-    interaction.editReply(await embed.setUser(userInfo, interaction.user.displayName, selEmb));
+    interaction.followUp(await embed.setUser(userInfo, interaction.user.displayName, selEmb));
+
+    return;
 }
 
 //サーバー情報の設定
@@ -393,7 +395,9 @@ async function setServer(interaction, speakers){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
     
-    interaction.editReply(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
+    interaction.followUp(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
+
+    return;
 }
 
 //voicevox_setting_*コマンドの補助
@@ -523,7 +527,9 @@ function start(interaction, channel_map, subsc_map){
         }
     }
 
-    interaction.editReply(embed.start(textCh, voiceCh, selEmb));
+    interaction.followUp(embed.start(textCh, voiceCh, selEmb));
+
+    return;
 }
 
 //読み上げ終了
@@ -581,7 +587,9 @@ function end(interaction, channel_map, subsc_map){
         }
     }
 
-    interaction.editReply(embed.end(textCh, voiceCh, selEmb));
+    interaction.followUp(embed.end(textCh, voiceCh, selEmb));
+
+    return;
 }
 
 //辞書の追加
@@ -649,7 +657,9 @@ async function dictAdd(interaction){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
 
-    interaction.editReply(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
+    interaction.followUp(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
+
+    return;
 }
 
 //辞書の削除
@@ -696,7 +706,9 @@ async function dictDel(interaction){
         
     }
 
-    await interaction.editReply(embed.dictDel(dictCsv, surface, selEmb));
+    await interaction.followUp(embed.dictDel(dictCsv, surface, selEmb));
 
     fs.unlink(dictCsv, (e) => {});
+
+    return;
 }

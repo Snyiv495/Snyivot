@@ -1,71 +1,72 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/09/03
+    2024/09/04
 *****************/
 
 module.exports = {
-    menu_home: menu_home,
-    menu_voicevox: menu_voicevox,
+    menu_mention: menu_mention,
+    menu_vv: menu_vv,
     menu_help: menu_help,
-    readme: readme,
-    cohere: cohere,
-    menu_help_voicevox_1: menu_help_voicevox_1,
-    menu_help_voicevox_2: menu_help_voicevox_2,
-    help_voicevox_start: help_voicevox_start,
-    help_voicevox_end: help_voicevox_end,
-    help_voicevox_setting_user: help_voicevox_setting_user,
-    help_voicevox_setting_server: help_voicevox_setting_server,
-    help_voicevox_dictAdd: help_voicevox_dictAdd,
-    help_voicevox_dictDel: help_voicevox_dictDel,
+    menu_help_vv01: menu_help_vv01,
+    menu_help_vv02: menu_help_vv02,
+    help_readme: help_readme,
+    help_cohere: help_cohere,
+    help_vv_start: help_vv_start,
+    help_vv_end: help_vv_end,
+    help_vv_setUser: help_vv_setUser,
+    help_vv_setServer: help_vv_setServer,
+    help_vv_dictAdd: help_vv_dictAdd,
+    help_vv_dictDel: help_vv_dictDel,
 }
 
 const {EmbedBuilder, AttachmentBuilder,  ButtonBuilder, ButtonStyle, ActionRowBuilder} = require('discord.js');
 
-function menu_home(){
+function menu_mention(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
     const buttons = new ActionRowBuilder();
-    const voicevox = new ButtonBuilder();
-    const zundamocchi = new ButtonBuilder();
-    const help = new ButtonBuilder();
+    const menu_vv = new ButtonBuilder();
+    const menu_zundamocchi = new ButtonBuilder();
+    const menu_help = new ButtonBuilder();
 
     embed.setTitle("呼ばれたのだ！\n何がしたいのだ？")
     embed.setThumbnail("attachment://icon.png")
+    embed.addFields({name: "ボクは忙しいから何もないならすぐに帰るのだ", value: "10秒後にこのメッセージは削除されます"})
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/dumb.png");
     
-    voicevox.setCustomId("voicevox");
-    voicevox.setStyle(ButtonStyle.Primary);
-    voicevox.setLabel("読み上げ");
-    voicevox.setDisabled(false);
+    menu_vv.setCustomId("menu_vv");
+    menu_vv.setStyle(ButtonStyle.Primary);
+    menu_vv.setLabel("読み上げ");
+    menu_vv.setDisabled(false);
 
-    zundamocchi.setCustomId("zundamocchi");
-    zundamocchi.setStyle(ButtonStyle.Primary);
-    zundamocchi.setLabel("ずんだもっち");
-    zundamocchi.setDisabled(true);
+    menu_zundamocchi.setCustomId("menu_zundamocchi");
+    menu_zundamocchi.setStyle(ButtonStyle.Primary);
+    menu_zundamocchi.setLabel("ずんだもっち");
+    menu_zundamocchi.setDisabled(true);
 
-    help.setCustomId("help");
-    help.setStyle(ButtonStyle.Secondary);
-    help.setLabel("使い方");
-    help.setDisabled(false);
+    menu_help.setCustomId("menu_help");
+    menu_help.setStyle(ButtonStyle.Secondary);
+    menu_help.setLabel("使い方");
+    menu_help.setDisabled(false);
 
-    buttons.addComponents(voicevox);
-    buttons.addComponents(zundamocchi);
-    buttons.addComponents(help);
+    buttons.addComponents(menu_vv);
+    buttons.addComponents(menu_zundamocchi);
+    buttons.addComponents(menu_help);
 
     return {files: [attachment], embeds: [embed], components: [buttons]};
 }
 
-function menu_voicevox(){
+function menu_vv(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
     const buttons = new ActionRowBuilder();
-    const start = new ButtonBuilder();
-    const end = new ButtonBuilder();
-    const endAll = new ButtonBuilder();
+    const start_vv = new ButtonBuilder();
+    const end_vv = new ButtonBuilder();
+    const endAll_vv = new ButtonBuilder();
 
     embed.setTitle("読み上げの開始か終了をするのだ？")
     embed.setThumbnail("attachment://icon.png")
@@ -74,24 +75,24 @@ function menu_voicevox(){
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/dumb.png");
     
-    start.setCustomId("vv_start");
-    start.setStyle(ButtonStyle.Primary);
-    start.setLabel("開始");
-    start.setDisabled(false);
+    start_vv.setCustomId("start_vv");
+    start_vv.setStyle(ButtonStyle.Primary);
+    start_vv.setLabel("開始");
+    start_vv.setDisabled(false);
 
-    end.setCustomId("vv_end");
-    end.setStyle(ButtonStyle.Danger);
-    end.setLabel("終了");
-    end.setDisabled(false);
+    end_vv.setCustomId("end_vv");
+    end_vv.setStyle(ButtonStyle.Danger);
+    end_vv.setLabel("終了");
+    end_vv.setDisabled(false);
 
-    endAll.setCustomId("vv_end_all");
-    endAll.setStyle(ButtonStyle.Danger);
-    endAll.setLabel("全体終了");
-    endAll.setDisabled(false);
+    endAll_vv.setCustomId("endAll_vv");
+    endAll_vv.setStyle(ButtonStyle.Danger);
+    endAll_vv.setLabel("全体終了");
+    endAll_vv.setDisabled(false);
 
-    buttons.addComponents(start);
-    buttons.addComponents(end);
-    buttons.addComponents(endAll);
+    buttons.addComponents(start_vv);
+    buttons.addComponents(end_vv);
+    buttons.addComponents(endAll_vv);
 
     return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
 }
@@ -100,9 +101,9 @@ function menu_help(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
     const buttons = new ActionRowBuilder();
-    const cohere = new ButtonBuilder();
-    const voicevox = new ButtonBuilder();
-    const readme = new ButtonBuilder();
+    const help_cohere = new ButtonBuilder();
+    const menu_help_vv01 = new ButtonBuilder();
+    const help_readme = new ButtonBuilder();
 
     embed.setTitle("何について知りたいのだ？")
     embed.setThumbnail("attachment://icon.png")
@@ -112,29 +113,118 @@ function menu_help(){
     attachment.setFile("zundamon/face/dumb.png");
 
     
-    cohere.setCustomId("help_cohere");
-    cohere.setStyle(ButtonStyle.Primary);
-    cohere.setLabel("AI");
-    cohere.setDisabled(false);
+    help_cohere.setCustomId("help_cohere");
+    help_cohere.setStyle(ButtonStyle.Primary);
+    help_cohere.setLabel("AI");
+    help_cohere.setDisabled(false);
 
-    voicevox.setCustomId("help_voicevox");
-    voicevox.setStyle(ButtonStyle.Primary);
-    voicevox.setLabel("読み上げ");
-    voicevox.setDisabled(false);
+    menu_help_vv01.setCustomId("menu_help_vv01");
+    menu_help_vv01.setStyle(ButtonStyle.Primary);
+    menu_help_vv01.setLabel("読み上げ");
+    menu_help_vv01.setDisabled(false);
 
-    readme.setCustomId("readme");
-    readme.setStyle(ButtonStyle.Secondary);
-    readme.setLabel("Snyivot");
-    readme.setDisabled(false);
+    help_readme.setCustomId("help_readme");
+    help_readme.setStyle(ButtonStyle.Secondary);
+    help_readme.setLabel("Snyivot");
+    help_readme.setDisabled(false);
 
-    buttons.addComponents(cohere);
-    buttons.addComponents(voicevox);
-    buttons.addComponents(readme);
+    buttons.addComponents(help_cohere);
+    buttons.addComponents(menu_help_vv01);
+    buttons.addComponents(help_readme);
 
     return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
 }
 
-function readme(){
+function menu_help_vv01(){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    const buttons = new ActionRowBuilder();
+    const help_vv_start = new ButtonBuilder();
+    const help_vv_end = new ButtonBuilder();
+    const help_vv_setUser = new ButtonBuilder();
+    const help_vv_setServer = new ButtonBuilder();
+    const menu_help_vv02 = new ButtonBuilder();
+
+    embed.setTitle("何について知りたいのだ？")
+    embed.setThumbnail("attachment://icon.png")
+    embed.setFooter({text: "ボタンを押してください"})
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("zundamon/face/dumb.png");
+
+    help_vv_start.setCustomId("help_vv_start");
+    help_vv_start.setStyle(ButtonStyle.Primary);
+    help_vv_start.setLabel("開始");
+    help_vv_start.setDisabled(false);
+
+    help_vv_end.setCustomId("help_vv_end");
+    help_vv_end.setStyle(ButtonStyle.Primary);
+    help_vv_end.setLabel("終了");
+    help_vv_end.setDisabled(false);
+
+    help_vv_setUser.setCustomId("help_vv_setUser");
+    help_vv_setUser.setStyle(ButtonStyle.Success);
+    help_vv_setUser.setLabel("ユーザー設定");
+    help_vv_setUser.setDisabled(false);
+
+    help_vv_setServer.setCustomId("help_vv_setServer");
+    help_vv_setServer.setStyle(ButtonStyle.Success);
+    help_vv_setServer.setLabel("サーバー設定");
+    help_vv_setServer.setDisabled(false);
+
+    menu_help_vv02.setCustomId("menu_help_vv02");
+    menu_help_vv02.setStyle(ButtonStyle.Secondary);
+    menu_help_vv02.setLabel("次へ");
+    menu_help_vv02.setDisabled(false);
+
+
+    buttons.addComponents(help_vv_start);
+    buttons.addComponents(help_vv_end);
+    buttons.addComponents(help_vv_setUser);
+    buttons.addComponents(help_vv_setServer);
+    buttons.addComponents(menu_help_vv02);
+
+    return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
+}
+
+function menu_help_vv02(){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+    const buttons = new ActionRowBuilder();
+    const menu_help_vv01 = new ButtonBuilder();
+    const help_vv_dictAdd = new ButtonBuilder();
+    const help_vv_dictDel = new ButtonBuilder();
+
+    embed.setTitle("何について知りたいのだ？")
+    embed.setThumbnail("attachment://icon.png")
+    embed.setFooter({text: "ボタンを押してください"})
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("zundamon/face/dumb.png");
+
+    menu_help_vv01.setCustomId("menu_help_vv01");
+    menu_help_vv01.setStyle(ButtonStyle.Secondary);
+    menu_help_vv01.setLabel("前へ");
+    menu_help_vv01.setDisabled(false);
+
+    help_vv_dictAdd.setCustomId("help_vv_dictAdd");
+    help_vv_dictAdd.setStyle(ButtonStyle.Success);
+    help_vv_dictAdd.setLabel("辞書追加");
+    help_vv_dictAdd.setDisabled(false);
+
+    help_vv_dictDel.setCustomId("help_vv_dictDel");
+    help_vv_dictDel.setStyle(ButtonStyle.Success);
+    help_vv_dictDel.setLabel("辞書削除");
+    help_vv_dictDel.setDisabled(false);
+
+    buttons.addComponents(menu_help_vv01);
+    buttons.addComponents(help_vv_dictAdd);
+    buttons.addComponents(help_vv_dictDel);
+
+    return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
+}
+
+function help_readme(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
     
@@ -149,7 +239,7 @@ function readme(){
     return {files: ["./README.md", attachment], embeds: [embed], ephemeral: true};
 }
 
-function cohere(){
+function help_cohere(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -158,7 +248,7 @@ function cohere(){
     embed.setThumbnail("attachment://icon.png");
     embed.addFields({name: "ぼくにメンションしながら質問をしてくれたら答えるのだ", value: "例：@Snyivot 読み上げの始め方を教えて"});
     embed.addFields({name: "使い方以外の質問も大歓迎なのだ", value: "例：@Snyivot 今日の夜ご飯を考えて"});
-    embed.setFooter({text: "出力は最大でも200文字程度です"});
+    embed.setFooter({text: "出力は最大でも1000文字程度です"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/normal.png");
@@ -166,96 +256,7 @@ function cohere(){
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-function menu_help_voicevox_1(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-    const buttons = new ActionRowBuilder();
-    const start = new ButtonBuilder();
-    const end = new ButtonBuilder();
-    const setting_user = new ButtonBuilder();
-    const setting_server = new ButtonBuilder();
-    const to_menu_help_voicevox_2 = new ButtonBuilder();
-
-    embed.setTitle("何について知りたいのだ？")
-    embed.setThumbnail("attachment://icon.png")
-    embed.setFooter({text: "ボタンを押してください"})
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
-
-    start.setCustomId("help_voicevox_start");
-    start.setStyle(ButtonStyle.Primary);
-    start.setLabel("開始");
-    start.setDisabled(false);
-
-    end.setCustomId("help_voicevox_end");
-    end.setStyle(ButtonStyle.Primary);
-    end.setLabel("終了");
-    end.setDisabled(false);
-
-    setting_user.setCustomId("help_voicevox_setting_user");
-    setting_user.setStyle(ButtonStyle.Success);
-    setting_user.setLabel("ユーザー設定");
-    setting_user.setDisabled(false);
-
-    setting_server.setCustomId("help_voicevox_setting_server");
-    setting_server.setStyle(ButtonStyle.Success);
-    setting_server.setLabel("サーバー設定");
-    setting_server.setDisabled(false);
-
-    to_menu_help_voicevox_2.setCustomId("to_menu_help_voicevox_2");
-    to_menu_help_voicevox_2.setStyle(ButtonStyle.Secondary);
-    to_menu_help_voicevox_2.setLabel("次へ");
-    to_menu_help_voicevox_2.setDisabled(false);
-
-
-    buttons.addComponents(start);
-    buttons.addComponents(end);
-    buttons.addComponents(setting_user);
-    buttons.addComponents(setting_server);
-    buttons.addComponents(to_menu_help_voicevox_2);
-
-    return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
-}
-
-function menu_help_voicevox_2(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-    const buttons = new ActionRowBuilder();
-    const to_menu_help_voicevox_1 = new ButtonBuilder();
-    const dictAdd = new ButtonBuilder();
-    const dictDel = new ButtonBuilder();
-
-    embed.setTitle("何について知りたいのだ？")
-    embed.setThumbnail("attachment://icon.png")
-    embed.setFooter({text: "ボタンを押してください"})
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
-
-    to_menu_help_voicevox_1.setCustomId("to_menu_help_voicevox_1");
-    to_menu_help_voicevox_1.setStyle(ButtonStyle.Secondary);
-    to_menu_help_voicevox_1.setLabel("前へ");
-    to_menu_help_voicevox_1.setDisabled(false);
-
-    dictAdd.setCustomId("help_voicevox_dictAdd");
-    dictAdd.setStyle(ButtonStyle.Success);
-    dictAdd.setLabel("辞書追加");
-    dictAdd.setDisabled(false);
-
-    dictDel.setCustomId("help_voicevox_dictDel");
-    dictDel.setStyle(ButtonStyle.Success);
-    dictDel.setLabel("辞書削除");
-    dictDel.setDisabled(false);
-
-    buttons.addComponents(to_menu_help_voicevox_1);
-    buttons.addComponents(dictAdd);
-    buttons.addComponents(dictDel);
-
-    return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};
-}
-
-function help_voicevox_start(){
+function help_vv_start(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -270,7 +271,7 @@ function help_voicevox_start(){
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-function help_voicevox_end(){
+function help_vv_end(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -285,7 +286,7 @@ function help_voicevox_end(){
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-function help_voicevox_setting_user(){
+function help_vv_setUser(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -307,7 +308,7 @@ function help_voicevox_setting_user(){
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-function help_voicevox_setting_server(){
+function help_vv_setServer(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -329,7 +330,7 @@ function help_voicevox_setting_server(){
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-function help_voicevox_dictAdd(){
+function help_vv_dictAdd(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -348,7 +349,7 @@ function help_voicevox_dictAdd(){
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-function help_voicevox_dictDel(){
+function help_vv_dictDel(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -357,7 +358,6 @@ function help_voicevox_dictDel(){
     embed.addFields({name: "スラッシュコマンドで辞書の一覧が取得できるのだ", value: "/voicevox_dictionary_delete"});
     embed.addFields({name: "オプションを追加することで辞書の削除ができるのだ", value: "例：/voicevox_dictionary_delete uuid 12345678-abcd-ijkl-wxyz-1234567890ab"});
     embed.addFields({name: "uuidの文字をすべて`x`か`*`にすると全削除ができるのだ", value: "例：/voicevox_dictionary_delete uuid xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"});
-
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/normal.png");

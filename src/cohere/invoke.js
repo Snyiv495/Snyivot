@@ -1,7 +1,7 @@
 /*****************
     invoke.js
     スニャイヴ
-    2024/07/22    
+    2024/09/03    
 *****************/
 
 module.exports = {
@@ -21,7 +21,7 @@ function getPreamble(readme){
         あなたは「Snyivot」という名前のDiscordのbotに搭載されている機能の一つのチャットボットです。
         質問に対して、Snyivotの機能説明や利用方法が求められていると判断された場合は、## README に示す情報をもとに回答してください。
         Snyivotに関係ない質問や雑談等であると判断した場合は、## README に示す情報は無視して回答してください。
-        また回答は一問一答、200文字以内で簡潔にお願いします。
+        また回答は一問一答でできるだけ短く、最大でも1000文字以内で簡潔にお願いします。
         現在の日付は${date.getFullYear()+'/'+('0'+(date.getMonth()+1)).slice(-2)+'/'+('0'+date.getDate()).slice(-2)+' '+('0'+date.getHours()).slice(-2)+':'+('0'+date.getMinutes()).slice(-2)+':'+('0'+date.getSeconds()).slice(-2)+'(JST)'}です。
 
         ## README
@@ -43,12 +43,12 @@ function getPreamble(readme){
 }
 
 async function invoke(message, readme){
-    const text = message.content.replace(`<@${process.env.SNYIVOT_ID}>`, "");
+    const text = message.content.replace(`<@${process.env.BOT_ID}>`, "");
 
     try{
         const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
-        message.reply(embed.invoke(res.text));
-    }catch(e){
-        console.log(e);
-    }
+        await message.reply(embed.invoke(text, res.text));
+    }catch(e){console.log(e);}
+
+    return;
 }

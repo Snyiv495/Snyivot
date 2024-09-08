@@ -1,17 +1,13 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/09/03
+    2024/09/09
 *****************/
 
 module.exports = {
     getCmd: getCmd,
+    menu: menu,
     help: help,
-    menu_home: menu_home,
-    menu_voicevox: menu_voicevox,
-    menu_help: menu_help,
-    menu_help_voicevox_1: menu_help_voicevox_1,
-    menu_help_voicevox_2: menu_help_voicevox_2,
 }
 
 require('dotenv').config();
@@ -27,99 +23,100 @@ function getCmd(){
             .setName("content")
             .setDescription("知りたい内容を選択してください")
             .addChoices(
-                {name: "AIの回答生成", value: "cohere"},
-                {name: "読み上げ開始", value: "voicevox_start"},
-                {name: "読み上げ終了", value: "voicevox_end"},
-                {name: "読み上げユーザー設定", value: "voicevox_setting_user"},
-                {name: "読み上げサーバー設定", value: "voicevox_setting_server"},
-                {name: "読み上げ辞書追加", value: "voicevox_dictAdd"},
-                {name: "読み上げ辞書削除", value: "voicevox_dictDel"}
+                {name: "AIの回答生成", value: "help_cohere"},
+                {name: "読み上げ開始", value: "help_vv_start"},
+                {name: "読み上げ終了", value: "help_vv_end"},
+                {name: "読み上げユーザー設定", value: "help_vv_setUser"},
+                {name: "読み上げサーバー設定", value: "help_vv_setServer"},
+                {name: "読み上げ辞書追加", value: "help_vv_dictAdd"},
+                {name: "読み上げ辞書削除", value: "help_vv_dictDel"}
             )   
         );
 
     return help;
 }
 
+//メニュー
+async function menu(interaction){
+
+    //メンションメニュー
+    if(interaction.applicationId != process.env.BOT_ID){
+        let menu_mention = await interaction.reply(embed.menu_mention());
+        setTimeout(() => menu_mention.delete().catch(()=>{}), 10000);
+        return;
+    }
+
+    //voicevoxメニュー
+    if(interaction.customId === "menu_vv"){
+        await interaction.followUp(embed.menu_vv());
+        interaction.message.delete().catch(()=>{});
+        return;
+    }
+
+    //使い方メニュー
+    if(interaction.customId === "menu_help"){
+        await interaction.followUp(embed.menu_help());
+        interaction.message.delete().catch(()=>{});
+        return
+    }
+
+    //voicevox使い方メニュー01
+    if(interaction.customId === "menu_help_vv01"){
+        await interaction.editReply(embed.menu_help_vv01());
+        return;
+    }
+
+    //voicevox使い方メニュー02
+    if(interaction.customId === "menu_help_vv02"){
+        await interaction.editReply(embed.menu_help_vv02());
+        return;
+    }
+
+    return;
+}
+
 //helpコマンド
-function help(interaction){
+async function help(interaction){
 
     //helpコマンド
-    if((interaction.isCommand() && !interaction.options.get("content")) || (interaction.isButton() && interaction.customId === "readme")){
-        interaction.editReply(embed.readme());
-        return;
+    if((interaction.isCommand() && !interaction.options.get("content")) || (interaction.isButton() && interaction.customId === "help_readme")){
+        await interaction.followUp(embed.help_readme());
     }
 
     //cohereのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "cohere") ||  (interaction.isButton() && interaction.customId === "help_cohere")){
-        interaction.editReply(embed.cohere());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_cohere") ||  (interaction.isButton() && interaction.customId === "help_cohere")){
+        await interaction.followUp(embed.help_cohere());
     }
 
     //voicevox_startのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "voicevox_start") ||  (interaction.isButton() && interaction.customId === "help_voicevox_start")){
-        interaction.editReply(embed.help_voicevox_start());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_vv_start") ||  (interaction.isButton() && interaction.customId === "help_vv_start")){
+        await interaction.followUp(embed.help_vv_start());
     }
 
     //voicevox_endのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "voicevox_end") ||  (interaction.isButton() && interaction.customId === "help_voicevox_end")){
-        interaction.editReply(embed.help_voicevox_end());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_vv_end") ||  (interaction.isButton() && interaction.customId === "help_vv_end")){
+        await interaction.followUp(embed.help_vv_end());
     }
 
     //voicevox_setting_userのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "voicevox_setting_user") ||  (interaction.isButton() && interaction.customId === "help_voicevox_setting_user")){
-        interaction.editReply(embed.help_voicevox_setting_user());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_vv_setUser") ||  (interaction.isButton() && interaction.customId === "help_vv_setUser")){
+        await interaction.followUp(embed.help_vv_setUser());
     }
 
     //voicevox_setting_serverのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "voicevox_setting_server") ||  (interaction.isButton() && interaction.customId === "help_voicevox_setting_server")){
-        interaction.editReply(embed.help_voicevox_setting_server());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_vv_setServer") ||  (interaction.isButton() && interaction.customId === "help_vv_setServer")){
+        await interaction.followUp(embed.help_vv_setServer());
     }
 
     //voicevox_dictAddのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "voicevox_dictAdd") ||  (interaction.isButton() && interaction.customId === "help_voicevox_dictAdd")){
-        interaction.editReply(embed.help_voicevox_dictAdd());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_vv_dictAdd") ||  (interaction.isButton() && interaction.customId === "help_vv_dictAdd")){
+        await interaction.followUp(embed.help_vv_dictAdd());
     }
 
     //voicevox_dictDeleteのhelp
-    if((interaction.isCommand() && interaction.options.get("content").value === "voicevox_dictDel") ||  (interaction.isButton() && interaction.customId === "help_voicevox_dictDel")){
-        interaction.editReply(embed.help_voicevox_dictDel());
-        return;
+    else if((interaction.isCommand() && interaction.options.get("content").value === "help_vv_dictDel") ||  (interaction.isButton() && interaction.customId === "help_vv_dictDel")){
+        await interaction.followUp(embed.help_vv_dictDel());
     }
 
-    return;
-}
-
-//ホームメニュー
-function menu_home(message){
-    message.reply(embed.menu_home());
-    return;
-}
-
-//voicevoxメニュー
-function menu_voicevox(interaction){
-    interaction.editReply(embed.menu_voicevox());
-    return;
-}
-
-//ヘルプメニュー
-function menu_help(interaction){
-    interaction.editReply(embed.menu_help());
-    return;
-}
-
-//voicevoxヘルプメニュー1
-function menu_help_voicevox_1(interaction){
-    interaction.editReply(embed.menu_help_voicevox_1());
-    return;
-}
-
-//voicevoxヘルプメニュー2
-function menu_help_voicevox_2(interaction){
-    interaction.editReply(embed.menu_help_voicevox_2());
     return;
 }

@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/09/03    
+    2024/09/04    
 *****************/
 
 require('dotenv').config();
@@ -56,25 +56,30 @@ client.once('ready', async () => {
 
 //メッセージ動作
 client.on('messageCreate', async message => {
-    //botの発言, スポイラー, コードブロックのメッセージを除外
-    if(message.author.bot || (message.content.match(/^\|\|.*?\|\|$/)) || (message.content.match(/^```.*?```$/))){
+    //botの発言, スポイラーのみ, コードブロックを含むメッセージを除外
+    if(message.author.bot || (message.content.match(/^\|\|.*?\|\|$/)) || (message.content.match(/```.*?```/))){
         return;
     }
 
     //メンションに反応
     if(message.mentions.users.has(client.user.id)){
+
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            help.menu_home(message);
-            return;
+            await help.menu(message);
         }
        
         //内容があれば回答
         else{
-            cohere.invoke(message, readme);
-            return;
+            await cohere.invoke(message, readme);
         }
         
+        //メンション文を削除
+        if(message.deletable){
+            message.delete().catch(() => null);
+        }
+
+        return;
     }
     
     //読み上げ
@@ -92,6 +97,8 @@ client.on('interactionCreate', async (interaction) => {
     if(!interaction.isCommand() || !interaction.guild){
         return;
     }
+    
+    await interaction.deferReply();
 
     //helpコマンド
     if(interaction.commandName === "help"){
@@ -138,8 +145,9 @@ client.on('interactionCreate', async (interaction) => {
     return;
 })
 
-//コマンド補助動作
-client.on('interactionCreate', async (interaction) => {
+//コマンド自動補動作
+client.on('interactionCreate', (interaction) => {
+    //コマンド自動補完以外を除外
     if(!interaction.isAutocomplete()){
         return;
     }
@@ -155,46 +163,35 @@ client.on('interactionCreate', async (interaction) => {
 
 //ボタン動作
 client.on('interactionCreate', async (interaction) => {
+    //ボタン以外を除外
     if(!interaction.isButton()){
         return;
     }
 
-    if(interaction.customId === "voicevox"){
-        help.menu_voicevox(interaction);
+    //ボタンの削除
+    await interaction.update({components: [], ephemeral: true});
+
+    if(interaction.customId === "menu_vv" || interaction.customId === "menu_help"){
+        help.menu(interaction);
         return;
     }
 
-    if(interaction.customId === "vv_start"){
+    if(interaction.customId === "menu_help_vv01" || interaction.customId === "menu_help_vv02"){
+        help.menu(interaction);
+        return;
+    }
+
+    if(interaction.customId === "start_vv"){
         voicevox.start(interaction, channel_map, subsc_map);
         return;
     }
 
-    if(interaction.customId === "vv_end"){
+    if(interaction.customId === "end_vv" || interaction.customId === "endAll_vv"){
         voicevox.end(interaction, channel_map, subsc_map);
         return;
     }
 
-    if(interaction.customId === "vv_end_all"){
-        voicevox.end(interaction, channel_map, subsc_map);
-        return;
-    }
-
-    if(interaction.customId === "help"){
-        help.menu_help(interaction);
-        return;
-    }
-
-    if(interaction.customId === "help_voicevox" || interaction.customId === "to_menu_help_voicevox_1"){
-        help.menu_help_voicevox_1(interaction);
-        return;
-    }
-
-    if(interaction.customId === "to_menu_help_voicevox_2"){
-        help.menu_help_voicevox_2(interaction);
-        return;
-    }
-
-    if(interaction.customId === "readme" || interaction.customId === "help_cohere" || interaction.customId === "help_voicevox_start" || interaction.customId === "help_voicevox_end" || interaction.customId === "help_voicevox_setting_user" || interaction.customId === "help_voicevox_setting_server" || interaction.customId === "help_voicevox_dictAdd" || interaction.customId === "help_voicevox_dictDel"){
+    if(interaction.customId === "help_readme" || interaction.customId === "help_cohere" || interaction.customId === "help_vv_start" || interaction.customId === "help_vv_end" || interaction.customId === "help_vv_setUser" || interaction.customId === "help_vv_setServer" || interaction.customId === "help_vv_dictAdd" || interaction.customId === "help_vv_dictDel"){
         help.help(interaction);
         return;
     }
