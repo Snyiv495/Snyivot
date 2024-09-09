@@ -27,5 +27,5 @@ function invoke(question, anser){
     embed.setFooter({text: "Cohere AIによる生成"});
     embed.setColor(0x00FF00);
 
-    return {embeds: [embed]};
+    return {embeds: [embed], ephemeral: true};
 }

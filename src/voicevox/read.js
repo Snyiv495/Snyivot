@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/08/26        
+    2024/09/09        
 *****************/
 
 module.exports = {
@@ -119,6 +119,7 @@ async function formText(message, userInfo, serverInfo){
 
         if(beforeUserId != message.member.id){
             text = userInfo.username ? (userInfo.username).substr(0, 10) + "さん、" + text : (message.member.displayName).substr(0, 10) + "さん、" + text;
+            text = text.replace("#", "シャープ");
         }
     }
 

@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/09/04
+    2024/09/09
 *****************/
 
 module.exports = {
@@ -32,7 +32,7 @@ function menu_mention(){
 
     embed.setTitle("呼ばれたのだ！\n何がしたいのだ？")
     embed.setThumbnail("attachment://icon.png")
-    embed.addFields({name: "ボクは忙しいから何もないならすぐに帰るのだ", value: "10秒後にこのメッセージは削除されます"})
+    embed.addFields({name: " ", value: "このメッセージは10秒後に自動で削除されます"})
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");

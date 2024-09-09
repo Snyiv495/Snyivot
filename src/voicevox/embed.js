@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/08/26
+    2024/09/09
 *****************/
 
 module.exports = {
@@ -89,8 +89,10 @@ async function setUser(userInfo, displayName, selEmb){
 async function setServer(serverInfo, serverName, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
+    let ephe = false;
 
     if(selEmb){
+        ephe = true;
         switch(selEmb){
             case 1 : {
                 embed.setTitle("君に管理者権限がないのだ");
@@ -173,12 +175,13 @@ async function setServer(serverInfo, serverName, selEmb){
         attachment.setFile(Buffer.from(icon, 'base64'));
     }
 
-    return {files: [attachment], embeds: [embed],  ephemeral: false};
+    return {files: [attachment], embeds: [embed],  ephemeral: ephe};
 }
 
 function start(textCh, voiceCh, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
+    let ephe = true;
     
     switch(selEmb){
         case 0 : {
@@ -188,6 +191,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/normal.png");
+            ephe = false;
             break;
         }
         case 1 : {
@@ -247,12 +251,13 @@ function start(textCh, voiceCh, selEmb){
         default: embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed]};
+    return {files: [attachment], embeds: [embed], ephemeral: ephe};
 }
 
 function end(textCh, voiceCh, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
+    let ephe = true;
     
     switch(selEmb){
         case 0 : {
@@ -262,6 +267,7 @@ function end(textCh, voiceCh, selEmb){
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/normal.png");
+            ephe = false;
             break;
         }
         case 1 : {
@@ -289,12 +295,13 @@ function end(textCh, voiceCh, selEmb){
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/normal.png");
+            ephe = false;
             break;
         }
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed]};
+    return {files: [attachment], embeds: [embed], ephemeral: ephe};
 }
 
 function autoEnd(oldVoiceChName){
@@ -342,6 +349,7 @@ function compulsionMove(oldVoiceChName, newVoiceChName){
 function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
+    let ephe = true;
     
     switch(selEmb){
         case 0 : {
@@ -358,6 +366,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/happy.png");
+            ephe = false;
             break;
         }
         case 1 : {
@@ -390,12 +399,13 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed]};
+    return {files: [attachment], embeds: [embed], ephemeral: ephe};
 }
 
 function dictDel(dictCsv, surface, selEmb){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
+    let ephe = true;
 
     //辞書の送信
     if(!selEmb){
@@ -417,6 +427,7 @@ function dictDel(dictCsv, surface, selEmb){
             embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/dumb.png");
+            ephe = false;
             break;
         }
         case 2 : {
@@ -426,6 +437,7 @@ function dictDel(dictCsv, surface, selEmb){
             embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
  	        attachment.setFile("zundamon/face/dumb.png");
+            ephe = false;
             break;
         }
         case 3 : {
@@ -440,6 +452,5 @@ function dictDel(dictCsv, surface, selEmb){
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed]};
-
+    return {files: [attachment], embeds: [embed], ephemeral: ephe};
 }

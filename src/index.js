@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/09/04    
+    2024/09/09
 *****************/
 
 require('dotenv').config();
@@ -99,6 +99,7 @@ client.on('interactionCreate', async (interaction) => {
     }
     
     await interaction.deferReply();
+    await (await interaction.followUp({content: "コマンドを受理したのだ"})).delete().catch(()=>{});
 
     //helpコマンド
     if(interaction.commandName === "help"){
@@ -171,12 +172,7 @@ client.on('interactionCreate', async (interaction) => {
     //ボタンの削除
     await interaction.update({components: [], ephemeral: true});
 
-    if(interaction.customId === "menu_vv" || interaction.customId === "menu_help"){
-        help.menu(interaction);
-        return;
-    }
-
-    if(interaction.customId === "menu_help_vv01" || interaction.customId === "menu_help_vv02"){
+    if(interaction.customId === "menu_vv" || interaction.customId === "menu_help" || interaction.customId === "menu_help_vv01" || interaction.customId === "menu_help_vv02"){
         help.menu(interaction);
         return;
     }
