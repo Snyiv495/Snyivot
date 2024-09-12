@@ -1,10 +1,11 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/09/09
+    2024/09/12
 *****************/
 
 module.exports = {
+    menu_cohere: menu_cohere,
     menu_mention: menu_mention,
     menu_vv: menu_vv,
     menu_help: menu_help,
@@ -20,12 +21,13 @@ module.exports = {
     help_vv_dictDel: help_vv_dictDel,
 }
 
-const {EmbedBuilder, AttachmentBuilder,  ButtonBuilder, ButtonStyle, ActionRowBuilder} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder,  ButtonBuilder, ButtonStyle, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle} = require('discord.js');
 
 function menu_mention(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
     const buttons = new ActionRowBuilder();
+    const menu_cohere = new ButtonBuilder();
     const menu_vv = new ButtonBuilder();
     const menu_zundamocchi = new ButtonBuilder();
     const menu_help = new ButtonBuilder();
@@ -37,6 +39,11 @@ function menu_mention(){
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
     attachment.setFile("zundamon/face/dumb.png");
+
+    menu_cohere.setCustomId("menu_cohere");
+    menu_cohere.setStyle(ButtonStyle.Primary);
+    menu_cohere.setLabel("質問");
+    menu_cohere.setDisabled(false);
     
     menu_vv.setCustomId("menu_vv");
     menu_vv.setStyle(ButtonStyle.Primary);
@@ -53,11 +60,29 @@ function menu_mention(){
     menu_help.setLabel("使い方");
     menu_help.setDisabled(false);
 
+    buttons.addComponents(menu_cohere);
     buttons.addComponents(menu_vv);
     buttons.addComponents(menu_zundamocchi);
     buttons.addComponents(menu_help);
 
     return {files: [attachment], embeds: [embed], components: [buttons]};
+}
+
+function menu_cohere(){
+    const modal = new ModalBuilder();
+    const question = new TextInputBuilder();
+
+	modal.setCustomId("modal_cohere")
+	modal.setTitle("質問送信フォーム");
+
+    question.setCustomId("inputFiled_question")
+    question.setLabel("質問内容を入力してください")
+    question.setStyle(TextInputStyle.Short);
+    question.setRequired(true);
+    
+    modal.addComponents(new ActionRowBuilder().addComponents(question));
+
+    return modal;
 }
 
 function menu_vv(){
@@ -103,6 +128,7 @@ function menu_help(){
     const buttons = new ActionRowBuilder();
     const help_cohere = new ButtonBuilder();
     const menu_help_vv01 = new ButtonBuilder();
+    const menu_help_zundamocchi01 = new ButtonBuilder();
     const help_readme = new ButtonBuilder();
 
     embed.setTitle("何について知りたいのだ？")
@@ -115,13 +141,18 @@ function menu_help(){
     
     help_cohere.setCustomId("help_cohere");
     help_cohere.setStyle(ButtonStyle.Primary);
-    help_cohere.setLabel("AI");
+    help_cohere.setLabel("質問");
     help_cohere.setDisabled(false);
 
     menu_help_vv01.setCustomId("menu_help_vv01");
     menu_help_vv01.setStyle(ButtonStyle.Primary);
     menu_help_vv01.setLabel("読み上げ");
     menu_help_vv01.setDisabled(false);
+
+    menu_help_zundamocchi01.setCustomId("menu_help_zundamocchi01");
+    menu_help_zundamocchi01.setStyle(ButtonStyle.Primary);
+    menu_help_zundamocchi01.setLabel("ずんだもっち");
+    menu_help_zundamocchi01.setDisabled(true);
 
     help_readme.setCustomId("help_readme");
     help_readme.setStyle(ButtonStyle.Secondary);
@@ -130,6 +161,7 @@ function menu_help(){
 
     buttons.addComponents(help_cohere);
     buttons.addComponents(menu_help_vv01);
+    buttons.addComponents(menu_help_zundamocchi01);
     buttons.addComponents(help_readme);
 
     return {files: [attachment], embeds: [embed], components: [buttons], ephemeral: true};

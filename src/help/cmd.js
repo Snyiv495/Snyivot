@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/09/09
+    2024/09/12
 *****************/
 
 module.exports = {
@@ -46,17 +46,24 @@ async function menu(interaction){
         return;
     }
 
+    //cohereメニュー
+    if(interaction.customId === "menu_cohere"){
+        await interaction.message.delete().catch(()=>{});
+        interaction.showModal(embed.menu_cohere());
+        return;
+    }
+
     //voicevoxメニュー
     if(interaction.customId === "menu_vv"){
-        await interaction.followUp(embed.menu_vv());
-        interaction.message.delete().catch(()=>{});
+        await interaction.message.delete().catch(()=>{});
+        interaction.followUp(embed.menu_vv());
         return;
     }
 
     //使い方メニュー
     if(interaction.customId === "menu_help"){
-        await interaction.followUp(embed.menu_help());
-        interaction.message.delete().catch(()=>{});
+        await interaction.message.delete().catch(()=>{});
+        interaction.followUp(embed.menu_help());
         return
     }
 

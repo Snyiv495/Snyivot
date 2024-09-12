@@ -1,19 +1,37 @@
 /*****************
-    invoke.js
+    cmd.js
     スニャイヴ
-    2024/09/03    
+    2024/09/12
 *****************/
 
 module.exports = {
-    invoke: invoke
+    getCmd: getCmd,
+    invoke_mention: invoke_mention,
+    invoke_cmd: invoke_cmd,
+    invoke_modal: invoke_modal,
 }
 
 require('dotenv').config();
+const {SlashCommandBuilder} = require('discord.js');
 const {CohereClient} = require('cohere-ai');
-const embed  = require('./embed');
-
 const cohere = new CohereClient({token: process.env.COHERE_TOKEN});
+const embed = require('./embed');
 
+//コマンドの取得
+function getCmd(){
+    const help = new SlashCommandBuilder()
+        .setName("cohere")
+        .setDescription("質問コマンド")
+        .addStringOption(option => option
+            .setName("question")
+            .setDescription("質問内容を記入してください")
+            .setRequired(true)
+    );
+    
+    return help;
+}
+
+//前文の取得
 function getPreamble(readme){
     const date = new Date();
     const preamble = `
@@ -42,12 +60,37 @@ function getPreamble(readme){
     return preamble;
 }
 
-async function invoke(message, readme){
+//メンションからの呼び出し
+async function invoke_mention(message, readme){
     const text = message.content.replace(`<@${process.env.BOT_ID}>`, "");
 
     try{
         const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
         await message.reply(embed.invoke(text, res.text));
+    }catch(e){console.log(e);}
+
+    return;
+}
+
+//コマンドからの呼び出し
+async function invoke_cmd(interaction, readme){
+    const text = interaction.options.get("question").value;
+    console.log(text);
+    try{
+        const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
+        await interaction.followUp(embed.invoke(text, res.text));
+    }catch(e){console.log(e);}
+
+    return;
+}
+
+//モーダルからの呼び出し
+async function invoke_modal(interaction, readme){
+    const text = interaction.fields.getTextInputValue("inputFiled_question");
+
+    try{
+        const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
+        await interaction.reply(embed.invoke(text, res.text));
     }catch(e){console.log(e);}
 
     return;

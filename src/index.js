@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/09/09
+    2024/09/12
 *****************/
 
 require('dotenv').config();
@@ -37,6 +37,7 @@ client.once('ready', async () => {
     try{
         await client.application.commands.set([
             help.getCmd(),
+            cohere.getCmd(),
             voicevox.getCmd(vv_speakers)[0],
             voicevox.getCmd(vv_speakers)[1],
             voicevox.getCmd(vv_speakers)[2],
@@ -71,7 +72,7 @@ client.on('messageCreate', async message => {
        
         //内容があれば回答
         else{
-            await cohere.invoke(message, readme);
+            await cohere.invoke_mention(message, readme);
         }
         
         //メンション文を削除
@@ -97,13 +98,19 @@ client.on('interactionCreate', async (interaction) => {
     if(!interaction.isCommand() || !interaction.guild){
         return;
     }
-    
+
     await interaction.deferReply();
     await (await interaction.followUp({content: "コマンドを受理したのだ"})).delete().catch(()=>{});
 
     //helpコマンド
     if(interaction.commandName === "help"){
         help.help(interaction);
+        return;
+    }
+
+    //cohereコマンド
+    if(interaction.commandName === "cohere"){
+        cohere.invoke_cmd(interaction, readme);
         return;
     }
 
@@ -169,6 +176,11 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
+    if(interaction.customId === "menu_cohere"){
+        help.menu(interaction);
+        return;
+    }
+
     //ボタンの削除
     await interaction.update({components: [], ephemeral: true});
 
@@ -191,6 +203,21 @@ client.on('interactionCreate', async (interaction) => {
         help.help(interaction);
         return;
     }
+
+    return;
+})
+
+//モーダル動作
+client.on('interactionCreate', async (interaction) => {
+    //モーダル以外を除外
+    if(!interaction.isModalSubmit()){
+        return
+    }
+
+	if(interaction.customId === "modal_cohere"){
+        await cohere.invoke_modal(interaction, readme);
+        return;
+	}
 
     return;
 })
