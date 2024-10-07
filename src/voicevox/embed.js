@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/09/09
+    2024/10/07
 *****************/
 
 module.exports = {
@@ -31,7 +31,7 @@ async function setUser(userInfo, displayName, selEmb){
                 embed.setFooter({text: "存在しないスピーカーが入力されました"});
                 embed.setColor(0xFF0000);
                 attachment.setName("icon.png");
-                attachment.setFile("zundamon/face/dumb.png");
+                attachment.setFile("assets/zundamon/icon/delight.png");
                 break;
             }
             case 2 : {
@@ -40,7 +40,7 @@ async function setUser(userInfo, displayName, selEmb){
                 embed.setFooter({text: "存在しないスタイルが入力されました"});
                 embed.setColor(0xFF0000);
                 attachment.setName("icon.png");
-                attachment.setFile("zundamon/face/dumb.png");
+                attachment.setFile("assets/zundamon/icon/delight.png");
                 break;
             }
             default : embed.setTitle("undefined").setColor(0x000000);
@@ -100,7 +100,7 @@ async function setServer(serverInfo, serverName, selEmb){
                 embed.setFooter({text: "管理者権限が必要な設定にされています"});
                 embed.setColor(0xFF0000);
                 attachment.setName("icon.png");
-                attachment.setFile("zundamon/face/dumb.png");
+                attachment.setFile("assets/zundamon/icon/delight.png");
                 break;
             }
             case 2 : {
@@ -109,7 +109,7 @@ async function setServer(serverInfo, serverName, selEmb){
                 embed.setFooter({text: "sudoオプションの利用には管理者権限が必要です"});
                 embed.setColor(0xFF0000);
                 attachment.setName("icon.png");
-                attachment.setFile("zundamon/face/dumb.png");
+                attachment.setFile("assets/zundamon/icon/delight.png");
                 break;
             }
             case 3 : {
@@ -118,7 +118,7 @@ async function setServer(serverInfo, serverName, selEmb){
                 embed.setFooter({text: "存在しないスピーカーが入力されました"});
                 embed.setColor(0xFF0000);
                 attachment.setName("icon.png");
-                attachment.setFile("zundamon/face/dumb.png");
+                attachment.setFile("assets/zundamon/icon/delight.png");
                 break;
             }
             case 4 : {
@@ -127,7 +127,7 @@ async function setServer(serverInfo, serverName, selEmb){
                 embed.setFooter({text: "存在しないスタイルが入力されました"});
                 embed.setColor(0xFF0000);
                 attachment.setName("icon.png");
-                attachment.setFile("zundamon/face/dumb.png");
+                attachment.setFile("assets/zundamon/icon/delight.png");
                 break;
             }
             default : embed.setTitle("undefined").setColor(0x000000);
@@ -190,7 +190,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "VOICEVOX:ずんだもん"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/normal.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             ephe = false;
             break;
         }
@@ -200,7 +200,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "テキストチャンネルにのみ対応してます"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/sad.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 2 : {
@@ -209,7 +209,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "既に読み上げを行っています"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/sad.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 3 : {
@@ -218,7 +218,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "Snyivotをメンバーに加えてください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/sad.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 4 : {
@@ -227,7 +227,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "ボイスチャンネルに入ってから呼んでください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/dumb.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 5 : {
@@ -236,7 +236,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "ボイスチャンネルのメンバーや許容人数を確認してください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/sad.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 6 : {
@@ -245,7 +245,7 @@ function start(textCh, voiceCh, selEmb){
             embed.setFooter({text: "Snyivotに喋る権限を与えてください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/sad.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         default: embed.setTitle("undefined").setColor(0x000000);
@@ -266,7 +266,7 @@ function end(textCh, voiceCh, selEmb){
             embed.setFooter({text: "読み上げを終了します"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/normal.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             ephe = false;
             break;
         }
@@ -276,7 +276,7 @@ function end(textCh, voiceCh, selEmb){
             embed.setFooter({text: "読み上げを行ってるチャンネルで使用してください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/smug.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 2 : {
@@ -285,7 +285,7 @@ function end(textCh, voiceCh, selEmb){
             embed.setFooter({text: "読み上げを行っているボイスチャンネルに接続してから使用してください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
-            attachment.setFile("zundamon/face/smug.png");
+            attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 3 : {
@@ -294,7 +294,7 @@ function end(textCh, voiceCh, selEmb){
             embed.setFooter({text: `🔊${voiceCh.name}での読み上げを終了します`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/normal.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             ephe = false;
             break;
         }
@@ -313,7 +313,7 @@ function autoEnd(oldVoiceChName){
     embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/happy.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed]};
 }
@@ -327,7 +327,7 @@ function compulsionEnd(oldVoiceChName){
     embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/sad.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed]};
 }
@@ -341,7 +341,7 @@ function compulsionMove(oldVoiceChName, newVoiceChName){
     embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動しました`});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/sad.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed]};
 }
@@ -365,7 +365,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setFooter({text: "読み方が変わらない場合は優先度を上げてください"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/happy.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             ephe = false;
             break;
         }
@@ -375,7 +375,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setFooter({text: "有効なカタカナを入力してください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/dumb.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 2 : {
@@ -384,7 +384,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setFooter({text: "クヮ, グヮ以外のヮは指定できません"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
-            attachment.setFile("zundamon/face/dumb.png");
+            attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         case 3 : {
@@ -393,7 +393,7 @@ function dictAdd(surface, pronunciation, accent, priority, uuid, selEmb){
             embed.setFooter({text: "文字数を確認してください(拗音は直前の文字と合わせて1文字と判断される場合があります)"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/smug.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         default : embed.setTitle("undefined").setColor(0x000000);
@@ -414,7 +414,7 @@ function dictDel(dictCsv, surface, selEmb){
         embed.setFooter({text: "辞書の削除にはuuidを利用してください"});
         embed.setColor(0x00FF00);
         attachment.setName("icon.png");
-        attachment.setFile("zundamon/face/happy.png");
+        attachment.setFile("assets/zundamon/icon/delight.png");
         
         return {files: [dictCsv, attachment], embeds: [embed]};
     }
@@ -426,7 +426,7 @@ function dictDel(dictCsv, surface, selEmb){
             embed.setFooter({text: "辞書を削除しました"});
             embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/dumb.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             ephe = false;
             break;
         }
@@ -436,7 +436,7 @@ function dictDel(dictCsv, surface, selEmb){
             embed.setFooter({text: `${surface}を辞書から削除しました`});
             embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/dumb.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             ephe = false;
             break;
         }
@@ -446,7 +446,7 @@ function dictDel(dictCsv, surface, selEmb){
             embed.setFooter({text: "uuidに間違いがないか確認してください"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("zundamon/face/dumb.png");
+ 	        attachment.setFile("assets/zundamon/icon/delight.png");
             break;
         }
         default : embed.setTitle("undefined").setColor(0x000000);

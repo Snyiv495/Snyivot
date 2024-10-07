@@ -1,7 +1,7 @@
 /*****************
     embed.js
     スニャイヴ
-    2024/09/12
+    2024/10/07
 *****************/
 
 module.exports = {
@@ -32,13 +32,12 @@ function menu_mention(){
     const menu_zundamocchi = new ButtonBuilder();
     const menu_help = new ButtonBuilder();
 
-    embed.setTitle("呼ばれたのだ！\n何がしたいのだ？")
-    embed.setThumbnail("attachment://icon.png")
-    embed.addFields({name: " ", value: "このメッセージは10秒後に自動で削除されます"})
-    embed.setFooter({text: "ボタンを押してください"})
+    embed.setTitle("呼ばれたのだ！\n何がしたいのだ？");
+    embed.setThumbnail("attachment://icon.png");
+    embed.setFooter({text: "ボタンを押してください"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     menu_cohere.setCustomId("menu_cohere");
     menu_cohere.setStyle(ButtonStyle.Primary);
@@ -98,7 +97,7 @@ function menu_vv(){
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
     
     start_vv.setCustomId("start_vv");
     start_vv.setStyle(ButtonStyle.Primary);
@@ -136,7 +135,7 @@ function menu_help(){
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     
     help_cohere.setCustomId("help_cohere");
@@ -182,7 +181,7 @@ function menu_help_vv01(){
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     help_vv_start.setCustomId("help_vv_start");
     help_vv_start.setStyle(ButtonStyle.Primary);
@@ -232,7 +231,7 @@ function menu_help_vv02(){
     embed.setFooter({text: "ボタンを押してください"})
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/dumb.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     menu_help_vv01.setCustomId("menu_help_vv01");
     menu_help_vv01.setStyle(ButtonStyle.Secondary);
@@ -266,7 +265,7 @@ function help_readme(){
     embed.setFooter({text: "プレビューでは読みにくいのでリンクから飛んでください"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/happy.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
     
     return {files: ["./README.md", attachment], embeds: [embed], ephemeral: true};
 }
@@ -283,7 +282,7 @@ function help_cohere(){
     embed.setFooter({text: "出力は最大でも1000文字程度です"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -298,7 +297,7 @@ function help_vv_start(){
     embed.addFields({name: "複数のチャットを読み上げることもできるのだ", value: "読み上げを行っていないチャットにコマンドを送信すると、そのチャットも追加で読み上げます。"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -313,7 +312,7 @@ function help_vv_end(){
     embed.addFields({name: "オプションを追加することでサーバー全体での読み上げも終了できるのだ", value: "/voicevox_end all True"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -335,7 +334,7 @@ function help_vv_setUser(){
     embed.addFields({name: "読み上げる名前の読み方を変更できるのだ", value: "例：/voicevox_setting_user username ほげほげ"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -357,7 +356,7 @@ function help_vv_setServer(){
     embed.addFields({name: "他にも読み上げ方のオプションが存在するのだ", value: "詳しくはユーザー設定のヘルプを確認してください"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -376,7 +375,7 @@ function help_vv_dictAdd(){
     embed.addFields({name: "追加する言葉の優先度が設定できるのだ", value: "例：/voicevox_dictionary_add surface 摩訶不思議 pronuncication パルプンテ priority 9"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }
@@ -392,7 +391,7 @@ function help_vv_dictDel(){
     embed.addFields({name: "uuidの文字をすべて`x`か`*`にすると全削除ができるのだ", value: "例：/voicevox_dictionary_delete uuid xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"});
     embed.setColor(0x00FF00);
     attachment.setName("icon.png");
-    attachment.setFile("zundamon/face/normal.png");
+    attachment.setFile("assets/zundamon/icon/delight.png");
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }

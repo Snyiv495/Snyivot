@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/09/12
+    2024/10/07
 *****************/
 
 require('dotenv').config();
@@ -31,7 +31,12 @@ client.once('ready', async () => {
     }
 
     //voicevoxのスピーカーの取得
-    vv_speakers = await voicevox.getSpeakers();
+    try{
+        vv_speakers = await voicevox.getSpeakers();
+    }catch(e){
+        console.log("### voicevoxのスピーカーの取得に失敗しました ###\n### 再起動してください ###\n");
+        process.exit();
+    }
 
     //コマンドの登録
     try{
@@ -43,7 +48,7 @@ client.once('ready', async () => {
             voicevox.getCmd(vv_speakers)[2],
             voicevox.getCmd(vv_speakers)[3],
             voicevox.getCmd(vv_speakers)[4],
-            voicevox.getCmd(vv_speakers)[5]
+            voicevox.getCmd(vv_speakers)[5],
         ]);
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
@@ -77,7 +82,7 @@ client.on('messageCreate', async message => {
         
         //メンション文を削除
         if(message.deletable){
-            message.delete().catch(() => null);
+            await message.delete().catch(() => null);
         }
 
         return;
@@ -104,49 +109,49 @@ client.on('interactionCreate', async (interaction) => {
 
     //helpコマンド
     if(interaction.commandName === "help"){
-        help.help(interaction);
+        await help.help(interaction);
         return;
     }
 
     //cohereコマンド
     if(interaction.commandName === "cohere"){
-        cohere.invoke_cmd(interaction, readme);
+        await cohere.invoke_cmd(interaction, readme);
         return;
     }
 
     //voicevox_startコマンド
     if(interaction.commandName === "voicevox_start"){
-        voicevox.start(interaction, channel_map, subsc_map);
+        await voicevox.start(interaction, channel_map, subsc_map);
         return;   
     }
 
     //voicevox_endコマンド
     if(interaction.commandName === "voicevox_end"){
-        voicevox.end(interaction, channel_map, subsc_map);
+        await voicevox.end(interaction, channel_map, subsc_map);
         return;
     }
 
     //voicevox_setting_userコマンド
     if(interaction.commandName === "voicevox_setting_user"){
-        voicevox.setUser(interaction, vv_speakers);
+        await voicevox.setUser(interaction, vv_speakers);
         return;
     }
 
     //voicevox_setting_serverコマンド
     if(interaction.commandName === "voicevox_setting_server"){
-        voicevox.setServer(interaction, vv_speakers);
+        await voicevox.setServer(interaction, vv_speakers);
         return;
     }
 
     //voicevox_dictionary_addコマンド
     if(interaction.commandName === "voicevox_dictionary_add"){
-        voicevox.dictAdd(interaction);
+        await voicevox.dictAdd(interaction);
         return;
     }
 
     //voicevox_dictionary_deleteコマンド
     if(interaction.commandName === "voicevox_dictionary_delete"){
-        voicevox.dictDel(interaction);
+        await voicevox.dictDel(interaction);
         return;
     }
 
@@ -154,7 +159,7 @@ client.on('interactionCreate', async (interaction) => {
 })
 
 //コマンド自動補動作
-client.on('interactionCreate', (interaction) => {
+client.on('interactionCreate', async (interaction) => {
     //コマンド自動補完以外を除外
     if(!interaction.isAutocomplete()){
         return;
@@ -162,7 +167,7 @@ client.on('interactionCreate', (interaction) => {
 
     //voicevox_setting_*コマンド
     if(interaction.commandName === "voicevox_setting_user" || interaction.commandName === "voicevox_setting_server"){
-        voicevox.autocomplete(interaction, vv_speakers);
+        await voicevox.autocomplete(interaction, vv_speakers);
         return;
     }
 
@@ -177,7 +182,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if(interaction.customId === "menu_cohere"){
-        help.menu(interaction);
+        await help.menu(interaction);
         return;
     }
 
@@ -185,22 +190,22 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.update({components: [], ephemeral: true});
 
     if(interaction.customId === "menu_vv" || interaction.customId === "menu_help" || interaction.customId === "menu_help_vv01" || interaction.customId === "menu_help_vv02"){
-        help.menu(interaction);
+        await help.menu(interaction);
         return;
     }
 
     if(interaction.customId === "start_vv"){
-        voicevox.start(interaction, channel_map, subsc_map);
+        await voicevox.start(interaction, channel_map, subsc_map);
         return;
     }
 
     if(interaction.customId === "end_vv" || interaction.customId === "endAll_vv"){
-        voicevox.end(interaction, channel_map, subsc_map);
+        await voicevox.end(interaction, channel_map, subsc_map);
         return;
     }
 
     if(interaction.customId === "help_readme" || interaction.customId === "help_cohere" || interaction.customId === "help_vv_start" || interaction.customId === "help_vv_end" || interaction.customId === "help_vv_setUser" || interaction.customId === "help_vv_setServer" || interaction.customId === "help_vv_dictAdd" || interaction.customId === "help_vv_dictDel"){
-        help.help(interaction);
+        await help.help(interaction);
         return;
     }
 

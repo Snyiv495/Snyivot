@@ -94,6 +94,9 @@ async function formText(message, userInfo, serverInfo){
     //カスタム絵文字の検出
     text = text.replace(/:[a-zA-Z0-9_~]+:/g, "");
 
+    //wwwの制限
+    text = text.replace(/www+/g, "www");
+
     //#の検出
     text = text.replace("#", "シャープ");
 

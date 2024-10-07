@@ -1,7 +1,7 @@
 /*****************
     help.js
     スニャイヴ
-    2024/09/04    
+    2024/10/07    
 *****************/
 
 module.exports = {
@@ -25,6 +25,6 @@ async function menu(interaction){
 
 //helpコマンド
 async function help(interaction){
-    help_cmd.help(interaction);
+    await help_cmd.help(interaction);
     return;
 }

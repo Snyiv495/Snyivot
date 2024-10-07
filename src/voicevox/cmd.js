@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/09/09    
+    2024/10/07
 *****************/
 
 module.exports = {
@@ -25,161 +25,181 @@ const embed = require('./embed');
 
 //コマンドの取得
 function getCmd(){
-    const voicevox_start = new SlashCommandBuilder()
-        .setName("voicevox_start")
-        .setDescription("voicevoxの開始コマンド")
-    ;
-
-    const voicevox_end = new SlashCommandBuilder()
-        .setName("voicevox_end")
-        .setDescription("voicevoxの終了コマンド")
-        .addBooleanOption(option => option
-            .setName("all")
-            .setDescription("サーバー全体の読み上げを終了する？")
-        )
-    ;
-
-    const voicevox_setting_user = new SlashCommandBuilder()
-        .setName("voicevox_setting_user")
-        .setDescription("voicevoxのユーザー用設定コマンド")
-        .addStringOption(option => option
-            .setName("speaker")
-            .setDescription("キャラ名を入力してください")
-            .setAutocomplete(true)
-        )
-        .addStringOption(option => option
-            .setName("style")
-            .setDescription("キャラのスタイルを入力してください")
-            .setAutocomplete(true)
-        )
-        .addNumberOption(option => option
-            .setName("speed")
-            .setDescription("読み上げの速度を入力してください[0.5~2.0]")
-            .setMaxValue(2.0)
-            .setMinValue(0.5)
-        )
-        .addNumberOption(option => option
-            .setName("pitch")
-            .setDescription("読み上げの高さを入力してください[-0.15~0.15]")
-            .setMaxValue(0.15)
-            .setMinValue(-0.15)
-        )
-        .addNumberOption(option => option
-            .setName("intonation")
-            .setDescription("読み上げの抑揚を入力してください[0.0~2.0]")
-            .setMaxValue(2.0)
-            .setMinValue(0.0)
-        )
-        .addNumberOption(option => option
-            .setName("volume")
-            .setDescription("読み上げの音量を入力してください[0.0~2.0]")
-            .setMaxValue(2.0)
-            .setMinValue(0.0)
-        )
-        .addStringOption(option => option
-            .setName("username")
-            .setDescription("読み上げに使うあなたの名前を入力してください")
-        )
-    ;
-
-    const voicevox_setting_server = new SlashCommandBuilder()
-        .setName("voicevox_setting_server")
-        .setDescription("voicevoxのサーバー用設定コマンド")
-        .addBooleanOption(option => option
-            .setName("need_sudo")
-            .setDescription("このコマンドの利用に管理者権限を必要とする？")
-        )
-        .addBooleanOption(option => option
-            .setName("read_name")
-            .setDescription("読み上げ時に名前を読み上げる？")
-        )
-        .addBooleanOption(option => option
-            .setName("continue_name")
-            .setDescription("発言者が連続しても名前を読み上げる？")
-        )
-        .addBooleanOption(option => option
-            .setName("continue_line")
-            .setDescription("複数行の文章も全て読み上げる？")
-        )
-        .addIntegerOption(option => option
-            .setName("maxwords")
-            .setDescription("読み上げる最大文字数を入力してください[10~50]")
-            .setMaxValue(50)
-            .setMinValue(10)
-        )
-        .addBooleanOption(option => option
-            .setName("unif")
-            .setDescription("全員の読み上げ音声をこのコマンド設定で統一する？")
-        )
-        .addStringOption(option => option
-            .setName("speaker")
-            .setDescription("キャラ名を入力してください")
-            .setAutocomplete(true)
-        )
-        .addStringOption(option => option
-            .setName("style")
-            .setDescription("キャラのスタイルを入力してください")
-            .setAutocomplete(true)
-        )
-        .addNumberOption(option => option
-            .setName("speed")
-            .setDescription("読み上げの速度を入力してください[0.5~2.0]")
-            .setMaxValue(2.0)
-            .setMinValue(0.5)
-        )
-        .addNumberOption(option => option
-            .setName("pitch")
-            .setDescription("読み上げの高さを入力してください[-0.15~0.15]")
-            .setMaxValue(0.15)
-            .setMinValue(-0.15)
-        )
-        .addNumberOption(option => option
-            .setName("intonation")
-            .setDescription("読み上げの抑揚を入力してください[0.0~2.0]")
-            .setMaxValue(2.0)
-            .setMinValue(0.0)
-        )
-        .addNumberOption(option => option
-            .setName("volume")
-            .setDescription("読み上げの音量を入力してください[0.0~2.0]")
-            .setMaxValue(2.0)
-            .setMinValue(0.0)
-        )
-    ;
-
-    const voicevox_dictionary_add = new SlashCommandBuilder()
-        .setName("voicevox_dictionary_add")
-        .setDescription("voicevoxの辞書追加コマンド")
-        .addStringOption(option => option
-            .setName("surface")
-            .setDescription("言葉を入力してください")
-            .setRequired(true)
-        )
-        .addStringOption(option => option
-            .setName("pronunciation")
-            .setDescription("発音をカタカナで入力してください")
-            .setRequired(true)
-        )
-        .addIntegerOption(option => option
-            .setName("accent")
-            .setDescription("語調が下がるのが何文字目かを入力してください")
-        )
-        .addIntegerOption(option => option
-            .setName("priority")
-            .setDescription("読み替えを行う優先度を入力してください")
-            .setMaxValue(9)
-            .setMinValue(1)
-        )
-    ;
-
+    const voicevox_start = new SlashCommandBuilder();
+    const voicevox_end = new SlashCommandBuilder();
+    const voicevox_setting_user = new SlashCommandBuilder();
+    const voicevox_setting_server = new SlashCommandBuilder();
+    const voicevox_dictionary_add = new SlashCommandBuilder();
     const voicevox_dictionary_delete = new SlashCommandBuilder()
-        .setName("voicevox_dictionary_delete")
-        .setDescription("voicevoxの辞書削除コマンド")
-        .addStringOption(option => option
-            .setName("uuid")
-            .setDescription("削除したい言葉のuuidを入力してください")
-        )
-    ;
+
+    voicevox_start.setName("voicevox_start");
+    voicevox_start.setDescription("voicevoxの開始コマンド");
+
+    voicevox_end.setName("voicevox_end");
+    voicevox_end.setDescription("voicevoxの終了コマンド");
+    voicevox_end.addBooleanOption(option => {
+        option.setName("all");
+        option.setDescription("サーバー全体の読み上げを終了する？");
+        return option;
+    });
+
+    voicevox_setting_user.setName("voicevox_setting_user");
+    voicevox_setting_user.setDescription("voicevoxのユーザー用設定コマンド");
+    voicevox_setting_user.addStringOption(option => {
+        option.setName("speaker");
+        option.setDescription("キャラ名を入力してください");
+        option.setAutocomplete(true);
+        return option;
+    });
+    voicevox_setting_user.addStringOption(option => {
+        option.setName("style");
+        option.setDescription("キャラのスタイルを入力してください");
+        option.setAutocomplete(true);
+        return option;
+    });
+    voicevox_setting_user.addNumberOption(option => {
+        option.setName("speed");
+        option.setDescription("読み上げの速度を入力してください[0.5~2.0]");
+        option.setMaxValue(2.0);
+        option.setMinValue(0.5);
+        return option;
+    });
+    voicevox_setting_user.addNumberOption(option => {
+        option.setName("pitch");
+        option.setDescription("読み上げの高さを入力してください[-0.15~0.15]");
+        option.setMaxValue(0.15);
+        option.setMinValue(-0.15);
+        return option;
+    });
+    voicevox_setting_user.addNumberOption(option => {
+        option.setName("intonation");
+        option.setDescription("読み上げの抑揚を入力してください[0.0~2.0]");
+        option.setMaxValue(2.0);
+        option.setMinValue(0.0);
+        return option;
+    });
+    voicevox_setting_user.addNumberOption(option => {
+        option.setName("volume");
+        option.setDescription("読み上げの音量を入力してください[0.0~2.0]");
+        option.setMaxValue(2.0);
+        option.setMinValue(0.0);
+        return option;
+    });
+    voicevox_setting_user.addStringOption(option => {
+        option.setName("username");
+        option.setDescription("読み上げに使うあなたの名前を入力してください");
+        return option;
+    });
+
+    voicevox_setting_server.setName("voicevox_setting_server")
+    voicevox_setting_server.setDescription("voicevoxのサーバー用設定コマンド")
+    voicevox_setting_server.addBooleanOption(option => {
+        option.setName("need_sudo");
+        option.setDescription("このコマンドの利用に管理者権限を必要とする？");
+        return option;
+    });
+    voicevox_setting_server.addBooleanOption(option => {
+        option.setName("read_name");
+        option.setDescription("読み上げ時に名前を読み上げる？");
+        return option;
+    });
+    voicevox_setting_server.addBooleanOption(option => {
+        option.setName("continue_name");
+        option.setDescription("発言者が連続しても名前を読み上げる？");
+        return option;
+    });
+    voicevox_setting_server.addBooleanOption(option => {
+        option.setName("continue_line");
+        option.setDescription("複数行の文章も全て読み上げる？");
+        return option;
+    });
+    voicevox_setting_server.addIntegerOption(option => {
+        option.setName("maxwords");
+        option.setDescription("読み上げる最大文字数を入力してください[10~50]");
+        option.setMaxValue(50);
+        option.setMinValue(10);
+        return option;
+    });
+    voicevox_setting_server.addBooleanOption(option => {
+        option.setName("unif");
+        option.setDescription("全員の読み上げ音声をこのコマンド設定で統一する？");
+        return option;
+    });
+    voicevox_setting_server.addStringOption(option => {
+        option.setName("speaker");
+        option.setDescription("キャラ名を入力してください");
+        option.setAutocomplete(true);
+        return option;
+    });
+    voicevox_setting_server.addStringOption(option => {
+        option.setName("style");
+        option.setDescription("キャラのスタイルを入力してください");
+        option.setAutocomplete(true);
+        return option;
+    });
+    voicevox_setting_server.addNumberOption(option => {
+        option.setName("speed");
+        option.setDescription("読み上げの速度を入力してください[0.5~2.0]");
+        option.setMaxValue(2.0);
+        option.setMinValue(0.5);
+        return option;
+    });
+    voicevox_setting_server.addNumberOption(option => {
+        option.setName("pitch");
+        option.setDescription("読み上げの高さを入力してください[-0.15~0.15]");
+        option.setMaxValue(0.15);
+        option.setMinValue(-0.15);
+        return option;
+    });
+    voicevox_setting_server.addNumberOption(option => {
+        option.setName("intonation");
+        option.setDescription("読み上げの抑揚を入力してください[0.0~2.0]");
+        option.setMaxValue(2.0);
+        option.setMinValue(0.0);
+        return option;
+    });
+    voicevox_setting_server.addNumberOption(option => {
+        option.setName("volume");
+        option.setDescription("読み上げの音量を入力してください[0.0~2.0]");
+        option.setMaxValue(2.0);
+        option.setMinValue(0.0);
+        return option;
+    });
+
+    voicevox_dictionary_add.setName("voicevox_dictionary_add")
+    voicevox_dictionary_add.setDescription("voicevoxの辞書追加コマンド")
+    voicevox_dictionary_add.addStringOption(option => {
+        option.setName("surface");
+        option.setDescription("言葉を入力してください");
+        option.setRequired(true);
+        return option;
+    });
+    voicevox_dictionary_add.addStringOption(option => {
+        option.setName("pronunciation");
+        option.setDescription("発音をカタカナで入力してください");
+        option.setRequired(true);
+        return option;
+    });
+    voicevox_dictionary_add.addIntegerOption(option => {
+        option.setName("accent");
+        option.setDescription("語調が下がるのが何文字目かを入力してください");
+        return option;
+    });
+    voicevox_dictionary_add.addIntegerOption(option => {
+        option.setName("priority");
+        option.setDescription("読み替えを行う優先度を入力してください");
+        option.setMaxValue(9);
+        option.setMinValue(1);
+        return option;
+    });
+
+    voicevox_dictionary_delete.setName("voicevox_dictionary_delete")
+    voicevox_dictionary_delete.setDescription("voicevoxの辞書削除コマンド")
+    voicevox_dictionary_delete.addStringOption(option => {
+        option.setName("uuid");
+        option.setDescription("削除したい言葉のuuidを入力してください");
+        return option;
+    });
     
     return [voicevox_start, voicevox_end, voicevox_setting_user, voicevox_setting_server, voicevox_dictionary_add, voicevox_dictionary_delete];
 }
@@ -270,7 +290,7 @@ async function setUser(interaction, speakers){
         await db.setUserInfo(interaction.user.id, userInfo);
     }
 
-    interaction.followUp(await embed.setUser(userInfo, interaction.user.displayName, selEmb));
+    await interaction.followUp(await embed.setUser(userInfo, interaction.user.displayName, selEmb));
 
     return;
 }
@@ -395,7 +415,7 @@ async function setServer(interaction, speakers){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
     
-    interaction.followUp(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
+    await interaction.followUp(await embed.setServer(serverInfo, interaction.guild.name, selEmb));
 
     return;
 }
@@ -436,13 +456,13 @@ async function autocomplete(interaction, speakers){
         }
     }
 
-    interaction.respond(choices.map(choices => ({name: choices, value: choices})));
+    await interaction.respond(choices.map(choices => ({name: choices, value: choices})));
 
     return;
 }
 
 //読み上げ開始
-function start(interaction, channel_map, subsc_map){
+async function start(interaction, channel_map, subsc_map){
     let textCh = null;
     let voiceCh = null;
     let connectingCh = null;
@@ -527,13 +547,13 @@ function start(interaction, channel_map, subsc_map){
         }
     }
 
-    interaction.followUp(embed.start(textCh, voiceCh, selEmb));
+    await interaction.followUp(embed.start(textCh, voiceCh, selEmb));
 
     return;
 }
 
 //読み上げ終了
-function end(interaction, channel_map, subsc_map){
+async function end(interaction, channel_map, subsc_map){
     let textCh = null;
     let voiceCh = null;
     let connectingCh = null;
@@ -587,7 +607,7 @@ function end(interaction, channel_map, subsc_map){
         }
     }
 
-    interaction.followUp(embed.end(textCh, voiceCh, selEmb));
+    await interaction.followUp(embed.end(textCh, voiceCh, selEmb));
 
     return;
 }
@@ -657,7 +677,7 @@ async function dictAdd(interaction){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
 
-    interaction.followUp(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
+    await interaction.followUp(embed.dictAdd(surface, pronunciation, accent, priority, uuid, selEmb));
 
     return;
 }

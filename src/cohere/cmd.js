@@ -1,7 +1,7 @@
 /*****************
     cmd.js
     スニャイヴ
-    2024/09/12
+    2024/10/07
 *****************/
 
 module.exports = {
@@ -19,14 +19,16 @@ const embed = require('./embed');
 
 //コマンドの取得
 function getCmd(){
-    const help = new SlashCommandBuilder()
-        .setName("cohere")
-        .setDescription("質問コマンド")
-        .addStringOption(option => option
-            .setName("question")
-            .setDescription("質問内容を記入してください")
-            .setRequired(true)
-    );
+    const help = new SlashCommandBuilder();
+
+    help.setName("cohere");
+    help.setDescription("質問コマンド");
+    help.addStringOption(option => {
+        option.setName("question");
+        option.setDescription("質問内容を記入してください");
+        option.setRequired(true);
+        return option;
+    });
     
     return help;
 }
@@ -75,7 +77,7 @@ async function invoke_mention(message, readme){
 //コマンドからの呼び出し
 async function invoke_cmd(interaction, readme){
     const text = interaction.options.get("question").value;
-    console.log(text);
+
     try{
         const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
         await interaction.followUp(embed.invoke(text, res.text));

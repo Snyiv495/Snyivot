@@ -50,25 +50,25 @@ function getCmd(){
 
 //ユーザー情報の設定
 async function setUser(interaction, speakers){
-    vv_cmd.setUser(interaction, speakers);
+    await vv_cmd.setUser(interaction, speakers);
     return;
 }
 
 //サーバー情報の設定
 async function setServer(interaction, speakers){
-    vv_cmd.setServer(interaction, speakers);
+    await vv_cmd.setServer(interaction, speakers);
     return;
 }
 
 //voicevoxコマンドの補助
-function autocomplete(interaction, channel_map, speakers){
-    vv_cmd.autocomplete(interaction, channel_map, speakers);
+async function autocomplete(interaction, channel_map, speakers){
+    await vv_cmd.autocomplete(interaction, channel_map, speakers);
     return;
 }
 
 //開始
 async function start(interaction, channel_map, subsc_map){
-    vv_cmd.start(interaction, channel_map, subsc_map);
+    await vv_cmd.start(interaction, channel_map, subsc_map);
     return;
 }
 
@@ -80,7 +80,7 @@ function read(message, subsc){
 
 //終了
 async function end(interaction, channel_map, subsc_map){
-    vv_cmd.end(interaction, channel_map, subsc_map);
+    await vv_cmd.end(interaction, channel_map, subsc_map);
     return;
 }
 
@@ -104,12 +104,12 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
 
 //辞書の追加
 async function dictAdd(interaction){
-    vv_cmd.dictAdd(interaction);
+    await vv_cmd.dictAdd(interaction);
     return;
 }
 
 //辞書の削除
 async function dictDel(interaction){
-    vv_cmd.dictDel(interaction);
+    await vv_cmd.dictDel(interaction);
     return;
 }
