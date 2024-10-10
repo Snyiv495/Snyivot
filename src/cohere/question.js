@@ -1,40 +1,51 @@
-/*****************
-    cmd.js
+/******************
+    question.js
     スニャイヴ
-    2024/10/07
-*****************/
+    2024/10/10
+******************/
 
 module.exports = {
     getCmd: getCmd,
-    invoke_mention: invoke_mention,
-    invoke_cmd: invoke_cmd,
-    invoke_modal: invoke_modal,
+    showModal: showModal,
+    sendAns: sendAns,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder} = require('discord.js');
+const {SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder} = require('discord.js');
 const {CohereClient} = require('cohere-ai');
 const cohere = new CohereClient({token: process.env.COHERE_TOKEN});
-const embed = require('./embed');
 
 //コマンドの取得
 function getCmd(){
-    const help = new SlashCommandBuilder();
+    const cohere = new SlashCommandBuilder();
 
-    help.setName("cohere");
-    help.setDescription("質問コマンド");
-    help.addStringOption(option => {
-        option.setName("question");
-        option.setDescription("質問内容を記入してください");
-        option.setRequired(true);
-        return option;
-    });
+    cohere.setName("cohere");
+    cohere.setDescription("AI質問コマンド");
     
-    return help;
+    return cohere;
 }
 
-//前文の取得
-function getPreamble(readme){
+//モーダルの表示
+async function showModal(interaction){
+    const question = new TextInputBuilder();
+    const modal = new ModalBuilder();
+
+    question.setCustomId("inputFiled_question")
+    question.setLabel("質問内容を入力してください")
+    question.setStyle(TextInputStyle.Short);
+    question.setRequired(true);
+
+	modal.setCustomId("modal_cohere")
+	modal.setTitle("質問送信フォーム");
+    modal.addComponents(new ActionRowBuilder().addComponents(question));
+
+    await interaction.showModal(modal);
+
+    return;
+}
+
+//回答の生成
+async function generateAns(question, readme){
     const date = new Date();
     const preamble = `
         ## Task and Context
@@ -58,42 +69,35 @@ function getPreamble(readme){
         ## zundamon
         「こんにちはなのだ」「ぼくはずんだもんなのだ」「ずんだの精霊なのだ」「みんなの質問にできる限り答えるのだ」
     `
-
-    return preamble;
-}
-
-//メンションからの呼び出し
-async function invoke_mention(message, readme){
-    const text = message.content.replace(`<@${process.env.BOT_ID}>`, "");
-
     try{
-        const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
-        await message.reply(embed.invoke(text, res.text));
+        
+        return (await cohere.chat({model: "command-r-plus", message: question, preamble: preamble})).text;
     }catch(e){console.log(e);}
 
     return;
 }
 
-//コマンドからの呼び出し
-async function invoke_cmd(interaction, readme){
-    const text = interaction.options.get("question").value;
+//埋め込みの作成
+function createEmbed(question, anser){
+    const embed = new EmbedBuilder();
+    
+    embed.setTitle("Q.");
+    embed.setDescription((question.length>4000) ? question.substr(0, 3992) + "...<以下略>" : question)
+    embed.addFields({name: "A.", value: (anser.length>1000) ? anser.substr(0, 992) + "...<以下略>" : anser});
+    embed.setFooter({text: "Cohere AIによる生成"});
+    embed.setColor(0x00FF00);
 
-    try{
-        const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
-        await interaction.followUp(embed.invoke(text, res.text));
-    }catch(e){console.log(e);}
-
-    return;
+    return {embeds: [embed], ephemeral: true};
 }
 
-//モーダルからの呼び出し
-async function invoke_modal(interaction, readme){
-    const text = interaction.fields.getTextInputValue("inputFiled_question");
+//回答の送信
+async function sendAns(msgInte, readme){
+    const question = msgInte.content ? msgInte.content.replace(`<@${process.env.BOT_ID}>`, "") : msgInte.fields.getTextInputValue("inputFiled_question");
+    const ans = await generateAns(question, readme);
 
     try{
-        const res = await cohere.chat({model: "command-r-plus", message: text, preamble: getPreamble(readme)});
-        await interaction.reply(embed.invoke(text, res.text));
-    }catch(e){console.log(e);}
+        await msgInte.reply(createEmbed(question, ans));
+    }catch(e){}
 
     return;
 }

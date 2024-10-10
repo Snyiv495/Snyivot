@@ -1,37 +1,30 @@
 /*****************
     cohere.js
     スニャイヴ
-    2024/09/12
+    2024/10/10
 *****************/
 
 module.exports = {
     getCmd: getCmd,
-    invoke_mention: invoke_mention,
-    invoke_cmd: invoke_cmd,
-    invoke_modal: invoke_modal,
+    showModal: showModal,
+    sendAns: sendAns,
 }
 
-const cohere_cmd = require('./cmd');
+const cohere_question = require('./question');
 
 //コマンドの取得
 function getCmd(){
-    return cohere_cmd.getCmd();
+    return cohere_question.getCmd();
 }
 
-//メンションからの呼び出し
-async function invoke_mention(message, readme){
-    await cohere_cmd.invoke_mention(message, readme);
+//モーダルの作成
+async function showModal(interaction){
+    await cohere_question.showModal(interaction);
     return;
 }
 
-//コマンドからの呼び出し
-async function invoke_cmd(interaction, readme){
-    await cohere_cmd.invoke_cmd(interaction, readme);
-    return;
-}
-
-//モーダルからの呼び出し
-async function invoke_modal(interaction, readme){
-    await cohere_cmd.invoke_modal(interaction, readme);
+//回答の送信
+async function sendAns(msgInte, readme){
+    await cohere_question.sendAns(msgInte, readme);
     return;
 }

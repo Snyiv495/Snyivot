@@ -49,13 +49,6 @@ async function menu(interaction){
         return;
     }
 
-    //cohereメニュー
-    if(interaction.customId === "menu_cohere"){
-        await interaction.message.delete().catch(()=>{});
-        await interaction.showModal(embed.menu_cohere());
-        return;
-    }
-
     //voicevoxメニュー
     if(interaction.customId === "menu_vv"){
         await interaction.message.delete().catch(()=>{});

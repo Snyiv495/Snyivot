@@ -77,7 +77,7 @@ client.on('messageCreate', async message => {
        
         //内容があれば回答
         else{
-            await cohere.invoke_mention(message, readme);
+            await cohere.sendAns(message, readme);
         }
         
         //メンション文を削除
@@ -104,6 +104,12 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
+    //cohereコマンド
+    if(interaction.commandName === "cohere"){
+        await cohere.showModal(interaction);
+        return;
+    }
+    
     await interaction.deferReply();
     await (await interaction.followUp({content: "コマンドを受理したのだ"})).delete().catch(()=>{});
 
@@ -113,11 +119,7 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //cohereコマンド
-    if(interaction.commandName === "cohere"){
-        await cohere.invoke_cmd(interaction, readme);
-        return;
-    }
+    
 
     //voicevox_startコマンド
     if(interaction.commandName === "voicevox_start"){
@@ -182,7 +184,8 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if(interaction.customId === "menu_cohere"){
-        await help.menu(interaction);
+        await interaction.message.delete().catch(()=>{});
+        await cohere.showModal(interaction);
         return;
     }
 
@@ -220,7 +223,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
 	if(interaction.customId === "modal_cohere"){
-        await cohere.invoke_modal(interaction, readme);
+        await cohere.sendAns(interaction, readme);
         return;
 	}
 
