@@ -11,7 +11,7 @@ module.exports = {
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder} = require('discord.js');
+const {SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {CohereClient} = require('cohere-ai');
 const cohere = new CohereClient({token: process.env.COHERE_TOKEN});
 
@@ -80,23 +80,31 @@ async function generateAns(question, readme){
 //埋め込みの作成
 function createEmbed(question, anser){
     const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
     
     embed.setTitle("Q.");
-    embed.setDescription((question.length>4000) ? question.substr(0, 3992) + "...<以下略>" : question)
-    embed.addFields({name: "A.", value: (anser.length>1000) ? anser.substr(0, 992) + "...<以下略>" : anser});
+    embed.setThumbnail("attachment://icon.png");
+    embed.setDescription(question);
+    embed.addFields({name: "A.", value: anser});
     embed.setFooter({text: "Cohere AIによる生成"});
     embed.setColor(0x00FF00);
+
+    attachment.setName("icon.png");
+    attachment.setFile("assets/zundamon/icon/dream.png");
 
     return {embeds: [embed], ephemeral: true};
 }
 
 //回答の送信
 async function sendAns(msgInte, readme){
-    const question = msgInte.content ? msgInte.content.replace(`<@${process.env.BOT_ID}>`, "") : msgInte.fields.getTextInputValue("inputFiled_question");
-    const ans = await generateAns(question, readme);
+    let question = msgInte.content ? msgInte.content.replace(`<@${process.env.BOT_ID}>`, "") : msgInte.fields.getTextInputValue("inputFiled_question");
+    let anser = await generateAns(question, readme);
+
+    question = (question.length>4000) ? question.substr(0, 3992) + "...<以下略>" : question;
+    anser = (anser.length>1000) ? anser.substr(0, 992) + "...<以下略>" : anser;
 
     try{
-        await msgInte.reply(createEmbed(question, ans));
+        await msgInte.reply(createEmbed(question, anser));
     }catch(e){}
 
     return;

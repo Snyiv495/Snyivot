@@ -7,8 +7,8 @@
 require('dotenv').config();
 const {Client, GatewayIntentBits} = require('discord.js');
 const fs = require('fs');
-const help = require('./help/help');
 const cohere = require('./cohere/cohere');
+const guide = require('./guide/guide');
 const voicevox = require('./voicevox/voicevox');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
@@ -41,7 +41,7 @@ client.once('ready', async () => {
     //コマンドの登録
     try{
         await client.application.commands.set([
-            help.getCmd(),
+            guide.getCmd(),
             cohere.getCmd(),
             voicevox.getCmd(vv_speakers)[0],
             voicevox.getCmd(vv_speakers)[1],
@@ -72,7 +72,7 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            await help.menu(message);
+            await guide.menu(message);
         }
        
         //内容があれば回答
@@ -105,6 +105,11 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     //cohereコマンド
+    if(interaction.commandName === "help_cohere"){
+        await cohere.sendHelp(interaction);
+        return;
+    }
+    
     if(interaction.commandName === "cohere"){
         await cohere.showModal(interaction);
         return;
@@ -115,7 +120,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //helpコマンド
     if(interaction.commandName === "help"){
-        await help.help(interaction);
+        await guide.help(interaction);
         return;
     }
 
@@ -193,7 +198,7 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.update({components: [], ephemeral: true});
 
     if(interaction.customId === "menu_vv" || interaction.customId === "menu_help" || interaction.customId === "menu_help_vv01" || interaction.customId === "menu_help_vv02"){
-        await help.menu(interaction);
+        await guide.menu(interaction);
         return;
     }
 
@@ -208,7 +213,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if(interaction.customId === "help_readme" || interaction.customId === "help_cohere" || interaction.customId === "help_vv_start" || interaction.customId === "help_vv_end" || interaction.customId === "help_vv_setUser" || interaction.customId === "help_vv_setServer" || interaction.customId === "help_vv_dictAdd" || interaction.customId === "help_vv_dictDel"){
-        await help.help(interaction);
+        await guide.help(interaction);
         return;
     }
 

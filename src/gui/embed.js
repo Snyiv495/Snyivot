@@ -5,7 +5,6 @@
 *****************/
 
 module.exports = {
-    menu_cohere: menu_cohere,
     menu_mention: menu_mention,
     menu_vv: menu_vv,
     menu_help: menu_help,
@@ -65,23 +64,6 @@ function menu_mention(){
     buttons.addComponents(menu_help);
 
     return {files: [attachment], embeds: [embed], components: [buttons]};
-}
-
-function menu_cohere(){
-    const modal = new ModalBuilder();
-    const question = new TextInputBuilder();
-
-	modal.setCustomId("modal_cohere")
-	modal.setTitle("質問送信フォーム");
-
-    question.setCustomId("inputFiled_question")
-    question.setLabel("質問内容を入力してください")
-    question.setStyle(TextInputStyle.Short);
-    question.setRequired(true);
-    
-    modal.addComponents(new ActionRowBuilder().addComponents(question));
-
-    return modal;
 }
 
 function menu_vv(){
@@ -268,23 +250,6 @@ function help_readme(){
     attachment.setFile("assets/zundamon/icon/delight.png");
     
     return {files: ["./README.md", attachment], embeds: [embed], ephemeral: true};
-}
-
-function help_cohere(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-
-    embed.setTitle("cohere AIの使い方を教えるのだ");
-    embed.setURL("https://cohere.com/");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "ぼくにメンションしながら質問をしてくれたら答えるのだ", value: "例：@Snyivot 読み上げの始め方を教えて"});
-    embed.addFields({name: "使い方以外の質問も大歓迎なのだ", value: "例：@Snyivot 今日の夜ご飯を考えて"});
-    embed.setFooter({text: "出力は最大でも1000文字程度です"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
-
-    return {files: [attachment], embeds: [embed], ephemeral: true};
 }
 
 function help_vv_start(){
