@@ -1,18 +1,16 @@
 /*****************
-    guide.js
+    gui.js
     スニャイヴ
-    2024/10/11
+    2024/10/15
 *****************/
 
 module.exports = {
     sendBell: sendBell,
-    sendCmds: sendCmds,
+    sendGui: sendGui,
 }
 
 const bell = require('./bell');
-const cmds = require('./cmds');
-const cmd_vv = require('./cmdVoicevox');
-const cmd_zm = require('./cmdZundamocchi');
+const guide = require('./guide');
 
 //ベルの送信
 function sendBell(message){
@@ -20,8 +18,8 @@ function sendBell(message){
     return;
 }
 
-//GUIコマンド群の送信
-async function sendCmds(interaction){
-    await cmds.sendCmds(interaction);
+//GUIの送信
+async function sendGui(interaction){
+    await guide.sendGui(interaction);
     return;
 }

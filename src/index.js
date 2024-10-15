@@ -8,7 +8,8 @@ require('dotenv').config();
 const {Client, GatewayIntentBits} = require('discord.js');
 const fs = require('fs');
 const cohere = require('./cohere/cohere');
-const guide = require('./guide/guide');
+const cui = require('./cui/cui');
+const gui = require('./gui/gui');
 const voicevox = require('./voicevox/voicevox');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
@@ -40,16 +41,7 @@ client.once('ready', async () => {
 
     //コマンドの登録
     try{
-        await client.application.commands.set([
-            guide.getCmd(),
-            cohere.getCmd(),
-            voicevox.getCmd(vv_speakers)[0],
-            voicevox.getCmd(vv_speakers)[1],
-            voicevox.getCmd(vv_speakers)[2],
-            voicevox.getCmd(vv_speakers)[3],
-            voicevox.getCmd(vv_speakers)[4],
-            voicevox.getCmd(vv_speakers)[5],
-        ]);
+        await client.application.commands.set(cui.getCmds());
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
@@ -72,7 +64,7 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            await guide.menu(message);
+            //await guide.menu(message);
         }
        
         //内容があれば回答
