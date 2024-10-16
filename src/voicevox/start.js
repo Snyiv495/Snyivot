@@ -23,7 +23,7 @@ function getCmd(){
     return voicevox_start;
 }
 
-//接続状況の取得
+//状況の取得
 function getStatus(interaction, textCh, voiceCh, channel_map){
 
     //ギルドチャンネルか確認

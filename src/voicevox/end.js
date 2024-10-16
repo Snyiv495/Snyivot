@@ -51,6 +51,7 @@ function getStatus(interaction, textCh, voiceCh, channel_map){
     return 0;
 }
 
+//埋め込みの作成
 function createEmbed(textCh, voiceCh, status){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();

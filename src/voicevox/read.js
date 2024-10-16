@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/09/09        
+    2024/10/16        
 *****************/
 
 module.exports = {
@@ -81,7 +81,7 @@ async function formText(message, userInfo, serverInfo){
     let text = message.cleanContent;
 
     //1行目だけ取得
-    if(!serverInfo.continue_line){
+    if(!serverInfo.read_multiline){
         text = text.split(/\r\n|\r|\n/)[0];
     }
 
@@ -110,7 +110,7 @@ async function formText(message, userInfo, serverInfo){
     if(serverInfo.read_name){
         let beforeUserId = null;
 
-        if(!serverInfo.continue_name){
+        if(!serverInfo.read_sameuser){
             await message.channel.messages.fetch({before: message.id, limit:1})
                 .then(messages => {
                     beforeUserId = messages.first().member.id;

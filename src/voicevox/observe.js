@@ -1,7 +1,7 @@
 /*******************
     observe.js    
     スニャイヴ
-    2024/08/19
+    2024/10/16
 *******************/
 
 module.exports = {
@@ -11,8 +11,47 @@ module.exports = {
 }
 
 require('dotenv').config();
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {joinVoiceChannel, createAudioPlayer} = require('@discordjs/voice');
-const embed = require('./embed');
+
+//埋め込みの作成
+function createEmbed(status, oldVoiceChName, newVoiceChName=null){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();
+
+    switch(status){
+        case "autoEnd" : {
+            embed.setTitle("誰もいないしぼくも帰るのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+            attachment.setFile("assets/zundamon/icon/delight.png");
+            break;
+        }
+        case "compulsionEnd" : {
+            embed.setTitle("追い出されたのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+            attachment.setFile("assets/zundamon/icon/delight.png");
+            break;
+        }
+        case "compulsionMove" : {
+            embed.setTitle("ボイスチャンネルを移動させられたのだ");
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動しました`});
+            embed.setColor(0x00FF00);
+            attachment.setName("icon.png");
+            attachment.setFile("assets/zundamon/icon/delight.png");
+            break;
+        }
+        default : embed.setTitle("undefined").setColor(0x000000);
+    }
+
+    return {files: [attachment], embeds: [embed]};
+}
 
 //自動終了
 function autoEnd(oldState, channel_map, subsc_map){
@@ -27,12 +66,11 @@ function autoEnd(oldState, channel_map, subsc_map){
 
     try{
         subsc_map.get(oldState.channelId).connection.destroy();
-    }catch(e){
-        console.log("### 自動停止エラー ###");
-    }
+    }catch(e){}
+
     subsc_map.delete(oldState.channelId);
 
-    textCh.send(embed.autoEnd(oldState.channel.name));
+    textCh.send(createEmbed("autoEnd", oldState.channel.name));
 
     return;
 }
@@ -50,7 +88,7 @@ function compulsionEnd(oldState, channel_map, subsc_map){
 
     subsc_map.delete(oldState.channelId);
 
-    textCh.send(embed.compulsionEnd(oldState.channel.name));
+    textCh.send(createEmbed("compulsionEnd", oldState.channel.name));
 
     return;
 }
@@ -78,10 +116,8 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
         subsc_map.set(newState.channelId, connection.subscribe(createAudioPlayer()));
         subsc_map.delete(oldState.channelId);
 
-        textCh.send(embed.compulsionMove(oldState.channel.name, newState.channel.name));
-    }catch(e){
-        console.log("### 強制移動エラー ###");
-    }
+        textCh.send(createEmbed("compulsionMove", oldState.channel.name, newState.channel.name));
+    }catch(e){}
 
     return;
 }

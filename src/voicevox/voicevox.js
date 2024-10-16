@@ -1,7 +1,7 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/08/26
+    2024/10/16
 ******************/
 
 module.exports = {
@@ -22,7 +22,12 @@ module.exports = {
 
 require('dotenv').config();
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const vv_cmd = require('./cmd');
+const vv_start = require('./start');
+const vv_end = require('./end');
+const vv_setUser = require('./setUser');
+const vv_setServer = require('./setServer');
+const vv_dictAdd = require('./dictAdd');
+const vv_dictDel = require('./dictDel');
 const vv_read = require('./read');
 const vv_observe = require('./observe');
 
@@ -45,30 +50,30 @@ async function getSpeakers(){
 
 //コマンドの取得
 function getCmd(){
-    return vv_cmd.getCmd();
+    return [vv_start.getCmd(), vv_end.getCmd(), vv_setUser.getCmd(), vv_setServer.getCmd(), vv_dictAdd.getCmd(), vv_dictDel.getCmd()];
 }
 
 //ユーザー情報の設定
 async function setUser(interaction, speakers){
-    await vv_cmd.setUser(interaction, speakers);
+    await vv_setUser.setUser(interaction, speakers);
     return;
 }
 
 //サーバー情報の設定
 async function setServer(interaction, speakers){
-    await vv_cmd.setServer(interaction, speakers);
+    await vv_setServer.setServer(interaction, speakers);
     return;
 }
 
 //voicevoxコマンドの補助
-async function autocomplete(interaction, channel_map, speakers){
-    await vv_cmd.autocomplete(interaction, channel_map, speakers);
+async function autocomplete(interaction, speakers){
+    await vv_setUser.autocomplete(interaction, speakers);
     return;
 }
 
 //開始
 async function start(interaction, channel_map, subsc_map){
-    await vv_cmd.start(interaction, channel_map, subsc_map);
+    await vv_start.start(interaction, channel_map, subsc_map);
     return;
 }
 
@@ -80,7 +85,7 @@ function read(message, subsc){
 
 //終了
 async function end(interaction, channel_map, subsc_map){
-    await vv_cmd.end(interaction, channel_map, subsc_map);
+    await vv_end.end(interaction, channel_map, subsc_map);
     return;
 }
 
@@ -104,12 +109,12 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
 
 //辞書の追加
 async function dictAdd(interaction){
-    await vv_cmd.dictAdd(interaction);
+    await vv_dictAdd.dictAdd(interaction);
     return;
 }
 
 //辞書の削除
 async function dictDel(interaction){
-    await vv_cmd.dictDel(interaction);
+    await vv_dictDel.dictDel(interaction);
     return;
 }
