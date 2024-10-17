@@ -12,6 +12,7 @@ module.exports = {
 require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {joinVoiceChannel, createAudioPlayer} = require('@discordjs/voice');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -24,12 +25,7 @@ function getCmd(){
 }
 
 //状況の取得
-function getStatus(interaction, textCh, voiceCh, channel_map){
-
-    //ギルドチャンネルか確認
-    if(!interaction.guild){
-        return "notGuild";
-    }
+function getStatus(textCh, voiceCh, channel_map){
 
     //テキストチャンネルか確認
     if(!(textCh.type == 0 || textCh.type == 2)){
@@ -82,20 +78,11 @@ function createEmbed(textCh, voiceCh, status){
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/delight.png");
 
-        return {files: [attachment], embeds: [embed], ephemeral: false};
+        return {content: "", files: [attachment], embeds: [embed], ephemeral: false};
     }
 
     switch(status){
-        case ("notGuild") : {
-            embed.setTitle(`DMでの読み上げは専門外なのだ`);
-            embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "チャンネルにのみ対応してます"});
-            embed.setColor(0xFF0000);
-            attachment.setName("icon.png");
- 	        attachment.setFile("assets/zundamon/icon/normal.png");
-            break;
-        }
-        case ("notTextch") : {
+         case ("notTextch") : {
             embed.setTitle(`#${textCh.name}での読み上げは専門外なのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "テキストチャンネルにのみ対応してます"});
@@ -152,7 +139,7 @@ function createEmbed(textCh, voiceCh, status){
         default: embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed], ephemeral: true};
+    return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
 }
 
 //VCに参加
@@ -196,12 +183,16 @@ function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
 
 //読み上げ開始
 async function start(interaction, channel_map, subsc_map){
-    const textCh = interaction.guild ? interaction.channel : null;
-    const voiceCh = interaction.guild ? interaction.member.voice.channel : null;
-    const status = getStatus(interaction, textCh, voiceCh, channel_map);
-    
+    const textCh = interaction.channel;
+    const voiceCh = interaction.member.voice.channel;
+    const status = getStatus(textCh, voiceCh, channel_map);
+    let progress = await cui.createProgressbar(interaction, 1);
+
     if(!status){
         joinVC(interaction, textCh, voiceCh, channel_map, subsc_map);
+        progress = await cui.stepProgress(interaction, progress);
+        interaction.channel.send(createEmbed(textCh, voiceCh, status));
+        return;
     }
 
     await interaction.editReply(createEmbed(textCh, voiceCh, status));

@@ -1,8 +1,8 @@
 /*****************
     dictAdd.js
     スニャイヴ
-    2024/10/16
-******************```**/
+    2024/10/17
+*****************/
 
 module.exports = {
     getCmd: getCmd,
@@ -14,6 +14,7 @@ const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.
 const fs = require('fs');
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -65,6 +66,7 @@ async function getStatus(pronunciation){
     return 0;
 }
 
+//埋め込みの作成
 function createEmbed(surface, pronunciation, accent, priority, uuid, status){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
@@ -83,7 +85,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
         embed.setColor(0x00FF00);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed], ephemeral: false};
+        return {content: "", files: [attachment], embeds: [embed], ephemeral: false};
     }
 
     switch(status){
@@ -93,7 +95,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
             embed.setFooter({text: "有効なカタカナを入力してください"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("assets/zundamon/icon/delight.png");
+ 	        attachment.setFile("assets/zundamon/icon/anger.png");
             break;
         }
         case "cantKana" : {
@@ -102,7 +104,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
             embed.setFooter({text: "クヮ, グヮ以外のヮは指定できません"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
-            attachment.setFile("assets/zundamon/icon/delight.png");
+            attachment.setFile("assets/zundamon/icon/think.png");
             break;
         }
         case "failAccent" : {
@@ -111,43 +113,56 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
             embed.setFooter({text: "文字数を確認してください(拗音は直前の文字と合わせて1文字と判断される場合があります)"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
- 	        attachment.setFile("assets/zundamon/icon/delight.png");
+ 	        attachment.setFile("assets/zundamon/icon/anger.png");
             break;
         }
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed], ephemeral: true};
+    return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
 }
 
+//辞書の追加
 async function dictAdd(interaction){
     const serverInfo = await db.getServerInfo(interaction.guild.id);
     const surface = interaction.options.get("surface").value;
     const pronunciation = interaction.options.get("pronunciation").value;
     const accent = interaction.options.get("accent") ? interaction.options.get("accent").value : 1;
     const priority = interaction.options.get("priority") ? interaction.options.get("priority").value : 5;
+    let progress = await cui.createProgressbar(interaction, 7);
     let status = await getStatus(pronunciation);
     let uuid = null;
 
+    progress = await cui.stepProgress(interaction, progress);
+    
     if(!status){
         //辞書ファイルの削除
         fs.unlink(`${process.env.VOICEVOX_DICTIONARY}`, (e) => {});
-        await interaction.editReply({content:"[##--------]20%"});
+
+        progress = await cui.stepProgress(interaction, progress);
 
         //既存の辞書のインポート
         await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}})
             .then(async function(){
-                await interaction.editReply({content:"[####------]40%"});
+
+                progress = await cui.stepProgress(interaction, progress);
+
                 //新規ワードの追加
                 await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority}`, {headers:{"accept" : "application/json"}})
                     .then(async function(res){
-                        await interaction.editReply({content:"[######----]60%"});
+
+                        progress = await cui.stepProgress(interaction, progress);
+
                         uuid = res.data;
+
                         //追加後の辞書を取得
                         await axios.get("user_dict", {headers:{"accept" : "application/json"}})
                             .then(async function(res){
-                                await interaction.editReply({content:"[########--]80%"});
+
+                                progress = await cui.stepProgress(interaction, progress);
+
                                 serverInfo.dict = res.data;
+
                             }).catch(function(e){})
                     })
                     .catch(function(e){
@@ -160,10 +175,16 @@ async function dictAdd(interaction){
 
     if(status){
         await interaction.editReply(createEmbed(surface, pronunciation, accent, priority, uuid, status));
-    }else{
-        await interaction.editReply({content:"[##########]100%"});
-        interaction.channel.send(createEmbed(surface, pronunciation, accent, priority, uuid, status));
+        return;
     }
+
+    progress = await cui.stepProgress(interaction, progress);
+
+    await db.setServerInfo(interaction.guild.id, serverInfo);
+
+    progress = await cui.stepProgress(interaction, progress);
+
+    interaction.channel.send(createEmbed(surface, pronunciation, accent, priority, uuid, status));
 
     return;
 }

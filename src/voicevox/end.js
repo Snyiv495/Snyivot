@@ -1,17 +1,17 @@
 /*****************
     end.js
     スニャイヴ
-    2024/10/15
+    2024/10/17
 *****************/
 
 module.exports = {
     getCmd: getCmd,
     end: end,
-    endAll: endAll,
 }
 
 require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -30,12 +30,6 @@ function getCmd(){
 
 //接続状況の確認
 function getStatus(interaction, textCh, voiceCh, channel_map){
-    
-    //ギルドチャンネルか確認
-    if(!interaction.guild){
-        return "notGuild";
-    }
-
     const connectingCh = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID)); 
         
     //ボイスチャンネルの確認
@@ -64,11 +58,11 @@ function createEmbed(textCh, voiceCh, status){
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/sleep.png");
 
-        return {files: [attachment], embeds: [embed], ephemeral: false};
+        return {content: "", files: [attachment], embeds: [embed], ephemeral: false};
     }
 
     switch(status){
-        case "notGuild" || "notReaing" : {
+        case "notReading" : {
             embed.setTitle(`#${textCh.name}で読み上げをしてないのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "読み上げを行ってるチャンネルで使用してください"});
@@ -89,20 +83,24 @@ function createEmbed(textCh, voiceCh, status){
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed], ephemeral: true};
+    return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
 }
 
 //任意のテキストチャンネルの読み上げを止める
 function stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map){
+    let flag = false;
 
     interaction.guild.channels.cache.forEach((channel) => {
         if(channel_map.get(channel.id) && channel.id != textCh){
             channel_map.delete(textCh.id);
+            flag = true;
             return;
         }
     });
 
-    destroyVC(interaction, voiceCh, channel_map, subsc_map);
+    if(!flag){
+        destroyVC(interaction, voiceCh, channel_map, subsc_map);
+    }
 
     return;
 }
@@ -126,30 +124,27 @@ function destroyVC(interaction, voiceCh, channel_map, subsc_map){
 
 //読み上げ終了
 async function end(interaction, channel_map, subsc_map){
-    const textCh = interaction.guild ? interaction.channel : null;
-    const voiceCh = interaction.guild ? interaction.member.voice.channel : null;
+    const textCh = interaction.channel;
+    const voiceCh = interaction.member.voice.channel;
     const status = getStatus(interaction, textCh, voiceCh, channel_map);
-    
-    if(!status){
+    let progress = await cui.createProgressbar(interaction, 1);
+
+    if(!status && (!interaction.options.get("all") || !interaction.options.get("all").value)){
         stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map);
     }
 
-    await interaction.reply(createEmbed(textCh, voiceCh, status));
-
-    return;
-}
-
-//読み上げ全体終了
-async function endAll(interaction, channel_map, subsc_map){
-    const textCh = interaction.guild ? interaction.channel : null;
-    const voiceCh = interaction.guild ? interaction.member.voice.channel : null;
-    const status = getStatus(interaction, textCh, voiceCh, channel_map);
-    
-    if(!status){
+    if(!status && interaction.options.get("all") && interaction.options.get("all").value){
         destroyVC(interaction, voiceCh, channel_map, subsc_map);
     }
 
-    await interaction.reply(createEmbed(textCh, voiceCh, status));
+    progress = await cui.stepProgress(interaction, progress);
+
+    if(status){
+        await interaction.editReply(createEmbed(textCh, voiceCh, status));
+        return;
+    }
+    
+    interaction.channel.send(createEmbed(textCh, voiceCh, status));
 
     return;
 }

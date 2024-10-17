@@ -7,7 +7,7 @@
 module.exports = {
     getSpeakers: getSpeakers,
     getCmd: getCmd,
-    CuiCmd: CuiCmd,
+    cuiCmd: cuiCmd,
     autocomplete: autocomplete,
     read: read,
     observe: observe,
@@ -47,7 +47,13 @@ function getCmd(){
 }
 
 //コマンドの実行
-async function CuiCmd(interaction, channel_map, subsc_map, vv_speakers){
+async function cuiCmd(interaction, channel_map, subsc_map, vv_speakers){
+    //サーバー以外を除外
+    if(!interaction.guild){
+        console.log("後で修正");
+        return;
+    }
+
     switch(interaction.commandName){
         case "voicevox_start" : {
             await vv_start.start(interaction, channel_map, subsc_map);

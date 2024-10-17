@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/10/16        
+    2024/10/17        
 *****************/
 
 module.exports = {
@@ -162,21 +162,12 @@ async function createWav(text, userInfo, serverInfo){
                             stream.push(res.data);
                             stream.push(null);
                             wav = createAudioResource(stream, {inputType: StreamType.Arbitrary});
-                        })
-                        .catch(function(){
-                            console.log("### VOICEVOXサーバとの接続が不安定です ###");
-                        }
-                    )
-                })
-                .catch(function(){
-                    console.log("### VOICEVOXサーバとの接続が不安定です ###");
-                })
-            ;
-        })
-        .catch(function(){
-            console.log("### VOICEVOXサーバとの接続が不安定です ###");
-        })
-    ;
+                        }).catch(function(){}
+                    );
+                }).catch(function(){}
+            );
+        }).catch(function(){}
+    );
     
     return wav;
 }

@@ -1,7 +1,7 @@
 /*****************
     setting.js
     スニャイヴ
-    2024/10/16
+    2024/10/17
 *****************/
 
 module.exports = {
@@ -14,6 +14,7 @@ require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -159,8 +160,8 @@ async function createEmbed(info, name, need_sudo=false){
         embed.setFooter({text: "このコマンドの利用には管理者権限が必要です"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
-        attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed],  ephemeral: true};
+        attachment.setFile("assets/zundamon/icon/agitate.png");
+        return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
     if(!info.speaker){
@@ -169,8 +170,8 @@ async function createEmbed(info, name, need_sudo=false){
         embed.setFooter({text: "存在しないスピーカーが入力されました"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
-        attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed],  ephemeral: true};
+        attachment.setFile("assets/zundamon/icon/anger.png");
+        return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
     if(!info.style){
@@ -179,8 +180,8 @@ async function createEmbed(info, name, need_sudo=false){
         embed.setFooter({text: "存在しないスタイルが入力されました"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
-        attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed],  ephemeral: false};
+        attachment.setFile("assets/zundamon/icon/anger.png");
+        return {content: "", files: [attachment], embeds: [embed],  ephemeral: false};
     }
 
     let policy;
@@ -222,17 +223,19 @@ async function createEmbed(info, name, need_sudo=false){
     attachment.setName("icon.jpg");
     attachment.setFile(Buffer.from(icon, 'base64'));
 
-    return {files: [attachment], embeds: [embed],  ephemeral: true};
+    return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
 }
 
 //サーバー情報の設定
 async function setServer(interaction, speakers){
-    let serverInfo = await db.getServerInfo(interaction.guild.id);
     const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
-    const style = interaction.options.get("style") ? interaction.options.get("style").vallue : null;
+    const style = interaction.options.get("style") ? interaction.options.get("style").value : null;
+    let progress = await cui.createProgressbar(interaction, 3);
+    let serverInfo = await db.getServerInfo(interaction.guild.id);
+
 
     if(!interaction.memberPermissions.has("Administrator") && (serverInfo.need_sudo || interaction.options.get("need_sudo"))){
-        await interaction.reply(await createEmbed(serverInfo, interaction.user.displayName, true));
+        await interaction.editReply(await createEmbed(serverInfo, interaction.user.displayName, true));
         return;
     }
 
@@ -257,8 +260,12 @@ async function setServer(interaction, speakers){
     //speakerオプション
     serverInfo = speaker ? getSpeaker(speaker, speakers, serverInfo) : serverInfo;
 
+    progress = await cui.stepProgress(interaction, progress);
+
     //styleオプション
     serverInfo = style ? getStyle(style, speakers, serverInfo) : serverInfo;
+
+    progress = await cui.stepProgress(interaction, progress);
 
     //speedオプション
     serverInfo.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : serverInfo.speed;
@@ -275,9 +282,12 @@ async function setServer(interaction, speakers){
     //問題がなければ保存
     if(serverInfo.speaker && serverInfo.style){
         await db.setServerInfo(interaction.guild.id, serverInfo);
+        progress = await cui.stepProgress(interaction, progress);
+        interaction.channel.send(await createEmbed(serverInfo, interaction.guild.name));
+        return;
     }
     
-    await interaction.reply(await createEmbed(serverInfo, interaction.guild.name));
+    await interaction.editReply(await createEmbed(serverInfo, interaction.guild.name));
 
     return;
 }

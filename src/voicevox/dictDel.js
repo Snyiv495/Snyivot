@@ -1,7 +1,7 @@
 /*****************
     dictDel.js
     スニャイヴ
-    2024/10/16
+    2024/10/17
 *****************/
 
 module.exports = {
@@ -13,6 +13,7 @@ require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const fs = require('fs');
 const db = require('./db');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -74,8 +75,8 @@ function createEmbed(dictFile, status, surface){
         embed.setFooter({text: `${surface}を辞書から削除しました`});
         embed.setColor(0xFFFF00);
         attachment.setName("icon.png");
-        attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [dictFile, attachment], embeds: [embed], ephemeral: false};
+        attachment.setFile("assets/zundamon/icon/dream.png");
+        return {content: "", files: [dictFile, attachment], embeds: [embed], ephemeral: false};
     }
     
     switch(status){
@@ -85,7 +86,7 @@ function createEmbed(dictFile, status, surface){
             embed.setFooter({text: "辞書の削除にはuuidを利用してください"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
-            attachment.setFile("assets/zundamon/icon/delight.png");
+            attachment.setFile("assets/zundamon/icon/flaunt.png");
             break;
         }
         case "delAll" : {
@@ -94,7 +95,7 @@ function createEmbed(dictFile, status, surface){
             embed.setFooter({text: "辞書を削除しました"});
             embed.setColor(0xFFFF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("assets/zundamon/icon/delight.png");
+ 	        attachment.setFile("assets/zundamon/icon/dream.png");
             break;
         }
         case "notDict" : {
@@ -103,13 +104,13 @@ function createEmbed(dictFile, status, surface){
             embed.setFooter({text: "uuidに間違いがないか確認してください"});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
- 	        attachment.setFile("assets/zundamon/icon/delight.png");
+ 	        attachment.setFile("assets/zundamon/icon/anger.png");
             break;
         }
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [dictFile, attachment], embeds: [embed], ephemeral: true};
+    return {content: "", files: [dictFile, attachment], embeds: [embed], ephemeral: true};
 }
 
 //辞書の削除
@@ -117,6 +118,7 @@ async function dictDel(interaction){
     const serverInfo = await db.getServerInfo(interaction.guild.id);
     const dictFile = `dict_${interaction.guild.id}.csv`;
     const status = getStatus(interaction, serverInfo);
+    let progress = await cui.createProgressbar(interaction, 5);
     let surface = null;
 
     if(!status){
@@ -125,15 +127,30 @@ async function dictDel(interaction){
         delete serverInfo.dict[uuid];
     }
 
+    progress = await cui.stepProgress(interaction, progress);
+
     if(status === "delAll"){
         serverInfo.dict = {};
     }
 
+    progress = await cui.stepProgress(interaction, progress);
+
     await db.setServerInfo(interaction.guild.id, serverInfo);
+
+    progress = await cui.stepProgress(interaction, progress);
 
     fs.writeFile(dictFile, createStrDict(serverInfo), (e) => {});
 
-    await interaction.reply(createEmbed(dictFile, status, surface));
+    progress = await cui.stepProgress(interaction, progress);
+
+    if(status === "notuuid" || status == "notDict"){
+        await interaction.editReply(createEmbed(dictFile, status, surface));
+        return;
+    }
+
+    progress = await cui.stepProgress(interaction, progress);
+
+    await interaction.channel.send(createEmbed(dictFile, status, surface));
 
     fs.unlink(dictFile, (e) => {});
 

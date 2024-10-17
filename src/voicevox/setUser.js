@@ -1,7 +1,7 @@
 /*****************
     setting.js
     スニャイヴ
-    2024/10/16
+    2024/10/17
 *****************/
 
 module.exports = {
@@ -14,6 +14,7 @@ require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 const db = require('./db');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -132,8 +133,8 @@ async function createEmbed(info, displayName){
         embed.setFooter({text: "存在しないスピーカーが入力されました"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
-        attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed],  ephemeral: true};
+        attachment.setFile("assets/zundamon/icon/anger.png");
+        return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
     if(!info.style){
@@ -142,8 +143,8 @@ async function createEmbed(info, displayName){
         embed.setFooter({text: "存在しないスタイルが入力されました"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
-        attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed],  ephemeral: true};
+        attachment.setFile("assets/zundamon/icon/anger.png");
+        return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
     let policy;
@@ -180,20 +181,26 @@ async function createEmbed(info, displayName){
     attachment.setName("icon.jpg");
     attachment.setFile(Buffer.from(icon, 'base64'));
 
-    return {files: [attachment], embeds: [embed],  ephemeral: true};
+    return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
 }
 
 //ユーザー情報の設定
 async function setUser(interaction, speakers){
-    let userInfo = await db.getUserInfo(interaction.user.id);
     const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
-    const style = interaction.options.get("style") ? interaction.options.get("style").vallue : null;
+    const style = interaction.options.get("style") ? interaction.options.get("style").value : null;
+    let progress = await cui.createProgressbar(interaction, 3);
+    let userInfo = await db.getUserInfo(interaction.user.id);
+
 
     //speakerオプション
     userInfo = speaker ? getSpeaker(speaker, speakers, userInfo) : userInfo;
 
+    progress = await cui.stepProgress(interaction, progress);
+
     //styleオプション
     userInfo = style ? getStyle(style, speakers, userInfo) : userInfo;
+
+    progress = await cui.stepProgress(interaction, progress);
 
     //speedオプション
     userInfo.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : userInfo.speed;
@@ -213,9 +220,10 @@ async function setUser(interaction, speakers){
     //問題がなければ保存
     if(userInfo.speaker && userInfo.style){
         await db.setUserInfo(interaction.user.id, userInfo);
+        progress = await cui.stepProgress(interaction, progress);
     }
 
-    await interaction.reply(await createEmbed(userInfo, interaction.user.displayName));
+    await interaction.editReply(await createEmbed(userInfo, interaction.user.displayName));
 
     return;
 }

@@ -107,13 +107,9 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //進捗表示
-    await interaction.deferReply({ephemeral: true});
-    await interaction.editReply({content: "[----------]0%"});
-
     //voicevox
     if(interaction.commandName.includes("voicevox")){
-        await voicevox.CuiCmd(interaction, channel_map, subsc_map, vv_speakers);
+        await voicevox.cuiCmd(interaction, channel_map, subsc_map, vv_speakers);
         return;
     }
 

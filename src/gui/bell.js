@@ -4,14 +4,14 @@
     2024/10/11
 *****************/
 
-const {AttachmentBuilder, ButtonBuilder} = require("discord.js");
+const {ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 
 module.exports = {
     sendBell: sendBell,
 }
 
 function createBell(){
-    const buttons = new AttachmentBuilder();
+    const buttons = new ActionRowBuilder();
     const bell = new ButtonBuilder();
 
     bell.setCustomId("bell");

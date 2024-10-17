@@ -1,7 +1,7 @@
 /*******************
     observe.js    
     スニャイヴ
-    2024/10/16
+    2024/10/17
 *******************/
 
 module.exports = {
@@ -26,7 +26,7 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
             embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
-            attachment.setFile("assets/zundamon/icon/delight.png");
+            attachment.setFile("assets/zundamon/icon/sleep.png");
             break;
         }
         case "compulsionEnd" : {
@@ -35,7 +35,7 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
             embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
-            attachment.setFile("assets/zundamon/icon/delight.png");
+            attachment.setFile("assets/zundamon/icon/cry.png");
             break;
         }
         case "compulsionMove" : {
@@ -44,13 +44,13 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
             embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動しました`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
-            attachment.setFile("assets/zundamon/icon/delight.png");
+            attachment.setFile("assets/zundamon/icon/guide.png");
             break;
         }
         default : embed.setTitle("undefined").setColor(0x000000);
     }
 
-    return {files: [attachment], embeds: [embed]};
+    return {content: "", files: [attachment], embeds: [embed]};
 }
 
 //自動終了
