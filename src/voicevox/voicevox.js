@@ -1,24 +1,16 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/10/16
+    2024/10/17
 ******************/
 
 module.exports = {
     getSpeakers: getSpeakers,
     getCmd: getCmd,
-    setUser: setUser,
-    setUser_autocomplete: setUser_autocomplete,
-    setServer: setServer,
-    setServer_autocomplete: setServer_autocomplete,
-    start: start,
+    CuiCmd: CuiCmd,
+    autocomplete: autocomplete,
     read: read,
-    end: end,
-    autoEnd: autoEnd,
-    compulsionEnd: compulsionEnd,
-    compulsionMove: compulsionMove,
-    dictAdd: dictAdd,
-    dictDel: dictDel,
+    observe: observe,
 }
 
 require('dotenv').config();
@@ -54,33 +46,51 @@ function getCmd(){
     return [vv_start.getCmd(), vv_end.getCmd(), vv_setUser.getCmd(), vv_setServer.getCmd(), vv_dictAdd.getCmd(), vv_dictDel.getCmd()];
 }
 
-//ユーザー情報の設定
-async function setUser(interaction, speakers){
-    await vv_setUser.setUser(interaction, speakers);
+//コマンドの実行
+async function CuiCmd(interaction, channel_map, subsc_map, vv_speakers){
+    switch(interaction.commandName){
+        case "voicevox_start" : {
+            await vv_start.start(interaction, channel_map, subsc_map);
+            break;
+        }
+        case "voicevox_end" : {
+            await vv_end.end(interaction, channel_map, subsc_map);
+            break;
+        }
+        case "voicevox_setting_user" : {
+            await vv_setUser.setUser(interaction, vv_speakers);
+            break;
+        }
+        case "voicevox_setting_server" : {
+            await vv_setServer.setServer(interaction, vv_speakers);
+            break;
+        }
+        case "voicevox_dictionary_add" : {
+            await vv_dictAdd.dictAdd(interaction);
+            break;
+        }
+        case "voicevox_dictionary_delete" : {
+            await vv_dictDel.dictDel(interaction);
+            break;
+        }
+        default : break;
+    }
+
     return;
 }
 
-//サーバー情報の設定
-async function setServer(interaction, speakers){
-    await vv_setServer.setServer(interaction, speakers);
-    return;
-}
-
-//voicevoxコマンドの補助
-async function setUser_autocomplete(interaction, speakers){
-    await vv_setUser.setUser_autocomplete(interaction, speakers);
-    return;
-}
-
-//voicevoxコマンドの補助
-async function setServer_autocomplete(interaction, speakers){
-    await vv_setServer.setServer_autocomplete(interaction, speakers);
-    return;
-}
-
-//開始
-async function start(interaction, channel_map, subsc_map){
-    await vv_start.start(interaction, channel_map, subsc_map);
+//コマンドの補助
+async function autocomplete(interaction, speakers){
+    switch(interaction.commandName){
+        case "voicevox_setting_user" : {
+            await vv_setUser.setUser_autocomplete(interaction, speakers);
+            break;
+        }
+        case "voicevox_setting_server" : {
+            await vv_setServer.setServer_autocomplete(interaction, speakers);
+            break;
+        }
+    }
     return;
 }
 
@@ -90,38 +100,25 @@ function read(message, subsc){
     return;
 }
 
-//終了
-async function end(interaction, channel_map, subsc_map){
-    await vv_end.end(interaction, channel_map, subsc_map);
-    return;
-}
+//VCの監視
+function observe(oldState, newState, channel_map, subsc_map){
+    //自動終了
+    if(subsc_map.get(oldState.channelId) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
+        vv_observe.autoEnd(oldState, channel_map, subsc_map);
+        return;
+    }
 
-//自動停止
-function autoEnd(oldState, channel_map, subsc_map){
-    vv_observe.autoEnd(oldState, channel_map, subsc_map);
-    return;
-}
+    //強制退出時の処理
+    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
+        vv_observe.compulsionEnd(oldState, channel_map, subsc_map);
+        return;
+    }
 
-//強制終了
-function compulsionEnd(oldState, channel_map, subsc_map){
-    vv_observe.compulsionEnd(oldState, channel_map, subsc_map);
-    return;
-}
+    //強制移動時の処理
+    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
+        vv_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
+        return;
+    }
 
-//強制移動
-function compulsionMove(oldState, newState, channel_map, subsc_map){
-    vv_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
-    return;
-}
-
-//辞書の追加
-async function dictAdd(interaction){
-    await vv_dictAdd.dictAdd(interaction);
-    return;
-}
-
-//辞書の削除
-async function dictDel(interaction){
-    await vv_dictDel.dictDel(interaction);
     return;
 }

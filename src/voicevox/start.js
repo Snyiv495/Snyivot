@@ -1,7 +1,7 @@
 /*****************
     start.js
     スニャイヴ
-    2024/10/15
+    2024/10/17
 *****************/
 
 module.exports = {
@@ -61,6 +61,11 @@ function getStatus(interaction, textCh, voiceCh, channel_map){
         return "notMember";
     }
 
+    //読み上げるボイスチャンネルがプライベートか確認
+    if(textCh.type == 2 && !textCh.joinable){
+        return "notMember";
+    }
+
     return 0;
 }
 
@@ -81,7 +86,16 @@ function createEmbed(textCh, voiceCh, status){
     }
 
     switch(status){
-        case ("notGuild" || "notTextch") : {
+        case ("notGuild") : {
+            embed.setTitle(`DMでの読み上げは専門外なのだ`);
+            embed.setThumbnail("attachment://icon.png");
+            embed.setFooter({text: "チャンネルにのみ対応してます"});
+            embed.setColor(0xFF0000);
+            attachment.setName("icon.png");
+ 	        attachment.setFile("assets/zundamon/icon/normal.png");
+            break;
+        }
+        case ("notTextch") : {
             embed.setTitle(`#${textCh.name}での読み上げは専門外なのだ`);
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "テキストチャンネルにのみ対応してます"});
@@ -190,7 +204,7 @@ async function start(interaction, channel_map, subsc_map){
         joinVC(interaction, textCh, voiceCh, channel_map, subsc_map);
     }
 
-    await interaction.reply(createEmbed(textCh, voiceCh, status));
+    await interaction.editReply(createEmbed(textCh, voiceCh, status));
 
     return;
 }

@@ -132,17 +132,21 @@ async function dictAdd(interaction){
     if(!status){
         //辞書ファイルの削除
         fs.unlink(`${process.env.VOICEVOX_DICTIONARY}`, (e) => {});
+        await interaction.editReply({content:"[##--------]20%"});
 
         //既存の辞書のインポート
         await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}})
             .then(async function(){
+                await interaction.editReply({content:"[####------]40%"});
                 //新規ワードの追加
                 await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority}`, {headers:{"accept" : "application/json"}})
                     .then(async function(res){
+                        await interaction.editReply({content:"[######----]60%"});
                         uuid = res.data;
                         //追加後の辞書を取得
                         await axios.get("user_dict", {headers:{"accept" : "application/json"}})
-                            .then(function(res){
+                            .then(async function(res){
+                                await interaction.editReply({content:"[########--]80%"});
                                 serverInfo.dict = res.data;
                             }).catch(function(e){})
                     })
@@ -154,7 +158,12 @@ async function dictAdd(interaction){
         ;
     }
 
-    await interaction.reply(createEmbed(surface, pronunciation, accent, priority, uuid, status));
+    if(status){
+        await interaction.editReply(createEmbed(surface, pronunciation, accent, priority, uuid, status));
+    }else{
+        await interaction.editReply({content:"[##########]100%"});
+        interaction.channel.send(createEmbed(surface, pronunciation, accent, priority, uuid, status));
+    }
 
     return;
 }

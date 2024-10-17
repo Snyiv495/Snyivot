@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/10/07
+    2024/10/17
 *****************/
 
 require('dotenv').config();
@@ -102,67 +102,34 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-
     if(interaction.commandName === "help_cohere"){
         await cohere.sendHelp(interaction);
         return;
     }
 
-    //voicevox_startコマンド
-    if(interaction.commandName === "voicevox_start"){
-        await voicevox.start(interaction, channel_map, subsc_map);
-        return;   
-    }
+    //進捗表示
+    await interaction.deferReply({ephemeral: true});
+    await interaction.editReply({content: "[----------]0%"});
 
-    //voicevox_endコマンド
-    if(interaction.commandName === "voicevox_end"){
-        await voicevox.end(interaction, channel_map, subsc_map);
-        return;
-    }
-
-    //voicevox_setting_userコマンド
-    if(interaction.commandName === "voicevox_setting_user"){
-        await voicevox.setUser(interaction, vv_speakers);
-        return;
-    }
-
-    //voicevox_setting_serverコマンド
-    if(interaction.commandName === "voicevox_setting_server"){
-        await voicevox.setServer(interaction, vv_speakers);
-        return;
-    }
-
-    //voicevox_dictionary_addコマンド
-    if(interaction.commandName === "voicevox_dictionary_add"){
-        await voicevox.dictAdd(interaction);
-        return;
-    }
-
-    //voicevox_dictionary_deleteコマンド
-    if(interaction.commandName === "voicevox_dictionary_delete"){
-        await voicevox.dictDel(interaction);
+    //voicevox
+    if(interaction.commandName.includes("voicevox")){
+        await voicevox.CuiCmd(interaction, channel_map, subsc_map, vv_speakers);
         return;
     }
 
     return;
 })
 
-//コマンド自動補動作
+//コマンド補助
 client.on('interactionCreate', async (interaction) => {
-    //コマンド自動補完以外を除外
+    //コマンド補助以外を除外
     if(!interaction.isAutocomplete()){
         return;
     }
 
-    //voicevox_setting_userコマンド
-    if(interaction.commandName === "voicevox_setting_user"){
-        await voicevox.setUser_autocomplete(interaction, vv_speakers);
-        return;
-    }
-
-    //voicevox_setting_serverコマンド
-    if(interaction.commandName === "voicevox_setting_server"){
-        await voicevox.setServer_autocomplete(interaction, vv_speakers);
+    //voicevox
+    if(interaction.commandName.includes("voicevox_setting")){
+        await voicevox.autocomplete(interaction, vv_speakers);
         return;
     }
 
@@ -225,23 +192,9 @@ client.on('interactionCreate', async (interaction) => {
 
 //ボイスチャンネル動作
 client.on('voiceStateUpdate', (oldState, newState) => {
-    //自動終了
-    if(subsc_map.get(oldState.channelId) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
-        voicevox.autoEnd(oldState, channel_map, subsc_map);
-        return;
-    }
 
-    //強制退出時の処理
-    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
-        voicevox.compulsionEnd(oldState, channel_map, subsc_map);
-        return;
-    }
-
-    //強制移動時の処理
-    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
-        voicevox.compulsionMove(oldState, newState, channel_map, subsc_map);
-        return;
-    }
+    //voicevox
+    voicevox.observe(oldState, newState, channel_map, subsc_map);
 
     return;
 });
