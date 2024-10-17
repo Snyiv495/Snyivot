@@ -115,9 +115,7 @@ async function formText(message, userInfo, serverInfo){
                 .then(messages => {
                     beforeUserId = messages.first().member.id;
                 })
-                .catch(function(){
-                    console.log("### 直前のメッセージはありません ###");
-                })
+                .catch(function(){})
         }
 
         if(beforeUserId != message.member.id){

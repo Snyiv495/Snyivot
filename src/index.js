@@ -64,7 +64,7 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            //await guide.menu(message);
+            gui.sendBell(message);
         }
        
         //内容があれば回答
@@ -92,31 +92,21 @@ client.on('messageCreate', async message => {
 //コマンド動作
 client.on('interactionCreate', async (interaction) => {
     //コマンド以外を除外
-    if(!interaction.isCommand() || !interaction.guild){
+    if(!interaction.isCommand()){
         return;
     }
 
     //cohereコマンド
-    if(interaction.commandName === "help_cohere"){
-        await cohere.sendHelp(interaction);
-        return;
-    }
-    
     if(interaction.commandName === "cohere"){
         await cohere.showModal(interaction);
         return;
     }
-    
-    await interaction.deferReply();
-    await (await interaction.followUp({content: "コマンドを受理したのだ"})).delete().catch(()=>{});
 
-    //helpコマンド
-    if(interaction.commandName === "help"){
-        await guide.help(interaction);
+
+    if(interaction.commandName === "help_cohere"){
+        await cohere.sendHelp(interaction);
         return;
     }
-
-    
 
     //voicevox_startコマンド
     if(interaction.commandName === "voicevox_start"){
@@ -164,9 +154,15 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //voicevox_setting_*コマンド
-    if(interaction.commandName === "voicevox_setting_user" || interaction.commandName === "voicevox_setting_server"){
-        await voicevox.autocomplete(interaction, vv_speakers);
+    //voicevox_setting_userコマンド
+    if(interaction.commandName === "voicevox_setting_user"){
+        await voicevox.setUser_autocomplete(interaction, vv_speakers);
+        return;
+    }
+
+    //voicevox_setting_serverコマンド
+    if(interaction.commandName === "voicevox_setting_server"){
+        await voicevox.setServer_autocomplete(interaction, vv_speakers);
         return;
     }
 

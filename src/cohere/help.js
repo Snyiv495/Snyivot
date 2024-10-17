@@ -30,8 +30,8 @@ function createEmbed(){
     embed.setTitle("cohere AIの使い方を教えるのだ");
     embed.setURL("https://cohere.com/");
     embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "1️⃣ぼくにメンションしながら質問をしてくれたら答えるのだ", value: "例：@Snyivot 読み上げの始め方を教えて"});
-    embed.addFields({name: "2️⃣コマンドの送信で、質問フォームから内緒で質問を送信できるのだ", value: "コマンド：/cohere"});
+    embed.addFields({name: "1️⃣ ぼくにメンションしながら質問をしてくれたら答えるのだ", value: "例：@Snyivot 読み上げの始め方を教えて"});
+    embed.addFields({name: "2️⃣ コマンドの送信で、質問フォームから内緒で質問を送信できるのだ", value: "コマンド：/cohere"});
     embed.setFooter({text: "出力は最大でも1000文字程度です"});
     embed.setColor(0x00FF00);
 

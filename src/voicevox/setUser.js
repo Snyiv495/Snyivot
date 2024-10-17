@@ -7,7 +7,7 @@
 module.exports = {
     getCmd: getCmd,
     setUser: setUser,
-    autocomplete: autocomplete,
+    setUser_autocomplete: setUser_autocomplete,
 }
 
 require('dotenv').config();
@@ -187,7 +187,7 @@ async function createEmbed(info, displayName){
 async function setUser(interaction, speakers){
     let userInfo = await db.getUserInfo(interaction.user.id);
     const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
-    const style = interaction.option.get("style") ? interaction.options.get("style").vallue : null;
+    const style = interaction.options.get("style") ? interaction.options.get("style").vallue : null;
 
     //speakerオプション
     userInfo = speaker ? getSpeaker(speaker, speakers, userInfo) : userInfo;
@@ -220,8 +220,8 @@ async function setUser(interaction, speakers){
     return;
 }
 
-//voicevox_setting_*コマンドの補助
-async function autocomplete(interaction, speakers){
+//voicevox_setting_userコマンドの補助
+async function setUser_autocomplete(interaction, speakers){
     const focusedOpt = interaction.options.getFocused(true);
     const choices = new Array();
     
@@ -240,7 +240,7 @@ async function autocomplete(interaction, speakers){
 
     //styleオプションの補助
     if(focusedOpt.name === "style"){
-        const speaker = interaction.options.getString("speaker") ? interaction.options.getString("speaker") : (await db.getInfo(interaction.user.id)).speaker_name;
+        const speaker = interaction.options.getString("speaker") ? interaction.options.getString("speaker") : (await db.getUserInfo(interaction.user.id)).speaker;
 
         if(speaker === "ランダム"){
             choices.push("ランダム");

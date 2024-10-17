@@ -8,8 +8,9 @@ module.exports = {
     getSpeakers: getSpeakers,
     getCmd: getCmd,
     setUser: setUser,
+    setUser_autocomplete: setUser_autocomplete,
     setServer: setServer,
-    autocomplete: autocomplete,
+    setServer_autocomplete: setServer_autocomplete,
     start: start,
     read: read,
     end: end,
@@ -66,8 +67,14 @@ async function setServer(interaction, speakers){
 }
 
 //voicevoxコマンドの補助
-async function autocomplete(interaction, speakers){
-    await vv_setUser.autocomplete(interaction, speakers);
+async function setUser_autocomplete(interaction, speakers){
+    await vv_setUser.setUser_autocomplete(interaction, speakers);
+    return;
+}
+
+//voicevoxコマンドの補助
+async function setServer_autocomplete(interaction, speakers){
+    await vv_setServer.setServer_autocomplete(interaction, speakers);
     return;
 }
 

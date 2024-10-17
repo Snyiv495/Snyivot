@@ -11,7 +11,7 @@ module.exports = {
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder} = require('discord.js');
+const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 
 //コマンドの取得
 function getCmd(){
@@ -93,7 +93,7 @@ function createEmbed(textCh, voiceCh, status){
 }
 
 //任意のテキストチャンネルの読み上げを止める
-function stopTextch(interaction, channel_map, subsc_map){
+function stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map){
 
     interaction.guild.channels.cache.forEach((channel) => {
         if(channel_map.get(channel.id) && channel.id != textCh){
@@ -102,13 +102,13 @@ function stopTextch(interaction, channel_map, subsc_map){
         }
     });
 
-    destroyVC(interaction, channel_map, subsc_map);
+    destroyVC(interaction, voiceCh, channel_map, subsc_map);
 
     return;
 }
 
 //VCから切断
-function destroyVC(interaction, channel_map, subsc_map){
+function destroyVC(interaction, voiceCh, channel_map, subsc_map){
     try{
         subsc_map.get(voiceCh.id).connection.destroy();
     }catch(e){}
@@ -131,7 +131,7 @@ async function end(interaction, channel_map, subsc_map){
     const status = getStatus(interaction, textCh, voiceCh, channel_map);
     
     if(!status){
-        stopTextch(interaction, channel_map, subsc_map);
+        stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map);
     }
 
     await interaction.reply(createEmbed(textCh, voiceCh, status));
@@ -146,7 +146,7 @@ async function endAll(interaction, channel_map, subsc_map){
     const status = getStatus(interaction, textCh, voiceCh, channel_map);
     
     if(!status){
-        destroyVC(interaction, channel_map, subsc_map);
+        destroyVC(interaction, voiceCh, channel_map, subsc_map);
     }
 
     await interaction.reply(createEmbed(textCh, voiceCh, status));

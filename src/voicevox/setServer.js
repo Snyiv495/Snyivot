@@ -7,7 +7,7 @@
 module.exports = {
     getCmd: getCmd,
     setServer: setServer,
-    autocomplete: autocomplete,
+    setServer_autocomplete: setServer_autocomplete,
 }
 
 require('dotenv').config();
@@ -180,7 +180,7 @@ async function createEmbed(info, name, need_sudo=false){
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/delight.png");
-        return {files: [attachment], embeds: [embed],  ephemeral: true};
+        return {files: [attachment], embeds: [embed],  ephemeral: false};
     }
 
     let policy;
@@ -205,16 +205,16 @@ async function createEmbed(info, name, need_sudo=false){
     embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
     embed.setDescription(`${name}読み上げ音声を\n${info.speaker}(${info.style})に設定したのだ`)
     embed.addFields([
-        {name : 'need_sudo', value : `${serverInfo.need_sudo}`, inline : true},
-        {name : 'read_name', value : `${serverInfo.read_name}`, inline : true},
-        {name : 'read_sameuser', value : `${serverInfo.read_sameuser}`, inline : true},
-        {name : 'read_multiline', value : `${serverInfo.read_multiline}`, inline : true},
-        {name : 'maxwords', value : `${serverInfo.maxwords}`, inline : true},
-        {name : 'unif', value : `${serverInfo.unif}`, inline : true},
-        {name : 'speed', value : `${serverInfo.speed}`, inline : true},
-        {name : 'pitch', value : `${serverInfo.pitch}`, inline : true},
-        {name : 'intonation', value : `${serverInfo.intonation}`, inline : true},
-        {name : 'volume', value : `${serverInfo.volume}`, inline : true}
+        {name : 'need_sudo', value : `${info.need_sudo}`, inline : true},
+        {name : 'read_name', value : `${info.read_name}`, inline : true},
+        {name : 'read_sameuser', value : `${info.read_sameuser}`, inline : true},
+        {name : 'read_multiline', value : `${info.read_multiline}`, inline : true},
+        {name : 'maxwords', value : `${info.maxwords}`, inline : true},
+        {name : 'unif', value : `${info.unif}`, inline : true},
+        {name : 'speed', value : `${info.speed}`, inline : true},
+        {name : 'pitch', value : `${info.pitch}`, inline : true},
+        {name : 'intonation', value : `${info.intonation}`, inline : true},
+        {name : 'volume', value : `${info.volume}`, inline : true}
     ])
     embed.setImage("attachment://icon.jpg");
     embed.setFooter({text: `VOICEVOX:${info.speaker}`});
@@ -227,9 +227,9 @@ async function createEmbed(info, name, need_sudo=false){
 
 //サーバー情報の設定
 async function setServer(interaction, speakers){
-    let serverInfo = await db.getUserInfo(interaction.user.id);
+    let serverInfo = await db.getServerInfo(interaction.guild.id);
     const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
-    const style = interaction.option.get("style") ? interaction.options.get("style").vallue : null;
+    const style = interaction.options.get("style") ? interaction.options.get("style").vallue : null;
 
     if(!interaction.memberPermissions.has("Administrator") && (serverInfo.need_sudo || interaction.options.get("need_sudo"))){
         await interaction.reply(await createEmbed(serverInfo, interaction.user.displayName, true));
@@ -273,7 +273,7 @@ async function setServer(interaction, speakers){
     serverInfo.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : serverInfo.volume;
     
     //問題がなければ保存
-    if(userInfo.speaker && userInfo.style){
+    if(serverInfo.speaker && serverInfo.style){
         await db.setServerInfo(interaction.guild.id, serverInfo);
     }
     
@@ -282,8 +282,8 @@ async function setServer(interaction, speakers){
     return;
 }
 
-//voicevox_setting_*コマンドの補助
-async function autocomplete(interaction, speakers){
+//voicevox_setting_serverコマンドの補助
+async function setServer_autocomplete(interaction, speakers){
     const focusedOpt = interaction.options.getFocused(true);
     const choices = new Array();
     
@@ -302,7 +302,7 @@ async function autocomplete(interaction, speakers){
 
     //styleオプションの補助
     if(focusedOpt.name === "style"){
-        const speaker = interaction.options.getString("speaker") ? interaction.options.getString("speaker") : (await db.getInfo(interaction.user.id)).speaker_name;
+        const speaker = interaction.options.getString("speaker") ? interaction.options.getString("speaker") : (await db.getServerInfo(interaction.guild.id)).speaker;
 
         if(speaker === "ランダム"){
             choices.push("ランダム");
