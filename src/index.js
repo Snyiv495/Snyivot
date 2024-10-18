@@ -96,14 +96,9 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    //cohereコマンド
-    if(interaction.commandName === "cohere"){
-        await cohere.showModal(interaction);
-        return;
-    }
-
-    if(interaction.commandName === "help_cohere"){
-        await cohere.sendHelp(interaction);
+    //cohere
+    if(interaction.commandName.includes("cohere")){
+        await cohere.cuiCmd(interaction);
         return;
     }
 

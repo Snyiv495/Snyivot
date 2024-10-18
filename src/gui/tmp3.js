@@ -252,111 +252,11 @@ function help_readme(){
     return {files: ["./README.md", attachment], embeds: [embed], ephemeral: true};
 }
 
-function help_vv_start(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-
-    embed.setTitle("読み上げの開始方法を教えるのだ");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで読み上げを開始できるのだ", value: "/voicevox_start"});
-    embed.addFields({name: "複数のチャットを読み上げることもできるのだ", value: "読み上げを行っていないチャットにコマンドを送信すると、そのチャットも追加で読み上げます。"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
-
-    return {files: [attachment], embeds: [embed], ephemeral: true};
-}
-
-function help_vv_end(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-
-    embed.setTitle("読み上げの終了方法を教えるのだ");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで読み上げを終了できるのだ", value: "/voicevox_end"});
-    embed.addFields({name: "オプションを追加することでサーバー全体での読み上げも終了できるのだ", value: "/voicevox_end all True"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
-
-    return {files: [attachment], embeds: [embed], ephemeral: true};
-}
-
-function help_vv_setUser(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-
-    embed.setTitle("ユーザー設定の変更方法を教えるのだ");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで設定を確認できるのだ", value: "/voicevox_setting_user"});
-    embed.addFields({name: "オプションを追加することで設定の変更ができるのだ", value: "以下のオプションが存在します"});
-    embed.addFields({name: "読み上げるキャラクターを変更できるのだ", value: "例：/voicevox_setting_user speaker ずんだもん"});
-    embed.addFields({name: "読み上げるスタイルを変更できるのだ", value: "例：/voicevox_setting_user style ノーマル"});
-    embed.addFields({name: "読み上げる速度を変更できるのだ", value: "例：/voicevox_setting_user speed 1.5"});
-    embed.addFields({name: "読み上げる高さを変更できるのだ", value: "例：/voicevox_setting_user pitch 0.1"});
-    embed.addFields({name: "読み上げる抑揚を変更できるのだ", value: "例：/voicevox_setting_user intonation 0.0"});
-    embed.addFields({name: "読み上げる音量を変更できるのだ", value: "例：/voicevox_setting_user volume 1.25"});
-    embed.addFields({name: "読み上げる名前の読み方を変更できるのだ", value: "例：/voicevox_setting_user username ほげほげ"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
-
-    return {files: [attachment], embeds: [embed], ephemeral: true};
-}
-
-function help_vv_setServer(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-
-    embed.setTitle("サーバー設定の変更方法を教えるのだ");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで設定を確認できるのだ", value: "/voicevox_setting_server"});
-    embed.addFields({name: "オプションを追加することで設定の変更ができるのだ", value: "以下のオプションが存在します"});
-    embed.addFields({name: "このコマンドに対する要管理者権限の変更ができるのだ", value: "例：/voicevox_setting_server need_sudo True"});
-    embed.addFields({name: "読み上げる時に名前も読み上げるかを変更できるのだ", value: "例：/voicevox_setting_server read_name True"});
-    embed.addFields({name: "同一人物が連続でチャットを送ったときも名前を読み上げるかを変更できるのだ", value: "例：/voicevox_setting_server continue_name True"});
-    embed.addFields({name: "読み上げるチャットが二行以上でもすべて読み上げるかを変更できるのだ", value: "例：/voicevox_setting_server continue_line True"});
-    embed.addFields({name: "読み上げる最大文字数を変更できるのだ", value: "例：/voicevox_setting_server maxwords 30"});
-    embed.addFields({name: "読み上げ方の設定を統一するかを変更できるのだ", value: "例：/voicevox_setting_server unif True"});
-    embed.addFields({name: "他にも読み上げ方のオプションが存在するのだ", value: "詳しくはユーザー設定のヘルプを確認してください"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
-
-    return {files: [attachment], embeds: [embed], ephemeral: true};
-}
-
-function help_vv_dictAdd(){
-    const embed = new EmbedBuilder();
-    const attachment = new AttachmentBuilder();
-
-    embed.setTitle("辞書の追加方法を教えるのだ");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで辞書を追加できるのだ", value: "例：/voicevox_dictionary_add surface 摩訶不思議 pronuncication パルプンテ"});
-    embed.addFields({name: "オプションを追加することで細かい設定ができるのだ", value: "以下のオプションが存在します"});
-    embed.addFields({name: "読み方を変更する文字を「surface」で指定できるのだ", value: "このオプションは必須です"});
-    embed.addFields({name: "文字の読み方を「pronuncication」で指定できるのだ", value: "このオプションは必須です"});
-    embed.addFields({name: "語調が下がる位置を指定できるのだ", value: "例：/voicevox_dictionary_add surface 摩訶不思議 pronuncication パルプンテ accent 4"});
-    embed.addFields({name: "追加する言葉の優先度が設定できるのだ", value: "例：/voicevox_dictionary_add surface 摩訶不思議 pronuncication パルプンテ priority 9"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
-
-    return {files: [attachment], embeds: [embed], ephemeral: true};
-}
-
 function help_vv_dictDel(){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
-    embed.setTitle("辞書の削除方法を教えるのだ");
-    embed.setThumbnail("attachment://icon.png");
-    embed.addFields({name: "スラッシュコマンドで辞書の一覧が取得できるのだ", value: "/voicevox_dictionary_delete"});
-    embed.addFields({name: "オプションを追加することで辞書の削除ができるのだ", value: "例：/voicevox_dictionary_delete uuid 12345678-abcd-ijkl-wxyz-1234567890ab"});
-    embed.addFields({name: "uuidの文字をすべて`x`か`*`にすると全削除ができるのだ", value: "例：/voicevox_dictionary_delete uuid xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"});
-    embed.setColor(0x00FF00);
-    attachment.setName("icon.png");
-    attachment.setFile("assets/zundamon/icon/delight.png");
+    
 
     return {files: [attachment], embeds: [embed], ephemeral: true};
 }

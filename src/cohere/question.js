@@ -1,7 +1,7 @@
 /******************
     question.js
     スニャイヴ
-    2024/10/10
+    2024/10/18
 ******************/
 
 module.exports = {
@@ -14,6 +14,7 @@ require('dotenv').config();
 const {SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {CohereClient} = require('cohere-ai');
 const cohere = new CohereClient({token: process.env.COHERE_TOKEN});
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
@@ -92,20 +93,33 @@ function createEmbed(question, anser){
     attachment.setName("icon.png");
     attachment.setFile("assets/zundamon/icon/dream.png");
 
-    return {embeds: [embed], ephemeral: true};
+    return {content: "", embeds: [embed], ephemeral: true};
 }
 
 //回答の送信
 async function sendAns(msgInte, readme){
     let question = msgInte.content ? msgInte.content.replace(`<@${process.env.BOT_ID}>`, "") : msgInte.fields.getTextInputValue("inputFiled_question");
+    let progress = null;
+    try{
+        progress = await cui.createProgressbar(msgInte, 3);
+    }catch(e){};
+
+    progress = progress ? await cui.stepProgress(msgInte, progress) : null;
+
     let anser = await generateAns(question, readme);
+    
+    progress = progress ? await cui.stepProgress(msgInte, progress) : null;
 
     question = (question.length>4000) ? question.substr(0, 3992) + "...<以下略>" : question;
     anser = (anser.length>1000) ? anser.substr(0, 992) + "...<以下略>" : anser;
 
-    try{
-        await msgInte.reply(createEmbed(question, anser));
-    }catch(e){}
+    if(!progress){
+        msgInte.reply(createEmbed(question, anser));
+        return;
+    }
+
+    progress = progress ? await cui.stepProgress(msgInte, progress) : null;
+    await msgInte.editReply(createEmbed(question, anser));
 
     return;
 }

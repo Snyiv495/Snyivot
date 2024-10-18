@@ -1,13 +1,12 @@
 /*****************
     cohere.js
     スニャイヴ
-    2024/10/10
+    2024/10/18
 *****************/
 
 module.exports = {
     getCmd: getCmd,
-    sendHelp: sendHelp,
-    showModal: showModal,
+    cuiCmd: cuiCmd,
     sendAns: sendAns,
 }
 
@@ -20,15 +19,20 @@ function getCmd(){
     return cmds;
 }
 
-//ヘルプの送信
-async function sendHelp(interaction){
-    await help.sendHelp(interaction);
-    return;
-}
+//コマンドの実行
+async function cuiCmd(interaction){
+    switch(interaction.commandName){
+        case "cohere" : {
+            await question.showModal(interaction);
+            break;
+        }
+        case "cohere_help" : {
+            await help.sendHelp(interaction);
+            break;
+        }
+        default : break;
+    }
 
-//モーダルの作成
-async function showModal(interaction){
-    await question.showModal(interaction);
     return;
 }
 

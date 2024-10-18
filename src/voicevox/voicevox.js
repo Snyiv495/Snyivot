@@ -23,6 +23,7 @@ const vv_dictAdd = require('./dictAdd');
 const vv_dictDel = require('./dictDel');
 const vv_read = require('./read');
 const vv_observe = require('./observe');
+const vv_help = require('./help');
 
 //スピーカーの取得
 async function getSpeakers(){
@@ -43,7 +44,7 @@ async function getSpeakers(){
 
 //コマンドの取得
 function getCmd(){
-    return [vv_start.getCmd(), vv_end.getCmd(), vv_setUser.getCmd(), vv_setServer.getCmd(), vv_dictAdd.getCmd(), vv_dictDel.getCmd()];
+    return [vv_start.getCmd(), vv_end.getCmd(), vv_setUser.getCmd(), vv_setServer.getCmd(), vv_dictAdd.getCmd(), vv_dictDel.getCmd(), vv_help.getCmd()];
 }
 
 //コマンドの実行
@@ -77,6 +78,10 @@ async function cuiCmd(interaction, channel_map, subsc_map, vv_speakers){
         }
         case "voicevox_dictionary_delete" : {
             await vv_dictDel.dictDel(interaction);
+            break;
+        }
+        case "voicevox_help" : {
+            await vv_help.sendHelp(interaction);
             break;
         }
         default : break;

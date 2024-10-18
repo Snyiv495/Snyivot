@@ -1,7 +1,7 @@
 /*****************
     help.js
     スニャイヴ
-    2024/10/10
+    2024/10/18
 *****************/
 
 module.exports = {
@@ -11,12 +11,13 @@ module.exports = {
 
 require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const cui = require('../cui/cui');
 
 //コマンドの取得
 function getCmd(){
     const help = new SlashCommandBuilder();
 
-    help.setName("help_cohere");
+    help.setName("cohere_help");
     help.setDescription("AI質問のヘルプコマンド");
     
     return help;
@@ -32,20 +33,21 @@ function createEmbed(){
     embed.setThumbnail("attachment://icon.png");
     embed.addFields({name: "1️⃣ ぼくにメンションしながら質問をしてくれたら答えるのだ", value: "例：@Snyivot 読み上げの始め方を教えて"});
     embed.addFields({name: "2️⃣ コマンドの送信で、質問フォームから内緒で質問を送信できるのだ", value: "コマンド：/cohere"});
-    embed.setFooter({text: "出力は最大でも1000文字程度です"});
+    embed.setFooter({text: "出力は最大1000文字です"});
     embed.setColor(0x00FF00);
 
     attachment.setName("icon.png");
     attachment.setFile("assets/zundamon/icon/flaunt.png");
 
-    return {files: [attachment], embeds: [embed], ephemeral: true};
+    return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
 }
 
 //ヘルプの送信
 async function sendHelp(interaction){
-    try{
-        await interaction.reply(createEmbed());
-    }catch(e){}
+    let progress = await cui.createProgressbar(interaction, 1);
+    progress = await cui.stepProgress(interaction, progress);
+    
+    await interaction.editReply(createEmbed());
 
     return;
 }
