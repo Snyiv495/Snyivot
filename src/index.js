@@ -109,7 +109,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     return;
-})
+});
 
 //コマンド補助
 client.on('interactionCreate', async (interaction) => {
@@ -125,7 +125,16 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     return;
-})
+});
+
+//セレクトメニュー動作
+client.on('interactionCreate', async (interaction) => {
+    //セレクトメニュー以外を除外
+    if(!interaction.isAnySelectMenu()){
+        return;
+    }
+
+});
 
 //ボタン動作
 client.on('interactionCreate', async (interaction) => {
@@ -134,37 +143,13 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
-    if(interaction.customId === "menu_cohere"){
-        await interaction.message.delete().catch(()=>{});
-        await cohere.showModal(interaction);
-        return;
-    }
-
-    //ボタンの削除
-    await interaction.update({components: [], ephemeral: true});
-
-    if(interaction.customId === "menu_vv" || interaction.customId === "menu_help" || interaction.customId === "menu_help_vv01" || interaction.customId === "menu_help_vv02"){
-        await guide.menu(interaction);
-        return;
-    }
-
-    if(interaction.customId === "start_vv"){
-        await voicevox.start(interaction, channel_map, subsc_map);
-        return;
-    }
-
-    if(interaction.customId === "end_vv" || interaction.customId === "endAll_vv"){
-        await voicevox.end(interaction, channel_map, subsc_map);
-        return;
-    }
-
-    if(interaction.customId === "help_readme" || interaction.customId === "help_cohere" || interaction.customId === "help_vv_start" || interaction.customId === "help_vv_end" || interaction.customId === "help_vv_setUser" || interaction.customId === "help_vv_setServer" || interaction.customId === "help_vv_dictAdd" || interaction.customId === "help_vv_dictDel"){
-        await guide.help(interaction);
+    if(interaction.customId === "bell"){
+        await gui.sendGui(interaction);
         return;
     }
 
     return;
-})
+});
 
 //モーダル動作
 client.on('interactionCreate', async (interaction) => {
@@ -173,13 +158,14 @@ client.on('interactionCreate', async (interaction) => {
         return
     }
 
+    //cohere
 	if(interaction.customId === "modal_cohere"){
         await cohere.sendAns(interaction, readme);
         return;
 	}
 
     return;
-})
+});
 
 //ボイスチャンネル動作
 client.on('voiceStateUpdate', (oldState, newState) => {
