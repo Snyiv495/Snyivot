@@ -1,75 +1,19 @@
 /*****************
     setting.js
     スニャイヴ
-    2024/10/17
+    2024/10/21
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
     setUser: setUser,
     setUser_autocomplete: setUser_autocomplete,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const db = require('./db');
-const cui = require('../cui/cui');
-
-//コマンドの取得
-function getCmd(){
-    const voicevox_setting_user = new SlashCommandBuilder();
-
-    voicevox_setting_user.setName("voicevox_setting_user");
-    voicevox_setting_user.setDescription("voicevoxのユーザー用設定コマンド");
-    voicevox_setting_user.addStringOption(option => {
-        option.setName("speaker");
-        option.setDescription("キャラ名を入力してください");
-        option.setAutocomplete(true);
-        return option;
-    });
-    voicevox_setting_user.addStringOption(option => {
-        option.setName("style");
-        option.setDescription("キャラのスタイルを入力してください");
-        option.setAutocomplete(true);
-        return option;
-    });
-    voicevox_setting_user.addNumberOption(option => {
-        option.setName("speed");
-        option.setDescription("読み上げの速度を入力してください[0.5~2.0]");
-        option.setMaxValue(2.0);
-        option.setMinValue(0.5);
-        return option;
-    });
-    voicevox_setting_user.addNumberOption(option => {
-        option.setName("pitch");
-        option.setDescription("読み上げの高さを入力してください[-0.15~0.15]");
-        option.setMaxValue(0.15);
-        option.setMinValue(-0.15);
-        return option;
-    });
-    voicevox_setting_user.addNumberOption(option => {
-        option.setName("intonation");
-        option.setDescription("読み上げの抑揚を入力してください[0.0~2.0]");
-        option.setMaxValue(2.0);
-        option.setMinValue(0.0);
-        return option;
-    });
-    voicevox_setting_user.addNumberOption(option => {
-        option.setName("volume");
-        option.setDescription("読み上げの音量を入力してください[0.0~2.0]");
-        option.setMaxValue(2.0);
-        option.setMinValue(0.0);
-        return option;
-    });
-    voicevox_setting_user.addStringOption(option => {
-        option.setName("username");
-        option.setDescription("読み上げに使うあなたの名前を入力してください");
-        return option;
-    });
-    
-    return voicevox_setting_user;
-}
+const db = require('../db');
+const cui = require('../cui');
 
 //スピーカーの取得
 function getSpeaker(speaker, speakers, info){
@@ -188,41 +132,56 @@ async function createEmbed(info, displayName){
 async function setUser(interaction, speakers){
     const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
     const style = interaction.options.get("style") ? interaction.options.get("style").value : null;
-    let progress = await cui.createProgressbar(interaction, 3);
-    let userInfo = await db.getUserInfo(interaction.user.id);
+    let userInfo = null;
+    let progress = null;
 
+    //進捗の表示
+    progress = await cui.createProgressbar(interaction, 9);
+
+    //ユーザー情報の取得
+    userInfo = await db.getUserInfo(interaction.user.id);
+    progress = await cui.stepProgressbar(progress);
 
     //speakerオプション
     userInfo = speaker ? getSpeaker(speaker, speakers, userInfo) : userInfo;
-
-    progress = await cui.stepProgress(interaction, progress);
+    progress = await cui.stepProgressbar(progress);
 
     //styleオプション
     userInfo = style ? getStyle(style, speakers, userInfo) : userInfo;
-
-    progress = await cui.stepProgress(interaction, progress);
+    progress = await cui.stepProgressbar(progress);
 
     //speedオプション
     userInfo.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : userInfo.speed;
+    progress = await cui.stepProgressbar(progress);
 
     //pitchオプション
     userInfo.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : userInfo.pitch;
+    progress = await cui.stepProgressbar(progress);
 
     //intonationオプション
     userInfo.intonation = interaction.options.get("intonation") ? interaction.options.get("intonation").value : userInfo.intonation;
+    progress = await cui.stepProgressbar(progress);
 
     //volumeオプション
     userInfo.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : userInfo.volume;
-    
+    progress = await cui.stepProgressbar(progress);
+
     //usernameオプション
     userInfo.username = interaction.options.get("username") ? (interaction.options.get("username").value === "null") ? null : (interaction.options.get("username").value).substr(0, 10) : userInfo.username;
+    progress = await cui.stepProgressbar(progress);
 
     //問題がなければ保存
-    if(userInfo.speaker && userInfo.style){
-        await db.setUserInfo(interaction.user.id, userInfo);
-        progress = await cui.stepProgress(interaction, progress);
+    if(!(userInfo.speaker && userInfo.style)){
+        //失敗送信
+        await interaction.editReply(await createEmbed(userInfo, interaction.user.displayName));
+        return -1;
     }
 
+    //ユーザー情報の保存
+    await db.setUserInfo(interaction.user.id, userInfo);
+    progress = await cui.stepProgressbar(progress);
+
+    //成功送信
     await interaction.editReply(await createEmbed(userInfo, interaction.user.displayName));
 
     return;

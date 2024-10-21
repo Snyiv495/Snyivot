@@ -1,57 +1,22 @@
 /*****************
     dictAdd.js
     スニャイヴ
-    2024/10/17
+    2024/10/21
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
     dictAdd: dictAdd,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const fs = require('fs');
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const db = require('./db');
-const cui = require('../cui/cui');
-
-//コマンドの取得
-function getCmd(){
-    const voicevox_dictionary_add = new SlashCommandBuilder();
-
-    voicevox_dictionary_add.setName("voicevox_dictionary_add")
-    voicevox_dictionary_add.setDescription("voicevoxの辞書追加コマンド")
-    voicevox_dictionary_add.addStringOption(option => {
-        option.setName("surface");
-        option.setDescription("言葉を入力してください");
-        option.setRequired(true);
-        return option;
-    });
-    voicevox_dictionary_add.addStringOption(option => {
-        option.setName("pronunciation");
-        option.setDescription("発音をカタカナで入力してください");
-        option.setRequired(true);
-        return option;
-    });
-    voicevox_dictionary_add.addIntegerOption(option => {
-        option.setName("accent");
-        option.setDescription("語調が下がる文字の番目を入力してください");
-        return option;
-    });
-    voicevox_dictionary_add.addIntegerOption(option => {
-        option.setName("priority");
-        option.setDescription("読み替えを行う優先度を入力してください");
-        option.setMaxValue(9);
-        option.setMinValue(1);
-        return option;
-    });
-    
-    return voicevox_dictionary_add;
-}
+const db = require('../db');
+const cui = require('../cui');
 
 //状況の取得
-async function getStatus(pronunciation){
+function getStatus(pronunciation){
 
     //カタカナ以外を検出
     if(pronunciation.match(/[^ァ-ヴー]/)){
@@ -64,6 +29,36 @@ async function getStatus(pronunciation){
     }
 
     return 0;
+}
+
+//辞書の削除
+async function deleteDict(){
+    fs.unlink(`${process.env.VOICEVOX_DICTIONARY}`, (e) => {});
+
+    return 0;
+}
+
+//既存の辞書のインポート
+async function importDict(serverInfo){
+    await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}}).then(async function(){
+    }).catch(function(e){});
+
+    return 0;
+}
+
+//辞書に単語の追加
+async function addWord(surface, pronunciation, accent, priority){
+    let uuid = null;
+    let status = null;
+
+    await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority}`, {headers:{"accept" : "application/json"}}).then(async function(res){
+        uuid = res.data;
+    }).catch(function(e){
+        status = "failAccent";
+    });
+    
+
+    return [uuid, status];
 }
 
 //埋め込みの作成
@@ -122,69 +117,67 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
     return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
 }
 
+//新規辞書の取得
+async function getDict(serverInfo){
+    await axios.get("user_dict", {headers:{"accept" : "application/json"}}).then(async function(res){
+        serverInfo.dict = res.data;
+    }).catch(function(e){});
+
+    return serverInfo;
+}
+
 //辞書の追加
 async function dictAdd(interaction){
-    const serverInfo = await db.getServerInfo(interaction.guild.id);
     const surface = interaction.options.get("surface").value;
     const pronunciation = interaction.options.get("pronunciation").value;
     const accent = interaction.options.get("accent") ? interaction.options.get("accent").value : 1;
     const priority = interaction.options.get("priority") ? interaction.options.get("priority").value : 5;
-    let progress = await cui.createProgressbar(interaction, 7);
-    let status = await getStatus(pronunciation);
+    let serverInfo = null;
+    let progress = null
+    let status = null;
     let uuid = null;
 
-    progress = await cui.stepProgress(interaction, progress);
-    
-    if(!status){
-        //辞書ファイルの削除
-        fs.unlink(`${process.env.VOICEVOX_DICTIONARY}`, (e) => {});
+    //進捗の表示
+    progress = await cui.createProgressbar(interaction, 7);
 
-        progress = await cui.stepProgress(interaction, progress);
+    //サーバー情報の取得
+    serverInfo = await db.getServerInfo(interaction.guild.id);
+    progress = await cui.stepProgressbar(progress);
+
+    //状況の取得
+    status = getStatus(pronunciation);
+    progress = await cui.stepProgressbar(progress);
+
+    if(!status){
+        //辞書の削除
+        await deleteDict(progress);
+        progress = await cui.stepProgressbar(progress);
 
         //既存の辞書のインポート
-        await axios.post("import_user_dict?override=true", JSON.stringify(serverInfo.dict), {headers:{"Content-Type": "application/json"}})
-            .then(async function(){
+        await importDict(serverInfo, progress);
+        progress = await cui.stepProgressbar(progress);
 
-                progress = await cui.stepProgress(interaction, progress);
-
-                //新規ワードの追加
-                await axios.post(`user_dict_word?surface=${encodeURI(surface)}&pronunciation=${encodeURI(pronunciation)}&accent_type=${accent}&priority=${priority}`, {headers:{"accept" : "application/json"}})
-                    .then(async function(res){
-
-                        progress = await cui.stepProgress(interaction, progress);
-
-                        uuid = res.data;
-
-                        //追加後の辞書を取得
-                        await axios.get("user_dict", {headers:{"accept" : "application/json"}})
-                            .then(async function(res){
-
-                                progress = await cui.stepProgress(interaction, progress);
-
-                                serverInfo.dict = res.data;
-
-                            }).catch(function(e){})
-                    })
-                    .catch(function(e){
-                        status = "failAccent";
-                    })
-            })
-            .catch(function(e){})
-        ;
+        //辞書に単語の追加
+        [uuid, status] = await addWord(surface, pronunciation, accent, priority);
+        progress = await cui.stepProgressbar(progress);
     }
 
     if(status){
+        //失敗送信
         await interaction.editReply(createEmbed(surface, pronunciation, accent, priority, uuid, status));
-        return;
+        return -1;
     }
 
-    progress = await cui.stepProgress(interaction, progress);
+    //新規辞書の取得
+    serverInfo = await getDict(serverInfo);
+    progress = await cui.stepProgressbar(progress);
 
+    //サーバー情報の保存
     await db.setServerInfo(interaction.guild.id, serverInfo);
+    progress = await cui.stepProgressbar(progress);
 
-    progress = await cui.stepProgress(interaction, progress);
+    //成功送信
+    interaction.channel.send(createEmbed(surface, pronunciation, accent, priority, uuid, status, progress));
 
-    interaction.channel.send(createEmbed(surface, pronunciation, accent, priority, uuid, status));
-
-    return;
+    return 0;
 }

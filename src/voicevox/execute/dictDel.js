@@ -1,34 +1,18 @@
 /*****************
     dictDel.js
     スニャイヴ
-    2024/10/17
+    2024/10/21
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
     dictDel: dictDel,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const fs = require('fs');
-const db = require('./db');
-const cui = require('../cui/cui');
-
-//コマンドの取得
-function getCmd(){
-    const voicevox_dictionary_delete = new SlashCommandBuilder();
-
-    voicevox_dictionary_delete.setName("voicevox_dictionary_delete")
-    voicevox_dictionary_delete.setDescription("voicevoxの辞書削除コマンド")
-    voicevox_dictionary_delete.addStringOption(option => {
-        option.setName("uuid");
-        option.setDescription("削除したい言葉のuuidを入力してください");
-        return option;
-    });
-    
-    return voicevox_dictionary_delete;
-}
+const db = require('../db');
+const cui = require('../cui');
 
 //状況の取得
 function getStatus(interaction, serverInfo){
@@ -52,8 +36,26 @@ function getStatus(interaction, serverInfo){
     return 0;
 }
 
-//文字列辞書の作成
-function createStrDict(serverInfo){
+//辞書の単語の削除
+async function delWord(interaction, serverInfo, status){
+    let surface = null;
+
+    if(!status){
+        const uuid = interaction.options.get("uuid").value;
+        surface = serverInfo.dict[uuid].surface;
+        delete serverInfo.dict[uuid];
+    }
+
+    if(status === "delAll"){
+        serverInfo.dict = {};
+    }
+
+    return [serverInfo, surface];
+
+}
+
+//辞書の作成
+async function createDict(serverInfo, dictFile){
     const uuids = Object.keys(serverInfo.dict);
     let csvstr = "言葉,発音,uuid,低語調位置,優先度\n";
 
@@ -61,7 +63,9 @@ function createStrDict(serverInfo){
         csvstr = csvstr + `${serverInfo.dict[uuids[i]].surface},${serverInfo.dict[uuids[i]].pronunciation},${uuids[i]},${serverInfo.dict[uuids[i]].accent_type},${serverInfo.dict[uuids[i]].priority}\n`;
     }
 
-    return csvstr;
+    fs.writeFile(dictFile, csvstr, (e) => {});
+
+    return 0;
 }
 
 //埋め込みの作成
@@ -102,7 +106,7 @@ function createEmbed(dictFile, status, surface){
             embed.setTitle("そのuuidに一致する言葉は覚えてないのだ");
             embed.setThumbnail("attachment://icon.png");
             embed.setFooter({text: "uuidに間違いがないか確認してください"});
-            embed.setColor(0x00FF00);
+            embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/anger.png");
             break;
@@ -115,44 +119,46 @@ function createEmbed(dictFile, status, surface){
 
 //辞書の削除
 async function dictDel(interaction){
-    const serverInfo = await db.getServerInfo(interaction.guild.id);
     const dictFile = `dict_${interaction.guild.id}.csv`;
-    const status = getStatus(interaction, serverInfo);
-    let progress = await cui.createProgressbar(interaction, 5);
+    let serverInfo = null;
+    let progress = null;
     let surface = null;
+    let status = null;
 
-    if(!status){
-        const uuid = interaction.options.get("uuid").value;
-        surface = serverInfo.dict[uuid].surface;
-        delete serverInfo.dict[uuid];
-    }
+    //進捗の表示
+    progress = await cui.createProgressbar(interaction, 5);
 
-    progress = await cui.stepProgress(interaction, progress);
+    //サーバー情報の取得    
+    serverInfo = await db.getServerInfo(interaction.guild.id);
+    progress = await cui.stepProgressbar(progress);
 
-    if(status === "delAll"){
-        serverInfo.dict = {};
-    }
+    //状況の取得
+    status = getStatus(interaction, serverInfo);
+    progress = await cui.stepProgressbar(progress);
 
-    progress = await cui.stepProgress(interaction, progress);
+    //辞書の単語の削除
+    [serverInfo, surface] = await delWord(interaction, serverInfo, status);
+    progress = await cui.stepProgressbar(progress);
 
+    //サーバー情報の保存
     await db.setServerInfo(interaction.guild.id, serverInfo);
+    progress = await cui.stepProgressbar(progress);
 
-    progress = await cui.stepProgress(interaction, progress);
-
-    fs.writeFile(dictFile, createStrDict(serverInfo), (e) => {});
-
-    progress = await cui.stepProgress(interaction, progress);
+    //辞書の作成
+    await createDict(serverInfo, dictFile);
+    progress = await cui.stepProgressbar(progress);
 
     if(status === "notuuid" || status == "notDict"){
+        //失敗送信
         await interaction.editReply(createEmbed(dictFile, status, surface));
-        return;
+        return -1;
     }
 
-    progress = await cui.stepProgress(interaction, progress);
+    //成功送信
+    await interaction.channel.send(await createEmbed(dictFile, status, surface));
 
-    await interaction.channel.send(createEmbed(dictFile, status, surface));
-
+    //辞書の削除
     fs.unlink(dictFile, (e) => {});
 
-    return;
+    return 0;
 }

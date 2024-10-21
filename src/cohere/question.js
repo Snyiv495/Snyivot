@@ -14,7 +14,7 @@ require('dotenv').config();
 const {SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {CohereClient} = require('cohere-ai');
 const cohere = new CohereClient({token: process.env.COHERE_TOKEN});
-const cui = require('../cui/cui');
+const cui = require('../cui');
 
 //コマンドの取得
 function getCmd(){

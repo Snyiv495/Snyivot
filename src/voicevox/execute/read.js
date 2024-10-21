@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2024/10/17        
+    2024/10/21    
 *****************/
 
 module.exports = {
@@ -13,7 +13,7 @@ const {createAudioResource, entersState, AudioPlayerStatus, StreamType} = requir
 const fs = require('fs');
 const {Readable} = require("stream");
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const db = require('./db');
+const db = require('../db');
 
 //マークダウン検出
 function detectMarkdown(text){
@@ -184,4 +184,6 @@ async function read(message, subsc){
         await entersState(player, AudioPlayerStatus.Idle, 2 ** 31 - 1);
         player.play(wav);
     }
+
+    return 0;
 }

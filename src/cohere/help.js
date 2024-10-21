@@ -11,7 +11,7 @@ module.exports = {
 
 require('dotenv').config();
 const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
-const cui = require('../cui/cui');
+const cui = require('../cui');
 
 //コマンドの取得
 function getCmd(){

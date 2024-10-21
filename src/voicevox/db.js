@@ -1,7 +1,7 @@
 /*****************
     db.js
     スニャイヴ
-    2024/10/16
+    2024/10/21
 *****************/
 
 module.exports = {
@@ -25,7 +25,7 @@ async function getUserInfo(id){
 async function setUserInfo(id, info){
     user.on('error', e => console.error('データベースの接続に失敗しました:', e));
     await user.set(id, info);
-    return;
+    return 0;
 }
 
 //サーバ情報を取得する
@@ -38,5 +38,5 @@ async function getServerInfo(id){
 async function setServerInfo(id, info){
     server.on('error', e => console.error('データベースの接続に失敗しました:', e));
     await server.set(id, info);
-    return;
+    return 0;
 }

@@ -8,8 +8,8 @@ require('dotenv').config();
 const {Client, GatewayIntentBits} = require('discord.js');
 const fs = require('fs');
 const cohere = require('./cohere/cohere');
-const cui = require('./cui/cui');
-const gui = require('./gui/gui');
+const cui = require('./cui');
+const gui = require('./gui');
 const voicevox = require('./voicevox/voicevox');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
@@ -41,7 +41,7 @@ client.once('ready', async () => {
 
     //コマンドの登録
     try{
-        await client.application.commands.set(cui.getCmds());
+        await client.application.commands.set(cui.getSlashCmds());
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
         process.exit();

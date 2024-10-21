@@ -1,32 +1,16 @@
 /*****************
     end.js
     スニャイヴ
-    2024/10/17
+    2024/10/21
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
     end: end,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
-const cui = require('../cui/cui');
-
-//コマンドの取得
-function getCmd(){
-    const voicevox_end = new SlashCommandBuilder();
-
-    voicevox_end.setName("voicevox_end");
-    voicevox_end.setDescription("voicevoxの終了コマンド");
-    voicevox_end.addBooleanOption(option => {
-        option.setName("all");
-        option.setDescription("サーバー全体の読み上げを終了する？");
-        return option;
-    });
-    
-    return voicevox_end;
-}
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const cui = require('../cui');
 
 //接続状況の確認
 function getStatus(interaction, textCh, voiceCh, channel_map){
@@ -41,6 +25,42 @@ function getStatus(interaction, textCh, voiceCh, channel_map){
     if(channel_map.get(textCh.id) != voiceCh.id){
         return "notReading";
     }
+
+    return 0;
+}
+
+//任意のテキストチャンネルの読み上げを止める
+function stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map){
+    let flag = false;
+
+    interaction.guild.channels.cache.forEach((channel) => {
+        if(channel_map.get(channel.id) && channel.id != textCh){
+            channel_map.delete(textCh.id);
+            flag = true;
+            return;
+        }
+    });
+
+    if(!flag){
+        destroyVC(interaction, voiceCh, channel_map, subsc_map);
+    }
+
+    return 0;
+}
+
+//VCから切断
+function destroyVC(interaction, voiceCh, channel_map, subsc_map){
+    try{
+        subsc_map.get(voiceCh.id).connection.destroy();
+    }catch(e){}
+
+    subsc_map.delete(voiceCh.id);
+
+    interaction.guild.channels.cache.forEach((channel) => {
+        if(channel_map.get(channel.id)){
+            channel_map.delete(channel.id);
+        }
+    });
 
     return 0;
 }
@@ -86,65 +106,42 @@ function createEmbed(textCh, voiceCh, status){
     return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
 }
 
-//任意のテキストチャンネルの読み上げを止める
-function stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map){
-    let flag = false;
-
-    interaction.guild.channels.cache.forEach((channel) => {
-        if(channel_map.get(channel.id) && channel.id != textCh){
-            channel_map.delete(textCh.id);
-            flag = true;
-            return;
-        }
-    });
-
-    if(!flag){
-        destroyVC(interaction, voiceCh, channel_map, subsc_map);
-    }
-
-    return;
-}
-
-//VCから切断
-function destroyVC(interaction, voiceCh, channel_map, subsc_map){
-    try{
-        subsc_map.get(voiceCh.id).connection.destroy();
-    }catch(e){}
-
-    subsc_map.delete(voiceCh.id);
-
-    interaction.guild.channels.cache.forEach((channel) => {
-        if(channel_map.get(channel.id)){
-            channel_map.delete(channel.id);
-        }
-    });
-
-    return;
-}
-
 //読み上げ終了
 async function end(interaction, channel_map, subsc_map){
     const textCh = interaction.channel;
     const voiceCh = interaction.member.voice.channel;
-    const status = getStatus(interaction, textCh, voiceCh, channel_map);
-    let progress = await cui.createProgressbar(interaction, 1);
+    let progress = null;
+    let status = null;
 
+    //進捗の表示
+    progress = await cui.createProgressbar(interaction, 2);
+
+    //状況の取得
+    status = getStatus(interaction, textCh, voiceCh, channel_map);
+    progress = await cui.stepProgressbar(progress);
+
+
+    //任意のテキストチャンネルの読み上げを止める
     if(!status && (!interaction.options.get("all") || !interaction.options.get("all").value)){
         stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map);
+        progress = await cui.stepProgressbar(progress);
     }
 
+    //VCから切断
     if(!status && interaction.options.get("all") && interaction.options.get("all").value){
         destroyVC(interaction, voiceCh, channel_map, subsc_map);
+        progress = await cui.stepProgressbar(progress);
     }
 
-    progress = await cui.stepProgress(interaction, progress);
 
     if(status){
+        //失敗送信
         await interaction.editReply(createEmbed(textCh, voiceCh, status));
-        return;
+        return -1;
     }
     
+    //成功送信
     interaction.channel.send(createEmbed(textCh, voiceCh, status));
 
-    return;
+    return 0;
 }

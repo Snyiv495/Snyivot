@@ -1,28 +1,17 @@
 /*****************
     start.js
     スニャイヴ
-    2024/10/17
+    2024/10/21
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
     start: start,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {joinVoiceChannel, createAudioPlayer} = require('@discordjs/voice');
-const cui = require('../cui/cui');
-
-//コマンドの取得
-function getCmd(){
-    const voicevox_start = new SlashCommandBuilder();
-
-    voicevox_start.setName("voicevox_start");
-    voicevox_start.setDescription("voicevoxの読み上げ開始コマンド");
-
-    return voicevox_start;
-}
+const cui = require('../cui');
 
 //状況の取得
 function getStatus(textCh, voiceCh, channel_map){
@@ -149,7 +138,7 @@ function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
     //同じボイチャで読み上げをしている場合は追加
     if(connectingCh && connectingCh.id == voiceCh.id){
         channel_map.set(textCh.id, voiceCh.id);
-        return;
+        return 0;
     }
     
     //他のボイチャで読み上げをしている場合は切断
@@ -178,24 +167,35 @@ function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
         subsc_map.set(voiceCh.id, connection.subscribe(createAudioPlayer()));
     }catch(e){}
 
-    return;
+    return 0;
 }
 
 //読み上げ開始
 async function start(interaction, channel_map, subsc_map){
     const textCh = interaction.channel;
     const voiceCh = interaction.member.voice.channel;
-    const status = getStatus(textCh, voiceCh, channel_map);
-    let progress = await cui.createProgressbar(interaction, 1);
+    let progress = null;
+    let status = null;
 
-    if(!status){
-        joinVC(interaction, textCh, voiceCh, channel_map, subsc_map);
-        progress = await cui.stepProgress(interaction, progress);
-        interaction.channel.send(createEmbed(textCh, voiceCh, status));
-        return;
+    //進捗の表示
+    progress = await cui.createProgressbar(interaction, 2);
+
+    //状況の取得
+    status = getStatus(textCh, voiceCh, channel_map);
+    progress = await cui.stepProgressbar(progress);
+
+    if(status){
+        //失敗送信
+        await interaction.editReply(createEmbed(textCh, voiceCh, status));
+        return -1;
     }
 
-    await interaction.editReply(createEmbed(textCh, voiceCh, status));
+    //VCに参加
+    joinVC(interaction, textCh, voiceCh, channel_map, subsc_map);
+    progress = await cui.stepProgressbar(progress);
+
+    //成功送信
+    interaction.channel.send(createEmbed(textCh, voiceCh, status));
 
     return;
 }

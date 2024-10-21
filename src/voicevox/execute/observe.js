@@ -1,7 +1,7 @@
 /*******************
     observe.js    
     スニャイヴ
-    2024/10/17
+    2024/10/21
 *******************/
 
 module.exports = {
@@ -72,7 +72,7 @@ function autoEnd(oldState, channel_map, subsc_map){
 
     textCh.send(createEmbed("autoEnd", oldState.channel.name));
 
-    return;
+    return 0;
 }
 
 //強制終了
@@ -90,7 +90,7 @@ function compulsionEnd(oldState, channel_map, subsc_map){
 
     textCh.send(createEmbed("compulsionEnd", oldState.channel.name));
 
-    return;
+    return 0;
 }
 
 //強制移動
@@ -119,5 +119,5 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
         textCh.send(createEmbed("compulsionMove", oldState.channel.name, newState.channel.name));
     }catch(e){}
 
-    return;
+    return 0;
 }

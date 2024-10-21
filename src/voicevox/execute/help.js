@@ -1,41 +1,16 @@
 /*****************
     help.js
     スニャイヴ
-    2024/10/18
+    2024/10/21
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
     sendHelp: sendHelp,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
-const cui = require('../cui/cui');
-
-//コマンドの取得
-function getCmd(){
-    const help = new SlashCommandBuilder();
-
-    help.setName("voicevox_help");
-    help.setDescription("voicevoxのヘルプコマンド");
-    help.addStringOption(option => {
-        option.setName("content");
-        option.setDescription("内容を選択してください");
-        option.addChoices(
-            {name: "start", value: "start"},
-            {name: "end", value: "end"},
-            {name: "setting_user", value: "setting_user"},
-            {name: "setting_server", value: "setting_server"},
-            {name: "dictionary_add", value: "dictionary_add"},
-            {name: "dictionary_delete", value: "dictionary_delete"}
-        );
-        option.setRequired(true);
-        return option;
-    });
-    
-    return help;
-}
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const cui = require('../cui');
 
 //埋め込みの作成
 function createEmbed(interaction){
@@ -129,10 +104,12 @@ function createEmbed(interaction){
 
 //ヘルプの送信
 async function sendHelp(interaction){
-    let progress = await cui.createProgressbar(interaction, 1);
-    progress = await cui.stepProgress(interaction, progress);
+    let progress = null;
+    
+    progress = await cui.createProgressbar(interaction, 1);
+    progress = await cui.stepProgressbar(progress);
     
     await interaction.editReply(createEmbed(interaction));
 
-    return;
+    return 0;
 }

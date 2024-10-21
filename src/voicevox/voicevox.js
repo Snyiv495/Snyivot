@@ -1,13 +1,14 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/10/17
+    2024/10/21
 ******************/
 
 module.exports = {
     getSpeakers: getSpeakers,
-    getCmd: getCmd,
+    getSlashCmd: getSlashCmd,
     cuiCmd: cuiCmd,
+    guiCmd: guiCmd,
     autocomplete: autocomplete,
     read: read,
     observe: observe,
@@ -15,15 +16,10 @@ module.exports = {
 
 require('dotenv').config();
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const vv_start = require('./start');
-const vv_end = require('./end');
-const vv_setUser = require('./setUser');
-const vv_setServer = require('./setServer');
-const vv_dictAdd = require('./dictAdd');
-const vv_dictDel = require('./dictDel');
-const vv_read = require('./read');
-const vv_observe = require('./observe');
-const vv_help = require('./help');
+const cui = require('./cui');
+const gui = require('./gui')
+const exe_read = require('./execute/read');
+const exe_observe = require('./execute/observe');
 
 //スピーカーの取得
 async function getSpeakers(){
@@ -43,71 +39,31 @@ async function getSpeakers(){
 }
 
 //コマンドの取得
-function getCmd(){
-    return [vv_start.getCmd(), vv_end.getCmd(), vv_setUser.getCmd(), vv_setServer.getCmd(), vv_dictAdd.getCmd(), vv_dictDel.getCmd(), vv_help.getCmd()];
+function getSlashCmd(){
+    return cui.getSlashCmds();
 }
 
-//コマンドの実行
-async function cuiCmd(interaction, channel_map, subsc_map, vv_speakers){
-    //サーバー以外を除外
-    if(!interaction.guild){
-        console.log("後で修正");
-        return;
-    }
+//CUIコマンドの実行
+async function cuiCmd(interaction, channel_map, subsc_map, speakers){
+    cui.cuiCmd(interaction, channel_map, subsc_map, speakers);
+    return;
+}
 
-    switch(interaction.commandName){
-        case "voicevox_start" : {
-            await vv_start.start(interaction, channel_map, subsc_map);
-            break;
-        }
-        case "voicevox_end" : {
-            await vv_end.end(interaction, channel_map, subsc_map);
-            break;
-        }
-        case "voicevox_setting_user" : {
-            await vv_setUser.setUser(interaction, vv_speakers);
-            break;
-        }
-        case "voicevox_setting_server" : {
-            await vv_setServer.setServer(interaction, vv_speakers);
-            break;
-        }
-        case "voicevox_dictionary_add" : {
-            await vv_dictAdd.dictAdd(interaction);
-            break;
-        }
-        case "voicevox_dictionary_delete" : {
-            await vv_dictDel.dictDel(interaction);
-            break;
-        }
-        case "voicevox_help" : {
-            await vv_help.sendHelp(interaction);
-            break;
-        }
-        default : break;
-    }
-
+//GUIコマンドの実行
+async function guiCmd(interaction, channel_map, subsc_map, speakers){
+    gui.guiCmd(interaction, channel_map, subsc_map, speakers);
     return;
 }
 
 //コマンドの補助
 async function autocomplete(interaction, speakers){
-    switch(interaction.commandName){
-        case "voicevox_setting_user" : {
-            await vv_setUser.setUser_autocomplete(interaction, speakers);
-            break;
-        }
-        case "voicevox_setting_server" : {
-            await vv_setServer.setServer_autocomplete(interaction, speakers);
-            break;
-        }
-    }
+    cui.autocomplete(interaction, speakers)
     return;
 }
 
 //読み上げ
 function read(message, subsc){
-    vv_read.read(message, subsc);
+    exe_read.read(message, subsc);
     return;
 }
 
@@ -115,19 +71,19 @@ function read(message, subsc){
 function observe(oldState, newState, channel_map, subsc_map){
     //自動終了
     if(subsc_map.get(oldState.channelId) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
-        vv_observe.autoEnd(oldState, channel_map, subsc_map);
+        exe_observe.autoEnd(oldState, channel_map, subsc_map);
         return;
     }
 
     //強制退出時の処理
     if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
-        vv_observe.compulsionEnd(oldState, channel_map, subsc_map);
+        exe_observe.compulsionEnd(oldState, channel_map, subsc_map);
         return;
     }
 
     //強制移動時の処理
     if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
-        vv_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
+        exe_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
         return;
     }
 
