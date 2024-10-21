@@ -7,6 +7,7 @@
 module.exports = {
     getSpeakers: getSpeakers,
     getSlashCmd: getSlashCmd,
+    getMenu: getMenu,
     cuiCmd: cuiCmd,
     guiCmd: guiCmd,
     autocomplete: autocomplete,
@@ -43,28 +44,32 @@ function getSlashCmd(){
     return cui.getSlashCmds();
 }
 
+function getMenu(){
+    return gui.getMenu();;
+}
+
 //CUIコマンドの実行
 async function cuiCmd(interaction, channel_map, subsc_map, speakers){
     cui.cuiCmd(interaction, channel_map, subsc_map, speakers);
-    return;
+    return 0;
 }
 
 //GUIコマンドの実行
 async function guiCmd(interaction, channel_map, subsc_map, speakers){
-    gui.guiCmd(interaction, channel_map, subsc_map, speakers);
-    return;
+    await gui.guiCmd(interaction, channel_map, subsc_map, speakers);
+    return 0;
 }
 
 //コマンドの補助
 async function autocomplete(interaction, speakers){
     cui.autocomplete(interaction, speakers)
-    return;
+    return 0;
 }
 
 //読み上げ
 function read(message, subsc){
     exe_read.read(message, subsc);
-    return;
+    return 0;
 }
 
 //VCの監視
@@ -72,20 +77,20 @@ function observe(oldState, newState, channel_map, subsc_map){
     //自動終了
     if(subsc_map.get(oldState.channelId) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
         exe_observe.autoEnd(oldState, channel_map, subsc_map);
-        return;
+        return 0;
     }
 
     //強制退出時の処理
     if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
         exe_observe.compulsionEnd(oldState, channel_map, subsc_map);
-        return;
+        return 0;
     }
 
     //強制移動時の処理
     if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
         exe_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
-        return;
+        return 0;
     }
 
-    return;
+    return -1;
 }

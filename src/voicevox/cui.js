@@ -332,7 +332,7 @@ async function autocomplete(interaction, speakers){
 async function createProgressbar(interaction, stepMax){
     const progress = {interaction: interaction, current: 0, step: 100.0/stepMax};
 
-    await interaction.deferReply({ephemeral: true});
+    try{await interaction.deferReply({ephemeral: true});}catch(e){};
     await interaction.editReply({content: "進捗[----------]0%"});
 
     return progress;

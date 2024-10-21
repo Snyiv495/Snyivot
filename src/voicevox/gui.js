@@ -6,10 +6,12 @@
 
 module.exports = {
     guiCmd: guiCmd,
+    getMenu: getMenu,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder} = require('discord.js');
+const {StringSelectMenuOptionBuilder, EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder} = require('discord.js');
+const gui = require('../gui');
 const exe_start = require('./execute/start');
 const exe_end = require('./execute/end');
 const exe_setting_user = require('./execute/setUser');
@@ -18,22 +20,57 @@ const exe_dictionary_add = require('./execute/dictAdd');
 const exe_dictionary_delete = require('./execute/dictDel');
 const exe_help = require('./execute/help');
 
-//GUIコマンドの取得
-function getGuiCmd(){
+//GUIメニューの取得
+function getMenu(){
+    const voicevox = new StringSelectMenuOptionBuilder();
+
+    voicevox.setLabel("voicevox");
+    voicevox.setDescription("読み上げができるよ!");
+    voicevox.setEmoji("🎙️");
+    voicevox.setValue("voicevox");
+
+    return voicevox;
+}
+
+//開始メニューの取得
+function getStartMenu(){
+    const voicevox_start = new StringSelectMenuOptionBuilder();
+
+    voicevox_start.setLabel("voicevox_start");
+    voicevox_start.setDescription("読み上げを開始するよ!");
+    voicevox_start.setEmoji("🎙️");
+    voicevox_start.setValue("voicevox_start");
+
+    return voicevox_start;
+}
+
+//GUIメニューの作成
+function createMenu(){
+    const embed = new EmbedBuilder();
+    const attachment = new AttachmentBuilder();;
+    const menus = new ActionRowBuilder();
+    const menu = new StringSelectMenuBuilder();
+    const buttons = new ActionRowBuilder();
+    const voicevox_start = getStartMenu();
+    const quit = gui.getQuitButton();
     
+    embed.setTitle("voicevoxで何をするのだ？");
+    embed.setThumbnail("attachment://icon.png");
+    embed.setFooter({text: "メニューから選択してください"});
+    embed.setColor(0x00FF00);
+    attachment.setName("icon.png");
+    attachment.setFile("assets/zundamon/icon/think.png");
 
-    return ;
+    menu.setCustomId("menu_voicevox");
+    menu.setPlaceholder("何も選択されてないのだ");
+    menu.addOptions(voicevox_start);
+
+    menus.addComponents(menu);
+    buttons.addComponents(quit);
+
+    return {content: "", files: [attachment], embeds: [embed], components: [menus, buttons], ephemeral: true};
 }
 
-//開始コマンドの取得
-function getStartCmd(){
-    const start = new SlashCommandBuilder();
-
-    start.setName("voicevox_start");
-    start.setDescription("voicevoxの読み上げ開始コマンド");
-
-    return start;
-}
 
 //終了コマンドの取得
 function getEndCmd(){
@@ -268,7 +305,11 @@ async function guiCmd(interaction, channel_map, subsc_map, speakers){
         return;
     }
 
-    switch(interaction.commandName){
+    switch(interaction.values[0]){
+        case "voicevox" : {
+            await interaction.editReply(createMenu(interaction, channel_map, subsc_map));
+            break;
+        }
         case "voicevox_start" : {
             await exe_start.start(interaction, channel_map, subsc_map);
             break;
@@ -300,7 +341,7 @@ async function guiCmd(interaction, channel_map, subsc_map, speakers){
         default : break;
     }
 
-    return;
+    return 0;
 }
 
 //コマンドの補助

@@ -56,7 +56,7 @@ client.once('ready', async () => {
 client.on('messageCreate', async message => {
     //botの発言, スポイラーのみ, コードブロックを含むメッセージを除外
     if(message.author.bot || (message.content.match(/^\|\|.*?\|\|$/)) || (message.content.match(/```.*?```/))){
-        return;
+        return -1;
     }
 
     //メンションに反応
@@ -64,7 +64,7 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            gui.sendBell(message);
+            await gui.sendBell(message);
         }
        
         //内容があれば回答
@@ -77,7 +77,7 @@ client.on('messageCreate', async message => {
             await message.delete().catch(() => null);
         }
 
-        return;
+        return 0;
     }
     
     //読み上げ
@@ -93,46 +93,56 @@ client.on('messageCreate', async message => {
 client.on('interactionCreate', async (interaction) => {
     //コマンド以外を除外
     if(!interaction.isCommand()){
-        return;
+        return -1;
     }
 
     //cohere
     if(interaction.commandName.includes("cohere")){
         await cohere.cuiCmd(interaction);
-        return;
+        return 0;
     }
 
     //voicevox
     if(interaction.commandName.includes("voicevox")){
         await voicevox.cuiCmd(interaction, channel_map, subsc_map, vv_speakers);
-        return;
+        return 0;
     }
 
-    return;
+    return 0;
 });
 
 //コマンド補助
 client.on('interactionCreate', async (interaction) => {
     //コマンド補助以外を除外
     if(!interaction.isAutocomplete()){
-        return;
+        return -1;
     }
 
     //voicevox
     if(interaction.commandName.includes("voicevox_setting")){
         await voicevox.autocomplete(interaction, vv_speakers);
-        return;
+        return 0;
     }
 
-    return;
+    return -1;
 });
 
 //セレクトメニュー動作
 client.on('interactionCreate', async (interaction) => {
     //セレクトメニュー以外を除外
     if(!interaction.isAnySelectMenu()){
-        return;
+        return -1;
     }
+
+    await interaction.deferUpdate();
+    await interaction.editReply({content: "進捗[##########]100%", files: [], embeds: [], components: []});
+    
+    if(interaction.values[0].includes("voicevox")){
+        await voicevox.guiCmd(interaction, channel_map, subsc_map, vv_speakers);
+        return 0;
+    }
+
+    return -1;
 
 });
 
@@ -140,31 +150,31 @@ client.on('interactionCreate', async (interaction) => {
 client.on('interactionCreate', async (interaction) => {
     //ボタン以外を除外
     if(!interaction.isButton()){
-        return;
+        return -1;
     }
 
     if(interaction.customId === "bell"){
         await gui.sendGui(interaction);
-        return;
+        return 0;
     }
 
-    return;
+    return -1;
 });
 
 //モーダル動作
 client.on('interactionCreate', async (interaction) => {
     //モーダル以外を除外
     if(!interaction.isModalSubmit()){
-        return
+        return -1;
     }
 
     //cohere
 	if(interaction.customId === "modal_cohere"){
         await cohere.sendAns(interaction, readme);
-        return;
+        return 0;
 	}
 
-    return;
+    return -1;
 });
 
 //ボイスチャンネル動作
@@ -173,5 +183,5 @@ client.on('voiceStateUpdate', (oldState, newState) => {
     //voicevox
     voicevox.observe(oldState, newState, channel_map, subsc_map);
 
-    return;
+    return 0;
 });
