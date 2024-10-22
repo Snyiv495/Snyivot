@@ -9,7 +9,8 @@ module.exports = {
     getSlashCmd: getSlashCmd,
     getMenu: getMenu,
     cuiCmd: cuiCmd,
-    guiCmd: guiCmd,
+    guiMenu: guiMenu,
+    guiModal: guiModal,
     autocomplete: autocomplete,
     read: read,
     observe: observe,
@@ -54,9 +55,15 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
     return 0;
 }
 
-//GUIコマンドの実行
-async function guiCmd(interaction, channel_map, subsc_map, speakers){
-    await gui.guiCmd(interaction, channel_map, subsc_map, speakers);
+//GUIメニューの実行
+async function guiMenu(interaction, channel_map, subsc_map, speakers){
+    await gui.guiMenu(interaction, channel_map, subsc_map, speakers);
+    return 0;
+}
+
+//GUIモーダルの実行
+async function guiModal(interaction){
+    await gui.guiModal(interaction);
     return 0;
 }
 

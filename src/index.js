@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/10/17
+    2024/10/22
 *****************/
 
 require('dotenv').config();
@@ -108,7 +108,7 @@ client.on('interactionCreate', async (interaction) => {
         return 0;
     }
 
-    return 0;
+    return -1;
 });
 
 //コマンド補助
@@ -133,12 +133,9 @@ client.on('interactionCreate', async (interaction) => {
     if(!interaction.isAnySelectMenu()){
         return -1;
     }
-
-    await interaction.deferUpdate();
-    await interaction.editReply({content: "進捗[##########]100%", files: [], embeds: [], components: []});
     
     if(interaction.values[0].includes("voicevox")){
-        await voicevox.guiCmd(interaction, channel_map, subsc_map, vv_speakers);
+        await voicevox.guiMenu(interaction, channel_map, subsc_map, vv_speakers);
         return 0;
     }
 
@@ -153,8 +150,9 @@ client.on('interactionCreate', async (interaction) => {
         return -1;
     }
 
-    if(interaction.customId === "bell"){
-        await gui.sendGui(interaction);
+    //GUI
+    if(interaction.customId.includes("gui")){
+        await gui.guiButton(interaction);
         return 0;
     }
 
@@ -173,6 +171,12 @@ client.on('interactionCreate', async (interaction) => {
         await cohere.sendAns(interaction, readme);
         return 0;
 	}
+
+    //voicevox
+    if(interaction.customId.includes("voicevox")){
+        await voicevox.guiModal(interaction, channel_map, subsc_map);
+        return 0;
+    }
 
     return -1;
 });
