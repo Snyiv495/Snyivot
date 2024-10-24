@@ -1,7 +1,7 @@
 /*****************
     start.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -50,6 +50,45 @@ function getStatus(textCh, voiceCh, channel_map){
     if(textCh.type == 2 && !textCh.joinable){
         return "notMember";
     }
+
+    return 0;
+}
+
+//VCに参加
+function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
+    const connectVC = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID));
+    
+    //同じボイチャで読み上げをしている場合は追加
+    if(connectVC && connectVC.id == voiceCh.id){
+        channel_map.set(textCh.id, voiceCh.id);
+        return 0;
+    }
+    
+    //他のボイチャで読み上げをしている場合は切断
+    if(connectVC && connectVC.id != voiceCh.id){
+        interaction.guild.channels.cache.forEach((channel) => {
+            if((channel.type == 0 || channel.type == 2) && channel_map.get(channel.id)){
+                try{
+                    subsc_map.get(channel_map.get(channel.id)).connection.destroy();
+                }catch(e){}
+                subsc_map.delete(channel_map.get(channel.id));
+                channel_map.delete(channel.id);
+            }
+        });
+    }
+                
+    //VC接続
+    try{
+        const connection = joinVoiceChannel({
+            channelId: voiceCh.id,
+            guildId: voiceCh.guild.id,
+            adapterCreator: voiceCh.guild.voiceAdapterCreator,
+            selfMute: false,
+            selfDeaf: true,
+        })
+        channel_map.set(textCh.id, voiceCh.id);
+        subsc_map.set(voiceCh.id, connection.subscribe(createAudioPlayer()));
+    }catch(e){}
 
     return 0;
 }
@@ -129,45 +168,6 @@ function createEmbed(textCh, voiceCh, status){
     }
 
     return {content: "", files: [attachment], embeds: [embed], ephemeral: true};
-}
-
-//VCに参加
-function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
-    const connectingCh = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID));
-    
-    //同じボイチャで読み上げをしている場合は追加
-    if(connectingCh && connectingCh.id == voiceCh.id){
-        channel_map.set(textCh.id, voiceCh.id);
-        return 0;
-    }
-    
-    //他のボイチャで読み上げをしている場合は切断
-    if(connectingCh && connectingCh.id != voiceCh.id){
-        interaction.guild.channels.cache.forEach((channel) => {
-            if((channel.type == 0 || channel.type == 2) && channel_map.get(channel.id)){
-                try{
-                    subsc_map.get(channel_map.get(channel.id)).connection.destroy();
-                }catch(e){}
-                subsc_map.delete(channel_map.get(channel.id));
-                channel_map.delete(channel.id);
-            }
-        });
-    }
-                
-    //VC接続
-    try{
-        const connection = joinVoiceChannel({
-            channelId: voiceCh.id,
-            guildId: voiceCh.guild.id,
-            adapterCreator: voiceCh.guild.voiceAdapterCreator,
-            selfMute: false,
-            selfDeaf: true,
-        })
-        channel_map.set(textCh.id, voiceCh.id);
-        subsc_map.set(voiceCh.id, connection.subscribe(createAudioPlayer()));
-    }catch(e){}
-
-    return 0;
 }
 
 //読み上げ開始

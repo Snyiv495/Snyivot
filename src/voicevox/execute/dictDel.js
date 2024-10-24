@@ -1,7 +1,7 @@
 /*****************
     dictDel.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -15,8 +15,7 @@ const db = require('../db');
 const cui = require('../cui');
 
 //状況の取得
-function getStatus(interaction, serverInfo){
-    const uuid = interaction.options.get("uuid") ? interaction.options.get("uuid").value : null
+function getStatus(uuid, serverInfo){
 
     //uuidの指定なし
     if(!uuid){
@@ -37,11 +36,10 @@ function getStatus(interaction, serverInfo){
 }
 
 //辞書の単語の削除
-async function delWord(interaction, serverInfo, status){
+async function delWord(uuid, serverInfo, status){
     let surface = null;
 
     if(!status){
-        const uuid = interaction.options.get("uuid").value;
         surface = serverInfo.dict[uuid].surface;
         delete serverInfo.dict[uuid];
     }
@@ -118,7 +116,7 @@ function createEmbed(dictFile, status, surface){
 }
 
 //辞書の削除
-async function dictDel(interaction){
+async function dictDel(interaction, options){
     const dictFile = `dict_${interaction.guild.id}.csv`;
     let serverInfo = null;
     let progress = null;
@@ -133,11 +131,11 @@ async function dictDel(interaction){
     progress = await cui.stepProgressbar(progress);
 
     //状況の取得
-    status = getStatus(interaction, serverInfo);
+    status = getStatus(options.uuid, serverInfo);
     progress = await cui.stepProgressbar(progress);
 
     //辞書の単語の削除
-    [serverInfo, surface] = await delWord(interaction, serverInfo, status);
+    [serverInfo, surface] = await delWord(options.uuid, serverInfo, status);
     progress = await cui.stepProgressbar(progress);
 
     //サーバー情報の保存
@@ -155,7 +153,7 @@ async function dictDel(interaction){
     }
 
     //成功送信
-    await interaction.channel.send(await createEmbed(dictFile, status, surface));
+    await interaction.channel.send(createEmbed(dictFile, status, surface));
 
     //辞書の削除
     fs.unlink(dictFile, (e) => {});

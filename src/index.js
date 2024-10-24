@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/10/22
+    2024/10/23
 *****************/
 
 require('dotenv').config();
@@ -64,7 +64,7 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            await gui.sendBell(message);
+            //await gui.sendBell(message);
         }
        
         //内容があれば回答
@@ -174,7 +174,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //voicevox
     if(interaction.customId.includes("voicevox")){
-        await voicevox.guiModal(interaction, channel_map, subsc_map);
+        await voicevox.guiModal(interaction, channel_map, subsc_map, vv_speakers);
         return 0;
     }
 

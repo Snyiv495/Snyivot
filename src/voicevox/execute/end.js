@@ -1,7 +1,7 @@
 /*****************
     end.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -14,10 +14,10 @@ const cui = require('../cui');
 
 //接続状況の確認
 function getStatus(interaction, textCh, voiceCh, channel_map){
-    const connectingCh = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID)); 
+    const connectVC = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID)); 
         
     //ボイスチャンネルの確認
-    if(!voiceCh || (voiceCh != connectingCh)){
+    if(!voiceCh || (voiceCh != connectVC)){
         return "notVoicech";
     }
 
@@ -29,26 +29,28 @@ function getStatus(interaction, textCh, voiceCh, channel_map){
     return 0;
 }
 
-//任意のテキストチャンネルの読み上げを止める
-function stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map){
-    let flag = false;
+//任意のテキストチャンネルの読み上げを終了する
+function endAnyTC(interaction, textCh, voiceCh, channel_map, subsc_map){
+    let only = true;
 
+    //他に読み上げを行っているテキストチャンネルがあるか確認する
     interaction.guild.channels.cache.forEach((channel) => {
         if(channel_map.get(channel.id) && channel.id != textCh){
             channel_map.delete(textCh.id);
-            flag = true;
-            return;
+            only = false;
+            return 0;
         }
     });
 
-    if(!flag){
+    //読み上げを行っているテキストチャンネルがなくなるならボイスチャンネルから切断
+    if(only){
         destroyVC(interaction, voiceCh, channel_map, subsc_map);
     }
 
     return 0;
 }
 
-//VCから切断
+//ボイスチャンネルから切断
 function destroyVC(interaction, voiceCh, channel_map, subsc_map){
     try{
         subsc_map.get(voiceCh.id).connection.destroy();
@@ -120,27 +122,17 @@ async function end(interaction, channel_map, subsc_map){
     status = getStatus(interaction, textCh, voiceCh, channel_map);
     progress = await cui.stepProgressbar(progress);
 
-
-    //任意のテキストチャンネルの読み上げを止める
-    if(!status && (!interaction.options.get("all") || !interaction.options.get("all").value)){
-        stopTextch(interaction, textCh, voiceCh, channel_map, subsc_map);
-        progress = await cui.stepProgressbar(progress);
-    }
-
-    //VCから切断
-    if(!status && interaction.options.get("all") && interaction.options.get("all").value){
-        destroyVC(interaction, voiceCh, channel_map, subsc_map);
-        progress = await cui.stepProgressbar(progress);
-    }
-
-
+    //失敗
     if(status){
-        //失敗送信
         await interaction.editReply(createEmbed(textCh, voiceCh, status));
         return -1;
     }
     
-    //成功送信
+    //読み上げ終了
+    endAnyTC(interaction, textCh, voiceCh, channel_map, subsc_map);
+    progress = await cui.stepProgressbar(progress);
+
+    //成功
     interaction.channel.send(createEmbed(textCh, voiceCh, status));
 
     return 0;

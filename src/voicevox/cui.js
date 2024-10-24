@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -51,11 +51,6 @@ function getEndCmd(){
 
     end.setName("voicevox_end");
     end.setDescription("voicevoxの終了コマンド");
-    end.addBooleanOption(option => {
-        option.setName("all");
-        option.setDescription("サーバー全体の読み上げを終了する？");
-        return option;
-    });
     
     return end;
 }
@@ -275,7 +270,7 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
-        return;
+        return -1;
     }
 
     switch(interaction.commandName){
@@ -288,23 +283,53 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
             break;
         }
         case "voicevox_setting_user" : {
-            await exe_setting_user.setUser(interaction, speakers);
+            const options = {speaker: null, style: null, speed: null, pitch: null, intonation: null, volume: null, username: null};
+            options.speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
+            options.style = interaction.options.get("style") ? interaction.options.get("style").value : null;
+            options.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : null;
+            options.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : null;
+            options.intonation = interaction.options.get("intonation") ? interaction.options.get("itonation").value : null;
+            options.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : null;
+            options.username = interaction.options.get("username") ? interaction.options.get("username").value : null;
+            await exe_setting_user.setUser(interaction, speakers, options);
             break;
         }
         case "voicevox_setting_server" : {
-            await exe_setting_server.setServer(interaction, speakers);
+            const options = {need_sudo: null, read_name: null, read_sameuser: null, read_multiline: null, maxword: null, unif: null, speaker: null, style: null, speed: null, pitch: null, intonation: null, volume: null, username: null};
+            options.need_sudo = interaction.options.get("need_sudo") ? interaction.options.get("need_sudo").value : null;
+            options.read_name = interaction.options.get("read_name") ? interaction.options.get("read_name").value : null;
+            options.read_sameuser = interaction.options.get("read_sameuser") ? interaction.options.get("read_sameuser").value : null;
+            options.read_multiline = interaction.options.get("read_multiline") ? interaction.options.get("read_multiline").value : null;
+            options.maxword = interaction.options.get("maxword") ? interaction.options.get("maxword").value : null;
+            options.unif = interaction.options.get("unif") ? interaction.options.get("unif").value : null;            
+            options.speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
+            options.style = interaction.options.get("style") ? interaction.options.get("style").value : null;
+            options.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : null;
+            options.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : null;
+            options.intonation = interaction.options.get("intonation") ? interaction.options.get("itonation").value : null;
+            options.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : null;
+            await exe_setting_server.setServer(interaction, speakers, options);
             break;
         }
         case "voicevox_dictionary_add" : {
-            await exe_dictionary_add.dictAdd(interaction);
+            const options = {surface: null, pronunciation: null, accent: null, priority: null};
+            options.surface = interaction.options.get("surface").value;
+            options.pronunciation = interaction.options.get("pronunciation").value;
+            options.accent = interaction.options.get("accent") ? interaction.options.get("accent").value : 1;
+            options.priority = interaction.options.get("priority") ? interaction.options.get("priority").value : 5;
+            await exe_dictionary_add.dictAdd(interaction, options);
             break;
         }
         case "voicevox_dictionary_delete" : {
-            await exe_dictionary_delete.dictDel(interaction);
+            const options = {uuid: null};
+            options.uuid = interaction.options.get("uuid") ? interaction.options.get("uuid").value : null;
+            await exe_dictionary_delete.dictDel(interaction, options);
             break;
         }
         case "voicevox_help" : {
-            await exe_help.sendHelp(interaction);
+            const options = {content : null};
+            options.content = interaction.options.get("content").value;
+            await exe_help.sendHelp(interaction, options);
             break;
         }
         default : break;
@@ -317,7 +342,7 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
 async function autocomplete(interaction, speakers){
     switch(interaction.commandName){
         case "voicevox_setting_user" : {
-            await exe_setting_user.setUser_autocomplete(interaction, speakers);
+            await exe_setting_user.autocomplete(interaction, speakers);
             break;
         }
         case "voicevox_setting_server" : {

@@ -1,12 +1,12 @@
 /*****************
     setting.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
     setUser: setUser,
-    setUser_autocomplete: setUser_autocomplete,
+    autocomplete: autocomplete,
 }
 
 require('dotenv').config();
@@ -129,9 +129,7 @@ async function createEmbed(info, displayName){
 }
 
 //ユーザー情報の設定
-async function setUser(interaction, speakers){
-    const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
-    const style = interaction.options.get("style") ? interaction.options.get("style").value : null;
+async function setUser(interaction, speakers, options){
     let userInfo = null;
     let progress = null;
 
@@ -143,31 +141,31 @@ async function setUser(interaction, speakers){
     progress = await cui.stepProgressbar(progress);
 
     //speakerオプション
-    userInfo = speaker ? getSpeaker(speaker, speakers, userInfo) : userInfo;
+    userInfo = (options.speaker != null) ? getSpeaker(options.speaker, speakers, userInfo) : userInfo;
     progress = await cui.stepProgressbar(progress);
 
     //styleオプション
-    userInfo = style ? getStyle(style, speakers, userInfo) : userInfo;
+    userInfo = (options.style != null) ? getStyle(options.style, speakers, userInfo) : userInfo;
     progress = await cui.stepProgressbar(progress);
 
     //speedオプション
-    userInfo.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : userInfo.speed;
+    userInfo.speed = (options.speed != null) ? options.speed : userInfo.speed;
     progress = await cui.stepProgressbar(progress);
 
     //pitchオプション
-    userInfo.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : userInfo.pitch;
+    userInfo.pitch = (options.pitch != null) ? options.pitch : userInfo.pitch;
     progress = await cui.stepProgressbar(progress);
 
     //intonationオプション
-    userInfo.intonation = interaction.options.get("intonation") ? interaction.options.get("intonation").value : userInfo.intonation;
+    userInfo.intonation = (options.intonation != null) ? options.intonation : userInfo.intonation;
     progress = await cui.stepProgressbar(progress);
 
     //volumeオプション
-    userInfo.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : userInfo.volume;
+    userInfo.volume = (options.volume != null) ? options.volume : userInfo.volume;
     progress = await cui.stepProgressbar(progress);
 
     //usernameオプション
-    userInfo.username = interaction.options.get("username") ? (interaction.options.get("username").value === "null") ? null : (interaction.options.get("username").value).substr(0, 10) : userInfo.username;
+    userInfo.username = (options.username != null) ? (options.username === "null") ? null : options.username.substr(0, 10) : userInfo.username;
     progress = await cui.stepProgressbar(progress);
 
     //問題がなければ保存
@@ -184,11 +182,11 @@ async function setUser(interaction, speakers){
     //成功送信
     await interaction.editReply(await createEmbed(userInfo, interaction.user.displayName));
 
-    return;
+    return 0;
 }
 
 //voicevox_setting_userコマンドの補助
-async function setUser_autocomplete(interaction, speakers){
+async function autocomplete(interaction, speakers){
     const focusedOpt = interaction.options.getFocused(true);
     const choices = new Array();
     

@@ -1,13 +1,12 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/10/21
+    2024/10/23
 ******************/
 
 module.exports = {
     getSpeakers: getSpeakers,
     getSlashCmd: getSlashCmd,
-    getMenu: getMenu,
     cuiCmd: cuiCmd,
     guiMenu: guiMenu,
     guiModal: guiModal,
@@ -45,10 +44,6 @@ function getSlashCmd(){
     return cui.getSlashCmds();
 }
 
-function getMenu(){
-    return gui.getMenu();;
-}
-
 //CUIコマンドの実行
 async function cuiCmd(interaction, channel_map, subsc_map, speakers){
     cui.cuiCmd(interaction, channel_map, subsc_map, speakers);
@@ -62,8 +57,8 @@ async function guiMenu(interaction, channel_map, subsc_map, speakers){
 }
 
 //GUIモーダルの実行
-async function guiModal(interaction){
-    await gui.guiModal(interaction);
+async function guiModal(interaction, channel_map, subsc_map, speakers){
+    await gui.guiModal(interaction, channel_map, subsc_map, speakers);
     return 0;
 }
 

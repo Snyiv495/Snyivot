@@ -1,7 +1,7 @@
 /*****************
     dictAdd.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -127,11 +127,7 @@ async function getDict(serverInfo){
 }
 
 //辞書の追加
-async function dictAdd(interaction){
-    const surface = interaction.options.get("surface").value;
-    const pronunciation = interaction.options.get("pronunciation").value;
-    const accent = interaction.options.get("accent") ? interaction.options.get("accent").value : 1;
-    const priority = interaction.options.get("priority") ? interaction.options.get("priority").value : 5;
+async function dictAdd(interaction, options){
     let serverInfo = null;
     let progress = null
     let status = null;
@@ -145,26 +141,26 @@ async function dictAdd(interaction){
     progress = await cui.stepProgressbar(progress);
 
     //状況の取得
-    status = getStatus(pronunciation);
+    status = getStatus(options.pronunciation);
     progress = await cui.stepProgressbar(progress);
 
     if(!status){
         //辞書の削除
-        await deleteDict(progress);
+        await deleteDict(options.progress);
         progress = await cui.stepProgressbar(progress);
 
         //既存の辞書のインポート
-        await importDict(serverInfo, progress);
+        await importDict(serverInfo);
         progress = await cui.stepProgressbar(progress);
 
         //辞書に単語の追加
-        [uuid, status] = await addWord(surface, pronunciation, accent, priority);
+        [uuid, status] = await addWord(options.surface, options.pronunciation, options.accent, options.priority);
         progress = await cui.stepProgressbar(progress);
     }
 
     if(status){
         //失敗送信
-        await interaction.editReply(createEmbed(surface, pronunciation, accent, priority, uuid, status));
+        await interaction.editReply(createEmbed(options.surface, options.pronunciation, options.accent, options.priority, uuid, status));
         return -1;
     }
 
@@ -177,7 +173,7 @@ async function dictAdd(interaction){
     progress = await cui.stepProgressbar(progress);
 
     //成功送信
-    interaction.channel.send(createEmbed(surface, pronunciation, accent, priority, uuid, status, progress));
+    interaction.channel.send(createEmbed(options.surface, options.pronunciation, options.accent, options.priority, uuid, status));
 
     return 0;
 }

@@ -1,7 +1,7 @@
 /*****************
     setting.js
     スニャイヴ
-    2024/10/17
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -144,66 +144,65 @@ async function createEmbed(info, name, need_sudo=false){
 }
 
 //サーバー情報の設定
-async function setServer(interaction, speakers){
-    const speaker = interaction.options.get("speaker") ? interaction.options.get("speaker").value : null;
-    const style = interaction.options.get("style") ? interaction.options.get("style").value : null;
+async function setServer(interaction, speakers, options){
     let serverInfo = null;
     let progress = null;
     
     serverInfo = await db.getServerInfo(interaction.guild.id);
     progress = await cui.createProgressbar(interaction, 13);
 
-    if(!interaction.memberPermissions.has("Administrator") && (serverInfo.need_sudo || interaction.options.get("need_sudo"))){
+    //権限の確認
+    if(!interaction.memberPermissions.has("Administrator") && (serverInfo.need_sudo || options.need_sudo != null)){
         await interaction.editReply(await createEmbed(serverInfo, interaction.user.displayName, true));
         return;
     }
 
     //need_sudoオプション
-    serverInfo.need_sudo = interaction.options.get("need_sudo") ? interaction.options.get("need_sudo").value : serverInfo.need_sudo;
+    serverInfo.need_sudo = (options.need_sudo != null) ? options.need_sudo : serverInfo.need_sudo;
     progress = await cui.stepProgressbar(progress);
 
     //read_nameオプション
-    serverInfo.read_name = interaction.options.get("read_name") ? interaction.options.get("read_name").value : serverInfo.read_name;
+    serverInfo.read_name = (options.read_name != null) ? options.read_name : serverInfo.read_name;
     progress = await cui.stepProgressbar(progress);
 
     //read_sameuserオプション
-    serverInfo.read_sameuser = interaction.options.get("read_sameuser") ? interaction.options.get("read_sameuser").value : serverInfo.read_sameuser;
+    serverInfo.read_sameuser = (options.read_sameuser != null) ? options.read_sameuser : serverInfo.read_sameuser;
     progress = await cui.stepProgressbar(progress);
 
     //read_multilineオプション
-    serverInfo.read_multiline = interaction.options.get("read_multiline") ? interaction.options.get("read_multiline").value : serverInfo.read_multiline;
+    serverInfo.read_multiline = (options.read_multiline != null) ? options.read_multiline : serverInfo.read_multiline;
     progress = await cui.stepProgressbar(progress);
 
     //maxwordsオプション
-    serverInfo.maxwords = interaction.options.get("maxwords") ? interaction.options.get("maxwords").value : serverInfo.maxwords;
+    serverInfo.maxwords = (options.maxwords != null) ? options.maxwords : serverInfo.maxwords;
     progress = await cui.stepProgressbar(progress);
 
     //unifオプション
-    serverInfo.unif = interaction.options.get("unif") ? interaction.options.get("unif").value : serverInfo.unif;
+    serverInfo.unif = (options.unif != null) ? options.unif : serverInfo.unif;
     progress = await cui.stepProgressbar(progress);
 
     //speakerオプション
-    serverInfo = speaker ? getSpeaker(speaker, speakers, serverInfo) : serverInfo;
+    serverInfo = (options.speaker != null) ? getSpeaker(options.speaker, speakers, serverInfo) : serverInfo;
     progress = await cui.stepProgressbar(progress);
 
     //styleオプション
-    serverInfo = style ? getStyle(style, speakers, serverInfo) : serverInfo;
+    serverInfo = (options.style != null) ? getStyle(options.style, speakers, serverInfo) : serverInfo;
     progress = await cui.stepProgressbar(progress);
 
     //speedオプション
-    serverInfo.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : serverInfo.speed;
+    serverInfo.speed = (options.speed != null) ? options.speed : serverInfo.speed;
     progress = await cui.stepProgressbar(progress);
 
     //pitchオプション
-    serverInfo.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : serverInfo.pitch;
+    serverInfo.pitch = (options.pitch != null) ? options.pitch : serverInfo.pitch;
     progress = await cui.stepProgressbar(progress);
 
     //intonationオプション
-    serverInfo.intonation = interaction.options.get("intonation") ? interaction.options.get("intonation").value : serverInfo.intonation;
+    serverInfo.intonation = (options.intonation != null) ? options.intonation : serverInfo.intonation;
     progress = await cui.stepProgressbar(progress);
 
     //volumeオプション
-    serverInfo.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : serverInfo.volume;
+    serverInfo.volume = (options.volume != null) ? options.volume : serverInfo.volume;
     progress = await cui.stepProgressbar(progress);
 
     if(!(serverInfo.speaker && serverInfo.style)){

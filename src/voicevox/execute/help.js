@@ -1,7 +1,7 @@
 /*****************
     help.js
     スニャイヴ
-    2024/10/21
+    2024/10/24
 *****************/
 
 module.exports = {
@@ -13,11 +13,11 @@ const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const cui = require('../cui');
 
 //埋め込みの作成
-function createEmbed(interaction){
+function createEmbed(content){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
-    switch(interaction.options.get("content").value){
+    switch(content){
         case "start" : {
             embed.setTitle("読み上げの開始方法を教えるのだ");
             embed.setThumbnail("attachment://icon.png");
@@ -103,13 +103,13 @@ function createEmbed(interaction){
 }
 
 //ヘルプの送信
-async function sendHelp(interaction){
+async function sendHelp(interaction, options){
     let progress = null;
     
     progress = await cui.createProgressbar(interaction, 1);
     progress = await cui.stepProgressbar(progress);
     
-    await interaction.editReply(createEmbed(interaction));
+    await interaction.editReply(createEmbed(options.content));
 
     return 0;
 }
