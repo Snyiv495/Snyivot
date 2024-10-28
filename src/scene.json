@@ -1,0 +1,157 @@
+[
+    {
+        "scene" : "template",
+        "embed" : [
+            {
+                "title" : "",
+                "url" : "",
+                "thumbnail" : "",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "",
+                "color" : ""
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "",
+                "placeholder" : "",
+                "options" : [
+                    {
+                        "menu" : 
+                        {
+                            "label" : "",
+                            "value" : "",
+                            "description" : "",
+                            "emoji" : ""
+                        }
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "button" : [
+                    {
+                        "label" : "",
+                        "emoji" : "",
+                        "id" : "",
+                        "style" : "",
+                        "disabled" : ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "scene" : "mention",
+        "buttons" : [
+            {
+                "button" : [
+                    {
+                        "label" : "呼ぶ",
+                        "emoji" : "🔔",
+                        "id" : "menu",
+                        "style" : "Primary",
+                        "disabled" : "false"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "scene" : "voicevox",
+        "embed" : [
+            {
+                "title" : "voicevoxで何をするのだ？",
+                "url" : "",
+                "icon" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "feilds" : [],
+                "footer" : "メニューから選択してください",
+                "color" : "0x00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "voicevox_menu",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "voicevox_start" : [
+                            {
+                                "label" : "voicevox_start",
+                                "value" : "voicevox_start",
+                                "description" : "読み上げを開始するよ!",
+                                "emoji" : "🔈"
+                            }
+                        ]
+                    },
+                    {
+                        "voicevox_end" : [
+                            {
+                                "label" : "voicevox_end",
+                                "value" : "voicevox_end_menu",
+                                "description" : "読み上げを終了するよ!",
+                                "emoji" : "🔇"
+                            }
+                        ]
+                    },
+                    {
+                        "voicevox_setting_user" : [
+                            {
+                                "label" : "voicevox_setting_user",
+                                "value" : "voicevox_setting_user",
+                                "description" : "ユーザー情報の設定をするよ!",
+                                "emoji" : "👤"
+                            }
+                        ]
+                    },
+                    {
+                        "voicevox_setting_server" : [
+                            {
+                                "label" : "voicevox_setting_server",
+                                "value" : "voicevox_setting_server",
+                                "description" : "サーバー情報の設定をするよ!",
+                                "emoji" : "👥"
+                            }
+                        ]
+                    },
+                    {
+                        "voicevox_dictionary_add" : [
+                            {
+                                "label" : "voicevox_dictionary_add",
+                                "value" : "voicevox_dictionary_add",
+                                "description" : "辞書に単語を追加するよ!",
+                                "emoji" : "📥"
+                            }
+                        ]
+                    },
+                    {
+                        "voicevox_dictionary_delete" : [
+                            {
+                                "label" : "voicevox_dictionary_delete",
+                                "value" : "voicevox_dictionary_delete",
+                                "description" : "辞書の単語を削除するよ!",
+                                "emoji" : "📤"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "gui_quit" : [
+                    {
+                        "label" : "やめる",
+                        "id" : "gui_quit",
+                        "style" : "Danger",
+                        "disabled" : "false"
+                    }
+                ]
+            }
+        ]
+    }
+]

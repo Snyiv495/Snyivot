@@ -5,14 +5,85 @@
 *****************/
 
 module.exports = {
-    sendBell: sendBell,
-    guiButton: guiButton,
-    getQuitButton: createQuitButton,
+    createGui: createGui,
 }
 
-const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuOptionBuilder} = require("discord.js");
 const cohere = require('./cohere/cohere');
 const voicevox = require('./voicevox/voicevox');
+
+async function createGui(id, scene){
+    let attachment = [];
+    let embed = [];
+    let components = [];
+    let menus = null;
+    let buttons = null;
+
+    for(let i=0; i<scene.length; i++){
+        if(scene[i].scene === id){
+            if(scene[i].embed){
+                attachment = new AttachmentBuilder();
+                embed = new EmbedBuilder();
+
+                attachment.setName("icon.png");
+                attachment.setFile(scene[i].embed[0].thumbnail);
+
+                embed.setTitle(scene[i].embed[0].title);
+                embed.setURL(scene[i].embed[0].url);
+                embed.setThumbnail("attachment://icon.png");
+                embed.setDescription(scene[i].embed[0].description);
+                for(let j=0; j<scene[i].embed[0].fields.length; j++){
+                    embed.addFields({name: scene[i].embed[0].fields[j].name, value: scene[i].embed[0].fields[j].value});
+                }
+                embed.setImage(scene[i].embed[0].image);
+                embed.setFooter(scene[i].embed[0].footer);
+                embed.setColor(scene[i].embed[0].color);
+            }
+            if(scene[i].menus){
+                const menu = new StringSelectMenuBuilder();
+                menus = new ActionRowBuilder();
+
+                menu.setCustomId(scene[i].menus[0].id);
+                menu.setPlaceholder(scene[i].menus[0].placeholder);
+                for(let j=0; j<scene[i].menus[0].options.length; j++){
+                    const option = new StringSelectMenuOptionBuilder();
+                    option.setLabel(scene[i].menus[0].options[j].menu[0].label);
+                    option.setEmoji(scene[i].menus[0].options[j].menu[0].emoji);
+                    option.setValue(scene[i].menus[0].options[j].menu[0].value);
+                    option.setDescription(scene[i].menus[0].options[j].menu[0].description);
+                    menu.addOptions(option);
+                    menus.addComponents(menu);
+                }
+            }
+            if(scene[i].buttons){
+                buttons = new ActionRowBuilder();
+
+                for(let j=0; j<scene[i].buttons.length; j++){
+                    const button = new ButtonBuilder();
+                    button.setLabel(`${scene[i].buttons[j].label}`);
+                    button.setEmoji(`${scene[i].buttons[j].emoji}`);
+                    button.setCustomId(`${scene[i].buttons[j].id}`);
+                    switch(scene[i].buttons[j].style){
+                        case "Primary" : button.setStyle(ButtonStyle.Primary); break;
+                        case "Secondary" : button.setStyle(ButtonStyle.Secondary); break;
+                        case "Success" : button.setStyle(ButtonStyle.Success); break;
+                        case "Danger" : button.setStyle(ButtonStyle.Danger); break;
+                        case "Link" : button.setStyle(ButtonStyle.Link); break;
+                        default : button.setStyle(ButtonStyle.Primary); break;
+                    }
+                    button.setDisabled((scene[i].buttons[j].disabled)==="true");
+                    buttons.addComponents(button);
+                }
+            }
+            break;
+        }
+    }
+
+    components = menus ? components.concat(menus) : components;
+    components = buttons ? components.concat(buttons) : components;
+    
+    return {content: "test", files: attachment, embeds: embed, components: components, ephemeral: true};
+}
 
 //ベルの作成
 function createBell(){

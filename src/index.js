@@ -16,6 +16,7 @@ const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.
 const channel_map = new Map();
 const subsc_map = new Map();
 let readme;
+let scene;
 let vv_speakers;
 
 //botのログイン
@@ -28,6 +29,14 @@ client.once('ready', async () => {
         readme = fs.readFileSync("./README.md", {encoding: "utf8"});
     }catch(e){
         console.log("### READMEの取得に失敗しました ###\n### 再起動してください ###\n");
+        process.exit();
+    }
+
+    //voicevoxのGUIの取得
+    try{
+        scene = JSON.parse(fs.readFileSync("./src/scene.json", {encoding: "utf8"}));
+    }catch(e){
+        console.log("### GUIの取得に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
     }
 
@@ -64,7 +73,7 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            //await gui.sendBell(message);
+            await message.reply(await gui.createGui("mention", scene));
         }
        
         //内容があれば回答
@@ -135,7 +144,7 @@ client.on('interactionCreate', async (interaction) => {
     }
     
     if(interaction.values[0].includes("voicevox")){
-        await voicevox.guiMenu(interaction, channel_map, subsc_map, vv_speakers);
+        await voicevox.guiMenu(interaction, channel_map, subsc_map, vv_speakers, vv_gui);
         return 0;
     }
 

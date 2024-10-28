@@ -34,13 +34,14 @@ function getMenu(){
     return voicevox;
 }
 
-async function createMenu(interaction){
-    menu = fs.readFile("./src/voicevox/gui.json", "utf-8");
-    
+async function createMenu(interaction, gui){
+    for(let i=0; i<gui.length; i++){
+        console.log(gui.at(i));
+    }
 }
 
 //GUIメニューの実行
-async function guiMenu(interaction, channel_map, subsc_map, speakers){
+async function guiMenu(interaction, channel_map, subsc_map, speakers, gui){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -51,7 +52,7 @@ async function guiMenu(interaction, channel_map, subsc_map, speakers){
         case "voicevox" : {
             await interaction.deferUpdate();
             await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            await interaction.editReply(createMenu(interaction.values[0]));
+            await interaction.editReply(createMenu(interaction, gui));
             break;
         }
         case "voicevox_start" : {
@@ -69,7 +70,7 @@ async function guiMenu(interaction, channel_map, subsc_map, speakers){
         case "voicevox_setting_user" : {
             await interaction.deferUpdate();
             await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            await interaction.editReply(createMenu(interaction));
+            await interaction.editReply(createMenu(interaction, gui));
             break;
         }
         case "voicevox_setting_user_speaker" : {
