@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/10/23
+    2024/10/29
 *****************/
 
 require('dotenv').config();
@@ -95,7 +95,7 @@ client.on('messageCreate', async message => {
         return;
     }
     
-    return;
+    return 0;
 });
 
 //コマンド動作
@@ -143,12 +143,15 @@ client.on('interactionCreate', async (interaction) => {
         return -1;
     }
     
-    if(interaction.values[0].includes("voicevox")){
-        await voicevox.guiMenu(interaction, channel_map, subsc_map, vv_speakers, vv_gui);
+    //コマンドの実行
+    if(interaction.values[0].includes("exe")){
         return 0;
     }
 
-    return -1;
+    //GUIの送信
+    await gui.sendGui(interaction, scene);
+
+    return 0;
 
 });
 
@@ -159,13 +162,25 @@ client.on('interactionCreate', async (interaction) => {
         return -1;
     }
 
-    //GUI
-    if(interaction.customId.includes("gui")){
-        await gui.guiButton(interaction);
-        return 0;
+    //コマンド実行
+    if(interaction.customId.includes("exe")){
+        if(interaction.customId.includes("cohere")){
+            await cohere.guiCmd(interaction, readme);
+            return 0;
+        }
+
+        if(interaction.customId.includes("voicevox")){
+            await voicevox.guiCmd(interaction, channel_map, subsc_map, vv_speakers);
+            return 0
+        }
+
+        return -1;
     }
 
-    return -1;
+    //GUIの送信
+    await gui.sendGui(interaction, scene);
+
+    return 0;
 });
 
 //モーダル動作
@@ -176,8 +191,8 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     //cohere
-	if(interaction.customId === "modal_cohere"){
-        await cohere.sendAns(interaction, readme);
+	if(interaction.customId.includes("cohere")){
+        await cohere.guiModal(interaction, readme);
         return 0;
 	}
 

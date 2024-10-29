@@ -5,7 +5,6 @@
 *****************/
 
 module.exports = {
-    getMenu: getMenu,
     guiMenu: guiMenu,
     guiModal: guiModal,
 }
@@ -21,24 +20,6 @@ const exe_setting_server = require('./execute/setServer');
 const exe_dictionary_add = require('./execute/dictAdd');
 const exe_dictionary_delete = require('./execute/dictDel');
 const exe_help = require('./execute/help');
-
-//GUIメニューの取得
-function getMenu(){
-    const voicevox = new StringSelectMenuOptionBuilder();
-
-    voicevox.setLabel("voicevox");
-    voicevox.setDescription("読み上げができるよ!");
-    voicevox.setEmoji("🎙️");
-    voicevox.setValue("voicevox");
-
-    return voicevox;
-}
-
-async function createMenu(interaction, gui){
-    for(let i=0; i<gui.length; i++){
-        console.log(gui.at(i));
-    }
-}
 
 //GUIメニューの実行
 async function guiMenu(interaction, channel_map, subsc_map, speakers, gui){
