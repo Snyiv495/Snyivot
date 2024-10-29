@@ -1,12 +1,12 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/10/24
+    2024/10/29
 *****************/
 
 module.exports = {
     getSlashCmds: getSlashCmds,
-    cuiCmd: cuiCmd,
+    cmd: cmd,
     autocomplete: autocomplete,
     createProgressbar: createProgressbar,
     stepProgressbar: stepProgressbar,
@@ -14,25 +14,28 @@ module.exports = {
 
 require('dotenv').config();
 const {SlashCommandBuilder} = require('discord.js');
-const exe_start = require('./execute/start');
-const exe_end = require('./execute/end');
-const exe_setting_user = require('./execute/setUser');
-const exe_setting_server = require('./execute/setServer');
-const exe_dictionary_add = require('./execute/dictAdd');
-const exe_dictionary_delete = require('./execute/dictDel');
-const exe_help = require('./execute/help');
+const vv_start = require('./execute/start');
+const vv_end = require('./execute/end');
+const vv_setting_user = require('./execute/setUser');
+const vv_setting_server = require('./execute/setServer');
+const vv_autocomplete = require('./execute/autocomplete');
+const vv_dictionary_add = require('./execute/dictAdd');
+const vv_dictionary_delete = require('./execute/dictDel');
+const vv_help = require('./execute/help');
 
 //スラッシュコマンドの取得
 function getSlashCmds(){
-    const start = getStartCmd();
-    const end = getEndCmd();
-    const setting_user = getSetUserCmd();
-    const setting_server = getSetServerCmd();
-    const dictionary_add = getDictAddCmd();
-    const dictionary_delete = getDictDelCmd();
-    const help = getHelpCmd();
+    const slashCmds = [];
 
-    return [start, end, setting_user, setting_server, dictionary_add, dictionary_delete, help];
+    slashCmds.push(getStartCmd());
+    slashCmds.push(getEndCmd());
+    slashCmds.push(getSetUserCmd());
+    slashCmds.push(getSetServerCmd());
+    slashCmds.push(getDictAddCmd());
+    slashCmds.push(getDictDelCmd());
+    slashCmds.push(getHelpCmd());
+
+    return slashCmds;
 }
 
 //開始コマンドの取得
@@ -266,7 +269,7 @@ function getHelpCmd(){
 }
 
 //CUIコマンドの実行
-async function cuiCmd(interaction, channel_map, subsc_map, speakers){
+async function cmd(interaction, channel_map, subsc_map, speakers){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -275,11 +278,11 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
 
     switch(interaction.commandName){
         case "voicevox_start" : {
-            await exe_start.start(interaction, channel_map, subsc_map);
+            await vv_start.exe(interaction, channel_map, subsc_map);
             break;
         }
         case "voicevox_end" : {
-            await exe_end.end(interaction, channel_map, subsc_map);
+            await vv_end.exe(interaction, channel_map, subsc_map);
             break;
         }
         case "voicevox_setting_user" : {
@@ -291,7 +294,7 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
             options.intonation = interaction.options.get("intonation") ? interaction.options.get("itonation").value : null;
             options.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : null;
             options.username = interaction.options.get("username") ? interaction.options.get("username").value : null;
-            await exe_setting_user.setUser(interaction, speakers, options);
+            await vv_setting_user.exe(interaction, speakers, options);
             break;
         }
         case "voicevox_setting_server" : {
@@ -308,7 +311,7 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
             options.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : null;
             options.intonation = interaction.options.get("intonation") ? interaction.options.get("itonation").value : null;
             options.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : null;
-            await exe_setting_server.setServer(interaction, speakers, options);
+            await vv_setting_server.exe(interaction, speakers, options);
             break;
         }
         case "voicevox_dictionary_add" : {
@@ -317,39 +320,30 @@ async function cuiCmd(interaction, channel_map, subsc_map, speakers){
             options.pronunciation = interaction.options.get("pronunciation").value;
             options.accent = interaction.options.get("accent") ? interaction.options.get("accent").value : 1;
             options.priority = interaction.options.get("priority") ? interaction.options.get("priority").value : 5;
-            await exe_dictionary_add.dictAdd(interaction, options);
+            await vv_dictionary_add.exe(interaction, options);
             break;
         }
         case "voicevox_dictionary_delete" : {
             const options = {uuid: null};
             options.uuid = interaction.options.get("uuid") ? interaction.options.get("uuid").value : null;
-            await exe_dictionary_delete.dictDel(interaction, options);
+            await vv_dictionary_delete.exe(interaction, options);
             break;
         }
         case "voicevox_help" : {
             const options = {content : null};
             options.content = interaction.options.get("content").value;
-            await exe_help.sendHelp(interaction, options);
+            await vv_help.exe(interaction, options);
             break;
         }
         default : break;
     }
 
-    return;
+    return -1;
 }
 
-//コマンドの補助
+//CUIコマンドの補助
 async function autocomplete(interaction, speakers){
-    switch(interaction.commandName){
-        case "voicevox_setting_user" : {
-            await exe_setting_user.autocomplete(interaction, speakers);
-            break;
-        }
-        case "voicevox_setting_server" : {
-            await exe_setting_server.setServer_autocomplete(interaction, speakers);
-            break;
-        }
-    }
+    await vv_autocomplete.exe(interaction, speakers);
     return;
 }
 

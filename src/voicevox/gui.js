@@ -1,28 +1,25 @@
 /*****************
     gui.js
     スニャイヴ
-    2024/10/21
+    2024/10/29
 *****************/
 
 module.exports = {
-    guiMenu: guiMenu,
+    guiCmd: guiCmd,
     guiModal: guiModal,
 }
 
 require('dotenv').config();
-const {StringSelectMenuOptionBuilder, EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, TextInputBuilder, ModalBuilder, TextInputStyle} = require('discord.js');
-const fs = require('fs');
-const gui = require('../gui');
-const exe_start = require('./execute/start');
-const exe_end = require('./execute/end');
-const exe_setting_user = require('./execute/setUser');
-const exe_setting_server = require('./execute/setServer');
-const exe_dictionary_add = require('./execute/dictAdd');
-const exe_dictionary_delete = require('./execute/dictDel');
-const exe_help = require('./execute/help');
+const vv_start = require('./execute/start');
+const vv_end = require('./execute/end');
+const vv_setting_user = require('./execute/setUser');
+const vv_setting_server = require('./execute/setServer');
+const vv_dictionary_add = require('./execute/dictAdd');
+const vv_dictionary_delete = require('./execute/dictDel');
+const vv_help = require('./execute/help');
 
 //GUIメニューの実行
-async function guiMenu(interaction, channel_map, subsc_map, speakers, gui){
+async function guiCmd(interaction, channel_map, subsc_map, speakers){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -30,56 +27,31 @@ async function guiMenu(interaction, channel_map, subsc_map, speakers, gui){
     }
 
     switch(interaction.values[0]){
-        case "voicevox" : {
+        case "voicevox_start_exe" : {
             await interaction.deferUpdate();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            await interaction.editReply(createMenu(interaction, gui));
+            await interaction.editReply({content: "NOW LOADING...", files: [], embeds: [], components: []});
+            await vv_start.exe(interaction, channel_map, subsc_map);
             break;
         }
-        case "voicevox_start" : {
+        case "voicevox_end_exe" : {
             await interaction.deferUpdate();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            await exe_start.start(interaction, channel_map, subsc_map);
+            await interaction.editReply({content: "NOW LOADING...", files: [], embeds: [], components: []});
+            await vv_end.exe(interaction, channel_map, subsc_map);
             break;
         }
-        case "voicevox_end" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            await exe_end.end(interaction, channel_map, subsc_map);
+        case "voicevox_setting_user_exe" : {
             break;
         }
-        case "voicevox_setting_user" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            await interaction.editReply(createMenu(interaction, gui));
-            break;
-        }
-        case "voicevox_setting_user_speaker" : {
-            break;
-        }
-        case "voicevox_setting_user_parameter" : {
-            await interaction.showModal(getSetUserModal());
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
-            break;
-        }
-        case "voicevox_setting_server" : {
-            await interaction.showModal();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
+        case "voicevox_setting_server_exe" : {
             break;
         }
         case "voicevox_dictionary_add" : {
-            await interaction.showModal();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
             break;
         }
         case "voicevox_dictionary_delete" : {
-            await interaction.showModal();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
             break;
         }
         case "voicevox_help" : {
-            await interaction.showModal();
-            await interaction.editReply({content: "Loading...", files: [], embeds: [], components: []});
             break;
         }
         default : break;
@@ -93,7 +65,7 @@ async function guiModal(interaction, channel_map, subsc_map, speakers){
     switch(interaction.customId){
         case "voicevox_end" : {
             const opt_all = ["はい","True","true"].includes(interaction.fields.getTextInputValue("all"));
-            await exe_end.end(interaction, channel_map, subsc_map, opt_all);
+            await vv_end.exe(interaction, channel_map, subsc_map, opt_all);
             break;
         }
         case "voicevox_setting_user_parameter" : {
@@ -103,7 +75,7 @@ async function guiModal(interaction, channel_map, subsc_map, speakers){
             opt_parameter.intonation = Math.min(Math.max((isNaN(parseFloat(interaction.fields.getTextInputValue("intonation"))) ? parseFloat(interaction.fields.getTextInputValue("intonation")) : 1.0), 0), 2);
             opt_parameter.volume = Math.min(Math.max((isNaN(parseFloat(interaction.fields.getTextInputValue("volume"))) ? parseFloat(interaction.fields.getTextInputValue("volume")) : 1.0), 0), 2);
             opt_parameter.username = (interaction.fields.getTextInputValue("username") != "") ? interaction.fields.getTextInputValue("username") : null;
-            await exe_setting_user.setUser(interaction, speakers, opt_parameter);
+            await vv_setting_user.setUser(interaction, speakers, opt_parameter);
             break;
         }
         default : break;

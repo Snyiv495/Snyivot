@@ -1,11 +1,11 @@
 /*****************
     dictAdd.js
     スニャイヴ
-    2024/10/24
+    2024/10/29
 *****************/
 
 module.exports = {
-    dictAdd: dictAdd,
+    exe: execute,
 }
 
 require('dotenv').config();
@@ -127,7 +127,7 @@ async function getDict(serverInfo){
 }
 
 //辞書の追加
-async function dictAdd(interaction, options){
+async function execute(interaction, options){
     let serverInfo = null;
     let progress = null
     let status = null;

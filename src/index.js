@@ -7,9 +7,9 @@
 require('dotenv').config();
 const {Client, GatewayIntentBits} = require('discord.js');
 const fs = require('fs');
-const cohere = require('./cohere/cohere');
 const cui = require('./cui');
 const gui = require('./gui');
+const cohere = require('./cohere/cohere');
 const voicevox = require('./voicevox/voicevox');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
@@ -50,7 +50,7 @@ client.once('ready', async () => {
 
     //コマンドの登録
     try{
-        await client.application.commands.set(cui.getSlashCmds());
+        client.application.commands.set(cui.getSlashCmds());
     }catch(e){
         console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
@@ -145,7 +145,17 @@ client.on('interactionCreate', async (interaction) => {
     
     //コマンドの実行
     if(interaction.values[0].includes("exe")){
-        return 0;
+        if(interaction.customId.includes("cohere")){
+            await cohere.guiCmd(interaction);
+            return 0;
+        }
+
+        if(interaction.customId.includes("voicevox")){
+            await voicevox.guiCmd(interaction, channel_map, subsc_map, vv_speakers);
+            return 0
+        }
+
+        return -1;
     }
 
     //GUIの送信
@@ -165,7 +175,7 @@ client.on('interactionCreate', async (interaction) => {
     //コマンド実行
     if(interaction.customId.includes("exe")){
         if(interaction.customId.includes("cohere")){
-            await cohere.guiCmd(interaction, readme);
+            await cohere.guiCmd(interaction);
             return 0;
         }
 

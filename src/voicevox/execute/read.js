@@ -1,11 +1,11 @@
 /*****************
     read.js
     スニャイヴ
-    2024/10/21    
+    2024/10/29
 *****************/
 
 module.exports = {
-    read: read,
+    exe: execute,
 }
 
 require('dotenv').config();
@@ -173,7 +173,7 @@ async function createWav(text, userInfo, serverInfo){
 }
 
 //読み上げ
-async function read(message, subsc){
+async function execute(message, subsc){
     const userInfo = await db.getUserInfo(message.member.id);
     const serverInfo = await db.getServerInfo(message.guild.id);
     const text = await formText(message, userInfo, serverInfo);

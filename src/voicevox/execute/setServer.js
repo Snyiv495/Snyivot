@@ -1,12 +1,11 @@
 /*****************
     setting.js
     スニャイヴ
-    2024/10/24
+    2024/10/29
 *****************/
 
 module.exports = {
-    setServer: setServer,
-    setServer_autocomplete: setServer_autocomplete,
+    exe: execute,
 }
 
 require('dotenv').config();
@@ -144,7 +143,7 @@ async function createEmbed(info, name, need_sudo=false){
 }
 
 //サーバー情報の設定
-async function setServer(interaction, speakers, options){
+async function execute(interaction, speakers, options){
     let serverInfo = null;
     let progress = null;
     
@@ -217,47 +216,6 @@ async function setServer(interaction, speakers, options){
 
     //成功送信
     interaction.channel.send(await createEmbed(serverInfo, interaction.guild.name));
-
-    return 0;
-}
-
-//voicevox_setting_serverコマンドの補助
-async function setServer_autocomplete(interaction, speakers){
-    const focusedOpt = interaction.options.getFocused(true);
-    const choices = new Array();
-    
-    //speakerオプションの補助
-    if(focusedOpt.name === "speaker"){
-        if(focusedOpt.value === ""){
-            choices.push("ランダム");
-        }else{
-            for(let i=0; i<speakers.length; i++){
-                if((speakers[i].name).includes(focusedOpt.value)){
-                    choices.push(speakers[i].name);
-                }
-            }
-        }
-    }
-
-    //styleオプションの補助
-    if(focusedOpt.name === "style"){
-        const speaker = interaction.options.getString("speaker") ? interaction.options.getString("speaker") : (await db.getServerInfo(interaction.guild.id)).speaker;
-
-        if(speaker === "ランダム"){
-            choices.push("ランダム");
-        }else{
-            for(let i=0; i<speakers.length; i++){
-                if(speaker === speakers[i].name){
-                    for(let j=0; j<speakers[i].styles.length; j++){
-                        choices.push(speakers[i].styles[j].name);
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    await interaction.respond(choices.map(choices => ({name: choices, value: choices})));
 
     return 0;
 }

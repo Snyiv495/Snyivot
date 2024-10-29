@@ -1,11 +1,11 @@
 /*****************
     end.js
     スニャイヴ
-    2024/10/24
+    2024/10/29
 *****************/
 
 module.exports = {
-    end: end,
+    exe: execute,
 }
 
 require('dotenv').config();
@@ -109,7 +109,7 @@ function createEmbed(textCh, voiceCh, status){
 }
 
 //読み上げ終了
-async function end(interaction, channel_map, subsc_map){
+async function execute(interaction, channel_map, subsc_map){
     const textCh = interaction.channel;
     const voiceCh = interaction.member.voice.channel;
     let progress = null;

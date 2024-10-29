@@ -1,11 +1,11 @@
 /*****************
     help.js
     スニャイヴ
-    2024/10/24
+    2024/10/29
 *****************/
 
 module.exports = {
-    sendHelp: sendHelp,
+    exe: execute,
 }
 
 require('dotenv').config();
@@ -103,7 +103,7 @@ function createEmbed(content){
 }
 
 //ヘルプの送信
-async function sendHelp(interaction, options){
+async function execute(interaction, options){
     let progress = null;
     
     progress = await cui.createProgressbar(interaction, 1);

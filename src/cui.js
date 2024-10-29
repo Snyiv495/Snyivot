@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/10/21
+    2024/10/29
 *****************/
 
 module.exports = {
@@ -13,10 +13,10 @@ const voicevox = require('./voicevox/voicevox');
 
 //コマンドの取得
 function getSlashCmds(){
-    const cmd_cohere = cohere.getCmd();
-    const cmd_voicevox = voicevox.getSlashCmd();
-    
-    const cmds = cmd_cohere.concat(cmd_voicevox);
+    let cmds = [];
+
+    //cmds = cmds.concat(cohere.getSlashCmd());
+    cmds = cmds.concat(voicevox.getSlashCmd());
 
     return cmds;
 }

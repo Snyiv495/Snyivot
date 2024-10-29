@@ -1,11 +1,11 @@
 /*****************
     dictDel.js
     スニャイヴ
-    2024/10/24
+    2024/10/29
 *****************/
 
 module.exports = {
-    dictDel: dictDel,
+    exe: execute,
 }
 
 require('dotenv').config();
@@ -116,7 +116,7 @@ function createEmbed(dictFile, status, surface){
 }
 
 //辞書の削除
-async function dictDel(interaction, options){
+async function execute(interaction, options){
     const dictFile = `dict_${interaction.guild.id}.csv`;
     let serverInfo = null;
     let progress = null;

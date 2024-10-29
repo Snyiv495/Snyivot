@@ -10,8 +10,6 @@ module.exports = {
 }
 
 const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuOptionBuilder} = require("discord.js");
-const cohere = require('./cohere/cohere');
-const voicevox = require('./voicevox/voicevox');
 
 //GUIの作成
 async function createGui(id, scene){
@@ -92,7 +90,7 @@ async function createGui(id, scene){
         }
     }
 
-    return {files: files, embeds: embeds, components: components, ephemeral: true};
+    return {content: "", files: files, embeds: embeds, components: components, ephemeral: true};
 }
 
 //GUIの送信
@@ -102,17 +100,8 @@ async function sendGui(interaction, scene){
         await interaction.deferReply({ephemeral: true});
     }else{
         await interaction.deferUpdate();
-        await interaction.editReply({components: []});
+        await interaction.editReply({content: "NOW LOADING...", files: [], embeds: [], components: []});
     }
     await interaction.editReply(await createGui(id, scene));
-    return 0;
-}
-
-
-//終了
-async function guiQuit(interaction){
-    await interaction.deferUpdate();
-    await interaction.editReply({content: "Loading...", files: [], embeds: [], components: [], ephemeral: true});
-    await interaction.editReply(createQuitEmbed());
     return 0;
 }
