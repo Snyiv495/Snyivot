@@ -71,25 +71,25 @@
                     {
                         "label" : "cohere",
                         "value" : "cohere_home",
-                        "description" : "AIに質問ができるよ!",
+                        "description" : "Snyivotに質問ができるよ！",
                         "emoji" : "🤖"
                     },
                     {
                         "label" : "voicevox",
                         "value" : "voicevox_home",
-                        "description" : "読み上げができるよ!",
+                        "description" : "読み上げができるよ！",
                         "emoji" : "🎙️"
                     },
                     {
-                        "label" : "miniGame",
-                        "value" : "minigame_home",
-                        "description" : "ミニゲームができるよ!",
+                        "label" : "game",
+                        "value" : "game_home",
+                        "description" : "ミニゲームができるよ！",
                         "emoji" : "🎮"
                     },
                     {
                         "label" : "README",
                         "value" : "readme_exe",
-                        "description" : "READMEを送信するよ!",
+                        "description" : "READMEを送信するよ！",
                         "emoji" : "📑"
                     }
                 ]
@@ -106,10 +106,33 @@
         ]
     },
     {
+        "scene" : "cohere_home",
+        "embeds" : [
+            {
+                "title" : "アップデートを待ってね！",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/bunny.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "color" : "00FF00"
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
         "scene" : "voicevox_home",
         "embeds" : [
             {
-                "title" : "voicevoxで何をするのだ？",
+                "title" : "voicevoxの何をするのだ？",
                 "url" : "",
                 "thumbnail" : "assets/zundamon/icon/think.png",
                 "description" : "",
@@ -125,42 +148,233 @@
                 "placeholder" : "何も選択されてないのだ",
                 "options" : [
                     {
-                        "label" : "voicevox_start",
+                        "label" : "start",
                         "value" : "voicevox_start_exe",
-                        "description" : "読み上げを開始するよ!",
+                        "description" : "読み上げを開始するよ！",
                         "emoji" : "🔈"
                     },
                     {
-                        "label" : "voicevox_end",
+                        "label" : "end",
                         "value" : "voicevox_end_exe",
-                        "description" : "読み上げを終了するよ!",
+                        "description" : "読み上げを終了するよ！",
                         "emoji" : "🔇"
                     },
                     {
-                        "label" : "voicevox_setting_user",
+                        "label" : "setting_user",
                         "value" : "voicevox_setting_user_home",
-                        "description" : "ユーザー情報の設定をするよ!",
+                        "description" : "ユーザー情報の設定をするよ！",
                         "emoji" : "👤"
                     },
                     {
-                        "label" : "voicevox_setting_server",
+                        "label" : "setting_server",
                         "value" : "voicevox_setting_server_home",
-                        "description" : "サーバー情報の設定をするよ!",
+                        "description" : "サーバー情報の設定をするよ！",
                         "emoji" : "👥"
                     },
                     {
-                        "label" : "voicevox_dictionary_add",
+                        "label" : "dictionary_add",
                         "value" : "voicevox_dictionary_add_exe",
-                        "description" : "辞書に単語を追加するよ!",
+                        "description" : "辞書に単語を追加するよ！",
                         "emoji" : "📥"
                     },
                     {
-                        "label" : "voicevox_dictionary_delete",
+                        "label" : "dictionary_delete",
                         "value" : "voicevox_dictionary_delete_exe",
-                        "description" : "辞書の単語を削除するよ!",
+                        "description" : "辞書の単語を削除するよ！",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "help",
+                        "value" : "voicevox_help_home",
+                        "description" : "使い方を教えるよ！",
+                        "emoji" : "❓"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "voicevox_setting_user_home",
+        "embeds" : [
+            {
+                "title" : "どの設定をするのだ？",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
+                "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "voicevox_setting_user_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "label" : "speaker_style",
+                        "value" : "voicevox_setting_user_speaker_style_exe",
+                        "description" : "スピーカーやそのスタイルを設定するよ！",
+                        "emoji" : "👨‍👩‍👧‍👦"
+                    },
+                    {
+                        "label" : "parameter",
+                        "value" : "voicevox_setting_user_parameter_exe",
+                        "description" : "喋り方を細かく設定するよ！",
+                        "emoji" : "🎛️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "voicevox_setting_server_home",
+        "embeds" : [
+            {
+                "title" : "どの設定をするのだ？",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
+                "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "voicevox_setting_server_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "label" : "config",
+                        "value" : "voicevox_setting_server_config_exe",
+                        "description" : "サーバーの構成を設定するよ！",
+                        "emoji" : "🛠️"
+                    },
+                    {
+                        "label" : "speaker_style",
+                        "value" : "voicevox_setting_server_speaker_style_exe",
+                        "description" : "スピーカーやそのスタイルを設定するよ！",
+                        "emoji" : "👨‍👩‍👧‍👦"
+                    },
+                    {
+                        "label" : "parameter",
+                        "value" : "voicevox_setting_server_parameter_exe",
+                        "description" : "喋り方を細かく設定するよ！",
+                        "emoji" : "🎛️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "voicevox_help_home",
+        "embeds" : [
+            {
+                "title" : "何の使い方を知りたいのだ？",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
+                "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "voicevox_help_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "label" : "start",
+                        "value" : "voicevox_help_start_exe",
+                        "description" : "読み上げ開始について",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "end",
+                        "value" : "voicevox_help_end_exe",
+                        "description" : "読み上げ終了について",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "setting_user",
+                        "value" : "voicevox_help_setting_user_exe",
+                        "description" : "ユーザー情報の設定について",
+                        "emoji" : "👤"
+                    },
+                    {
+                        "label" : "setting_server",
+                        "value" : "voicevox_help_setting_server_exe",
+                        "description" : "サーバー情報の設定について",
+                        "emoji" : "👥"
+                    },
+                    {
+                        "label" : "dictionary_add",
+                        "value" : "voicevox_help_dictionary_add_exe",
+                        "description" : "辞書の追加について",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "dictionary_delete",
+                        "value" : "voicevox_dictionary_delete_exe",
+                        "description" : "辞書の削除について",
                         "emoji" : "📤"
                     }
                 ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "game_home",
+        "embeds" : [
+            {
+                "title" : "アップデートを待ってね！",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/bunny.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "color" : "00FF00"
             }
         ],
         "buttons" : [

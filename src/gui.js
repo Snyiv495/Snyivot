@@ -100,7 +100,7 @@ async function sendGui(interaction, scene){
         await interaction.deferReply({ephemeral: true});
     }else{
         await interaction.deferUpdate();
-        await interaction.editReply({content: "NOW LOADING...", files: [], embeds: [], components: []});
+        await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
     }
     await interaction.editReply(await createGui(id, scene));
     return 0;

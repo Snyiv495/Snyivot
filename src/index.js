@@ -146,13 +146,17 @@ client.on('interactionCreate', async (interaction) => {
     //コマンドの実行
     if(interaction.values[0].includes("exe")){
         if(interaction.customId.includes("cohere")){
-            await cohere.guiCmd(interaction);
+            await cohere.guiMenu(interaction);
             return 0;
         }
 
         if(interaction.customId.includes("voicevox")){
-            await voicevox.guiCmd(interaction, channel_map, subsc_map, vv_speakers);
+            await voicevox.guiMenu(interaction, channel_map, subsc_map, vv_speakers);
             return 0
+        }
+
+        if(interaction.customId.includes("readme")){
+            return 0;
         }
 
         return -1;
@@ -175,12 +179,12 @@ client.on('interactionCreate', async (interaction) => {
     //コマンド実行
     if(interaction.customId.includes("exe")){
         if(interaction.customId.includes("cohere")){
-            await cohere.guiCmd(interaction);
+            await cohere.guiButton(interaction);
             return 0;
         }
 
         if(interaction.customId.includes("voicevox")){
-            await voicevox.guiCmd(interaction, channel_map, subsc_map, vv_speakers);
+            await voicevox.guiButton(interaction, vv_speakers);
             return 0
         }
 
@@ -208,7 +212,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //voicevox
     if(interaction.customId.includes("voicevox")){
-        await voicevox.guiModal(interaction, channel_map, subsc_map, vv_speakers);
+        await voicevox.guiModal(interaction, vv_speakers);
         return 0;
     }
 

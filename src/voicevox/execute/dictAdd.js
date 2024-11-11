@@ -146,7 +146,7 @@ async function execute(interaction, options){
 
     if(!status){
         //辞書の削除
-        await deleteDict(options.progress);
+        await deleteDict();
         progress = await cui.stepProgressbar(progress);
 
         //既存の辞書のインポート
