@@ -73,7 +73,7 @@ async function createEmbed(info, displayName){
     if(!info.speaker){
         embed.setTitle("そんなスピーカー知らないのだ");
         embed.setThumbnail("attachment://icon.png");
-        embed.setFooter({text: "存在しないスピーカーが入力されました"});
+        embed.setFooter({text: "存在しないスピーカーが入力されたのだ"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/anger.png");
@@ -83,7 +83,7 @@ async function createEmbed(info, displayName){
     if(!info.style){
         embed.setTitle("そんなスタイル知らないのだ");
         embed.setThumbnail("attachment://icon.png");
-        embed.setFooter({text: "存在しないスタイルが入力されました"});
+        embed.setFooter({text: "存在しないスタイルが入力されたのだ"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/anger.png");

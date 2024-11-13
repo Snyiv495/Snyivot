@@ -76,7 +76,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
             {name : "低語調位置", value : `${accent}文字目`, inline : true},
             {name : "優先度", value : `${priority}`, inline : true}
         )
-        embed.setFooter({text: "読み方が変わらない場合は優先度を上げてください"});
+        embed.setFooter({text: "読み方が変わらない場合は優先度を上げるのだ"});
         embed.setColor(0x00FF00);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/delight.png");
@@ -87,7 +87,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
         case "notKana" : {
             embed.setTitle("知らないカタカナが含まれているのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "有効なカタカナを入力してください"});
+            embed.setFooter({text: "有効なカタカナを入力するのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/anger.png");
@@ -96,7 +96,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
         case "cantKana" : {
             embed.setTitle("その「ヮ」はどう読むのだ...");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "クヮ, グヮ以外のヮは指定できません"});
+            embed.setFooter({text: "クヮ, グヮ以外のヮは指定できないのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
             attachment.setFile("assets/zundamon/icon/think.png");
@@ -105,7 +105,7 @@ function createEmbed(surface, pronunciation, accent, priority, uuid, status){
         case "failAccent" : {
             embed.setTitle("語調低下の位置がおかしいのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "文字数を確認してください(拗音は直前の文字と合わせて1文字と判断される場合があります)"});
+            embed.setFooter({text: "文字数を確認するのだ(拗音は直前の文字と合わせて1文字なのだ)"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/anger.png");

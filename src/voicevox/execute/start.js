@@ -113,7 +113,7 @@ function createEmbed(textCh, voiceCh, status){
          case ("notTextch") : {
             embed.setTitle(`#${textCh.name}での読み上げは専門外なのだ`);
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "テキストチャンネルにのみ対応してます"});
+            embed.setFooter({text: "テキストチャンネルにのみ対応してるのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/normal.png");
@@ -122,7 +122,7 @@ function createEmbed(textCh, voiceCh, status){
         case "notVoicech" : {
             embed.setTitle("ぼくはどこで読み上げをすればいいのだ？");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "ボイスチャンネルに入ってから呼んでください"});
+            embed.setFooter({text: "ボイスチャンネルに入ってから呼ぶのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/think.png");
@@ -131,7 +131,7 @@ function createEmbed(textCh, voiceCh, status){
         case "cantJoin" : {
             embed.setTitle(`🔊${voiceCh.name}に参加できないのだ`);
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "ボイスチャンネルのメンバーや許容人数を確認してください"});
+            embed.setFooter({text: "ボイスチャンネルのメンバーや許容人数を確認するのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/cry.png");
@@ -140,7 +140,7 @@ function createEmbed(textCh, voiceCh, status){
         case "cantSpeak" : {
             embed.setTitle(`ぼくは🔊${voiceCh.name}で喋れないのだ`);
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "Snyivotに喋る権限を与えてください"});
+            embed.setFooter({text: "Snyivotに喋る権限を与えるのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/cry.png");
@@ -149,7 +149,7 @@ function createEmbed(textCh, voiceCh, status){
         case "isReading" : {
             embed.setTitle("これ以上ぼくに何を要求するのだ...");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "既に読み上げを行っています"});
+            embed.setFooter({text: "既に読み上げを行っているのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/anger.png");
@@ -158,7 +158,7 @@ function createEmbed(textCh, voiceCh, status){
         case "notMember" : {
             embed.setTitle(`ぼくは#${textCh.name}に入れてもらってないのだ`);
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "Snyivotをメンバーに加えてください"});
+            embed.setFooter({text: "Snyivotをメンバーに加えるのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
  	        attachment.setFile("assets/zundamon/icon/cry.png");

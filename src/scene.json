@@ -39,6 +39,7 @@
     },
     {
         "scene" : "mention",
+        "content" : "ver 1.3.0",
         "buttons" : [
             {
                 "label" : "呼ぶ",
@@ -71,25 +72,25 @@
                     {
                         "label" : "cohere",
                         "value" : "cohere_home",
-                        "description" : "Snyivotに質問ができるよ！",
+                        "description" : "Snyivotに質問ができるのだ！",
                         "emoji" : "🤖"
                     },
                     {
                         "label" : "voicevox",
                         "value" : "voicevox_home",
-                        "description" : "読み上げができるよ！",
+                        "description" : "読み上げができるのだ！",
                         "emoji" : "🎙️"
                     },
                     {
                         "label" : "game",
                         "value" : "game_home",
-                        "description" : "ミニゲームができるよ！",
+                        "description" : "ミニゲームができるのだ！",
                         "emoji" : "🎮"
                     },
                     {
                         "label" : "README",
                         "value" : "readme_exe",
-                        "description" : "READMEを送信するよ！",
+                        "description" : "READMEを送信するのだ！",
                         "emoji" : "📑"
                     }
                 ]
@@ -109,13 +110,72 @@
         "scene" : "cohere_home",
         "embeds" : [
             {
-                "title" : "アップデートを待ってね！",
+                "title" : "cohereの何をするのだ？",
                 "url" : "",
-                "thumbnail" : "assets/zundamon/icon/bunny.png",
+                "thumbnail" : "assets/zundamon/icon/think.png",
                 "description" : "",
                 "fields" : [],
                 "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
                 "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "cohere_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "label" : "question",
+                        "value" : "cohere_question_exe",
+                        "description" : "質問ができるのだ！",
+                        "emoji" : "💭"
+                    },
+                    {
+                        "label" : "help",
+                        "value" : "cohere_help_home",
+                        "description" : "使い方を教えるのだ！",
+                        "emoji" : "❓"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "cohere_help_home",
+        "embeds" : [
+            {
+                "title" : "何の使い方を知りたいのだ？",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
+                "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "cohere_help_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "label" : "question",
+                        "value" : "cohere_help_question_exe",
+                        "description" : "質問についてなのだ",
+                        "emoji" : "💭"
+                    }
+                ]
             }
         ],
         "buttons" : [
@@ -150,43 +210,43 @@
                     {
                         "label" : "start",
                         "value" : "voicevox_start_exe",
-                        "description" : "読み上げを開始するよ！",
+                        "description" : "読み上げを開始するのだ！",
                         "emoji" : "🔈"
                     },
                     {
                         "label" : "end",
                         "value" : "voicevox_end_exe",
-                        "description" : "読み上げを終了するよ！",
+                        "description" : "読み上げを終了するのだ！",
                         "emoji" : "🔇"
                     },
                     {
                         "label" : "setting_user",
                         "value" : "voicevox_setting_user_home",
-                        "description" : "ユーザー情報の設定をするよ！",
+                        "description" : "ユーザー情報の設定をするのだ！",
                         "emoji" : "👤"
                     },
                     {
                         "label" : "setting_server",
                         "value" : "voicevox_setting_server_home",
-                        "description" : "サーバー情報の設定をするよ！",
+                        "description" : "サーバー情報の設定をするのだ！",
                         "emoji" : "👥"
                     },
                     {
                         "label" : "dictionary_add",
                         "value" : "voicevox_dictionary_add_exe",
-                        "description" : "辞書に単語を追加するよ！",
+                        "description" : "辞書に単語を追加するのだ！",
                         "emoji" : "📥"
                     },
                     {
                         "label" : "dictionary_delete",
                         "value" : "voicevox_dictionary_delete_exe",
-                        "description" : "辞書の単語を削除するよ！",
+                        "description" : "辞書の単語を削除するのだ！",
                         "emoji" : "📤"
                     },
                     {
                         "label" : "help",
                         "value" : "voicevox_help_home",
-                        "description" : "使い方を教えるよ！",
+                        "description" : "使い方を教えるのだ！",
                         "emoji" : "❓"
                     }
                 ]
@@ -368,12 +428,13 @@
         "scene" : "game_home",
         "embeds" : [
             {
-                "title" : "アップデートを待ってね！",
+                "title" : "Coming Soon...",
                 "url" : "",
                 "thumbnail" : "assets/zundamon/icon/bunny.png",
                 "description" : "",
                 "fields" : [],
                 "image" : "",
+                "footer" : "アップデートを待つのだ！",
                 "color" : "00FF00"
             }
         ],

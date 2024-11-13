@@ -1,7 +1,7 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/10/29
+    2024/11/12
 ******************/
 
 module.exports = {
@@ -18,8 +18,8 @@ module.exports = {
 
 require('dotenv').config();
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
-const cui = require('./cui');
-const gui = require('./gui')
+const vv_cui = require('./cui');
+const vv_gui = require('./gui')
 const vv_read = require('./execute/read');
 const vv_observe = require('./execute/observe');
 
@@ -42,36 +42,36 @@ async function getSpeakers(){
 
 //コマンドの取得
 function getSlashCmd(){
-    return cui.getSlashCmds();
+    return vv_cui.getSlashCmds();
 }
 
 //CUIコマンドの実行
 async function cuiCmd(interaction, channel_map, subsc_map, speakers){
-    cui.cmd(interaction, channel_map, subsc_map, speakers);
+    vv_cui.cmd(interaction, channel_map, subsc_map, speakers);
     return 0;
 }
 
 //GUIメニューの実行
 async function guiMenu(interaction, channel_map, subsc_map, speakers){
-    await gui.guiMenu(interaction, channel_map, subsc_map, speakers);
+    await vv_gui.menu(interaction, channel_map, subsc_map, speakers);
     return 0;
 }
 
 //GUIボタンの実行
 async function guiButton(interaction, speakers){
-    await gui.guiButton(interaction, speakers);
+    await vv_gui.button(interaction, speakers);
     return 0;
 }
 
 //GUIモーダルの実行
 async function guiModal(interaction, speakers){
-    await gui.guiModal(interaction, speakers);
+    await vv_gui.modal(interaction, speakers);
     return 0;
 }
 
 //コマンドの補助
 async function autocomplete(interaction, speakers){
-    cui.autocomplete(interaction, speakers)
+    vv_cui.autocomplete(interaction, speakers)
     return 0;
 }
 

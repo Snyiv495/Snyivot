@@ -1,26 +1,30 @@
 /*****************
     gui.js
     スニャイヴ
-    2024/10/29
+    2024/11/13
 *****************/
 
 module.exports = {
-    createGui: createGui,
-    sendGui: sendGui,
+    send: send,
+    menu: menu,
 }
 
 const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuOptionBuilder} = require("discord.js");
+const readme = require("./execute/readme");
 
 //GUIの作成
-async function createGui(id, scene){
+async function create(id, scene){
     let files = [];
     let embeds = [];
     let components = [];
+    let content = null;
     let menus = null;
     let buttons = null;
 
     for(let i=0; i<scene.length; i++){
         if(scene[i].scene === id){
+            //文章の動的作成
+            content = scene[i].content ? scene[i].content : null;
 
             //埋め込みの動的作成
             if(scene[i].embeds){
@@ -90,18 +94,48 @@ async function createGui(id, scene){
         }
     }
 
-    return {content: "", files: files, embeds: embeds, components: components, ephemeral: true};
+    return {content: content, files: files, embeds: embeds, components: components, ephemeral: true};
 }
 
 //GUIの送信
-async function sendGui(interaction, scene){
-    const id = interaction.values ? interaction.values[0] : interaction.customId;
-    if(id==="home"){
-        await interaction.deferReply({ephemeral: true});
-    }else{
-        await interaction.deferUpdate();
-        await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
+async function send(interaction, scene){
+    const id = !interaction.values ? !interaction.customId ? "mention" : interaction.customId : interaction.values[0];
+    switch(id){
+        case "mention" : {
+            await interaction.reply(await create(id, scene));
+            return 0;
+        }
+        case "home" : {
+            await interaction.deferReply({ephemeral: true});
+            break;
+        }
+        default : {
+            await interaction.deferUpdate();
+            await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
+        }
     }
-    await interaction.editReply(await createGui(id, scene));
+
+    await interaction.editReply(await create(id, scene));
+    return 0;
+}
+
+//GUIメニューの実行
+async function menu(interaction){
+    //サーバー以外を除外
+    if(!interaction.guild){
+        console.log("後で修正");
+        return;
+    }
+
+    switch(interaction.values[0]){
+        case "readme_exe" : {
+            await interaction.deferUpdate();
+            await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
+            await readme.exe(interaction);
+            break;
+        }
+        default : break;
+    }
+
     return 0;
 }

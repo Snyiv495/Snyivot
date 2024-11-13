@@ -73,7 +73,7 @@ async function createEmbed(info, name, need_sudo=false){
     if(need_sudo){
         embed.setTitle(`${name}さんに管理者権限がないのだ`);
         embed.setThumbnail("attachment://icon.png");
-        embed.setFooter({text: "このコマンドの利用には管理者権限が必要です"});
+        embed.setFooter({text: "このコマンドの利用には管理者権限が必要なのだ"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/agitate.png");
@@ -83,7 +83,7 @@ async function createEmbed(info, name, need_sudo=false){
     if(!info.speaker){
         embed.setTitle("そんなスピーカー知らないのだ");
         embed.setThumbnail("attachment://icon.png");
-        embed.setFooter({text: "存在しないスピーカーが入力されました"});
+        embed.setFooter({text: "存在しないスピーカーが入力されたのだ"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/anger.png");
@@ -93,7 +93,7 @@ async function createEmbed(info, name, need_sudo=false){
     if(!info.style){
         embed.setTitle("そんなスタイル知らないのだ");
         embed.setThumbnail("attachment://icon.png");
-        embed.setFooter({text: "存在しないスタイルが入力されました"});
+        embed.setFooter({text: "存在しないスタイルが入力されたのだ"});
         embed.setColor(0xFF0000);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/anger.png");

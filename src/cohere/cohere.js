@@ -1,43 +1,52 @@
 /*****************
     cohere.js
     スニャイヴ
-    2024/10/18
+    2024/11/13
 *****************/
 
 module.exports = {
-    getCmd: getCmd,
+    getSlashCmd: getSlashCmd,
     cuiCmd: cuiCmd,
-    sendAns: sendAns,
+    guiMenu: guiMenu,
+    guiModal: guiModal,
+    mention: mention,
 }
 
-const help = require('./help');
-const question = require('./question');
+const ch_cui = require('./cui');
+const ch_gui = require('./gui');
+const ch_question = require('./execute/question');
 
 //コマンドの取得
-function getCmd(){
-    const cmds = [help.getCmd(), question.getCmd()];
-    return cmds;
+function getSlashCmd(){
+    return ch_cui.getSlashCmds();
 }
 
 //コマンドの実行
-async function cuiCmd(interaction){
-    switch(interaction.commandName){
-        case "cohere" : {
-            await question.showModal(interaction);
-            break;
-        }
-        case "cohere_help" : {
-            await help.sendHelp(interaction);
-            break;
-        }
-        default : break;
-    }
-
-    return;
+async function cuiCmd(interaction, readme){
+    ch_cui.cmd(interaction, readme);
+    return 0;
 }
 
-//回答の送信
-async function sendAns(msgInte, readme){
-    await question.sendAns(msgInte, readme);
-    return;
+//GUIメニューの実行
+async function guiMenu(interaction){
+    await ch_gui.menu(interaction);
+    return 0;
+}
+
+//GUIボタンの実行
+async function guiButton(interaction){
+    await ch_gui.button(interaction);
+    return 0;
+}
+
+//GUIモーダルの実行
+async function guiModal(interaction, readme){
+    await ch_gui.modal(interaction, readme);
+    return 0;
+}
+
+//メンションの実行
+async function mention(message, readme){
+    await ch_question.exe(message, message.content.replace(`<@${process.env.BOT_ID}>`, ""), readme);
+    return 0;
 }

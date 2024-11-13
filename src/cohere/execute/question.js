@@ -1,49 +1,18 @@
 /******************
     question.js
     スニャイヴ
-    2024/10/18
+    2024/11/12
 ******************/
 
 module.exports = {
-    getCmd: getCmd,
-    showModal: showModal,
-    sendAns: sendAns,
+    exe: execute,
 }
 
 require('dotenv').config();
-const {SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const {CohereClient} = require('cohere-ai');
 const cohere = new CohereClient({token: process.env.COHERE_TOKEN});
 const cui = require('../cui');
-
-//コマンドの取得
-function getCmd(){
-    const cohere = new SlashCommandBuilder();
-
-    cohere.setName("cohere");
-    cohere.setDescription("AI質問コマンド");
-    
-    return cohere;
-}
-
-//モーダルの表示
-async function showModal(interaction){
-    const question = new TextInputBuilder();
-    const modal = new ModalBuilder();
-
-    question.setCustomId("inputFiled_question")
-    question.setLabel("質問内容を入力してください")
-    question.setStyle(TextInputStyle.Short);
-    question.setRequired(true);
-
-	modal.setCustomId("modal_cohere")
-	modal.setTitle("質問送信フォーム");
-    modal.addComponents(new ActionRowBuilder().addComponents(question));
-
-    await interaction.showModal(modal);
-
-    return;
-}
 
 //回答の生成
 async function generateAns(question, readme){
@@ -75,7 +44,7 @@ async function generateAns(question, readme){
         return (await cohere.chat({model: "command-r-plus", message: question, preamble: preamble})).text;
     }catch(e){console.log(e);}
 
-    return;
+    return -1;
 }
 
 //埋め込みの作成
@@ -96,30 +65,27 @@ function createEmbed(question, anser){
     return {content: "", embeds: [embed], ephemeral: true};
 }
 
-//回答の送信
-async function sendAns(msgInte, readme){
-    let question = msgInte.content ? msgInte.content.replace(`<@${process.env.BOT_ID}>`, "") : msgInte.fields.getTextInputValue("inputFiled_question");
+//質問
+async function execute(interaction, content, readme){
     let progress = null;
     try{
-        progress = await cui.createProgressbar(msgInte, 3);
-    }catch(e){};
+        progress = await cui.createProgressbar(interaction, 2);
+        progress = await cui.stepProgressbar(progress);
+    }catch(e){}
 
-    progress = progress ? await cui.stepProgress(msgInte, progress) : null;
+    let anser = await generateAns(content, readme);
 
-    let anser = await generateAns(question, readme);
-    
-    progress = progress ? await cui.stepProgress(msgInte, progress) : null;
-
-    question = (question.length>4000) ? question.substr(0, 3992) + "...<以下略>" : question;
+    content = (content.length>4000) ? content.substr(0, 3992) + "...<以下略>" : content;
     anser = (anser.length>1000) ? anser.substr(0, 992) + "...<以下略>" : anser;
 
-    if(!progress){
-        msgInte.reply(createEmbed(question, anser));
-        return;
+    if(!interaction.type){
+        await interaction.reply(createEmbed(content, anser));
+        return 0;
     }
 
-    progress = progress ? await cui.stepProgress(msgInte, progress) : null;
-    await msgInte.editReply(createEmbed(question, anser));
+    progress = await cui.stepProgressbar(progress);
 
-    return;
+    await interaction.editReply(createEmbed(content, anser));
+
+    return 0;
 }

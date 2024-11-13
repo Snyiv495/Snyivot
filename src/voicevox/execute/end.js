@@ -75,7 +75,7 @@ function createEmbed(textCh, voiceCh, status){
     if(!status){
         embed.setTitle("お疲れ様なのだ");
         embed.setThumbnail("attachment://icon.png");
-        embed.setFooter({text: `🔊${voiceCh.name}での読み上げを終了します`});
+        embed.setFooter({text: `🔊${voiceCh.name}での読み上げを終了するのだ`});
         embed.setColor(0x00FF00);
         attachment.setName("icon.png");
         attachment.setFile("assets/zundamon/icon/sleep.png");
@@ -87,7 +87,7 @@ function createEmbed(textCh, voiceCh, status){
         case "notReading" : {
             embed.setTitle(`#${textCh.name}で読み上げをしてないのだ`);
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "読み上げを行ってるチャンネルで使用してください"});
+            embed.setFooter({text: "読み上げを行ってるチャンネルで使用するのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
             attachment.setFile("assets/zundamon/icon/anger.png");
@@ -96,7 +96,7 @@ function createEmbed(textCh, voiceCh, status){
         case "notVoicech" : {
             embed.setTitle("君に権限がないのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: "読み上げを行っているボイスチャンネルに接続してから使用してください"});
+            embed.setFooter({text: "読み上げを行っているボイスチャンネルに接続してから使用するのだ"});
             embed.setColor(0xFF0000);
             attachment.setName("icon.png");
             attachment.setFile("assets/zundamon/icon/agitate.png");

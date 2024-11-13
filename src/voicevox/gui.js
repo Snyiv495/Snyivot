@@ -1,16 +1,16 @@
 /*****************
     gui.js
     スニャイヴ
-    2024/10/29
+    2024/11/12
 *****************/
 
 module.exports = {
-    guiMenu: guiMenu,
-    guiButton: guiButton,
-    guiModal: guiModal,
+    menu: menu,
+    button: button,
+    modal: modal,
 }
 
-const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuOptionBuilder, TextInputBuilder, ModalBuilder, TextInputStyle} = require("discord.js");
+const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, TextInputBuilder, ModalBuilder, TextInputStyle} = require("discord.js");
 const axios = require('axios').create({baseURL: process.env.VOICEVOX_SERVER, proxy: false});
 
 require('dotenv').config();
@@ -357,7 +357,7 @@ async function createDictDelGUI(){
 }
 
 //GUIメニューの実行
-async function guiMenu(interaction, channel_map, subsc_map, speakers){
+async function menu(interaction, channel_map, subsc_map, speakers){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -463,17 +463,17 @@ async function guiMenu(interaction, channel_map, subsc_map, speakers){
 }
 
 //GUIボタンの実行
-async function guiButton(interaction, speakers){
+async function button(interaction, speakers){
 
     await interaction.deferUpdate();
     await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
 
     switch(true){
-        case /user_id/.test(interaction.customId) : {
+        case /voicevox_setting_user_id/.test(interaction.customId) : {
             await interaction.editReply(await createSpeakerStyleGUI(interaction.customId, speakers, true));
             break;
         }
-        case /server_id/.test(interaction.customId) : {
+        case /voicevox_setting_server_id/.test(interaction.customId) : {
             await interaction.editReply(await createSpeakerStyleGUI(interaction.customId, speakers, false));
             break;
         }
@@ -498,7 +498,7 @@ async function guiButton(interaction, speakers){
 }
 
 //GUIモーダルの実行
-async function guiModal(interaction, speakers){
+async function modal(interaction, speakers){
     await interaction.deferUpdate();
     await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
 

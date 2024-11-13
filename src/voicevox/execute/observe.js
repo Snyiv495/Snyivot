@@ -23,7 +23,7 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
         case "autoEnd" : {
             embed.setTitle("誰もいないしぼくも帰るのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
+            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了するのだ`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
             attachment.setFile("assets/zundamon/icon/sleep.png");
@@ -32,7 +32,7 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
         case "compulsionEnd" : {
             embed.setTitle("追い出されたのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了します`});
+            embed.setFooter({text: `🔊${oldVoiceChName}での読み上げを終了するのだ`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
             attachment.setFile("assets/zundamon/icon/cry.png");
@@ -41,7 +41,7 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
         case "compulsionMove" : {
             embed.setTitle("ボイスチャンネルを移動させられたのだ");
             embed.setThumbnail("attachment://icon.png");
-            embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動しました`});
+            embed.setFooter({text: `🔊${oldVoiceChName}から🔊${newVoiceChName}に移動したのだ`});
             embed.setColor(0x00FF00);
             attachment.setName("icon.png");
             attachment.setFile("assets/zundamon/icon/guide.png");

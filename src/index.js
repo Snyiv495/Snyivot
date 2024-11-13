@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/10/29
+    2024/11/12
 *****************/
 
 require('dotenv').config();
@@ -73,12 +73,12 @@ client.on('messageCreate', async message => {
 
         //内容がなければヘルプ
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            await message.reply(await gui.createGui("mention", scene));
+            await gui.send(message, scene);
         }
        
         //内容があれば回答
         else{
-            await cohere.sendAns(message, readme);
+            await cohere.mention(message, readme);
         }
         
         //メンション文を削除
@@ -92,10 +92,10 @@ client.on('messageCreate', async message => {
     //読み上げ
     if(channel_map.get(message.channelId)){
         voicevox.read(message, subsc_map.get(channel_map.get(message.channelId)));
-        return;
+        return 0;
     }
     
-    return 0;
+    return -1;
 });
 
 //コマンド動作
@@ -114,6 +114,12 @@ client.on('interactionCreate', async (interaction) => {
     //voicevox
     if(interaction.commandName.includes("voicevox")){
         await voicevox.cuiCmd(interaction, channel_map, subsc_map, vv_speakers);
+        return 0;
+    }
+
+    //readme
+    if(interaction.commandName === "readme"){
+        await cui.cmd(interaction);
         return 0;
     }
 
@@ -142,7 +148,7 @@ client.on('interactionCreate', async (interaction) => {
     if(!interaction.isAnySelectMenu()){
         return -1;
     }
-    
+
     //コマンドの実行
     if(interaction.values[0].includes("exe")){
         if(interaction.customId.includes("cohere")){
@@ -152,10 +158,11 @@ client.on('interactionCreate', async (interaction) => {
 
         if(interaction.customId.includes("voicevox")){
             await voicevox.guiMenu(interaction, channel_map, subsc_map, vv_speakers);
-            return 0
+            return 0;
         }
 
-        if(interaction.customId.includes("readme")){
+        if(interaction.customId.includes("home")){
+            await gui.menu(interaction);
             return 0;
         }
 
@@ -163,7 +170,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     //GUIの送信
-    await gui.sendGui(interaction, scene);
+    await gui.send(interaction, scene);
 
     return 0;
 
@@ -192,7 +199,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     //GUIの送信
-    await gui.sendGui(interaction, scene);
+    await gui.send(interaction, scene);
 
     return 0;
 });
