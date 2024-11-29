@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/11/13
+    2024/11/22
 *****************/
 
 module.exports = {
@@ -14,6 +14,7 @@ module.exports = {
 const {SlashCommandBuilder} = require('discord.js');
 const readme = require('./execute/readme')
 const cohere = require('./cohere/cohere');
+const game = require('./game/game');
 const voicevox = require('./voicevox/voicevox');
 
 //コマンドの取得
@@ -22,6 +23,7 @@ function getSlashCmds(){
 
     cmds = cmds.concat(getReadmeCmd());
     cmds = cmds.concat(cohere.getSlashCmd());
+    cmds = cmds.concat(game.getSlashCmd());
     cmds = cmds.concat(voicevox.getSlashCmd());
 
     return cmds;

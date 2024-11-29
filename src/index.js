@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/11/12
+    2024/11/22
 *****************/
 
 require('dotenv').config();
@@ -10,6 +10,7 @@ const fs = require('fs');
 const cui = require('./cui');
 const gui = require('./gui');
 const cohere = require('./cohere/cohere');
+const game = require('./game/game');
 const voicevox = require('./voicevox/voicevox');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
@@ -111,6 +112,12 @@ client.on('interactionCreate', async (interaction) => {
         return 0;
     }
 
+    //game
+    if(interaction.commandName.includes("game")){
+        await game.cuiCmd(interaction);
+        return 0;
+    }
+
     //voicevox
     if(interaction.commandName.includes("voicevox")){
         await voicevox.cuiCmd(interaction, channel_map, subsc_map, vv_speakers);
@@ -190,6 +197,11 @@ client.on('interactionCreate', async (interaction) => {
             return 0;
         }
 
+        if(interaction.customId.includes("game")){
+            await game.guiButton(interaction);
+            return 0;
+        }
+        
         if(interaction.customId.includes("voicevox")){
             await voicevox.guiButton(interaction, vv_speakers);
             return 0

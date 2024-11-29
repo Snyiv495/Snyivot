@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/10/29
+    2024/11/28
 *****************/
 
 module.exports = {
@@ -291,7 +291,7 @@ async function cmd(interaction, channel_map, subsc_map, speakers){
             options.style = interaction.options.get("style") ? interaction.options.get("style").value : null;
             options.speed = interaction.options.get("speed") ? interaction.options.get("speed").value : null;
             options.pitch = interaction.options.get("pitch") ? interaction.options.get("pitch").value : null;
-            options.intonation = interaction.options.get("intonation") ? interaction.options.get("itonation").value : null;
+            options.intonation = interaction.options.get("intonation") ? interaction.options.get("intonation").value : null;
             options.volume = interaction.options.get("volume") ? interaction.options.get("volume").value : null;
             options.username = interaction.options.get("username") ? interaction.options.get("username").value : null;
             await vv_setting_user.exe(interaction, speakers, options);
