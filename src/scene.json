@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.3.1\nスロットGUIのβ版実装！\n今だけ回し放題！",
+        "content" : "ver 1.3.2\nスロットβ版実装！\n呼ぶ->game->slotで\n今だけ回し放題！",
         "buttons" : [
             {
                 "label" : "呼ぶ",
