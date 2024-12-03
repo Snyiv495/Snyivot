@@ -56,7 +56,7 @@ function getHelpCmd(){
 }
 
 //CUIコマンドの実行
-async function cmd(interaction){
+async function cmd(interaction, game_slot_map){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -66,7 +66,7 @@ async function cmd(interaction){
     switch(interaction.commandName){
         case "game_casino_slot" : {
             await interaction.deferReply({ephemeral: true});
-            await gm_casino_slot.exe(interaction);
+            await gm_casino_slot.exe(interaction, game_slot_map);
             break;
         }
         case "game_help" : {

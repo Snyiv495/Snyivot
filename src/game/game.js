@@ -22,20 +22,20 @@ function getSlashCmd(){
 }
 
 //CUIコマンドの実行
-async function cuiCmd(interaction){
-    gm_cui.cmd(interaction);
+async function cuiCmd(interaction, game_slot_map){
+    gm_cui.cmd(interaction, game_slot_map);
     return 0;
 }
 
 //GUIメニューの実行
-async function guiMenu(interaction){
-    await gm_gui.menu(interaction);
+async function guiMenu(interaction, game_slot_map){
+    await gm_gui.menu(interaction, game_slot_map);
     return 0;
 }
 
 //GUIボタンの実行
-async function guiButton(interaction){
-    await gm_gui.button(interaction);
+async function guiButton(interaction, game_slot_map){
+    await gm_gui.button(interaction, game_slot_map);
     return 0;
 }
 
