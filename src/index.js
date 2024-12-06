@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/11/22
+    2024/12/06
 *****************/
 
 require('dotenv').config();
@@ -16,7 +16,8 @@ const voicevox = require('./voicevox/voicevox');
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
 const vv_channel_map = new Map();
 const vv_subsc_map = new Map();
-const game_slot_map = new Map()
+const game_casino_slot_map = new Map()
+
 let readme;
 let scene;
 let vv_speakers;
@@ -115,7 +116,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //game
     if(interaction.commandName.includes("game")){
-        await game.cuiCmd(interaction, game_slot_map);
+        await game.cuiCmd(interaction, game_casino_slot_map);
         return 0;
     }
 
@@ -165,7 +166,7 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         if(interaction.customId.includes("game")){
-            await game.guiMenu(interaction, game_slot_map);
+            await game.guiMenu(interaction, game_casino_slot_map);
             return 0;
         }
 
@@ -204,7 +205,7 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         if(interaction.customId.includes("game")){
-            await game.guiButton(interaction, game_slot_map);
+            await game.guiButton(interaction, game_casino_slot_map);
             return 0;
         }
 

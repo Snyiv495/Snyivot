@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/11/20
+    2024/12/05
 *****************/
 
 module.exports = {
@@ -13,8 +13,8 @@ module.exports = {
 
 require('dotenv').config();
 const {SlashCommandBuilder} = require('discord.js');
-const gm_casino_slot = require('./execute/casinoSlot');
-//const gm_help = require('./execute/help');
+const casino_slot = require('./execute/casino/slot');
+//const help = require('./execute/help');
 
 //スラッシュコマンドの取得
 function getSlashCmds(){
@@ -28,21 +28,21 @@ function getSlashCmds(){
 
 //スロットコマンドの取得
 function getCasinoSlotCmd(){
-    const casino_slot = new SlashCommandBuilder();
+    const cmd = new SlashCommandBuilder();
 
-    casino_slot.setName("game_casino_slot");
-    casino_slot.setDescription("スロットをプレイするコマンドなのだ！");
+    cmd.setName("game_casino_slot");
+    cmd.setDescription("スロットをプレイするコマンドなのだ！");
 
-    return casino_slot;
+    return cmd;
 }
 
 //ヘルプコマンドの取得
 function getHelpCmd(){
-    const help = new SlashCommandBuilder();
+    const cmd = new SlashCommandBuilder();
 
-    help.setName("game_help");
-    help.setDescription("ゲームのヘルプコマンドなのだ！");
-    help.addStringOption(option => {
+    cmd.setName("game_help");
+    cmd.setDescription("ゲームのヘルプコマンドなのだ！");
+    cmd.addStringOption(option => {
         option.setName("content");
         option.setDescription("内容を選択するのだ！");
         option.addChoices(
@@ -52,11 +52,11 @@ function getHelpCmd(){
         return option;
     });
     
-    return help;
+    return cmd;
 }
 
 //CUIコマンドの実行
-async function cmd(interaction, game_slot_map){
+async function cmd(interaction, slot_map){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -66,13 +66,13 @@ async function cmd(interaction, game_slot_map){
     switch(interaction.commandName){
         case "game_casino_slot" : {
             await interaction.deferReply({ephemeral: true});
-            await gm_casino_slot.exe(interaction, game_slot_map);
+            await casino_slot.exe(interaction, slot_map);
             break;
         }
         case "game_help" : {
             const options = {content : null};
             options.content = interaction.options.get("content").value;
-            await gm_help.exe(interaction, options);
+            await game_help.exe(interaction, options);
             break;
         }
         default : break;

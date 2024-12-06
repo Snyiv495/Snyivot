@@ -209,7 +209,7 @@
                 "options" : [
                     {
                         "label" : "slot",
-                        "value" : "game_slot_exe",
+                        "value" : "game_casino_slot_exe",
                         "description" : "スロットをプレイするのだ！",
                         "emoji" : "🎰"
                     }
