@@ -12,8 +12,8 @@ module.exports = {
 }
 
 const Keyv = require('keyv');
-const user = new Keyv('sqlite://db.sqlite', {table: 'user'});
-const server = new Keyv('sqlite://db.sqlite', {teble: 'server'})
+const user = new Keyv('sqlite://db.sqlite', {table: 'voicevox_user'});
+const server = new Keyv('sqlite://db.sqlite', {teble: 'voicevox_server'})
 
 //ユーザ情報を取得する
 async function getUserInfo(id){
