@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.3.2\nスロットβ版実装！\n呼ぶ->game->slotで\n今だけ回し放題！",
+        "content" : "ver 1.3.3\nボタン操作の応答速度UP!\nスロットβ版, 呼ぶ→game→slotで今だけ回し放題！",
         "buttons" : [
             {
                 "label" : "呼ぶ",
