@@ -1,7 +1,7 @@
 /******************
     voicevox.js    
     スニャイヴ
-    2024/11/12
+    2024/12/16
 ******************/
 
 module.exports = {
@@ -82,22 +82,22 @@ function read(message, subsc){
 }
 
 //VCの監視
-function observe(oldState, newState, channel_map, subsc_map){
+function observe(oldState, newState, map){
     //自動終了
-    if(subsc_map.get(oldState.channelId) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
-        vv_observe.autoEnd(oldState, channel_map, subsc_map);
+    if(map.get(`voice_${oldState.channelId}`) && oldState.channel.members.filter((member)=>!member.user.bot).size < 1){
+        vv_observe.autoEnd(oldState, map);
         return 0;
     }
 
     //強制退出時の処理
-    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
-        vv_observe.compulsionEnd(oldState, channel_map, subsc_map);
+    if(map.get(`voice_${oldState.channelId}`) && !oldState.channel.members.has(process.env.BOT_ID) && !newState.channel){
+        vv_observe.compulsionEnd(oldState, map);
         return 0;
     }
 
     //強制移動時の処理
-    if(subsc_map.get(oldState.channelId) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
-        vv_observe.compulsionMove(oldState, newState, channel_map, subsc_map);
+    if(map.get(`voice_${oldState.channelId}`) && !oldState.channel.members.has(process.env.BOT_ID) && newState.channel){
+        vv_observe.compulsionMove(oldState, newState, map);
         return 0;
     }
 

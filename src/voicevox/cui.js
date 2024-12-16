@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/11/28
+    2024/12/16
 *****************/
 
 module.exports = {
@@ -269,7 +269,7 @@ function getHelpCmd(){
 }
 
 //CUIコマンドの実行
-async function cmd(interaction, channel_map, subsc_map, speakers){
+async function cmd(interaction, map, speakers){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -278,11 +278,11 @@ async function cmd(interaction, channel_map, subsc_map, speakers){
 
     switch(interaction.commandName){
         case "voicevox_start" : {
-            await vv_start.exe(interaction, channel_map, subsc_map);
+            await vv_start.exe(interaction, map);
             break;
         }
         case "voicevox_end" : {
-            await vv_end.exe(interaction, channel_map, subsc_map);
+            await vv_end.exe(interaction, map);
             break;
         }
         case "voicevox_setting_user" : {

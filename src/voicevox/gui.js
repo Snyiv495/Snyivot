@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2024/11/12
+    2024/12/16
 *****************/
 
 module.exports = {
@@ -357,7 +357,7 @@ async function createDictDelGUI(){
 }
 
 //GUIメニューの実行
-async function menu(interaction, channel_map, subsc_map, speakers){
+async function menu(interaction, map, speakers){
     //サーバー以外を除外
     if(!interaction.guild){
         console.log("後で修正");
@@ -368,13 +368,13 @@ async function menu(interaction, channel_map, subsc_map, speakers){
         case "voicevox_start_exe" : {
             await interaction.deferUpdate();
             await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
-            await vv_start.exe(interaction, channel_map, subsc_map);
+            await vv_start.exe(interaction, map);
             break;
         }
         case "voicevox_end_exe" : {
             await interaction.deferUpdate();
             await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
-            await vv_end.exe(interaction, channel_map, subsc_map);
+            await vv_end.exe(interaction, map);
             break;
         }
         case "voicevox_setting_user_speaker_style_exe" : {

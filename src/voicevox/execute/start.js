@@ -1,7 +1,7 @@
 /*****************
     start.js
     スニャイヴ
-    2024/10/29
+    2024/12/16
 *****************/
 
 module.exports = {
@@ -14,7 +14,7 @@ const {joinVoiceChannel, createAudioPlayer} = require('@discordjs/voice');
 const cui = require('../cui');
 
 //状況の取得
-function getStatus(textCh, voiceCh, channel_map){
+function getStatus(textCh, voiceCh, map){
 
     //テキストチャンネルか確認
     if(!(textCh.type == 0 || textCh.type == 2)){
@@ -37,7 +37,7 @@ function getStatus(textCh, voiceCh, channel_map){
     }
 
     //既に読み上げを行っていないか確認
-    if(voiceCh == channel_map.get(textCh.id)){
+    if(voiceCh == (map.get(`text_${textCh.id}`))){
         return "isReading";
     }
 
@@ -55,24 +55,24 @@ function getStatus(textCh, voiceCh, channel_map){
 }
 
 //VCに参加
-function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
+function joinVC(interaction, textCh, voiceCh, map){
     const connectVC = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID));
     
     //同じボイチャで読み上げをしている場合は追加
     if(connectVC && connectVC.id == voiceCh.id){
-        channel_map.set(textCh.id, voiceCh.id);
+        map.set(`text_${textCh.id}`, voiceCh.id);
         return 0;
     }
     
     //他のボイチャで読み上げをしている場合は切断
     if(connectVC && connectVC.id != voiceCh.id){
         interaction.guild.channels.cache.forEach((channel) => {
-            if((channel.type == 0 || channel.type == 2) && channel_map.get(channel.id)){
+            if((channel.type == 0 || channel.type == 2) && map.get(`text_${channel.id}`)){
                 try{
-                    subsc_map.get(channel_map.get(channel.id)).connection.destroy();
+                    map.get(`voice_${map.get(`text_${channel.id}`)}`).connection.destroy();
                 }catch(e){}
-                subsc_map.delete(channel_map.get(channel.id));
-                channel_map.delete(channel.id);
+                map.delete(`voice_${map.get(`text_${channel.id}`)}`);
+                map.delete(`text_${channel.id}`);
             }
         });
     }
@@ -86,8 +86,8 @@ function joinVC(interaction, textCh, voiceCh, channel_map, subsc_map){
             selfMute: false,
             selfDeaf: true,
         })
-        channel_map.set(textCh.id, voiceCh.id);
-        subsc_map.set(voiceCh.id, connection.subscribe(createAudioPlayer()));
+        map.set(`text_${textCh.id}`, voiceCh.id);
+        map.set(`voice_${voiceCh.id}`, connection.subscribe(createAudioPlayer()));
     }catch(e){}
 
     return 0;
@@ -171,7 +171,7 @@ function createEmbed(textCh, voiceCh, status){
 }
 
 //読み上げ開始
-async function execute(interaction, channel_map, subsc_map){
+async function execute(interaction, map){
     const textCh = interaction.channel;
     const voiceCh = interaction.member.voice.channel;
     let progress = null;
@@ -181,7 +181,7 @@ async function execute(interaction, channel_map, subsc_map){
     progress = await cui.createProgressbar(interaction, 2);
 
     //状況の取得
-    status = getStatus(textCh, voiceCh, channel_map);
+    status = getStatus(textCh, voiceCh, map);
     progress = await cui.stepProgressbar(progress);
 
     if(status){
@@ -191,7 +191,7 @@ async function execute(interaction, channel_map, subsc_map){
     }
 
     //VCに参加
-    joinVC(interaction, textCh, voiceCh, channel_map, subsc_map);
+    joinVC(interaction, textCh, voiceCh, map);
     progress = await cui.stepProgressbar(progress);
 
     //成功送信

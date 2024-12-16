@@ -1,7 +1,7 @@
 /*******************
     observe.js    
     スニャイヴ
-    2024/10/21
+    2024/12/16
 *******************/
 
 module.exports = {
@@ -54,21 +54,21 @@ function createEmbed(status, oldVoiceChName, newVoiceChName=null){
 }
 
 //自動終了
-function autoEnd(oldState, channel_map, subsc_map){
+function autoEnd(oldState, map){
     let textCh = null;
 
     oldState.guild.channels.cache.forEach((channel) => {
-        if((channel.type == 0 || channel.type == 2) && channel_map.get(channel.id)){
-            channel_map.delete(channel.id);
+        if((channel.type == 0 || channel.type == 2) && map.get(`text_${channel.id}`)){
+            map.delete(`text_${channel.id}`);
             textCh = channel;
         }
     });
 
     try{
-        subsc_map.get(oldState.channelId).connection.destroy();
+        map.get(`voice_${oldState.channelId}`).connection.destroy();
     }catch(e){}
 
-    subsc_map.delete(oldState.channelId);
+    map.delete(`voice_${oldState.channelId}`);
 
     textCh.send(createEmbed("autoEnd", oldState.channel.name));
 
@@ -76,17 +76,17 @@ function autoEnd(oldState, channel_map, subsc_map){
 }
 
 //強制終了
-function compulsionEnd(oldState, channel_map, subsc_map){
+function compulsionEnd(oldState, map){
     let textCh = null;
 
     oldState.guild.channels.cache.forEach((channel) => {
-        if((channel.type == 0 || channel.type == 2) && channel_map.get(channel.id)){
-            channel_map.delete(channel.id);
+        if((channel.type == 0 || channel.type == 2) && map.get(`text_${channel.id}`)){
+            map.delete(`text_${channel.id}`);
             textCh = channel;
         }
     });
 
-    subsc_map.delete(oldState.channelId);
+    map.delete(`voice_${oldState.channelId}`);
 
     textCh.send(createEmbed("compulsionEnd", oldState.channel.name));
 
@@ -94,12 +94,12 @@ function compulsionEnd(oldState, channel_map, subsc_map){
 }
 
 //強制移動
-function compulsionMove(oldState, newState, channel_map, subsc_map){
+function compulsionMove(oldState, newState, map){
     let textCh = null;
 
     oldState.guild.channels.cache.forEach((channel) => {
-        if((channel.type == 0 || channel.type == 2) && channel_map.get(channel.id)){
-            channel_map.set(channel.id, newState.channelId);
+        if((channel.type == 0 || channel.type == 2) && map.get(`text_${channel.id}`)){
+            map.set(`text_${channel.id}`, newState.channelId);
             textCh = channel;
         }
     });
@@ -113,8 +113,8 @@ function compulsionMove(oldState, newState, channel_map, subsc_map){
             selfDeaf: true,
         })
 
-        subsc_map.set(newState.channelId, connection.subscribe(createAudioPlayer()));
-        subsc_map.delete(oldState.channelId);
+        map.set(`voice_${newState.channelId}`, connection.subscribe(createAudioPlayer()));
+        map.delete(`voice_${oldState.channelId}`);
 
         textCh.send(createEmbed("compulsionMove", oldState.channel.name, newState.channel.name));
     }catch(e){}

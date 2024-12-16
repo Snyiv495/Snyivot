@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/12/06
+    2024/12/11
 *****************/
 
 require('dotenv').config();
@@ -14,9 +14,8 @@ const game = require('./game/game');
 const voicevox = require('./voicevox/voicevox');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
-const vv_channel_map = new Map();
-const vv_subsc_map = new Map();
-const game_casino_slot_map = new Map()
+const voicevox_map = new Map();
+const game_map = new Map();
 
 let readme;
 let scene;
@@ -93,8 +92,8 @@ client.on('messageCreate', async message => {
     }
     
     //読み上げ
-    if(vv_channel_map.get(message.channelId)){
-        voicevox.read(message, vv_subsc_map.get(vv_channel_map.get(message.channelId)));
+    if(voicevox_map.get(`text_${message.channelId}`)){
+        voicevox.read(message, voicevox_map.get(`voice_${voicevox_map.get(`text_${message.channelId}`)}`));
         return 0;
     }
     
@@ -116,13 +115,13 @@ client.on('interactionCreate', async (interaction) => {
 
     //game
     if(interaction.commandName.includes("game")){
-        await game.cuiCmd(interaction, game_casino_slot_map);
+        await game.cuiCmd(interaction, game_map);
         return 0;
     }
 
     //voicevox
     if(interaction.commandName.includes("voicevox")){
-        await voicevox.cuiCmd(interaction, vv_channel_map, vv_subsc_map, vv_speakers);
+        await voicevox.cuiCmd(interaction, voicevox_map, vv_speakers);
         return 0;
     }
 
@@ -166,12 +165,12 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         if(interaction.customId.includes("game")){
-            await game.guiMenu(interaction, game_casino_slot_map);
+            await game.guiMenu(interaction, game_map);
             return 0;
         }
 
         if(interaction.customId.includes("voicevox")){
-            await voicevox.guiMenu(interaction, vv_channel_map, vv_subsc_map, vv_speakers);
+            await voicevox.guiMenu(interaction, voicevox_map, vv_speakers);
             return 0;
         }
 
@@ -205,7 +204,7 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         if(interaction.customId.includes("game")){
-            await game.guiButton(interaction, game_casino_slot_map);
+            await game.guiButton(interaction, game_map);
             return 0;
         }
 
@@ -236,6 +235,12 @@ client.on('interactionCreate', async (interaction) => {
         return 0;
 	}
 
+    //game
+    if(interaction.customId.includes("game")){
+        await game.guiModal(interaction);
+        return 0;
+	}
+
     //voicevox
     if(interaction.customId.includes("voicevox")){
         await voicevox.guiModal(interaction, vv_speakers);
@@ -249,7 +254,7 @@ client.on('interactionCreate', async (interaction) => {
 client.on('voiceStateUpdate', (oldState, newState) => {
 
     //voicevox
-    voicevox.observe(oldState, newState, vv_channel_map, vv_subsc_map);
+    voicevox.observe(oldState, newState, voicevox_map);
 
     return 0;
 });

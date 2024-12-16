@@ -1,7 +1,7 @@
 /*****************
     end.js
     スニャイヴ
-    2024/10/29
+    2024/12/16
 *****************/
 
 module.exports = {
@@ -13,7 +13,7 @@ const {EmbedBuilder, AttachmentBuilder} = require('discord.js');
 const cui = require('../cui');
 
 //接続状況の確認
-function getStatus(interaction, textCh, voiceCh, channel_map){
+function getStatus(interaction, textCh, voiceCh, map){
     const connectVC = interaction.guild.channels.cache.find((channel) => channel.type == 2 && channel.members.get(process.env.BOT_ID)); 
         
     //ボイスチャンネルの確認
@@ -22,7 +22,7 @@ function getStatus(interaction, textCh, voiceCh, channel_map){
     }
 
     //読み上げを行っているか確認
-    if(channel_map.get(textCh.id) != voiceCh.id){
+    if(map.get(`text_${textCh.id}`) != voiceCh.id){
         return "notReading";
     }
 
@@ -30,13 +30,13 @@ function getStatus(interaction, textCh, voiceCh, channel_map){
 }
 
 //任意のテキストチャンネルの読み上げを終了する
-function endAnyTC(interaction, textCh, voiceCh, channel_map, subsc_map){
+function endAnyTC(interaction, textCh, voiceCh, map){
     let only = true;
 
     //他に読み上げを行っているテキストチャンネルがあるか確認する
     interaction.guild.channels.cache.forEach((channel) => {
-        if(channel_map.get(channel.id) && channel.id != textCh){
-            channel_map.delete(textCh.id);
+        if(map.get(`text_${channel.id}`) && channel.id != textCh){
+            map.delete(`text_${channel.id}`);
             only = false;
             return 0;
         }
@@ -44,23 +44,23 @@ function endAnyTC(interaction, textCh, voiceCh, channel_map, subsc_map){
 
     //読み上げを行っているテキストチャンネルがなくなるならボイスチャンネルから切断
     if(only){
-        destroyVC(interaction, voiceCh, channel_map, subsc_map);
+        destroyVC(interaction, voiceCh, map);
     }
 
     return 0;
 }
 
 //ボイスチャンネルから切断
-function destroyVC(interaction, voiceCh, channel_map, subsc_map){
+function destroyVC(interaction, voiceCh, map){
     try{
-        subsc_map.get(voiceCh.id).connection.destroy();
+        map.get(`voice_${voiceCh.id}`).connection.destroy();
     }catch(e){}
 
-    subsc_map.delete(voiceCh.id);
+    map.delete(`voice_${voiceCh.id}`);
 
     interaction.guild.channels.cache.forEach((channel) => {
-        if(channel_map.get(channel.id)){
-            channel_map.delete(channel.id);
+        if(map.get(`text_${channel.id}`)){
+            map.delete(`text_${channel.id}`);
         }
     });
 
@@ -109,7 +109,7 @@ function createEmbed(textCh, voiceCh, status){
 }
 
 //読み上げ終了
-async function execute(interaction, channel_map, subsc_map){
+async function execute(interaction, map){
     const textCh = interaction.channel;
     const voiceCh = interaction.member.voice.channel;
     let progress = null;
@@ -119,7 +119,7 @@ async function execute(interaction, channel_map, subsc_map){
     progress = await cui.createProgressbar(interaction, 2);
 
     //状況の取得
-    status = getStatus(interaction, textCh, voiceCh, channel_map);
+    status = getStatus(interaction, textCh, voiceCh, map);
     progress = await cui.stepProgressbar(progress);
 
     //失敗
@@ -129,7 +129,7 @@ async function execute(interaction, channel_map, subsc_map){
     }
     
     //読み上げ終了
-    endAnyTC(interaction, textCh, voiceCh, channel_map, subsc_map);
+    endAnyTC(interaction, textCh, voiceCh, map);
     progress = await cui.stepProgressbar(progress);
 
     //成功
