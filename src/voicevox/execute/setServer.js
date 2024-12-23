@@ -1,7 +1,7 @@
 /*******************
     setServer.js
     スニャイヴ
-    2024/10/29
+    2024/12/23
 *******************/
 
 module.exports = {
@@ -35,7 +35,7 @@ function getSpeaker(speaker, speakers, info){
         }
     }
 
-    info.speaker = null;
+    info.speaker = undefined;
     return info;
 }
 
@@ -61,12 +61,12 @@ function getStyle(style, speakers, info){
         }
     }
 
-    info.style = null;
+    info.style = undefined;
     return info;
 }
 
 //埋め込みの作成
-async function createEmbed(info, name, need_sudo=false){
+async function createEmbed(server_info, name, need_sudo=false){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
@@ -80,7 +80,7 @@ async function createEmbed(info, name, need_sudo=false){
         return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
-    if(!info.speaker){
+    if(server_info.speaker===undefined){
         embed.setTitle("そんなスピーカー知らないのだ");
         embed.setThumbnail("attachment://icon.png");
         embed.setFooter({text: "存在しないスピーカーが入力されたのだ"});
@@ -90,7 +90,7 @@ async function createEmbed(info, name, need_sudo=false){
         return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
-    if(!info.style){
+    if(server_info.style===undefined){
         embed.setTitle("そんなスタイル知らないのだ");
         embed.setThumbnail("attachment://icon.png");
         embed.setFooter({text: "存在しないスタイルが入力されたのだ"});
@@ -104,7 +104,7 @@ async function createEmbed(info, name, need_sudo=false){
     let style_infos;
     let icon;
 
-    await axios.get(`speaker_info?speaker_uuid=${info.uuid}`).then(
+    await axios.get(`speaker_info?speaker_uuid=${server_info.uuid}`).then(
         function(res){
             policy = res.data.policy;
             style_infos = res.data.style_infos;
@@ -112,7 +112,7 @@ async function createEmbed(info, name, need_sudo=false){
     ).catch(function(e){});
     
     for(let i=0; i<style_infos.length; i++){
-        if(style_infos[i].id === info.id){
+        if(style_infos[i].id === server_info.id){
             icon = style_infos[i].icon;
             break;
         }
@@ -120,21 +120,21 @@ async function createEmbed(info, name, need_sudo=false){
 
     embed.setTitle("利用規約");
     embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
-    embed.setDescription(`${name}読み上げ音声を\n${info.speaker}(${info.style})に設定したのだ`)
+    embed.setDescription(`${name}読み上げ音声を\n${server_info.speaker}(${server_info.style})に設定したのだ`)
     embed.addFields([
-        {name : 'need_sudo', value : `${info.need_sudo}`, inline : true},
-        {name : 'read_name', value : `${info.read_name}`, inline : true},
-        {name : 'read_sameuser', value : `${info.read_sameuser}`, inline : true},
-        {name : 'read_multiline', value : `${info.read_multiline}`, inline : true},
-        {name : 'maxwords', value : `${info.maxwords}`, inline : true},
-        {name : 'unif', value : `${info.unif}`, inline : true},
-        {name : 'speed', value : `${info.speed}`, inline : true},
-        {name : 'pitch', value : `${info.pitch}`, inline : true},
-        {name : 'intonation', value : `${info.intonation}`, inline : true},
-        {name : 'volume', value : `${info.volume}`, inline : true}
+        {name : 'need_sudo', value : `${server_info.need_sudo}`, inline : true},
+        {name : 'read_name', value : `${server_info.read_name}`, inline : true},
+        {name : 'read_sameuser', value : `${server_info.read_sameuser}`, inline : true},
+        {name : 'read_multiline', value : `${server_info.read_multiline}`, inline : true},
+        {name : 'maxwords', value : `${server_info.maxwords}`, inline : true},
+        {name : 'unif', value : `${server_info.unif}`, inline : true},
+        {name : 'speed', value : `${server_info.speed}`, inline : true},
+        {name : 'pitch', value : `${server_info.pitch}`, inline : true},
+        {name : 'intonation', value : `${server_info.intonation}`, inline : true},
+        {name : 'volume', value : `${server_info.volume}`, inline : true}
     ])
     embed.setImage("attachment://icon.jpg");
-    embed.setFooter({text: `VOICEVOX:${info.speaker}`});
+    embed.setFooter({text: `VOICEVOX:${server_info.speaker}`});
     embed.setColor(0x00FF00);        
     attachment.setName("icon.jpg");
     attachment.setFile(Buffer.from(icon, 'base64'));
@@ -144,78 +144,78 @@ async function createEmbed(info, name, need_sudo=false){
 
 //サーバー情報の設定
 async function execute(interaction, speakers, options){
-    let serverInfo = null;
+    let server_info = null;
     let progress = null;
     
-    serverInfo = await db.getServerInfo(interaction.guild.id);
+    server_info = await db.getServerInfo(interaction.guild.id);
     progress = await cui.createProgressbar(interaction, 13);
 
     //権限の確認
-    if(!interaction.memberPermissions.has("Administrator") && (serverInfo.need_sudo || options.need_sudo != null)){
-        await interaction.editReply(await createEmbed(serverInfo, interaction.user.displayName, true));
-        return;
+    if(!interaction.memberPermissions.has("Administrator") && (server_info.need_sudo || options.need_sudo != null)){
+        await interaction.editReply(await createEmbed(server_info, interaction.user.displayName, true));
+        return -1;
     }
 
     //need_sudoオプション
-    serverInfo.need_sudo = (options.need_sudo != null) ? options.need_sudo : serverInfo.need_sudo;
+    server_info.need_sudo = (options.need_sudo != null) ? options.need_sudo : server_info.need_sudo;
     progress = await cui.stepProgressbar(progress);
 
     //read_nameオプション
-    serverInfo.read_name = (options.read_name != null) ? options.read_name : serverInfo.read_name;
+    server_info.read_name = (options.read_name != null) ? options.read_name : server_info.read_name;
     progress = await cui.stepProgressbar(progress);
 
     //read_sameuserオプション
-    serverInfo.read_sameuser = (options.read_sameuser != null) ? options.read_sameuser : serverInfo.read_sameuser;
+    server_info.read_sameuser = (options.read_sameuser != null) ? options.read_sameuser : server_info.read_sameuser;
     progress = await cui.stepProgressbar(progress);
 
     //read_multilineオプション
-    serverInfo.read_multiline = (options.read_multiline != null) ? options.read_multiline : serverInfo.read_multiline;
+    server_info.read_multiline = (options.read_multiline != null) ? options.read_multiline : server_info.read_multiline;
     progress = await cui.stepProgressbar(progress);
 
     //maxwordsオプション
-    serverInfo.maxwords = (options.maxwords != null) ? options.maxwords : serverInfo.maxwords;
+    server_info.maxwords = (options.maxwords != null) ? options.maxwords : server_info.maxwords;
     progress = await cui.stepProgressbar(progress);
 
     //unifオプション
-    serverInfo.unif = (options.unif != null) ? options.unif : serverInfo.unif;
+    server_info.unif = (options.unif != null) ? options.unif : server_info.unif;
     progress = await cui.stepProgressbar(progress);
 
     //speakerオプション
-    serverInfo = (options.speaker != null) ? getSpeaker(options.speaker, speakers, serverInfo) : serverInfo;
+    server_info = (options.speaker != null) ? getSpeaker(options.speaker, speakers, server_info) : server_info;
     progress = await cui.stepProgressbar(progress);
 
     //styleオプション
-    serverInfo = (options.style != null) ? getStyle(options.style, speakers, serverInfo) : serverInfo;
+    server_info = (options.style != null) ? getStyle(options.style, speakers, server_info) : server_info;
     progress = await cui.stepProgressbar(progress);
 
     //speedオプション
-    serverInfo.speed = (options.speed != null) ? options.speed : serverInfo.speed;
+    server_info.speed = (options.speed != null) ? options.speed : server_info.speed;
     progress = await cui.stepProgressbar(progress);
 
     //pitchオプション
-    serverInfo.pitch = (options.pitch != null) ? options.pitch : serverInfo.pitch;
+    server_info.pitch = (options.pitch != null) ? options.pitch : server_info.pitch;
     progress = await cui.stepProgressbar(progress);
 
     //intonationオプション
-    serverInfo.intonation = (options.intonation != null) ? options.intonation : serverInfo.intonation;
+    server_info.intonation = (options.intonation != null) ? options.intonation : server_info.intonation;
     progress = await cui.stepProgressbar(progress);
 
     //volumeオプション
-    serverInfo.volume = (options.volume != null) ? options.volume : serverInfo.volume;
+    server_info.volume = (options.volume != null) ? options.volume : server_info.volume;
     progress = await cui.stepProgressbar(progress);
 
-    if(!(serverInfo.speaker && serverInfo.style)){
-        //失敗送信
-        await interaction.editReply(await createEmbed(serverInfo, interaction.guild.name));
+    //未定義キャラクターの検出
+    if(server_info.speaker === undefined || server_info.style === undefined){
+        await interaction.editReply(await createEmbed(server_info, interaction.guild.name));
         return -1;
     }
 
     //サーバー情報の保存
-    await db.setServerInfo(interaction.guild.id, serverInfo);
+    await db.setServerInfo(interaction.guild.id, server_info);
     progress = await cui.stepProgressbar(progress);
 
     //成功送信
-    interaction.channel.send(await createEmbed(serverInfo, interaction.guild.name));
+    interaction.channel.send(await createEmbed(server_info, interaction.guild.name));
 
     return 0;
 }

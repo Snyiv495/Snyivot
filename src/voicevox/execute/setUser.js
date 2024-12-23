@@ -1,7 +1,7 @@
 /*****************
     setUser.js
     スニャイヴ
-    2024/10/29
+    2024/12/23
 *****************/
 
 module.exports = {
@@ -35,7 +35,7 @@ function getSpeaker(speaker, speakers, info){
         }
     }
 
-    info.speaker = null;
+    info.speaker = undefined;
     return info;
 }
 
@@ -61,16 +61,16 @@ function getStyle(style, speakers, info){
         }
     }
 
-    info.style = null;
+    info.style = undefined;
     return info;
 }
 
 //埋め込みの作成
-async function createEmbed(info, displayName){
+async function createEmbed(user_info, display_name){
     const embed = new EmbedBuilder();
     const attachment = new AttachmentBuilder();
 
-    if(!info.speaker){
+    if(user_info.speaker===undefined){
         embed.setTitle("そんなスピーカー知らないのだ");
         embed.setThumbnail("attachment://icon.png");
         embed.setFooter({text: "存在しないスピーカーが入力されたのだ"});
@@ -80,7 +80,7 @@ async function createEmbed(info, displayName){
         return {content: "", files: [attachment], embeds: [embed],  ephemeral: true};
     }
 
-    if(!info.style){
+    if(user_info.style===undefined){
         embed.setTitle("そんなスタイル知らないのだ");
         embed.setThumbnail("attachment://icon.png");
         embed.setFooter({text: "存在しないスタイルが入力されたのだ"});
@@ -93,16 +93,16 @@ async function createEmbed(info, displayName){
     let policy;
     let style_infos;
     let icon;
-
-    await axios.get(`speaker_info?speaker_uuid=${info.uuid}`).then(
+    
+    await axios.get(`speaker_info?speaker_uuid=${user_info.uuid}`).then(
         function(res){
             policy = res.data.policy;
             style_infos = res.data.style_infos;
         }
     ).catch(function(e){});
-    
+
     for(let i=0; i<style_infos.length; i++){
-        if(style_infos[i].id === info.id){
+        if(style_infos[i].id === user_info.id){
             icon = style_infos[i].icon;
             break;
         }
@@ -110,16 +110,16 @@ async function createEmbed(info, displayName){
 
     embed.setTitle("利用規約");
     embed.setURL(policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0]);
-    embed.setDescription(`${displayName}さんの読み上げ音声を\n${info.speaker}(${info.style})に設定したのだ`)
+    embed.setDescription(`${display_name}さんの読み上げ音声を\n${user_info.speaker}(${user_info.style})に設定したのだ`)
     embed.addFields([
-        {name : 'speed', value : `${info.speed}`, inline : true},
-        {name : 'pitch', value : `${info.pitch}`, inline : true},
-        {name : 'intonation', value : `${info.intonation}`, inline : true},
-        {name : 'volume', value : `${info.volume}`, inline : true},
-        {name : 'username', value : `${info.username}`, inline : true}
+        {name : 'speed', value : `${user_info.speed}`, inline : true},
+        {name : 'pitch', value : `${user_info.pitch}`, inline : true},
+        {name : 'intonation', value : `${user_info.intonation}`, inline : true},
+        {name : 'volume', value : `${user_info.volume}`, inline : true},
+        {name : 'username', value : `${user_info.username}`, inline : true}
     ])
     embed.setImage("attachment://icon.jpg");
-    embed.setFooter({text: `VOICEVOX:${info.speaker}`});
+    embed.setFooter({text: `VOICEVOX:${user_info.speaker}`});
     embed.setColor(0x00FF00);        
     attachment.setName("icon.jpg");
     attachment.setFile(Buffer.from(icon, 'base64'));
@@ -129,57 +129,71 @@ async function createEmbed(info, displayName){
 
 //ユーザー情報の設定
 async function execute(interaction, speakers, options){
-    let userInfo = null;
+    let user_info = null;
+    let server_info = null;
     let progress = null;
 
     //進捗の表示
-    progress = await cui.createProgressbar(interaction, 9);
+    progress = await cui.createProgressbar(interaction, 10);
 
     //ユーザー情報の取得
-    userInfo = await db.getUserInfo(interaction.user.id);
+    user_info = await db.getUserInfo(interaction.user.id);
+    progress = await cui.stepProgressbar(progress);
+
+    //サーバー情報の取得
+    server_info = await db.getServerInfo(interaction.guild.id);
     progress = await cui.stepProgressbar(progress);
 
     //speakerオプション
-    userInfo = (options.speaker != null) ? getSpeaker(options.speaker, speakers, userInfo) : userInfo;
+    user_info = (options.speaker != null) ? getSpeaker(options.speaker, speakers, user_info) : user_info;
     progress = await cui.stepProgressbar(progress);
 
     //styleオプション
-    userInfo = (options.style != null) ? getStyle(options.style, speakers, userInfo) : userInfo;
+    user_info = (options.style != null) ? getStyle(options.style, speakers, user_info) : user_info;
     progress = await cui.stepProgressbar(progress);
 
     //speedオプション
-    userInfo.speed = (options.speed != null) ? options.speed : userInfo.speed;
+    user_info.speed = (options.speed != null) ? options.speed : user_info.speed;
     progress = await cui.stepProgressbar(progress);
 
     //pitchオプション
-    userInfo.pitch = (options.pitch != null) ? options.pitch : userInfo.pitch;
+    user_info.pitch = (options.pitch != null) ? options.pitch : user_info.pitch;
     progress = await cui.stepProgressbar(progress);
 
     //intonationオプション
-    userInfo.intonation = (options.intonation != null) ? options.intonation : userInfo.intonation;
+    user_info.intonation = (options.intonation != null) ? options.intonation : user_info.intonation;
     progress = await cui.stepProgressbar(progress);
 
     //volumeオプション
-    userInfo.volume = (options.volume != null) ? options.volume : userInfo.volume;
+    user_info.volume = (options.volume != null) ? options.volume : user_info.volume;
     progress = await cui.stepProgressbar(progress);
 
     //usernameオプション
-    userInfo.username = (options.username != null) ? (options.username === "null") ? null : options.username.substr(0, 10) : userInfo.username;
+    user_info.username = (options.username != null) ? (options.username === "null") ? null : options.username.substr(0, 10) : user_info.username;
     progress = await cui.stepProgressbar(progress);
 
-    //問題がなければ保存
-    if(!(userInfo.speaker && userInfo.style)){
-        //失敗送信
-        await interaction.editReply(await createEmbed(userInfo, interaction.user.displayName));
+    //未定義キャラクターの検出
+    if(user_info.speaker === undefined || user_info.style === undefined){
+        await interaction.editReply(await createEmbed(user_info, interaction.user.displayName));
         return -1;
     }
 
     //ユーザー情報の保存
-    await db.setUserInfo(interaction.user.id, userInfo);
+    user_info.speaker = (user_info.speaker===null) ? server_info.speaker : user_info.speaker;
+    user_info.style = (user_info.style===null) ? server_info.style : user_info.style;
+    user_info.uuid = (user_info.uuid===null) ? server_info.uuid : user_info.uuid;
+    user_info.id = (user_info.id===null) ? server_info.id : user_info.id;
+    user_info.speed = (user_info.speed===null) ? server_info.speed : user_info.speed;
+    user_info.pitch = (user_info.pitch===null) ? server_info.pitch : user_info.pitch;
+    user_info.intonation = (user_info.intonation===null) ? server_info.intonation : user_info.intonation;
+    user_info.volume = (user_info.volume===null) ? server_info.volume : user_info.volume;
+    user_info.username = (user_info.username===null) ? interaction.user.displayName : user_info.username;
+
+    await db.setUserInfo(interaction.user.id, user_info);
     progress = await cui.stepProgressbar(progress);
 
     //成功送信
-    await interaction.editReply(await createEmbed(userInfo, interaction.user.displayName));
+    await interaction.editReply(await createEmbed(user_info, interaction.user.displayName));
 
     return 0;
 }
