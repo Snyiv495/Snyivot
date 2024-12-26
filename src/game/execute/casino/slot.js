@@ -86,14 +86,14 @@ async function createSlot(slot_info, coins, jackpot){
         bet_2.setEmoji("💰");
         bet_2.setCustomId("game_casino_slot_2bet_exe");
         bet_2.setStyle(ButtonStyle.Primary);
-        coins<2 ? bet_1.setDisabled(true) : bet_1.setDisabled(false);
+        coins<2 ? bet_2.setDisabled(true) : bet_2.setDisabled(false);
         buttons.addComponents(bet_2);
 
         bet_3.setLabel("3bet");
         bet_3.setEmoji("💴");
         bet_3.setCustomId("game_casino_slot_3bet_exe");
         bet_3.setStyle(ButtonStyle.Primary);
-        coins<3 ? bet_1.setDisabled(true) : bet_1.setDisabled(false);
+        coins<3 ? bet_3.setDisabled(true) : bet_3.setDisabled(false);
         buttons.addComponents(bet_3);
 
         home.setLabel("ゲーム選択");
