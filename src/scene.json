@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.3.3\nボタン操作の応答速度UP!\nスロットβ版, 呼ぶ→game→slotで今だけ回し放題！",
+        "content" : "ver 1.3.6\nゲーム機能の実装",
         "buttons" : [
             {
                 "label" : "呼ぶ",
@@ -208,10 +208,92 @@
                 "placeholder" : "何も選択されてないのだ",
                 "options" : [
                     {
+                        "label" : "casino",
+                        "value" : "game_casino_home",
+                        "description" : "カジノに行くのだ！",
+                        "emoji" : "🎪"
+                    },
+                    {
+                        "label" : "work",
+                        "value" : "game_work_home",
+                        "description" : "働いて稼ぐのだ！",
+                        "emoji" : "💼"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "game_casino_home",
+        "embeds" : [
+            {
+                "title" : "何で勝負するのだ？",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
+                "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "game_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
                         "label" : "slot",
                         "value" : "game_casino_slot_exe",
                         "description" : "スロットをプレイするのだ！",
                         "emoji" : "🎰"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "終わる",
+                "emoji" : "⚠️",
+                "id" : "quit",
+                "style" : "Danger",
+                "disabled" : "false"
+            }
+        ]
+    },
+    {
+        "scene" : "game_work_home",
+        "embeds" : [
+            {
+                "title" : "何の仕事をするのだ？",
+                "url" : "",
+                "thumbnail" : "assets/zundamon/icon/think.png",
+                "description" : "",
+                "fields" : [],
+                "image" : "",
+                "footer" : "↓↓メニューから選択するのだ↓↓",
+                "color" : "00FF00"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "game_home",
+                "placeholder" : "何も選択されてないのだ",
+                "options" : [
+                    {
+                        "label" : "calc",
+                        "value" : "game_work_calc_exe",
+                        "description" : "僕に計算を教えてほしいのだ！",
+                        "emoji" : "🧑‍🏫"
                     }
                 ]
             }

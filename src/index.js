@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/12/11
+    2024/12/26
 *****************/
 
 require('dotenv').config();
@@ -237,7 +237,7 @@ client.on('interactionCreate', async (interaction) => {
 
     //game
     if(interaction.customId.includes("game")){
-        await game.guiModal(interaction);
+        await game.guiModal(interaction, game_map);
         return 0;
 	}
 

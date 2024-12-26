@@ -1,7 +1,7 @@
 /*****************
     game.js
     スニャイヴ
-    2024/12/05
+    2024/12/16
 *****************/
 
 module.exports = {
@@ -22,25 +22,25 @@ function getSlashCmd(){
 }
 
 //CUIコマンドの実行
-async function cuiCmd(interaction, casino_slot_map){
-    cui.cmd(interaction, casino_slot_map);
+async function cuiCmd(interaction, map){
+    cui.cmd(interaction, map);
     return 0;
 }
 
 //GUIメニューの実行
-async function guiMenu(interaction, casino_slot_map){
-    await gui.menu(interaction, casino_slot_map);
+async function guiMenu(interaction, map){
+    await gui.menu(interaction, map);
     return 0;
 }
 
 //GUIボタンの実行
-async function guiButton(interaction, casino_slot_map){
-    await gui.button(interaction, casino_slot_map);
+async function guiButton(interaction, map){
+    await gui.button(interaction, map);
     return 0;
 }
 
 //GUIモーダルの実行
-async function guiModal(interaction){
-    await gui.modal(interaction);
+async function guiModal(interaction, map){
+    await gui.modal(interaction, map);
     return 0;
 }
