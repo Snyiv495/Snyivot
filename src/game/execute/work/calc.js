@@ -1,7 +1,7 @@
 /*****************
     calc.js
     スニャイヴ
-    2024/12/26
+    2025/01/04
 *****************/
 
 module.exports = {
@@ -31,7 +31,7 @@ function createProbrem(interaction, map){
                 const price = Math.floor(Math.random()*899)+101;
                 const discount = (Math.floor(Math.random()*9)+1)*10;
                 calc_info.probrem = `${price}円の商品が${discount}%引きで売られてるよ！何円かな？`
-                calc_info.anser = Math.floor(price-(price*discount/100));
+                calc_info.anser = Math.floor((price-(price*discount/100))*10)/10;
                 break;
             }
             case 2 : {
@@ -41,14 +41,14 @@ function createProbrem(interaction, map){
                 const D = Math.floor(Math.random()*9)+1;
                 const E = Math.floor(Math.random()*9)+1;
                 calc_info.probrem = `点数[${A}, ${B}, ${C}, ${D}, ${E}]の平均はいくらかな？`
-                calc_info.anser = Math.floor((A+B+C+D+E)/5);
+                calc_info.anser = Math.floor(((A+B+C+D+E)/5)*10)/10;
                 break;
             }
             case 3 : {
                 const A = Math.floor(Math.random()*10)+11;
                 const B = Math.floor(Math.random()*10)+11;
                 calc_info.probrem = `2種類の同じサイズのピザをそれぞれ${A-3}/${A}枚と${B-5}/${B}枚食べたよ！合計何枚食べたかな？`
-                calc_info.anser = Math.floor((2*A*B-5*A-3*B)/(A*B));
+                calc_info.anser = Math.floor(((2*A*B-5*A-3*B)/(A*B))*10)/10;
                 break;
             }
             default : break;
@@ -60,8 +60,8 @@ function createProbrem(interaction, map){
                 const B = Math.floor(Math.random()*8)+2;
                 const A_B = Math.floor(Math.random()*8)+2;
                 
-                calc_info.probrem = `[難]事象A,Bの確率が(A)=1/${A}, P(B)=1/${B}, P(A|B)=1/${A_B}のとき, P(B|A)を求めよ`
-                calc_info.anser = Math.floor(A/(B*A_B));
+                calc_info.probrem = `[難]確率P(A)=1/${A},P(B)=1/${B},P(A|B)=1/${A_B}のときのP(B|A)`
+                calc_info.anser = Math.floor((A/(B*A_B))*10)/10;
                 break;
             }
             case 1 : {
@@ -77,7 +77,7 @@ function createProbrem(interaction, map){
                 const first_term = Math.floor(Math.random()*11);
                 const term_ratio = Math.floor(Math.random()*4)+2;
                 calc_info.probrem = `[難]初項${first_term}, 公比1/${term_ratio}の無限等比数列の和を求めよ`
-                calc_info.anser = Math.floor(first_term/(1-term_ratio));
+                calc_info.anser = Math.floor((first_term/(1-term_ratio))*10)/10;
             }
             case 3 : {
                 const n = Math.floor(Math.random()*90000)+10000;
@@ -177,7 +177,7 @@ async function execute(interaction, map){
     const calc_info = map.get(`work_calc_${interaction.user.id}`);
     const anser = interaction.fields.getTextInputValue("anser");
 
-    if(!isNaN(anser) && parseInt(anser)==calc_info.anser){
+    if(!isNaN(anser) && parseFloat(anser)==calc_info.anser){
         calc_info.correct = true;
         user_info.money += 10;
         await db.setUserInfo(interaction.user.id, user_info);
