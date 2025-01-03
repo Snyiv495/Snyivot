@@ -87,9 +87,9 @@ cd voicevox
 wget https://github.com/VOICEVOX/voicevox_core/releases/download/0.15.4/download-linux-arm64
 chmod +x ./download-linux-arm64 && ./download-linux-arm64
 ```
-voicevox起動スクリプトの作成
+voicevox常時起動
 ```
-echo "python3.11 ~/voicevox/run.py --voicelib_dir=~/voicevox/voicevox_core --port 50000" > startvoicevox.sh
+pm2 start ~/voicevox/run.py --interpreter python3.11 -- --voicelib_dir=~/voicevox/voicevox_core
 ```
 [kanayomi-dict](https://github.com/WariHima/KanaYomi-dict-GPL2/releases)をダウンロードしてvoicevox/resources/にdefault.csvの名前で配置する
 

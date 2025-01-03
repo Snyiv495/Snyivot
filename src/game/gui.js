@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2024/12/26
+    2024/01/03
 *****************/
 
 module.exports = {
@@ -12,6 +12,8 @@ module.exports = {
 
 require('dotenv').config();
 const db = require('./db');
+const casino_borrow = require('./execute/casino/borrow');
+const casino_exchange = require('./execute/casino/exchange');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
 //const game_help = require('./execute/help');
@@ -25,6 +27,14 @@ async function menu(interaction, map){
     }
 
     switch(interaction.values[0]){
+        case "game_casino_borrow_exe" : {
+            await casino_borrow.exe(interaction);
+            break;
+        }
+        case "game_casino_exchange_exe" : {
+            await casino_exchange.exe(interaction);
+            break;
+        }
         case "game_casino_slot_exe" : {
             await interaction.deferUpdate();
             await interaction.editReply({components: []});
@@ -129,6 +139,14 @@ async function modal(interaction, map){
     }
 
     switch(interaction.customId){
+        case "game_casino_borrow_modal" : {
+            await casino_borrow.exe(interaction);
+            break;
+        }
+        case "game_casino_exchange_modal" : {
+            await casino_exchange.exe(interaction);
+            break;
+        }
         case "game_work_calc_modal" : {
             await work_calc.exe(interaction, map);
             break;

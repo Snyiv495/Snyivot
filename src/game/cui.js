@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/12/26
+    2024/01/03
 *****************/
 
 module.exports = {
@@ -13,6 +13,8 @@ module.exports = {
 
 require('dotenv').config();
 const {SlashCommandBuilder} = require('discord.js');
+const casino_borrow = require('./execute/casino/borrow');
+const casino_exchange = require('./execute/casino/exchange');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
 //const help = require('./execute/help');
@@ -24,6 +26,8 @@ function getSlashCmds(){
     //slash_cmds.push(getZundamocchiFoodCmd());
     //slash_cmds.push(getZundamocchiPlayCmd());
     //slash_cmds.push(getZundamocchiCleanCmd());
+    slash_cmds.push(getCasinoBorrowCmd());
+    slash_cmds.push(getCasinoExchangeCmd());
     slash_cmds.push(getCasinoSlotCmd());
     //slash_cmds.push(getWorkIdentCmd());
     //slash_cmds.push(getWorkInspectCmd());
@@ -59,6 +63,26 @@ function getZundamocchiCleanCmd(){
 
     cmd.setName("game_zundamocchi_clean");
     cmd.setDescription("ずんだもんの部屋を掃除するコマンドなのだ！");
+
+    return cmd;
+}
+
+//貸出コマンドの取得
+function getCasinoBorrowCmd(){
+    const cmd = new SlashCommandBuilder();
+
+    cmd.setName("game_casino_borrow");
+    cmd.setDescription("メダルの貸出をするコマンドなのだ！");
+
+    return cmd;
+}
+
+//換金コマンドの取得
+function getCasinoExchangeCmd(){
+    const cmd = new SlashCommandBuilder();
+
+    cmd.setName("game_casino_exchange");
+    cmd.setDescription("メダルを換金するコマンドなのだ！");
 
     return cmd;
 }
@@ -149,6 +173,14 @@ async function cmd(interaction, map){
         case "game_zundamocchi_shop" : {
             await interaction.deferReply({ephemeral: true});
             await zundamocchi_shop.exe(interaction);
+            break;
+        }
+        case "game_casino_borrow" : {
+            await casino_borrow.exe(interaction);
+            break;
+        }
+        case "game_casino_exchange" : {
+            await casino_exchange.exe(interaction);
             break;
         }
         case "game_casino_slot" : {

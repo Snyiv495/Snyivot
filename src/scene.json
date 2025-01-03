@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.3.6\nゲーム機能の実装",
+        "content" : "ver 1.3.7\n最低限のゲーム実装！",
         "buttons" : [
             {
                 "label" : "呼ぶ",
@@ -251,6 +251,18 @@
                 "id" : "game_home",
                 "placeholder" : "何も選択されてないのだ",
                 "options" : [
+                    {
+                        "label" : "borrow",
+                        "value" : "game_casino_borrow_exe",
+                        "description" : "メダルの貸出をするのだ！",
+                        "emoji" : "💳"
+                    },
+                    {
+                        "label" : "exchange",
+                        "value" : "game_casino_exchange_exe",
+                        "description" : "メダルの換金をするのだ！",
+                        "emoji" : "💴"
+                    },
                     {
                         "label" : "slot",
                         "value" : "game_casino_slot_exe",

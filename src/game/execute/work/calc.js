@@ -21,25 +21,25 @@ function createProbrem(interaction, map){
     if(!difficult){
         switch(sel){
             case 0 : {
-                const length = Math.floor(Math.random()*899)+101;
-                const width = Math.floor(Math.random()*899)+101;
+                const length = Math.floor(Math.random()*89)+11;
+                const width = Math.floor(Math.random()*89)+11;
                 calc_info.probrem = `縦${length}㍉ 横${width}㍉ の四角形の面積は何平方ミリメートルかな？`;
                 calc_info.anser = length*width;
                 break;
             }
             case 1 : {
                 const price = Math.floor(Math.random()*899)+101;
-                const discount = Math.floor(Math.random()*99)+1;
+                const discount = (Math.floor(Math.random()*9)+1)*10;
                 calc_info.probrem = `${price}円の商品が${discount}%引きで売られてるよ！何円かな？`
                 calc_info.anser = Math.floor(price-(price*discount/100));
                 break;
             }
             case 2 : {
-                const A = Math.floor(Math.random()*899)+101;
-                const B = Math.floor(Math.random()*899)+101;
-                const C = Math.floor(Math.random()*899)+101;
-                const D = Math.floor(Math.random()*899)+101;
-                const E = Math.floor(Math.random()*899)+101;
+                const A = Math.floor(Math.random()*9)+1;
+                const B = Math.floor(Math.random()*9)+1;
+                const C = Math.floor(Math.random()*9)+1;
+                const D = Math.floor(Math.random()*9)+1;
+                const E = Math.floor(Math.random()*9)+1;
                 calc_info.probrem = `点数[${A}, ${B}, ${C}, ${D}, ${E}]の平均はいくらかな？`
                 calc_info.anser = Math.floor((A+B+C+D+E)/5);
                 break;
