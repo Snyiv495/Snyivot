@@ -100,7 +100,7 @@ function createModal(calc_info){
     
     anser.setCustomId("anser")
     anser.setLabel(`${calc_info.probrem}`)
-    anser.setPlaceholder("小数点以下は切り捨て, 数値のみで回答");
+    anser.setPlaceholder("小数第2位を切り捨て, 数値のみで回答");
     anser.setStyle(TextInputStyle.Short);
     anser.setRequired(true);
     modal.addComponents(new ActionRowBuilder().addComponents(anser));
