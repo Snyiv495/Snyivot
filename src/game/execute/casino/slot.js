@@ -1,7 +1,7 @@
 /*****************
     slot.js
     スニャイヴ
-    2024/12/26
+    2024/01/06
 *****************/
 
 module.exports = {
@@ -15,10 +15,10 @@ const db = require('../../db');
 //スロット情報の取得
 function getSlotInfo(interaction, map){
     /*
-    state 0 : 初期状態　🗡️も💎も出ない　絵柄を揃えると10%でstate1へ
-    state 1 : 🗡️が狙える状態　🗡️を揃えると10%でstate2へ　絵柄を外すと25%でstate0へ
-    state 2 : 🗡️と💎が狙える状態　💎を揃えるとstate3へ　常に25%でstate0へ
-    state 3~: ボーナス状態　🛡️🏹しか存在しないスロット　継続率(100-state^2)%　常にstate+1　終了時state0へ
+    state 0 : 初期状態　🗡️も💎も出ない　絵柄を揃えると20%でstate1へ
+    state 1 : 🗡️が狙える状態　🗡️を揃えると[20%:80%]で[state2:state0]へ　🗡️が揃わないと20%でstate0へ
+    state 2 : 💎が狙える状態　💎を揃えるとstate3へ　💎が揃わないと20%でstate0へ
+    state 3~: ボーナス状態　🛡️🏹しか存在しないスロット　継続率(100-state^2)%でstate+1　終了時state0へ
     */
     const info = map.has(`casino_slot_${interaction.user.id}`) ? map.get(`casino_slot_${interaction.user.id}`) : {
         state: 0,
@@ -170,9 +170,21 @@ async function turnSlot(interaction, slot_info, map, coins, jackpot){
         if(slot_info.count_interval > 20){
             clearInterval(slot_info.interval);
             switch(true){
-                case !slot_info.left_stop : slot_info.left_stop = true; break;
-                case !slot_info.center_stop : slot_info.center_stop = true; break;
-                case !slot_info.right_stop : slot_info.right_stop = true; break;
+                case !slot_info.left_stop : {
+                    slot_info.stop = "left"
+                    slot_info.left_stop = true;
+                    break;
+                }
+                case !slot_info.center_stop : {
+                    slot_info.stop = "center"
+                    slot_info.center_stop = true;
+                    break;
+                }
+                case !slot_info.right_stop : {
+                    slot_info.stop = "right"
+                    slot_info.right_stop = true;
+                    break;
+                }
                 default : break;
             }
             map.set(`casino_slot_${interaction.user.id}`, slot_info);
@@ -186,10 +198,19 @@ async function turnSlot(interaction, slot_info, map, coins, jackpot){
 
 //スロットの操作
 async function controlSlot(slot_info){
+    const rand = Math.floor(Math.random()*100);
+
     //斜めの絵柄操作
     if(slot_info.bet===3){
         if(slot_info.left_line[slot_info.left_idx] === slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[slot_info.right_idx] === slot_info.right_line[(slot_info.right_idx+2)%10]){
-            if(slot_info.state<2 && slot_info.left_line[slot_info.left_idx]==="💎"){
+            if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
+                switch(slot_info.stop){
+                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
+                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
+                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
+                    default: break;
+                }
+            }else if(slot_info.state<2 && slot_info.left_line[slot_info.left_idx]==="💎"){
                 switch(slot_info.stop){
                     case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
                     case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
@@ -206,7 +227,14 @@ async function controlSlot(slot_info){
             }
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10] === slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[(slot_info.left_idx+2)%10] === slot_info.right_line[slot_info.right_idx]){
-            if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+2)%10]==="💎"){
+            if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
+                switch(slot_info.stop){
+                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
+                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
+                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
+                    default: break;
+                }
+            }else if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+2)%10]==="💎"){
                 switch(slot_info.stop){
                     case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
                     case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
@@ -227,7 +255,14 @@ async function controlSlot(slot_info){
     //上下行の絵柄操作
     if(slot_info.bet===3 || slot_info.bet===2){
         if(slot_info.left_line[slot_info.left_idx] == slot_info.center_line[slot_info.center_idx] && slot_info.left_line[slot_info.left_idx] == slot_info.right_line[slot_info.right_idx]){
-            if(slot_info.state<2 && slot_info.left_line[slot_info.left_idx]==="💎"){
+            if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
+                switch(slot_info.stop){
+                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
+                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
+                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
+                    default: break;
+                }
+            }else if(slot_info.state<2 && slot_info.left_line[slot_info.left_idx]==="💎"){
                 switch(slot_info.stop){
                     case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
                     case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
@@ -244,7 +279,14 @@ async function controlSlot(slot_info){
             }
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.center_line[(slot_info.center_idx+2)%10] && slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.right_line[(slot_info.right_idx+2)%10]){
-            if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+2)%10]==="💎"){
+            if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
+                switch(slot_info.stop){
+                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
+                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
+                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
+                    default: break;
+                }
+            }else if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+2)%10]==="💎"){
                 switch(slot_info.stop){
                     case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
                     case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
@@ -264,7 +306,14 @@ async function controlSlot(slot_info){
 
     //中央行の絵柄判定
     if(slot_info.left_line[(slot_info.left_idx+1)%10] == slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[(slot_info.left_idx+1)%10] == slot_info.right_line[(slot_info.right_idx+1)%10]){
-        if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+1)%10]==="💎"){
+        if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
+            switch(slot_info.stop){
+                case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
+                case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
+                case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
+                default: break;
+            }
+        }else if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+1)%10]==="💎"){
             switch(slot_info.stop){
                 case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
                 case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
@@ -347,19 +396,38 @@ async function calcPayout(slot_info, jackpot, pattern){
 function transState(slot_info){
     const rand = Math.floor(Math.random()*100);
 
-    if(slot_info.state===0 && slot_info.hit && rand<10){
-        slot_info.state = 1;
-    }else if(slot_info.state===1 && slot_info.hit===null && rand<25){
-        slot_info.state = 0;
-    }else if(slot_info.state===1 && slot_info.hit==="🗡️" && rand<10){
-        slot_info.state = 2;
-    }else if(slot_info.state===2 && slot_info.hit!="💎" && rand<25){
-        slot_info.state = 0;
-    }else if(slot_info.state===2 && slot_info.hit!="💎"){
-        slot_info.state = 3;
-    }else if(slot_info.state>2){
-        slot_info.state = (rand>slot_info.state**2) ? slot_info.state+1 : 0;
+    if(slot_info.state===0){
+        if(slot_info.hit && rand<20){
+            slot_info.state = 1;
+        }
+        return slot_info;
     }
+
+    if(slot_info.state===1){
+        if(slot_info.hit==="🗡️"){
+            if(rand<20){
+                slot_info.state = 2;
+            }else{
+                slot_info.state = 0;
+            }
+        }else if(rand<20){
+            slot_info.state = 0;
+        }
+
+        return slot_info;
+    }
+
+    if(slot_info.state===2){
+        if(slot_info.hit==="💎"){
+            slot_info.state = 3;
+        }else if(rand<20){
+            slot_info.state = 0;
+        }
+
+        return slot_info;
+    }
+
+    slot_info.state = (rand>slot_info.state**2) ? slot_info.state+1 : 0;
 
     return slot_info;
 }
