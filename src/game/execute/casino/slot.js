@@ -1,7 +1,7 @@
 /*****************
     slot.js
     スニャイヴ
-    2024/01/06
+    2024/01/08
 *****************/
 
 module.exports = {
@@ -14,12 +14,6 @@ const db = require('../../db');
 
 //スロット情報の取得
 function getSlotInfo(interaction, map){
-    /*
-    state 0 : 初期状態　🗡️も💎も出ない　絵柄を揃えると20%でstate1へ
-    state 1 : 🗡️が狙える状態　🗡️を揃えると[20%:80%]で[state2:state0]へ　🗡️が揃わないと20%でstate0へ
-    state 2 : 💎が狙える状態　💎を揃えるとstate3へ　💎が揃わないと20%でstate0へ
-    state 3~: ボーナス状態　🛡️🏹しか存在しないスロット　継続率(100-state^2)%でstate+1　終了時state0へ
-    */
     const info = map.has(`casino_slot_${interaction.user.id}`) ? map.get(`casino_slot_${interaction.user.id}`) : {
         state: 0,
         bet: 0,
@@ -45,29 +39,95 @@ function getSlotInfo(interaction, map){
     info.again = false
     info.payout = 0;
 
+    if(interaction.isButton()){
+        switch(true){
+            case /1bet/.test(interaction.customId) : {
+                info.bet = 1;
+                break;
+            }
+            case /2bet/.test(interaction.customId) : {
+                info.bet = 2;
+                break;
+            }
+            case /3bet/.test(interaction.customId) : {
+                info.bet = 3;
+                break;
+            }
+            case /left/.test(interaction.customId) : {
+                info.stop = "left";
+                info.left_stop = true;
+                break;
+            }
+            case /center/.test(interaction.customId) : {
+                info.stop = "center";
+                info.center_stop = true;
+                break;
+            }
+            case /right/.test(interaction.customId) : {
+                info.stop = "right";
+                info.right_stop = true;
+                break;
+            }
+            default : break;
+        }
+    }
+
+    map.set(`casino_slot_${interaction.user.id}`, info);
+
     return info;
 }
 
+//ユーザーのコイン枚数の取得
+async function getUserCoins(interaction, user_info){
+
+    if(interaction.isButton()){
+        switch(true){
+            case /1bet/.test(interaction.customId) : {
+                user_info.coins -= 1;
+                break;
+            }
+            case /2bet/.test(interaction.customId) : {
+                user_info.coins -= 2;
+                break;
+            }
+            case /3bet/.test(interaction.customId) : {
+                user_info.coins -= 3;
+                break;
+            }
+            default : break;
+        }
+    }
+
+    await db.setUserInfo(interaction.user.id, user_info);
+
+    return user_info.coins;
+}
+
 //スロットの作成
-async function createSlot(slot_info, coins, jackpot){
+async function createSlot(slot_info, user_coins, jackpot_coins){
+    const files = [];
     const embeds = [];
     const components = [];
 
+    const attachment = new AttachmentBuilder();
     const embed = new EmbedBuilder();
     const buttons = new ActionRowBuilder();
 
     switch(slot_info.state){
-        case 0: embed.setTitle("スロットなのだ！"); embed.setColor(0x000000); break;
+        case 0: embed.setTitle("大当たりは出そうなのだ？"); embed.setColor(0x000000); break;
         case 1: embed.setTitle("流れが来てる気がするのだ！"); embed.setColor(0x0000FF); break;
-        case 2: embed.setTitle("大当たりの予感...！"); embed.setColor(0xFFFF00); break;
+        case 2: embed.setTitle("大当たりの予感なのだ...！"); embed.setColor(0xFFFF00); break;
         default: embed.setTitle(`JACKPOTおめでとうなのだ！\nボーナスタイムなのだ！\n(継続率：${100-(slot_info.state**2)}%)`); embed.setColor(0xFFFFFF); break;
     }
 
-    embed.setDescription(`|💎|💎|💎|:${jackpot}　|💊|🆓|🆓|:002　|🛡️|🛡️|🛡️|:010\n　\n|🗡️|🗡️|🗡️|:100　|🏹|🏹|🏹|:015　|🔁|🔁|🔁|:もう1回\n--------------------`);
+    embed.setThumbnail("attachment://icon.png");
+    embed.setDescription(`|💎|💎|💎|:${jackpot_coins}　|💊|🆓|🆓|:002　|🛡️|🛡️|🛡️|:010\n　\n|🗡️|🗡️|🗡️|:100　|🏹|🏹|🏹|:015　|🔁|🔁|🔁|:もう1回\n--------------------`);
     embed.addFields({name: `| ${slot_info.left_line[slot_info.left_idx]} | ${slot_info.center_line[slot_info.center_idx]} | ${slot_info.right_line[slot_info.right_idx]} |\n| ${slot_info.left_line[(slot_info.left_idx+1)%10]} | ${slot_info.center_line[(slot_info.center_idx+1)%10]} | ${slot_info.right_line[(slot_info.right_idx+1)%10]} |\n| ${slot_info.left_line[(slot_info.left_idx+2)%10]} | ${slot_info.center_line[(slot_info.center_idx+2)%10]} | ${slot_info.right_line[(slot_info.right_idx+2)%10]} |`, value: "--------------------", inline: false});
-    embed.setFooter({text: `CREDIT:${coins}, \tBET:${slot_info.bet}, \tPAYOUT:${slot_info.payout}`});
-    embeds.push(embed);
-
+    embed.setFooter({text: `CREDIT:${user_coins}, \tBET:${slot_info.bet}, \tPAYOUT:${slot_info.payout}`});
+    attachment.setName("icon.png");
+    attachment.setFile("assets/zundamon/icon/bunny.png");
+    files.push(attachment);
+    
     if(!slot_info.bet){
         const bet_1 = new ButtonBuilder();
         const bet_2 = new ButtonBuilder();
@@ -75,25 +135,27 @@ async function createSlot(slot_info, coins, jackpot){
         const home = new ButtonBuilder();
         const quit = new ButtonBuilder();
 
+        embed.setTitle("bet額を決めるのだ！");
+
         bet_1.setLabel("1bet");
         bet_1.setEmoji("🪙");
         bet_1.setCustomId("game_casino_slot_1bet_exe");
         bet_1.setStyle(ButtonStyle.Primary);
-        coins<1 ? bet_1.setDisabled(true) : bet_1.setDisabled(false);
+        user_coins<1 ? bet_1.setDisabled(true) : bet_1.setDisabled(false);
         buttons.addComponents(bet_1);
 
         bet_2.setLabel("2bet");
         bet_2.setEmoji("💰");
         bet_2.setCustomId("game_casino_slot_2bet_exe");
         bet_2.setStyle(ButtonStyle.Primary);
-        coins<2 ? bet_2.setDisabled(true) : bet_2.setDisabled(false);
+        user_coins<2 ? bet_2.setDisabled(true) : bet_2.setDisabled(false);
         buttons.addComponents(bet_2);
 
         bet_3.setLabel("3bet");
         bet_3.setEmoji("💴");
         bet_3.setCustomId("game_casino_slot_3bet_exe");
         bet_3.setStyle(ButtonStyle.Primary);
-        coins<3 ? bet_3.setDisabled(true) : bet_3.setDisabled(false);
+        user_coins<3 ? bet_3.setDisabled(true) : bet_3.setDisabled(false);
         buttons.addComponents(bet_3);
 
         home.setLabel("ゲーム選択");
@@ -149,23 +211,27 @@ async function createSlot(slot_info, coins, jackpot){
             quit.setStyle(ButtonStyle.Danger);
             quit.setDisabled(false);
             buttons.addComponents(quit);
+        }else{
+            embed.setTitle("当たってほしいのだ！");
+            files.shift();
         }
     }
     
+    embeds.push(embed);
     components.push(buttons);
 
-    return {content: "", files: [], embeds: embeds, components: components, ephemeral: true};
+    return {content: "", files: files, embeds: embeds, components: components, ephemeral: true};
 }
 
 //スロットの回転
-async function turnSlot(interaction, slot_info, map, coins, jackpot){
+async function turnSlot(interaction, slot_info, map, user_coins, jackpot_coins){
     slot_info.interval = setInterval(async () => {
         slot_info.left_idx = slot_info.left_stop ? slot_info.left_idx : (slot_info.left_idx+1)%10;
         slot_info.center_idx = slot_info.center_stop ? slot_info.center_idx : (slot_info.center_idx+9)%10;
         slot_info.right_idx = slot_info.right_stop ? slot_info.right_idx : (slot_info.right_idx+1)%10;
         slot_info.count_interval++;
 
-        await interaction.editReply(await createSlot(slot_info, coins, jackpot));
+        await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
 
         if(slot_info.count_interval > 20){
             clearInterval(slot_info.interval);
@@ -196,137 +262,74 @@ async function turnSlot(interaction, slot_info, map, coins, jackpot){
     return 0;
 }
 
+//スロットのスライド
+function slideSlot(slot_info){
+    switch(slot_info.stop){
+        case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
+        case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
+        case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
+        default: break;
+    }
+
+    return slot_info;
+}
+
 //スロットの操作
 async function controlSlot(slot_info){
     const rand = Math.floor(Math.random()*100);
 
-    //斜めの絵柄操作
+    //斜めの操作
     if(slot_info.bet===3){
         if(slot_info.left_line[slot_info.left_idx] === slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[slot_info.right_idx] === slot_info.right_line[(slot_info.right_idx+2)%10]){
             if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<2 && slot_info.left_line[slot_info.left_idx]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<1 && slot_info.left_line[slot_info.left_idx]==="🗡️"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10] === slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[(slot_info.left_idx+2)%10] === slot_info.right_line[slot_info.right_idx]){
             if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+2)%10]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<1 && slot_info.left_line[(slot_info.left_idx+2)%10]==="🗡️"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }
         }
     }
 
-    //上下行の絵柄操作
+    //上下行の操作
     if(slot_info.bet===3 || slot_info.bet===2){
         if(slot_info.left_line[slot_info.left_idx] == slot_info.center_line[slot_info.center_idx] && slot_info.left_line[slot_info.left_idx] == slot_info.right_line[slot_info.right_idx]){
             if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<2 && slot_info.left_line[slot_info.left_idx]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<1 && slot_info.left_line[slot_info.left_idx]==="🗡️"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.center_line[(slot_info.center_idx+2)%10] && slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.right_line[(slot_info.right_idx+2)%10]){
             if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+2)%10]==="💎"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }else if(slot_info.state<1 && slot_info.left_line[(slot_info.left_idx+2)%10]==="🗡️"){
-                switch(slot_info.stop){
-                    case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                    case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                    case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                    default: break;
-                }
+                slot_info = slideSlot(slot_info);
             }
         }
     }
 
-    //中央行の絵柄判定
+    //中央行の操作
     if(slot_info.left_line[(slot_info.left_idx+1)%10] == slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[(slot_info.left_idx+1)%10] == slot_info.right_line[(slot_info.right_idx+1)%10]){
         if(rand<75 && slot_info.left_line[slot_info.left_idx]==="💎"){
-            switch(slot_info.stop){
-                case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                default: break;
-            }
+            slot_info = slideSlot(slot_info);
         }else if(slot_info.state<2 && slot_info.left_line[(slot_info.left_idx+1)%10]==="💎"){
-            switch(slot_info.stop){
-                case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                default: break;
-            }
+            slot_info = slideSlot(slot_info);
         }else if(slot_info.state<1 && slot_info.left_line[(slot_info.left_idx+1)%10]=="🗡️"){
-            switch(slot_info.stop){
-                case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
-                case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
-                case "right" : {slot_info.right_idx = (slot_info.right_idx+1)%10; break;}
-                default: break;
-            }
+            slot_info = slideSlot(slot_info);
         }
     }
 
@@ -351,14 +354,14 @@ async function reportJackpot(winner, jackpot){
     attachment.setFile("assets/zundamon/icon/bunny.png");
     files.push(attachment);
 
-    return {content: "", files: [], embeds: embeds, components: [], ephemeral: false};
+    return {content: "", files: files, embeds: embeds, components: [], ephemeral: false};
 }
 
 //払い戻し計算
-async function calcPayout(slot_info, jackpot, pattern){
+async function calcPayout(slot_info, jackpot_coins, pattern){
     switch(pattern){
         case "💎" : {
-            slot_info.payout += jackpot;
+            slot_info.payout += jackpot_coins;
             slot_info.hit = pattern;
             break;
         }
@@ -394,6 +397,12 @@ async function calcPayout(slot_info, jackpot, pattern){
 
 //状態遷移
 function transState(slot_info){
+    /*
+    state 0 : 初期状態　🗡️も💎も出ない　絵柄を揃えると20%でstate1へ
+    state 1 : 🗡️が狙える状態　🗡️を揃えると[20%:80%]で[state2:state0]へ　🗡️が揃わないと20%でstate0へ
+    state 2 : 💎が狙える状態　💎を揃えるとstate3へ　💎が揃わないと20%でstate0へ
+    state 3~: ボーナス状態　🛡️🏹しか存在しないスロット　継続率(100-state^2)%でstate+1　終了時state0へ
+    */
     const rand = Math.floor(Math.random()*100);
 
     if(slot_info.state===0){
@@ -433,39 +442,39 @@ function transState(slot_info){
 }
 
 //結果の確認
-async function checkResult(slot_info, jackpot){
+async function checkResult(slot_info, jackpot_coins){
     //斜めの絵柄判定
     if(slot_info.bet == 3){
         if(slot_info.left_line[slot_info.left_idx] == slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[slot_info.left_idx] == slot_info.right_line[(slot_info.right_idx+2)%10]){
-            slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[slot_info.left_idx]);
+            slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[slot_info.left_idx]);
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.right_line[slot_info.right_idx]){
-            slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx+2)%10]);
+            slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx+2)%10]);
         }
     }
 
     //上下行の絵柄判定
     if(slot_info.bet == 3 || slot_info.bet == 2){
         if(slot_info.left_line[slot_info.left_idx] == slot_info.center_line[slot_info.center_idx] && slot_info.left_line[slot_info.left_idx] == slot_info.right_line[slot_info.right_idx]){
-            slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx)]);
+            slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx)]);
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.center_line[(slot_info.center_idx+2)%10] && slot_info.left_line[(slot_info.left_idx+2)%10] == slot_info.right_line[(slot_info.right_idx+2)%10]){
-            slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx+2)%10]);
+            slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx+2)%10]);
         }
         if(slot_info.left_line[slot_info.left_idx]=="💊"){
-            slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx)]);
+            slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx)]);
         }
         if(slot_info.left_line[(slot_info.left_idx+2)%10]=="💊"){
-            slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx+2)%10]);
+            slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx+2)%10]);
         }
     }
 
     //中央行の絵柄判定
     if(slot_info.left_line[(slot_info.left_idx+1)%10] == slot_info.center_line[(slot_info.center_idx+1)%10] && slot_info.left_line[(slot_info.left_idx+1)%10] == slot_info.right_line[(slot_info.right_idx+1)%10]){
-        slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx+1)%10]);
+        slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx+1)%10]);
     }
     if(slot_info.left_line[(slot_info.left_idx+1)%10]=="💊"){
-        slot_info = await calcPayout(slot_info, jackpot, slot_info.left_line[(slot_info.left_idx+1)%10]);
+        slot_info = await calcPayout(slot_info, jackpot_coins, slot_info.left_line[(slot_info.left_idx+1)%10]);
     }
 
     return slot_info;
@@ -496,44 +505,44 @@ async function execute(interaction, map){
     const server_info = await db.getServerInfo(interaction.guild.id);
 
     let slot_info = getSlotInfo(interaction, map);
-    let coins = user_info.coins;
-    let jackpot = server_info.casino_slot_jackpot;
+    let user_coins = await getUserCoins(interaction, user_info);
+    let jackpot_coins = server_info.casino_slot_jackpot;
         
     //スロットの送信
     if(!slot_info.bet){
         map.set(`casino_slot_${interaction.user.id}`, slot_info);
-        await interaction.editReply(await createSlot(slot_info, coins, jackpot));
+        await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
         return 0;
     }
 
     //スロットの回転
     if(!slot_info.left_stop || !slot_info.center_stop || !slot_info.right_stop){
-        await turnSlot(interaction, slot_info, map, coins, jackpot);
+        await turnSlot(interaction, slot_info, map, user_coins, jackpot_coins);
         return 0;
     }
 
     //結果送信
     if(slot_info.left_stop && slot_info.center_stop && slot_info.right_stop){
         slot_info = await controlSlot(slot_info);
-        slot_info = await checkResult(slot_info, jackpot);
+        slot_info = await checkResult(slot_info, jackpot_coins);
         slot_info = transState(slot_info);
 
         if(slot_info.hit==="💎"){
             server_info.casino_slot_jackpot = 100-slot_info.payout;
-            interaction.channel.send(await reportJackpot(interaction.user.displayName, jackpot));
+            interaction.channel.send(await reportJackpot(interaction.user.displayName, jackpot_coins));
         }
 
-        user_info.coins = coins + slot_info.payout;
+        user_info.coins = user_coins + slot_info.payout;
         server_info.casino_slot_jackpot = Math.min(server_info.casino_slot_jackpot+slot_info.payout, 9999);
         
         await db.setUserInfo(interaction.user.id, user_info);
         await db.setServerInfo(interaction.guild.id, server_info);
-        await interaction.editReply(await createSlot(slot_info, coins, jackpot));
+        await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
 
         map.set(`casino_slot_${interaction.user.id}`, initialize(slot_info));
 
         return 0;
     }
 
-    return 0;
+    return -1;
 }

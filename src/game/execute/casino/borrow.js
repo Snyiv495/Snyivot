@@ -9,26 +9,9 @@ module.exports = {
 }
 
 require('dotenv').config();
-const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, TextInputBuilder, ModalBuilder, TextInputStyle} = require('discord.js');
+const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
 const db = require('../../db');
-
-//モーダルの作成
-function createModal(user_info){
-    const money = new TextInputBuilder();
-    const modal = new ModalBuilder();
-    
-    money.setCustomId("money");
-    money.setLabel(`3円でコイン1枚借りれるのだ！(所持金：${user_info.money}円)`);
-    money.setPlaceholder("数値のみで記入");
-    money.setStyle(TextInputStyle.Short);
-    money.setRequired(true);
-    modal.addComponents(new ActionRowBuilder().addComponents(money));
-
-    modal.setCustomId("game_casino_borrow_modal");
-    modal.setTitle("コインにするお金の金額を教えてほしいのだ！");
-
-    return modal;
-}
+const cui = require('../../cui');
 
 //埋め込みの作成
 async function createEmbed(user_info){
@@ -65,19 +48,15 @@ async function createEmbed(user_info){
 }
 
 //貸出の実行
-async function execute(interaction){
+async function execute(interaction, money){
+    let progress = null;
+    try{
+        progress = await cui.createProgressbar(interaction, 3);
+        progress = await cui.stepProgressbar(progress);
+    }catch(e){}
+
     const user_info = await db.getUserInfo(interaction.user.id);
-    
-    //金額の取得
-    if(!interaction.isModalSubmit()){
-        await interaction.showModal(createModal(user_info));
-
-        try{await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: [], ephemeral: true});}catch(e){};
-
-        return 0;
-    }
-
-    const money = interaction.fields.getTextInputValue("money");
+    progress = await cui.stepProgressbar(progress);
     
     if(!isNaN(money)){
         const coins = Math.min(Math.max(0, (money - money%3)/3), (user_info.money - user_info.money%3)/3);
@@ -86,6 +65,7 @@ async function execute(interaction){
         await db.setUserInfo(interaction.user.id, user_info);
     }
 
+    progress = await cui.stepProgressbar(progress);
     await interaction.editReply(await createEmbed(user_info));
 
     return 0;

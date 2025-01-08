@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.3.9\nスロットで既に止まっているレールがずれるバグ、他いくつかのバグを修正",
+        "content" : "ver 1.3.10\nスロットで既に止まっているレールがずれるバグ、他いくつかのバグを修正",
         "buttons" : [
             {
                 "label" : "呼ぶ",
@@ -254,19 +254,19 @@
                     {
                         "label" : "borrow",
                         "value" : "game_casino_borrow_exe",
-                        "description" : "メダルの貸出をするのだ！",
+                        "description" : "メダルを借りるのだ！",
                         "emoji" : "💳"
                     },
                     {
                         "label" : "exchange",
                         "value" : "game_casino_exchange_exe",
-                        "description" : "メダルの換金をするのだ！",
+                        "description" : "メダルを換金するのだ！",
                         "emoji" : "💴"
                     },
                     {
                         "label" : "slot",
                         "value" : "game_casino_slot_exe",
-                        "description" : "スロットをプレイするのだ！",
+                        "description" : "スロットをするのだ！",
                         "emoji" : "🎰"
                     }
                 ]

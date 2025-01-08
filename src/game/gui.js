@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2024/01/03
+    2025/01/08
 *****************/
 
 module.exports = {
@@ -11,12 +11,49 @@ module.exports = {
 }
 
 require('dotenv').config();
+const {TextInputBuilder, ModalBuilder, TextInputStyle, ActionRowBuilder} = require('discord.js');
 const db = require('./db');
 const casino_borrow = require('./execute/casino/borrow');
 const casino_exchange = require('./execute/casino/exchange');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
 //const game_help = require('./execute/help');
+
+//借入モーダル
+function borrowModal(user_info){
+    const money_input_text = new TextInputBuilder();
+    const borrow_modal = new ModalBuilder();
+    
+    money_input_text.setCustomId("money_input_text");
+    money_input_text.setLabel(`3円でコイン1枚借りれるのだ！ (所持金：${user_info.money}円)`);
+    money_input_text.setPlaceholder("数値のみを記入");
+    money_input_text.setStyle(TextInputStyle.Short);
+    money_input_text.setRequired(true);
+    borrow_modal.addComponents(new ActionRowBuilder().addComponents(money_input_text));
+
+    borrow_modal.setCustomId("game_casino_borrow_modal");
+    borrow_modal.setTitle("何円分のお金をコインにするのだ？");
+
+    return borrow_modal;
+}
+
+//換金モーダル
+function exchangeModal(user_info){
+    const coins_input_text = new TextInputBuilder();
+    const exchange_modal = new ModalBuilder();
+    
+    coins_input_text.setCustomId("coins_input_text");
+    coins_input_text.setLabel(`コイン3枚で1円に換金できるのだ！ (所持コイン：${user_info.coins}枚)`);
+    coins_input_text.setPlaceholder("数値のみを記入");
+    coins_input_text.setStyle(TextInputStyle.Short);
+    coins_input_text.setRequired(true);
+    exchange_modal.addComponents(new ActionRowBuilder().addComponents(coins_input_text));
+
+    exchange_modal.setCustomId("game_casino_exchange_modal");
+    exchange_modal.setTitle("換金したいコインの枚数を教えてほしいのだ！");
+
+    return exchange_modal;
+}
 
 //GUIメニューの実行
 async function menu(interaction, map){
@@ -26,13 +63,17 @@ async function menu(interaction, map){
         return;
     }
 
+    const user_info = await db.getUserInfo(interaction.user.id);
+    
     switch(interaction.values[0]){
         case "game_casino_borrow_exe" : {
-            await casino_borrow.exe(interaction);
+            await interaction.showModal(borrowModal(user_info));
+            await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
             break;
         }
         case "game_casino_exchange_exe" : {
-            await casino_exchange.exe(interaction);
+            await interaction.showModal(exchangeModal(user_info));
+            await interaction.editReply({content: "Snyivot が考え中...", files: [], embeds: [], components: []});
             break;
         }
         case "game_casino_slot_exe" : {
@@ -53,75 +94,17 @@ async function menu(interaction, map){
 
 //GUIボタンの実行
 async function button(interaction, map){
-    const user_info = await db.getUserInfo(interaction.user.id);
-    const casino_slot_info = map.get(`casino_slot_${interaction.user.id}`);
 
-    switch(interaction.customId){
-        case "game_casino_slot_again_exe" : {
+    switch(true){
+        case /game_casino_slot/.test(interaction.customId) : {
             await interaction.deferUpdate();
             await interaction.editReply({components: []});
             await casino_slot.exe(interaction, map);
             break;
         }
-        case "game_casino_slot_3bet_exe" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({components: []});
-            casino_slot_info.bet = 3;
-            user_info.coins -= 3;
-            map.set(`casino_slot_${interaction.user.id}`, casino_slot_info);
-            await db.setUserInfo(interaction.user.id, user_info);
-            await casino_slot.exe(interaction, map);
-            break;
-        }
-        case "game_casino_slot_2bet_exe" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({components: []});
-            casino_slot_info.bet = 2;
-            user_info.coins -= 2;
-            map.set(`casino_slot_${interaction.user.id}`, casino_slot_info);
-            await db.setUserInfo(interaction.user.id, user_info);
-            await casino_slot.exe(interaction, map);
-            break;
-        }
-        case "game_casino_slot_1bet_exe" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({components: []});
-            casino_slot_info.bet = 1;
-            user_info.coins -= 1;
-            map.set(`casino_slot_${interaction.user.id}`, casino_slot_info);
-            await db.setUserInfo(interaction.user.id, user_info);
-            await casino_slot.exe(interaction, map);
-            break;
-        }
-        case "game_casino_slot_left_exe" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({components: []});
-            casino_slot_info.stop = "left";
-            casino_slot_info.left_stop = true;
-            map.set(`casino_slot_${interaction.user.id}`, casino_slot_info);
-            await casino_slot.exe(interaction, map);
-            break;
-        }
-        case "game_casino_slot_center_exe" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({components: []});
-            casino_slot_info.stop = "center";
-            casino_slot_info.center_stop = true;
-            map.set(`casino_slot_${interaction.user.id}`, casino_slot_info);
-            await casino_slot.exe(interaction, map);
-            break;
-        }
-        case "game_casino_slot_right_exe" : {
-            await interaction.deferUpdate();
-            await interaction.editReply({components: []});
-            casino_slot_info.stop = "right";
-            casino_slot_info.right_stop = true;
-            map.set(`casino_slot_${interaction.user.id}`, casino_slot_info);
-            await casino_slot.exe(interaction, map);
-            break;
-        }
-        case "game_work_calc_again_exe" : {
+        case /game_work_calc/.test(interaction.customId) : {
             await work_calc.exe(interaction, map);
+            break;
         }
         default : break;
     }
@@ -140,11 +123,11 @@ async function modal(interaction, map){
 
     switch(interaction.customId){
         case "game_casino_borrow_modal" : {
-            await casino_borrow.exe(interaction);
+            await casino_borrow.exe(interaction, interaction.fields.getTextInputValue("money_input_text"));
             break;
         }
         case "game_casino_exchange_modal" : {
-            await casino_exchange.exe(interaction);
+            await casino_exchange.exe(interaction, interaction.fields.getTextInputValue("coins_input_text"));
             break;
         }
         case "game_work_calc_modal" : {

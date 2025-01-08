@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2024/01/03
+    2025/01/08
 *****************/
 
 module.exports = {
@@ -67,12 +67,18 @@ function getZundamocchiCleanCmd(){
     return cmd;
 }
 
-//貸出コマンドの取得
+//借入コマンドの取得
 function getCasinoBorrowCmd(){
     const cmd = new SlashCommandBuilder();
 
     cmd.setName("game_casino_borrow");
-    cmd.setDescription("メダルの貸出をするコマンドなのだ！");
+    cmd.setDescription("コインを借りるコマンドなのだ！");
+    cmd.addIntegerOption(option => {
+        option.setName("money");
+        option.setDescription("何円分のお金でコインを借りるかを入力するのだ！");
+        option.setRequired(true);
+        return option;
+    });
 
     return cmd;
 }
@@ -82,7 +88,13 @@ function getCasinoExchangeCmd(){
     const cmd = new SlashCommandBuilder();
 
     cmd.setName("game_casino_exchange");
-    cmd.setDescription("メダルを換金するコマンドなのだ！");
+    cmd.setDescription("コインを換金するコマンドなのだ！");
+    cmd.addIntegerOption(option => {
+        option.setName("coins");
+        option.setDescription("換金したいコインの枚数を入力するのだ！");
+        option.setRequired(true);
+        return option;
+    });
 
     return cmd;
 }
@@ -92,7 +104,7 @@ function getCasinoSlotCmd(){
     const cmd = new SlashCommandBuilder();
 
     cmd.setName("game_casino_slot");
-    cmd.setDescription("スロットをプレイするコマンドなのだ！");
+    cmd.setDescription("スロットをするコマンドなのだ！");
 
     return cmd;
 }
@@ -176,11 +188,11 @@ async function cmd(interaction, map){
             break;
         }
         case "game_casino_borrow" : {
-            await casino_borrow.exe(interaction);
+            await casino_borrow.exe(interaction, interaction.options.get("money").value);
             break;
         }
         case "game_casino_exchange" : {
-            await casino_exchange.exe(interaction);
+            await casino_exchange.exe(interaction, interaction.options.get("coins").value);
             break;
         }
         case "game_casino_slot" : {
@@ -224,16 +236,19 @@ async function createProgressbar(interaction, stepMax){
 }
 
 //進捗バーの進展
-async function stepProgressbar(progress, activity){
+async function stepProgressbar(progress){
     let bar = "";
 
     progress.current = ((progress.current+(progress.step*2)-1)<100) ? progress.current+progress.step : 100;
     
     for(let i=0; i<10; i++){
-        bar += (i < Math.floor(progress.current/10)) ? "#" : "-";
+        if(i < Math.floor(progress.current/10)){
+            bar += "#";
+        }else{
+            bar += "-";
+        }
     }
-
-    await progress.interaction.editReply({content: `進捗[${bar}]${Math.floor(progress.current)}%\n${activity}`});
+    await progress.interaction.editReply({content: `進捗[${bar}]${Math.floor(progress.current)}%`});
 
     return progress;
 }

@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2024/12/26
+    2025/01/08
 *****************/
 
 require('dotenv').config();
@@ -38,7 +38,7 @@ client.once('ready', async () => {
     try{
         scene = JSON.parse(fs.readFileSync("./src/scene.json", {encoding: "utf8"}));
     }catch(e){
-        console.log("### GUIの取得に失敗しました ###\n### 再起動してください ###\n");
+        console.log("### シーンの取得に失敗しました ###\n### 再起動してください ###\n");
         process.exit();
     }
 
@@ -73,7 +73,7 @@ client.on('messageCreate', async message => {
     //メンションに反応
     if(message.mentions.users.has(client.user.id)){
 
-        //内容がなければヘルプ
+        //内容がなければGUIの送信
         if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
             await gui.send(message, scene);
         }
@@ -100,151 +100,137 @@ client.on('messageCreate', async message => {
     return -1;
 });
 
-//コマンド動作
+//インタラクション動作
 client.on('interactionCreate', async (interaction) => {
-    //コマンド以外を除外
-    if(!interaction.isCommand()){
+    //スラッシュコマンド
+    if(interaction.isCommand()){
+        //cohere
+        if(interaction.commandName.includes("cohere")){
+            await cohere.cuiCmd(interaction);
+            return 0;
+        }
+
+        //game
+        if(interaction.commandName.includes("game")){
+            await game.cuiCmd(interaction, game_map);
+            return 0;
+        }
+
+        //voicevox
+        if(interaction.commandName.includes("voicevox")){
+            await voicevox.cuiCmd(interaction, voicevox_map, vv_speakers);
+            return 0;
+        }
+
+        //readme
+        if(interaction.commandName === "readme"){
+            await cui.cmd(interaction);
+            return 0;
+        }
+
         return -1;
     }
+
+    //スラッシュコマンド補助
+    if(interaction.isAutocomplete()){
+        //voicevox
+        if(interaction.commandName.includes("voicevox")){
+            await voicevox.autocomplete(interaction, vv_speakers);
+            return 0;
+        }
+
+        return -1;
+    }
+
+    //セレクトメニュー
+    if(interaction.isAnySelectMenu()){
+        //実行
+        if(interaction.values[0].includes("exe")){
+            //cohere
+            if(interaction.customId.includes("cohere")){
+                await cohere.guiMenu(interaction);
+                return 0;
+            }
+
+            //game
+            if(interaction.customId.includes("game")){
+                await game.guiMenu(interaction, game_map);
+                return 0;
+            }
+
+            //voicevox
+            if(interaction.customId.includes("voicevox")){
+                await voicevox.guiMenu(interaction, voicevox_map, vv_speakers);
+                return 0;
+            }
+
+            //GUI
+            if(interaction.customId.includes("home")){
+                await gui.menu(interaction);
+                return 0;
+            }
+
+            return -1;
+        }
+
+        //GUIの遷移
+        await gui.send(interaction, scene);
+
+        return 0;
+    }
+
+    //ボタン
+    if(interaction.isButton()){
+        //実行
+        if(interaction.customId.includes("exe")){
+            //cohere
+            if(interaction.customId.includes("cohere")){
+                await cohere.guiButton(interaction);
+                return 0;
+            }
     
-    //cohere
-    if(interaction.commandName.includes("cohere")){
-        await cohere.cuiCmd(interaction);
+            //game
+            if(interaction.customId.includes("game")){
+                await game.guiButton(interaction, game_map);
+                return 0;
+            }
+    
+            //voicevox
+            if(interaction.customId.includes("voicevox")){
+                await voicevox.guiButton(interaction, vv_speakers);
+                return 0
+            }
+    
+            return -1;
+        }
+    
+        //GUIの遷移
+        await gui.send(interaction, scene);
+    
         return 0;
     }
 
-    //game
-    if(interaction.commandName.includes("game")){
-        await game.cuiCmd(interaction, game_map);
-        return 0;
-    }
-
-    //voicevox
-    if(interaction.commandName.includes("voicevox")){
-        await voicevox.cuiCmd(interaction, voicevox_map, vv_speakers);
-        return 0;
-    }
-
-    //readme
-    if(interaction.commandName === "readme"){
-        await cui.cmd(interaction);
-        return 0;
-    }
-
-    return -1;
-});
-
-//コマンド補助
-client.on('interactionCreate', async (interaction) => {
-    //コマンド補助以外を除外
-    if(!interaction.isAutocomplete()){
-        return -1;
-    }
-
-    //voicevox
-    if(interaction.commandName.includes("voicevox_setting")){
-        await voicevox.autocomplete(interaction, vv_speakers);
-        return 0;
-    }
-
-    return -1;
-});
-
-//セレクトメニュー動作
-client.on('interactionCreate', async (interaction) => {
-    //セレクトメニュー以外を除外
-    if(!interaction.isAnySelectMenu()){
-        return -1;
-    }
-
-    //コマンドの実行
-    if(interaction.values[0].includes("exe")){
+    //モーダル
+    if(interaction.isModalSubmit()){
+        //cohere
         if(interaction.customId.includes("cohere")){
-            await cohere.guiMenu(interaction);
+            await cohere.guiModal(interaction, readme);
             return 0;
         }
 
+        //game
         if(interaction.customId.includes("game")){
-            await game.guiMenu(interaction, game_map);
+            await game.guiModal(interaction, game_map);
             return 0;
         }
 
+        //voicevox
         if(interaction.customId.includes("voicevox")){
-            await voicevox.guiMenu(interaction, voicevox_map, vv_speakers);
-            return 0;
-        }
-
-        if(interaction.customId.includes("home")){
-            await gui.menu(interaction);
+            await voicevox.guiModal(interaction, vv_speakers);
             return 0;
         }
 
         return -1;
-    }
-
-    //GUIの送信
-    await gui.send(interaction, scene);
-
-    return 0;
-
-});
-
-//ボタン動作
-client.on('interactionCreate', async (interaction) => {
-    //ボタン以外を除外
-    if(!interaction.isButton()){
-        return -1;
-    }
-
-    //コマンド実行
-    if(interaction.customId.includes("exe")){
-        if(interaction.customId.includes("cohere")){
-            await cohere.guiButton(interaction);
-            return 0;
-        }
-
-        if(interaction.customId.includes("game")){
-            await game.guiButton(interaction, game_map);
-            return 0;
-        }
-
-        if(interaction.customId.includes("voicevox")){
-            await voicevox.guiButton(interaction, vv_speakers);
-            return 0
-        }
-
-        return -1;
-    }
-
-    //GUIの送信
-    await gui.send(interaction, scene);
-
-    return 0;
-});
-
-//モーダル動作
-client.on('interactionCreate', async (interaction) => {
-    //モーダル以外を除外
-    if(!interaction.isModalSubmit()){
-        return -1;
-    }
-
-    //cohere
-	if(interaction.customId.includes("cohere")){
-        await cohere.guiModal(interaction, readme);
-        return 0;
-	}
-
-    //game
-    if(interaction.customId.includes("game")){
-        await game.guiModal(interaction, game_map);
-        return 0;
-	}
-
-    //voicevox
-    if(interaction.customId.includes("voicevox")){
-        await voicevox.guiModal(interaction, vv_speakers);
-        return 0;
     }
 
     return -1;
