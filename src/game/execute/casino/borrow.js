@@ -1,7 +1,7 @@
 /*****************
     borrow.js
     スニャイヴ
-    2024/01/03
+    2024/01/09
 *****************/
 
 module.exports = {
@@ -9,26 +9,31 @@ module.exports = {
 }
 
 require('dotenv').config();
-const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
+const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder} = require('discord.js');
 const db = require('../../db');
 const cui = require('../../cui');
 
-//埋め込みの作成
-async function createEmbed(user_info){
+//借用埋め込み
+async function borrowEmbed(user_info){
+    const files = [];
     const embeds = [];
     const components = [];
 
+    const attachment = new AttachmentBuilder();
     const embed = new EmbedBuilder();
     const buttons = new ActionRowBuilder();
-
-    embed.setTitle(`現在の貸出枚数は${user_info.coins}枚なのだ！`);
-    embed.setFooter({text: `所持金：${user_info.money}`});
-    embed.setColor(0x00FF00);
-    embeds.push(embed);
 
     const home = new ButtonBuilder();
     const quit = new ButtonBuilder();
 
+    embed.setTitle(`現在の貸出枚数は${user_info.coins}枚なのだ！`);
+    embed.setThumbnail("attachment://icon.png");
+    embed.setFooter({text: `所持金：${user_info.money}`});
+    embed.setColor(0x00FF00);
+
+    attachment.setName("icon.png");
+    attachment.setFile("assets/zundamon/icon/bunny.png");
+    
     home.setLabel("ゲーム選択");
     home.setEmoji("🎮");
     home.setCustomId("game_home");
@@ -42,9 +47,11 @@ async function createEmbed(user_info){
     quit.setDisabled(false);
     buttons.addComponents(quit);
     
+    files.push(attachment);
+    embeds.push(embed);
     components.push(buttons);
 
-    return {content: "", files: [], embeds: embeds, components: components, ephemeral: true};
+    return {content: "", files: files, embeds: embeds, components: components, ephemeral: true};
 }
 
 //貸出の実行
@@ -66,7 +73,7 @@ async function execute(interaction, money){
     }
 
     progress = await cui.stepProgressbar(progress);
-    await interaction.editReply(await createEmbed(user_info));
+    await interaction.editReply(await borrowEmbed(user_info));
 
     return 0;
 }
