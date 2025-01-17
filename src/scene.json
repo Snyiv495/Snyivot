@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.4.0\n仕事の内容を追加！",
+        "content" : "ver 1.4.1\n仕事の内容を追加！\nすでに止まってるスロットが動くバグを修正",
         "buttons" : [
             {
                 "label" : "呼ぶ",

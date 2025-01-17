@@ -543,6 +543,8 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
 //スロットの回転
 async function turnSlot(interaction, slot_info, map, user_coins, jackpot_coins){
     slot_info.interval = setInterval(async () => {
+        slot_info = map.get(`casino_slot_${interaction.user.id}`);
+        
         slot_info.left_idx = slot_info.left_stop ? slot_info.left_idx : (slot_info.left_idx+1)%10;
         slot_info.center_idx = slot_info.center_stop ? slot_info.center_idx : (slot_info.center_idx+9)%10;
         slot_info.right_idx = slot_info.right_stop ? slot_info.right_idx : (slot_info.right_idx+1)%10;
