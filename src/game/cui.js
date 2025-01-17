@@ -17,6 +17,7 @@ const casino_borrow = require('./execute/casino/borrow');
 const casino_exchange = require('./execute/casino/exchange');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
+const work_ident = require('./execute/work/ident');
 //const help = require('./execute/help');
 
 //スラッシュコマンドの取得
@@ -29,7 +30,7 @@ function getSlashCmds(){
     slash_cmds.push(getCasinoBorrowCmd());
     slash_cmds.push(getCasinoExchangeCmd());
     slash_cmds.push(getCasinoSlotCmd());
-    //slash_cmds.push(getWorkIdentCmd());
+    slash_cmds.push(getWorkIdentCmd());
     //slash_cmds.push(getWorkInspectCmd());
     slash_cmds.push(getWorkCalcCmd());
     //slash_cmds.push(getHelpCmd());
