@@ -1,7 +1,7 @@
 /*****************
     slot.js
     スニャイヴ
-    2024/01/08
+    2024/01/20
 *****************/
 
 module.exports = {
@@ -34,12 +34,10 @@ function getSlotInfo(interaction, map){
         payout: 0
     }
     try{clearInterval(info.interval);}catch(e){};
-    info.interval = null;
-    info.count_interval = 0;
     info.again = false
     info.payout = 0;
 
-    if(interaction.isButton()){
+    if(interaction.isButton() && info.count_interval<=20){
         switch(true){
             case /1bet/.test(interaction.customId) : {
                 info.button = "1bet";
@@ -74,6 +72,9 @@ function getSlotInfo(interaction, map){
             default : break;
         }
     }
+
+    info.interval = null;
+    info.count_interval = 0;
 
     map.set(`casino_slot_${interaction.user.id}`, info);
 
@@ -205,7 +206,7 @@ async function createSlot(slot_info, user_coins, jackpot_coins){
 }
 
 //スロットのスライド
-function slideSlot(interaction, slot_info, map){
+function slideSlot(slot_info){
     switch(slot_info.button){
         case "left" : {slot_info.left_idx = (slot_info.left_idx+1)%10; break;}
         case "center" : {slot_info.center_idx = (slot_info.center_idx+9)%10; break;}
@@ -217,37 +218,35 @@ function slideSlot(interaction, slot_info, map){
     slot_info.center_idx = !slot_info.center_stop ? (slot_info.center_idx+9)%10 : slot_info.center_idx;
     slot_info.right_idx = !slot_info.right_stop ? (slot_info.right_idx+1)%10 : slot_info.right_idx;
 
-    map.set(`casino_slot_${interaction.user.id}`, slot_info);
-
     return slot_info;
 }
 
 //1レーン停止時の確認
-async function checkFirstLane(interaction, slot_info, map, user_coins, jackpot_coins){
+async function checkFirstLane(interaction, slot_info, user_coins, jackpot_coins){
     const rand = Math.floor(Math.random()*100);
 
     if(slot_info.button==="left"){
         //3行目
         if(slot_info.left_line[(slot_info.left_idx+2)%10]==="☄️" && slot_info.bet>1){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
         //2行目
         if(slot_info.left_line[(slot_info.left_idx+1)%10]==="☄️"){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
         //1行目
         if(slot_info.left_line[slot_info.left_idx]==="☄️" && slot_info.bet>1){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -258,24 +257,24 @@ async function checkFirstLane(interaction, slot_info, map, user_coins, jackpot_c
         //1行目
         if(slot_info.center_line[slot_info.center_idx]==="☄️" && slot_info.bet>1){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
         //2行目
         if(slot_info.center_line[(slot_info.center_idx+1)%10]==="☄️"){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
         //3行目
         if(slot_info.center_line[(slot_info.center_idx+2)%10]==="☄️" && slot_info.bet>1){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -286,24 +285,24 @@ async function checkFirstLane(interaction, slot_info, map, user_coins, jackpot_c
         //3行目
         if(slot_info.right_line[(slot_info.right_idx+2)%10]==="☄️" && slot_info.bet>1){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
         //2行目
         if(slot_info.right_line[(slot_info.right_idx+1)%10]==="☄️"){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);    
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));  
             }
         }
 
         //1行目
         if(slot_info.right_line[slot_info.right_idx]==="☄️" && slot_info.bet>1){
             if((slot_info.state===4&&rand<80) || slot_info.state<4&&rand<90){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
-                map.get(`casino_slot_${interaction.user.id}`);
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -314,28 +313,31 @@ async function checkFirstLane(interaction, slot_info, map, user_coins, jackpot_c
 }
 
 //2レーン停止時の確認
-async function checkSecondLane(interaction, slot_info, map, user_coins, jackpot_coins){
+async function checkSecondLane(interaction, slot_info, user_coins, jackpot_coins){
     const rand = Math.floor(Math.random()*100);
 
     if(slot_info.button==="left"){
         //3行目
         if(slot_info.left_line[(slot_info.left_idx+2)%10]==="🦖" && slot_info.bet>1){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
         //2行目
         if(slot_info.left_line[(slot_info.left_idx+1)%10]==="🦖"){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
         //1行目
         if(slot_info.left_line[slot_info.left_idx]==="🦖" && slot_info.bet>1){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -346,21 +348,24 @@ async function checkSecondLane(interaction, slot_info, map, user_coins, jackpot_
         //1行目
         if(slot_info.center_line[slot_info.center_idx]==="🦖" && slot_info.bet>1){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
         //2行目
         if(slot_info.center_line[(slot_info.center_idx+1)%10]==="🦖"){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
         //3行目
         if(slot_info.center_line[(slot_info.center_idx+2)%10]==="🦖" && slot_info.bet>1){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -371,21 +376,24 @@ async function checkSecondLane(interaction, slot_info, map, user_coins, jackpot_
         //3行目
         if(slot_info.right_line[(slot_info.right_idx+2)%10]==="🦖" && slot_info.bet>1){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
         //2行目
         if(slot_info.right_line[(slot_info.right_idx+1)%10]==="🦖"){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }    
 
         //1行目
         if(slot_info.right_line[slot_info.right_idx]==="🦖" && slot_info.bet>1){
             if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -396,7 +404,7 @@ async function checkSecondLane(interaction, slot_info, map, user_coins, jackpot_
 }
 
 //3レーン停止時の確認
-async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_coins){
+async function checkThirdLane(interaction, slot_info, user_coins, jackpot_coins){
     const rand = Math.floor(Math.random()*100);
 
     if(slot_info.button==="left"){
@@ -404,13 +412,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[slot_info.left_idx]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet===3) || (slot_info.left_line[slot_info.left_idx]===slot_info.center_line[slot_info.center_idx]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet>1)){
             if(slot_info.left_line[slot_info.left_idx]==="☄️" || slot_info.left_line[slot_info.left_idx]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.left_line[(slot_info.left_idx+1)%10]!="☄️" && slot_info.left_line[(slot_info.left_idx+1)%10]!="🦖"){
             if((slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet===3) || slot_info.left_line[(slot_info.left_idx+1)%10]===(slot_info.center_line[slot_info.center_idx]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet>1)){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
@@ -418,13 +428,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[(slot_info.right_idx+1)%10])){
             if(slot_info.left_line[(slot_info.left_idx+1)%10]==="☄️" || slot_info.left_line[(slot_info.left_idx+1)%10]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.left_line[(slot_info.left_idx+2)%10]!="☄️" && slot_info.left_line[(slot_info.left_idx+2)%10]!="🦖"){
             if(slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+1)%10]){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
@@ -432,13 +444,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet===3) || (slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+2)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet>1)){
             if(slot_info.left_line[slot_info.left_idx]==="☄️" || slot_info.left_line[slot_info.left_idx]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.left_line[(slot_info.left_idx+3)%10]!="☄️" && slot_info.left_line[(slot_info.left_idx+3)%10]!="🦖"){
             if((slot_info.left_line[(slot_info.left_idx+3)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+3)%10]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet===3) || slot_info.left_line[(slot_info.left_idx+3)%10]===(slot_info.center_line[(slot_info.center_idx+2)%10]&&slot_info.left_line[(slot_info.left_idx+3)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet>1)){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -450,13 +464,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+2)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet>1)){
             if(slot_info.left_line[(slot_info.left_idx+2)%10]==="☄️" || slot_info.left_line[(slot_info.left_idx+2)%10]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.center_line[(slot_info.center_idx+9)%10]!="☄️" && slot_info.center_line[(slot_info.center_idx+9)%10]!="🦖"){
             if(slot_info.left_line[slot_info.left_idx]===slot_info.center_line[(slot_info.center_idx+9)%10]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet>1){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -464,13 +480,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[slot_info.left_idx]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet===3) || (slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet===3) || (slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[(slot_info.right_idx+1)%10])){
             if(slot_info.left_line[(slot_info.left_idx+1)%10]==="☄️" || slot_info.left_line[(slot_info.left_idx+1)%10]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.center_line[(slot_info.center_idx+8)%10]!="☄️" && slot_info.center_line[(slot_info.center_idx+8)%10]!="🦖"){
             if((slot_info.left_line[slot_info.left_idx]===slot_info.center_line[(slot_info.center_idx+8)%10]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet===3) || (slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+8)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet===3) || (slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.center_line[(slot_info.center_idx+8)%10]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[(slot_info.right_idx+1)%10])){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -478,13 +496,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[slot_info.left_idx]===slot_info.center_line[slot_info.center_idx]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[slot_info.right_idx+2]&&slot_info.bet>1)){
             if(slot_info.left_line[slot_info.left_idx]==="☄️" || slot_info.left_line[slot_info.left_idx]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.center_line[(slot_info.center_idx+7)%10]!="☄️" && slot_info.center_line[(slot_info.center_idx+7)%10]!="🦖"){
             if(slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+7)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet>1){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -496,13 +516,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet===3) || (slot_info.left_line[slot_info.left_idx]===slot_info.center_line[slot_info.center_idx]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[slot_info.right_idx]&&slot_info.bet>1)){
             if(slot_info.left_line[slot_info.left_idx]==="☄️" || slot_info.left_line[slot_info.left_idx]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.right_line[(slot_info.right_idx+1)%10]!="☄️" && slot_info.right_line[(slot_info.right_idx+1)%10]!="🦖"){
             if((slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+1)%10]&&slot_info.bet===3) || slot_info.left_line[slot_info.left_idx]===(slot_info.center_line[slot_info.center_idx]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[(slot_info.right_idx+1)%10]&&slot_info.bet>1)){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -510,13 +532,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[(slot_info.right_idx+1)%10])){
             if(slot_info.left_line[(slot_info.left_idx+1)%10]==="☄️" || slot_info.left_line[(slot_info.left_idx+1)%10]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.right_line[(slot_info.right_idx+2)%10]!="☄️" && slot_info.right_line[(slot_info.right_idx+2)%10]!="🦖"){
             if(slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[(slot_info.left_idx+1)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
     
@@ -524,13 +548,15 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
         if((slot_info.left_line[slot_info.left_idx]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet===3) || (slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.center_line[(slot_info.center_idx+2)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+2)%10]&&slot_info.bet>1)){
             if(slot_info.left_line[slot_info.left_idx]==="☄️" || slot_info.left_line[slot_info.left_idx]==="🦖"){
                 if((slot_info.state===4&&rand<50) || slot_info.state<4&&rand<80){
-                    await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                    slot_info = slideSlot(slot_info);
+                    await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
                 }
             }
         }
         if(slot_info.state===-4 && rand<50 && slot_info.right_line[(slot_info.right_idx+3)%10]!="☄️" && slot_info.right_line[(slot_info.right_idx+3)%10]!="🦖"){
             if((slot_info.left_line[slot_info.left_idx]===slot_info.center_line[(slot_info.center_idx+1)%10]&&slot_info.left_line[slot_info.left_idx]===slot_info.right_line[(slot_info.right_idx+3)%10]&&slot_info.bet===3) || slot_info.left_line[(slot_info.left_idx+2)%10]===(slot_info.center_line[(slot_info.center_idx+2)%10]&&slot_info.left_line[(slot_info.left_idx+2)%10]===slot_info.right_line[(slot_info.right_idx+3)%10]&&slot_info.bet>1)){
-                await interaction.editReply(await createSlot(slideSlot(interaction, slot_info, map), user_coins, jackpot_coins));
+                slot_info = slideSlot(slot_info);
+                await interaction.editReply(await createSlot(slot_info, user_coins, jackpot_coins));
             }
         }
 
@@ -543,8 +569,6 @@ async function checkThirdLane(interaction, slot_info, map, user_coins, jackpot_c
 //スロットの回転
 async function turnSlot(interaction, slot_info, map, user_coins, jackpot_coins){
     slot_info.interval = setInterval(async () => {
-        slot_info = map.get(`casino_slot_${interaction.user.id}`);
-        
         slot_info.left_idx = slot_info.left_stop ? slot_info.left_idx : (slot_info.left_idx+1)%10;
         slot_info.center_idx = slot_info.center_stop ? slot_info.center_idx : (slot_info.center_idx+9)%10;
         slot_info.right_idx = slot_info.right_stop ? slot_info.right_idx : (slot_info.right_idx+1)%10;
@@ -811,20 +835,21 @@ async function execute(interaction, map){
 
     //1レーン停止
     if((slot_info.left_stop&&!slot_info.center_stop&&!slot_info.right_stop) || (!slot_info.left_stop&&slot_info.center_stop&&!slot_info.right_stop) || (!slot_info.left_stop&&!slot_info.center_stop&&slot_info.right_stop)){
-        await turnSlot(interaction, await checkFirstLane(interaction, slot_info, map, user_info.coins, server_info.casino_slot_jackpot), map, user_info.coins, server_info.casino_slot_jackpot);
+        await turnSlot(interaction, await checkFirstLane(interaction, slot_info, user_info.coins, server_info.casino_slot_jackpot), map, user_info.coins, server_info.casino_slot_jackpot);
         return 0;
     }
 
     //2レーン停止
     if((slot_info.left_stop&&slot_info.center_stop&&!slot_info.right_stop) || (slot_info.left_stop&&!slot_info.center_stop&&slot_info.right_stop) || (!slot_info.left_stop&&slot_info.center_stop&&slot_info.right_stop)){
-        await turnSlot(interaction, await checkSecondLane(interaction, slot_info, map, user_info.coins, server_info.casino_slot_jackpot), map, user_info.coins, server_info.casino_slot_jackpot);
+        await turnSlot(interaction, await checkSecondLane(interaction, slot_info, user_info.coins, server_info.casino_slot_jackpot), map, user_info.coins, server_info.casino_slot_jackpot);
         return 0;
     }
 
     //3レーン停止
     if(slot_info.left_stop && slot_info.center_stop && slot_info.right_stop){
-        slot_info = transState(checkResult(await checkThirdLane(interaction, slot_info, map, user_info.coins, server_info.casino_slot_jackpot), server_info.casino_slot_jackpot));
-
+        slot_info = await checkThirdLane(interaction, slot_info, user_info.coins, server_info.casino_slot_jackpot);
+        slot_info = transState(checkResult(slot_info, server_info.casino_slot_jackpot));
+        
         if(slot_info.hit==="☄️"){
             interaction.channel.send(await reportJackpot(interaction.user.displayName, server_info.casino_slot_jackpot));
             server_info.casino_slot_jackpot = 100-slot_info.bet;
