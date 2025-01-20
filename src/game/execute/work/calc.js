@@ -1,7 +1,7 @@
 /*****************
     calc.js
     スニャイヴ
-    2025/01/04
+    2025/01/20
 *****************/
 
 module.exports = {
@@ -9,84 +9,36 @@ module.exports = {
 }
 
 require('dotenv').config();
-const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, TextInputBuilder, ModalBuilder, TextInputStyle} = require('discord.js');
+const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, TextInputBuilder, ModalBuilder, TextInputStyle, AttachmentBuilder} = require('discord.js');
 const db = require('../../db');
 
 //問題の作成
 function createProbrem(interaction, map){
-    const calc_info = {probrem: null, anser: 0, correct: false};
-    const difficult = Math.floor(Math.random()*10)===0 ? true : false;
-    const sel = Math.floor(Math.random()*4);
+    const calc_info = {probrem_add: null, probrem_sub: null, probrem_mul: null, probrem_div: null, anser_add: 0, anser_sub: 0, anser_mul: 0, anser_div: 0, correct_add: false, correct_sub: false, correct_mul: false, correct_div: false, correct_all: false};
 
-    if(!difficult){
-        switch(sel){
-            case 0 : {
-                const length = Math.floor(Math.random()*89)+11;
-                const width = Math.floor(Math.random()*89)+11;
-                calc_info.probrem = `縦${length}㍉ 横${width}㍉ の四角形の面積は何平方ミリメートルかな？`;
-                calc_info.anser = length*width;
-                break;
-            }
-            case 1 : {
-                const price = Math.floor(Math.random()*899)+101;
-                const discount = (Math.floor(Math.random()*9)+1)*10;
-                calc_info.probrem = `${price}円の商品が${discount}%引きで売られてるよ！何円かな？`
-                calc_info.anser = Math.floor((price-(price*discount/100))*10)/10;
-                break;
-            }
-            case 2 : {
-                const A = Math.floor(Math.random()*9)+1;
-                const B = Math.floor(Math.random()*9)+1;
-                const C = Math.floor(Math.random()*9)+1;
-                const D = Math.floor(Math.random()*9)+1;
-                const E = Math.floor(Math.random()*9)+1;
-                calc_info.probrem = `点数[${A}, ${B}, ${C}, ${D}, ${E}]の平均はいくらかな？`
-                calc_info.anser = Math.floor(((A+B+C+D+E)/5)*10)/10;
-                break;
-            }
-            case 3 : {
-                const A = Math.floor(Math.random()*10)+11;
-                const B = Math.floor(Math.random()*10)+11;
-                calc_info.probrem = `2種類の同じサイズのピザをそれぞれ${A-3}/${A}枚と${B-5}/${B}枚食べたよ！合計何枚食べたかな？`
-                calc_info.anser = Math.floor(((2*A*B-5*A-3*B)/(A*B))*10)/10;
-                break;
-            }
-            default : break;
-        }
-    }else{
-        switch(sel){
-            case 0 : {
-                const A = Math.floor(Math.random()*8)+2;
-                const B = Math.floor(Math.random()*8)+2;
-                const A_B = Math.floor(Math.random()*8)+2;
-                
-                calc_info.probrem = `[難]確率P(A)=1/${A},P(B)=1/${B},P(A|B)=1/${A_B}のときのP(B|A)`
-                calc_info.anser = Math.floor((A/(B*A_B))*10)/10;
-                break;
-            }
-            case 1 : {
-                const A11 = Math.floor(Math.random()*11);
-                const A12 = Math.floor(Math.random()*11);
-                const A21 = Math.floor(Math.random()*11);
-                const A22 = Math.floor(Math.random()*11);
-                calc_info.probrem = `[難]2*2の行列((${A11},${A12}),(${A21},${A22}))について行列式を求めよ`
-                calc_info.anser = A11*A22-A12*A21;
-                break;
-            }
-            case 2 : {
-                const first_term = Math.floor(Math.random()*11);
-                const term_ratio = Math.floor(Math.random()*4)+2;
-                calc_info.probrem = `[難]初項${first_term}, 公比1/${term_ratio}の無限等比数列の和を求めよ`
-                calc_info.anser = Math.floor((first_term/(1-term_ratio))*10)/10;
-            }
-            case 3 : {
-                const n = Math.floor(Math.random()*90000)+10000;
-                calc_info.probrem = `[難]整数n=${n}のデジタル根を求めよ`
-                calc_info.anser = 1+((n-1)%9);
-            }
-            default : break;
-        }
-    }
+    //足し算
+    const sum_A = Math.floor(Math.random()*900)+100;
+    const sum_B = Math.floor(Math.random()*900)+100;
+    calc_info.probrem_add = `問1. ${sum_A} + ${sum_B}`;
+    calc_info.anser_add = sum_A + sum_B;
+
+    //引き算
+    const sub_A = Math.floor(Math.random()*900)+100;
+    const sub_B = Math.floor(Math.random()*900)+100;
+    calc_info.probrem_sub = `問2. ${sub_A} - ${sub_B}`;
+    calc_info.anser_sub = sub_A - sub_B;
+
+    //掛け算
+    const mul_A = Math.floor(Math.random()*900)+100;
+    const mul_B = Math.floor(Math.random()*900)+100;
+    calc_info.probrem_mul = `問3. ${mul_A} × ${mul_B}`;
+    calc_info.anser_mul = mul_A * mul_B;
+
+    //割り算
+    const div_A = Math.floor(Math.random()*900)+100;
+    const div_B = Math.floor(Math.random()*900)+100;
+    calc_info.probrem_div = `問4. ${div_A}.00 ÷ ${div_B}.00 (有効数字2桁)`;
+    calc_info.anser_div = Math.round(((div_A / div_B) * 100))/100;
 
     map.set(`work_calc_${interaction.user.id}`, calc_info);
 
@@ -95,15 +47,39 @@ function createProbrem(interaction, map){
 
 //モーダルの作成
 function createModal(calc_info){
-    const anser = new TextInputBuilder();
+    const res_add = new TextInputBuilder();
+    const res_sub = new TextInputBuilder();
+    const res_mul = new TextInputBuilder();
+    const res_div = new TextInputBuilder();
     const modal = new ModalBuilder();
     
-    anser.setCustomId("anser")
-    anser.setLabel(`${calc_info.probrem}`)
-    anser.setPlaceholder("小数第2位を切り捨て, 数値のみで回答");
-    anser.setStyle(TextInputStyle.Short);
-    anser.setRequired(true);
-    modal.addComponents(new ActionRowBuilder().addComponents(anser));
+    res_add.setCustomId("res_add")
+    res_add.setLabel(`${calc_info.probrem_add}`)
+    res_add.setPlaceholder("123");
+    res_add.setStyle(TextInputStyle.Short);
+    res_add.setRequired(true);
+    modal.addComponents(new ActionRowBuilder().addComponents(res_add));
+
+    res_sub.setCustomId("res_sub")
+    res_sub.setLabel(`${calc_info.probrem_sub}`)
+    res_sub.setPlaceholder("123");
+    res_sub.setStyle(TextInputStyle.Short);
+    res_sub.setRequired(true);
+    modal.addComponents(new ActionRowBuilder().addComponents(res_sub));
+
+    res_mul.setCustomId("res_mul")
+    res_mul.setLabel(`${calc_info.probrem_mul}`)
+    res_mul.setPlaceholder("123");
+    res_mul.setStyle(TextInputStyle.Short);
+    res_mul.setRequired(true);
+    modal.addComponents(new ActionRowBuilder().addComponents(res_mul));
+
+    res_div.setCustomId("res_div")
+    res_div.setLabel(`${calc_info.probrem_div}`)
+    res_div.setPlaceholder("1.23");
+    res_div.setStyle(TextInputStyle.Short);
+    res_div.setRequired(true);
+    modal.addComponents(new ActionRowBuilder().addComponents(res_div));
 
 	modal.setCustomId("game_work_calc_modal");
 	modal.setTitle("この問題の答えを教えてほしいのだ！");
@@ -111,11 +87,22 @@ function createModal(calc_info){
     return modal;
 }
 
+//正誤判定
+function isCorrect(anser, res){
+    if(!isNaN(res) && parseFloat(res)==anser){
+        return true;
+    }
+
+    return false;
+}
+
 //埋め込みの作成
 function createEmbed(calc_info, money){
+    const files = [];
     const embeds = [];
     const components = [];
 
+    const attachment = new AttachmentBuilder();
     const embed = new EmbedBuilder();
     const buttons = new ActionRowBuilder();
 
@@ -123,18 +110,17 @@ function createEmbed(calc_info, money){
     const home = new ButtonBuilder();
     const quit = new ButtonBuilder();
 
-    if(calc_info.correct){
-        embed.setTitle("合ってたのだ！");
-        embed.setDescription("助かったのだ！");
-        embed.setColor(0x00FF00);
-    }else{
-        embed.setTitle("違ったみたいなのだ...");
-        embed.setDescription("次こそ助けてほしいのだ！");
-        embed.setColor(0xFF0000);
-    }
-    
+    embed.setTitle("結果はこんな感じなのだ！");
+    embed.setThumbnail("attachment://icon.png");
+    embed.addFields({name: `問1. ${calc_info.correct_add ? "⭕" : "❌"}`, value: `給料+${calc_info.correct_add ? "5" : "0"}円`});
+    embed.addFields({name: `問2. ${calc_info.correct_sub ? "⭕" : "❌"}`, value: `給料+${calc_info.correct_sub ? "5" : "0"}円`});
+    embed.addFields({name: `問3. ${calc_info.correct_mul ? "⭕" : "❌"}`, value: `給料+${calc_info.correct_mul ? "10" : "0"}円`});
+    embed.addFields({name: `問4. ${calc_info.correct_div ? "⭕" : "❌"}`, value: `給料+${calc_info.correct_div ? "10" : "0"}円`});
+    embed.addFields({name: `完答ボーナス ${calc_info.correct_all ? "✅" : "❎"}`, value: `給料+${calc_info.correct_all ? "20" : "0"}円`});
     embed.setFooter({text: `所持金：${money}`});
-    embeds.push(embed);
+
+    attachment.setName("icon.png");
+    attachment.setFile("assets/zundamon/icon/flaunt.png");
 
     again.setLabel("もう一問！");
     again.setEmoji("🔂");
@@ -155,9 +141,11 @@ function createEmbed(calc_info, money){
     quit.setDisabled(false);
     buttons.addComponents(quit);
 
+    files.push(attachment);
+    embeds.push(embed);
     components.push(buttons);
 
-    return {content: "", files: [], embeds: embeds, components: components, ephemeral: true};
+    return {content: "", files: files, embeds: embeds, components: components, ephemeral: true};
 }
 
 //演算士の実行
@@ -175,15 +163,36 @@ async function execute(interaction, map){
     //正誤判定
     const user_info = await db.getUserInfo(interaction.user.id);
     const calc_info = map.get(`work_calc_${interaction.user.id}`);
-    const anser = interaction.fields.getTextInputValue("anser");
 
-    if(!isNaN(anser) && parseFloat(anser)==calc_info.anser){
-        calc_info.correct = true;
-        user_info.money += 10;
-        await db.setUserInfo(interaction.user.id, user_info);
+    if(isCorrect(calc_info.anser_add, interaction.fields.getTextInputValue("res_add"))){
+        calc_info.correct_add = true;
+        user_info.money += 5;
     }
 
+    if(isCorrect(calc_info.anser_sub, interaction.fields.getTextInputValue("res_sub"))){
+        calc_info.correct_sub = true;
+        user_info.money += 5;
+    }
+
+    if(isCorrect(calc_info.anser_mul, interaction.fields.getTextInputValue("res_mul"))){
+        calc_info.correct_mul = true;
+        user_info.money += 10;
+    }
+
+    if(isCorrect(calc_info.anser_div, interaction.fields.getTextInputValue("res_div"))){
+        calc_info.correct_div = true;
+        user_info.money += 10;
+    }
+
+    if(calc_info.correct_add && calc_info.correct_sub && calc_info.correct_mul && calc_info.correct_div){
+        calc_info.correct_all = true;
+        user_info.money += 20;
+    }
+
+    await db.setUserInfo(interaction.user.id, user_info);
+
     map.delete(`work_calc_${interaction.user.id}`);
+
     await interaction.editReply(createEmbed(calc_info, user_info.money));
     
     return 0;

@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.4.2\n仕事の内容を追加！\nスロットが自動停止したときに壊れるバグの修正",
+        "content" : "ver 1.4.3\n計算問題の形式変更",
         "buttons" : [
             {
                 "label" : "呼ぶ",
