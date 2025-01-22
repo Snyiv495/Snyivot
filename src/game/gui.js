@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/01/08
+    2025/01/22
 *****************/
 
 module.exports = {
@@ -17,7 +17,7 @@ const casino_borrow = require('./execute/casino/borrow');
 const casino_exchange = require('./execute/casino/exchange');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
-const work_ident = require('./execute/work/ident');
+const work_prot = require('./execute/work/prot');
 //const game_help = require('./execute/help');
 
 //借入モーダル
@@ -87,9 +87,9 @@ async function menu(interaction, map){
             await work_calc.exe(interaction, map);
             break;
         }
-        case "game_work_ident_exe" : {
+        case "game_work_prot_exe" : {
             await interaction.deferUpdate();
-            await work_ident.exe(interaction, map);
+            await work_prot.exe(interaction, map);
             break;
         }
         default: break;
@@ -112,9 +112,9 @@ async function button(interaction, map){
             await work_calc.exe(interaction, map);
             break;
         }
-        case /game_work_ident/.test(interaction.customId) : {
+        case /game_work_prot/.test(interaction.customId) : {
             await interaction.deferUpdate();
-            await work_ident.exe(interaction, map);
+            await work_prot.exe(interaction, map);
             break;
         }
         default : break;

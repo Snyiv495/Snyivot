@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/01/08
+    2025/01/22
 *****************/
 
 module.exports = {
@@ -17,7 +17,7 @@ const casino_borrow = require('./execute/casino/borrow');
 const casino_exchange = require('./execute/casino/exchange');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
-const work_ident = require('./execute/work/ident');
+const work_prot = require('./execute/work/prot');
 //const help = require('./execute/help');
 
 //スラッシュコマンドの取得
@@ -30,7 +30,7 @@ function getSlashCmds(){
     slash_cmds.push(getCasinoBorrowCmd());
     slash_cmds.push(getCasinoExchangeCmd());
     slash_cmds.push(getCasinoSlotCmd());
-    slash_cmds.push(getWorkIdentCmd());
+    slash_cmds.push(getWorkProtCmd());
     //slash_cmds.push(getWorkInspectCmd());
     slash_cmds.push(getWorkCalcCmd());
     //slash_cmds.push(getHelpCmd());
@@ -110,12 +110,12 @@ function getCasinoSlotCmd(){
     return cmd;
 }
 
-//識別士コマンドの取得
-function getWorkIdentCmd(){
+//保護士コマンドの取得
+function getWorkProtCmd(){
     const cmd = new SlashCommandBuilder();
 
-    cmd.setName("game_work_ident");
-    cmd.setDescription("識別の仕事をするコマンドなのだ！");
+    cmd.setName("game_work_prot");
+    cmd.setDescription("保護の仕事をするコマンドなのだ！");
 
     return cmd;
 }
@@ -205,9 +205,9 @@ async function cmd(interaction, map){
             await work_calc.exe(interaction, map);
             break;
         }
-        case "game_work_ident" : {
+        case "game_work_prot" : {
             await interaction.deferReply({ephemeral: true});
-            await work_ident.exe(interaction, map);
+            await work_prot.exe(interaction, map);
             break;
         }
         case "game_work_inspect" : {

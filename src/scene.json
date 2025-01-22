@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.4.3\n計算問題の形式変更",
+        "content" : "ver 1.4.4\n計算問題の形式変更\nずんだの妖精を保護する仕事の追加",
         "buttons" : [
             {
                 "label" : "呼ぶ",
@@ -308,9 +308,9 @@
                         "emoji" : "🧑‍🏫"
                     },
                     {
-                        "label" : "ident",
-                        "value" : "game_work_ident_exe",
-                        "description" : "妖精の性別を識別してほしいのだ！",
+                        "label" : "prot",
+                        "value" : "game_work_prot_exe",
+                        "description" : "ずんだの妖精の保護をしてほしいのだ！",
                         "emoji" : "🧚"
                     }
                 ]
