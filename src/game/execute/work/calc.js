@@ -1,7 +1,7 @@
 /*****************
     calc.js
     スニャイヴ
-    2025/01/20
+    2025/01/24
 *****************/
 
 module.exports = {
@@ -47,12 +47,15 @@ function createProbrem(interaction, map){
 
 //モーダルの作成
 function createModal(calc_info){
+    const modal = new ModalBuilder();
     const res_add = new TextInputBuilder();
     const res_sub = new TextInputBuilder();
     const res_mul = new TextInputBuilder();
     const res_div = new TextInputBuilder();
-    const modal = new ModalBuilder();
     
+    modal.setCustomId("game_work_calc_modal");
+	modal.setTitle("この問題の答えを教えてほしいのだ！");
+
     res_add.setCustomId("res_add")
     res_add.setLabel(`${calc_info.probrem_add}`)
     res_add.setPlaceholder("123");
@@ -81,9 +84,6 @@ function createModal(calc_info){
     res_div.setRequired(true);
     modal.addComponents(new ActionRowBuilder().addComponents(res_div));
 
-	modal.setCustomId("game_work_calc_modal");
-	modal.setTitle("この問題の答えを教えてほしいのだ！");
-
     return modal;
 }
 
@@ -106,9 +106,12 @@ function createEmbed(calc_info, money){
     const embed = new EmbedBuilder();
     const buttons = new ActionRowBuilder();
 
-    const again = new ButtonBuilder();
     const home = new ButtonBuilder();
+    const game_home = new ButtonBuilder();
+    const again = new ButtonBuilder();
     const quit = new ButtonBuilder();
+
+    const salary = (calc_info.correct_add ? 5 : 0) + (calc_info.correct_sub ? 5 : 0) + (calc_info.correct_mul ? 10 : 0) + (calc_info.correct_div ? 10 : 0);
 
     embed.setTitle("結果はこんな感じなのだ！");
     embed.setThumbnail("attachment://icon.png");
@@ -117,22 +120,28 @@ function createEmbed(calc_info, money){
     embed.addFields({name: `問3. ${calc_info.correct_mul ? "⭕" : "❌"}`, value: `給料+${calc_info.correct_mul ? "10" : "0"}円`});
     embed.addFields({name: `問4. ${calc_info.correct_div ? "⭕" : "❌"}`, value: `給料+${calc_info.correct_div ? "10" : "0"}円`});
     embed.addFields({name: `完答ボーナス ${calc_info.correct_all ? "✅" : "❎"}`, value: `給料+${calc_info.correct_all ? "20" : "0"}円`});
-    embed.setFooter({text: `所持金：${money}`});
+    embed.setFooter({text: `所持金：${money}\t給料：${salary}+${(calc_info.correct_all ? 20 : 0)}円`});
 
     attachment.setName("icon.png");
     attachment.setFile("assets/zundamon/icon/flaunt.png");
 
-    again.setLabel("もう一問！");
+    home.setLabel("ホーム");
+    home.setEmoji("🏠");
+    home.setCustomId("home");
+    home.setStyle(ButtonStyle.Secondary);
+    buttons.addComponents(home);
+
+    game_home.setLabel("戻る");
+    game_home.setEmoji("🎮");
+    game_home.setCustomId("game_home");
+    game_home.setStyle(ButtonStyle.Secondary);
+    buttons.addComponents(game_home);
+
+    again.setLabel("もう一度！");
     again.setEmoji("🔂");
     again.setCustomId("game_work_calc_again_exe");
     again.setStyle(ButtonStyle.Success);
     buttons.addComponents(again);
-
-    home.setLabel("ゲーム選択");
-    home.setEmoji("🎮");
-    home.setCustomId("game_home");
-    home.setStyle(ButtonStyle.Secondary);
-    buttons.addComponents(home);
 
     quit.setLabel("終わる");
     quit.setEmoji("⚠️");

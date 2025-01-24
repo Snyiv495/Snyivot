@@ -116,6 +116,7 @@ async function send(interaction, scene){
     }
 
     await interaction.editReply(await create(id, scene));
+    
     return 0;
 }
 

@@ -1,7 +1,7 @@
 /*******************
     prot.js
     スニャイヴ
-    2024/01/22
+    2024/01/24
 *******************/
 
 module.exports = {
@@ -52,7 +52,7 @@ async function createEmbed(interaction, user_info, prot_info){
     const embed = new EmbedBuilder();
     const buttons = new ActionRowBuilder();
 
-    const salary = prot_info.num_correct*5;
+    const salary = prot_info.num_correct*3;
 
     if(prot_info.num_times<=10){
         embed.setTitle("この子は野良なのだ？それとも迷子なのだ？👉");
@@ -60,7 +60,7 @@ async function createEmbed(interaction, user_info, prot_info){
     }else{
         embed.setTitle("お疲れ様なのだ！");
         embed.setDescription(`${prot_info.num_correct}匹のずんだもんを保護したのだ！`);
-        embed.addFields({name: "完答ボーナス", value: `+${(prot_info.num_correct===10 ? 30 : 0)}円`});
+        embed.addFields({name: "完答ボーナス", value: `+${(prot_info.num_correct===10 ? 20 : 0)}円`});
         attachment.setName("icon.png");
         attachment.setFile(`assets/zundamon/icon/flaunt.png`);
     }
@@ -90,20 +90,27 @@ async function createEmbed(interaction, user_info, prot_info){
         
     }else{
         const home = new ButtonBuilder();
-        const quit = new ButtonBuilder();
+        const game_home = new ButtonBuilder();
         const again = new ButtonBuilder();
+        const quit = new ButtonBuilder();
+
+        home.setLabel("ホーム");
+        home.setEmoji("🏠");
+        home.setCustomId("home");
+        home.setStyle(ButtonStyle.Secondary);
+        buttons.addComponents(home);
+
+        game_home.setLabel("戻る");
+        game_home.setEmoji("🎮");
+        game_home.setCustomId("game_home");
+        game_home.setStyle(ButtonStyle.Secondary);
+        buttons.addComponents(game_home);
 
         again.setLabel("もう一度！");
         again.setEmoji("🔂");
         again.setCustomId("game_work_prot_again_exe");
         again.setStyle(ButtonStyle.Success);
         buttons.addComponents(again);
-
-        home.setLabel("ゲーム選択");
-        home.setEmoji("🎮");
-        home.setCustomId("game_home");
-        home.setStyle(ButtonStyle.Secondary);
-        buttons.addComponents(home);
 
         quit.setLabel("終わる");
         quit.setEmoji("⚠️");
@@ -123,9 +130,9 @@ async function createEmbed(interaction, user_info, prot_info){
 //保護士の実行
 async function execute(interaction, map){
     const user_info = await db.getUserInfo(interaction.user.id);
-    const rand = Math.floor(Math.random()*100);
     const prot_info = getProtInfo(interaction, map);
     const img_zundamon = await Jimp.read(`assets/zundamon/fairy/0${prot_info.num_times%10}.png`);
+    const rand = Math.floor(Math.random()*100);
 
     prot_info.num_times++; 
 
@@ -152,7 +159,7 @@ async function execute(interaction, map){
 
     //最終結果
     if(prot_info.num_times>10){
-        user_info.money += prot_info.num_correct*5+(prot_info.num_correct===10 ? 20 : 0);
+        user_info.money += prot_info.num_correct*3+(prot_info.num_correct===10 ? 20 : 0);
         await interaction.editReply(await createEmbed(interaction, user_info, prot_info));
         await db.setUserInfo(interaction.user.id, user_info);
         map.delete(`work_prot_${interaction.user.id}`);

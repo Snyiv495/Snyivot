@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/01/22
+    2025/01/24
 *****************/
 
 module.exports = {
@@ -13,8 +13,8 @@ module.exports = {
 
 require('dotenv').config();
 const {SlashCommandBuilder} = require('discord.js');
-const casino_borrow = require('./execute/casino/borrow');
-const casino_exchange = require('./execute/casino/exchange');
+const shop = require('./execute/shop');
+const casino_shop = require('./execute/casino/shop');
 const casino_slot = require('./execute/casino/slot');
 const work_calc = require('./execute/work/calc');
 const work_prot = require('./execute/work/prot');
@@ -24,78 +24,32 @@ const work_prot = require('./execute/work/prot');
 function getSlashCmds(){
     const slash_cmds = [];
 
-    //slash_cmds.push(getZundamocchiFoodCmd());
-    //slash_cmds.push(getZundamocchiPlayCmd());
-    //slash_cmds.push(getZundamocchiCleanCmd());
-    slash_cmds.push(getCasinoBorrowCmd());
-    slash_cmds.push(getCasinoExchangeCmd());
+    slash_cmds.push(getShopCmd());
+    slash_cmds.push(getCasinoShopCmd());
     slash_cmds.push(getCasinoSlotCmd());
     slash_cmds.push(getWorkProtCmd());
-    //slash_cmds.push(getWorkInspectCmd());
     slash_cmds.push(getWorkCalcCmd());
     //slash_cmds.push(getHelpCmd());
 
     return slash_cmds;
 }
 
-//食べ物コマンドの取得
-function getZundamocchiFoodCmd(){
+//売買コマンドの取得
+function getShopCmd(){
     const cmd = new SlashCommandBuilder();
 
-    cmd.setName("game_zundamocchi_food");
-    cmd.setDescription("ずんだもんにご飯をあげるコマンドなのだ！");
+    cmd.setName("game_shop");
+    cmd.setDescription("売買をするコマンドなのだ！");
 
     return cmd;
 }
 
-//遊ぶコマンドの取得
-function getZundamocchiPlayCmd(){
+//カジノ関連の売買コマンドの取得
+function getCasinoShopCmd(){
     const cmd = new SlashCommandBuilder();
 
-    cmd.setName("game_zundamocchi_play");
-    cmd.setDescription("ずんだもんと遊ぶコマンドなのだ！");
-
-    return cmd;
-}
-
-//掃除コマンドの取得
-function getZundamocchiCleanCmd(){
-    const cmd = new SlashCommandBuilder();
-
-    cmd.setName("game_zundamocchi_clean");
-    cmd.setDescription("ずんだもんの部屋を掃除するコマンドなのだ！");
-
-    return cmd;
-}
-
-//借入コマンドの取得
-function getCasinoBorrowCmd(){
-    const cmd = new SlashCommandBuilder();
-
-    cmd.setName("game_casino_borrow");
-    cmd.setDescription("コインを借りるコマンドなのだ！");
-    cmd.addIntegerOption(option => {
-        option.setName("money");
-        option.setDescription("何円分のお金でコインを借りるかを入力するのだ！");
-        option.setRequired(true);
-        return option;
-    });
-
-    return cmd;
-}
-
-//換金コマンドの取得
-function getCasinoExchangeCmd(){
-    const cmd = new SlashCommandBuilder();
-
-    cmd.setName("game_casino_exchange");
-    cmd.setDescription("コインを換金するコマンドなのだ！");
-    cmd.addIntegerOption(option => {
-        option.setName("coins");
-        option.setDescription("換金したいコインの枚数を入力するのだ！");
-        option.setRequired(true);
-        return option;
-    });
+    cmd.setName("game_casino_shop");
+    cmd.setDescription("カジノ関連の売買をするコマンドなのだ！");
 
     return cmd;
 }
@@ -120,16 +74,6 @@ function getWorkProtCmd(){
     return cmd;
 }
 
-//検品士コマンドの取得
-function getWorkInspectCmd(){
-    const cmd = new SlashCommandBuilder();
-
-    cmd.setName("game_work_inspect");
-    cmd.setDescription("検品の仕事をするコマンドなのだ！");
-
-    return cmd;
-}
-
 //演算士コマンドの取得
 function getWorkCalcCmd(){
     const cmd = new SlashCommandBuilder();
@@ -150,7 +94,10 @@ function getHelpCmd(){
         option.setName("content");
         option.setDescription("内容を選択するのだ！");
         option.addChoices(
-            {name: "casino_slot", value: "casino_slot"}
+            {name: "casino_slot", value: "casino_slot"},
+            {name: "casino_shop", value: "casino_shop"},
+            {name: "work_calc", value: "work_calc"},
+            {name: "work_prot", value: "work_prot"}
         );
         option.setRequired(true);
         return option;
@@ -168,37 +115,17 @@ async function cmd(interaction, map){
     }
 
     switch(interaction.commandName){
-        case "game_zundamocchi_food" : {
-            await interaction.deferReply({ephemeral: true});
-            await zundamocchi_food.exe(interaction);
-            break;
-        }
-        case "game_zundamocchi_play" : {
-            await interaction.deferReply({ephemeral: true});
-            await zundamocchi_play.exe(interaction);
-            break;
-        }
-        case "game_zundamocchi_clean" : {
-            await interaction.deferReply({ephemeral: true});
-            await zundamocchi_clean.exe(interaction);
-            break;
-        }
-        case "game_zundamocchi_shop" : {
-            await interaction.deferReply({ephemeral: true});
-            await zundamocchi_shop.exe(interaction);
-            break;
-        }
-        case "game_casino_borrow" : {
-            await casino_borrow.exe(interaction, interaction.options.get("money").value);
-            break;
-        }
-        case "game_casino_exchange" : {
-            await casino_exchange.exe(interaction, interaction.options.get("coins").value);
+        case "game_shop" : {
+            await shop.exe(interaction);
             break;
         }
         case "game_casino_slot" : {
             await interaction.deferReply({ephemeral: true});
             await casino_slot.exe(interaction, map);
+            break;
+        }
+        case "game_casino_shop" : {
+            await casino_shop.exe(interaction);
             break;
         }
         case "game_work_calc" : {
@@ -208,11 +135,6 @@ async function cmd(interaction, map){
         case "game_work_prot" : {
             await interaction.deferReply({ephemeral: true});
             await work_prot.exe(interaction, map);
-            break;
-        }
-        case "game_work_inspect" : {
-            await interaction.deferReply({ephemeral: true});
-            await work_inspect.exe(interaction, map);
             break;
         }
         case "game_help" : {

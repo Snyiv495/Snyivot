@@ -39,7 +39,7 @@
     },
     {
         "scene" : "mention",
-        "content" : "ver 1.4.4\n計算問題の形式変更\nずんだの妖精を保護する仕事の追加",
+        "content" : "ver 1.5.0\nshopの追加",
         "buttons" : [
             {
                 "label" : "呼ぶ",
@@ -142,6 +142,13 @@
         ],
         "buttons" : [
             {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
                 "label" : "終わる",
                 "emoji" : "⚠️",
                 "id" : "quit",
@@ -179,6 +186,20 @@
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
+                "label" : "戻る",
+                "emoji" : "🤖",
+                "id" : "cohere_home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
@@ -218,11 +239,24 @@
                         "value" : "game_work_home",
                         "description" : "働いて稼ぐのだ！",
                         "emoji" : "💼"
+                    },
+                    {
+                        "label" : "shop",
+                        "value" : "game_shop_exe",
+                        "description" : "売買をするのだ！",
+                        "emoji" : "🏪"
                     }
                 ]
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
@@ -236,7 +270,7 @@
         "scene" : "game_casino_home",
         "embeds" : [
             {
-                "title" : "何で勝負するのだ？",
+                "title" : "どこに向かうのだ？",
                 "url" : "",
                 "thumbnail" : "assets/zundamon/icon/think.png",
                 "description" : "",
@@ -248,31 +282,39 @@
         ],
         "menus" : [
             {
-                "id" : "game_home",
+                "id" : "game_casino_home",
                 "placeholder" : "何も選択されてないのだ",
                 "options" : [
-                    {
-                        "label" : "borrow",
-                        "value" : "game_casino_borrow_exe",
-                        "description" : "メダルを借りるのだ！",
-                        "emoji" : "💳"
-                    },
-                    {
-                        "label" : "exchange",
-                        "value" : "game_casino_exchange_exe",
-                        "description" : "メダルを換金するのだ！",
-                        "emoji" : "💴"
-                    },
                     {
                         "label" : "slot",
                         "value" : "game_casino_slot_exe",
                         "description" : "スロットをするのだ！",
                         "emoji" : "🎰"
+                    },
+                    {
+                        "label" : "shop",
+                        "value" : "game_casino_shop_exe",
+                        "description" : "カジノ関連の売買をするのだ！",
+                        "emoji" : "🏪"
                     }
                 ]
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
+                "label" : "戻る",
+                "emoji" : "🎮",
+                "id" : "game_home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
@@ -298,7 +340,7 @@
         ],
         "menus" : [
             {
-                "id" : "game_home",
+                "id" : "game_work_home",
                 "placeholder" : "何も選択されてないのだ",
                 "options" : [
                     {
@@ -317,6 +359,20 @@
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
+                "label" : "戻る",
+                "emoji" : "🎮",
+                "id" : "game_home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
@@ -392,6 +448,13 @@
         ],
         "buttons" : [
             {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
                 "label" : "終わる",
                 "emoji" : "⚠️",
                 "id" : "quit",
@@ -422,19 +485,33 @@
                     {
                         "label" : "speaker_style",
                         "value" : "voicevox_setting_user_speaker_style_exe",
-                        "description" : "スピーカーやそのスタイルを設定するよ！",
+                        "description" : "スピーカーやそのスタイルを設定するのだ！",
                         "emoji" : "👨‍👩‍👧‍👦"
                     },
                     {
                         "label" : "parameter",
                         "value" : "voicevox_setting_user_parameter_exe",
-                        "description" : "喋り方を細かく設定するよ！",
+                        "description" : "喋り方を細かく設定するのだ！",
                         "emoji" : "🎛️"
                     }
                 ]
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
+                "label" : "戻る",
+                "emoji" : "🎙️",
+                "id" : "voicevox_home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
@@ -466,25 +543,39 @@
                     {
                         "label" : "config",
                         "value" : "voicevox_setting_server_config_exe",
-                        "description" : "サーバーの構成を設定するよ！",
+                        "description" : "サーバーの構成を設定するのだ！",
                         "emoji" : "🛠️"
                     },
                     {
                         "label" : "speaker_style",
                         "value" : "voicevox_setting_server_speaker_style_exe",
-                        "description" : "スピーカーやそのスタイルを設定するよ！",
+                        "description" : "スピーカーやそのスタイルを設定するのだ！",
                         "emoji" : "👨‍👩‍👧‍👦"
                     },
                     {
                         "label" : "parameter",
                         "value" : "voicevox_setting_server_parameter_exe",
-                        "description" : "喋り方を細かく設定するよ！",
+                        "description" : "喋り方を細かく設定するのだ！",
                         "emoji" : "🎛️"
                     }
                 ]
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
+                "label" : "戻る",
+                "emoji" : "🎙️",
+                "id" : "voicevox_home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
@@ -516,43 +607,57 @@
                     {
                         "label" : "start",
                         "value" : "voicevox_help_start_exe",
-                        "description" : "読み上げ開始について",
+                        "description" : "読み上げ開始についてなのだ",
                         "emoji" : "🔈"
                     },
                     {
                         "label" : "end",
                         "value" : "voicevox_help_end_exe",
-                        "description" : "読み上げ終了について",
+                        "description" : "読み上げ終了についてなのだ",
                         "emoji" : "🔇"
                     },
                     {
                         "label" : "setting_user",
                         "value" : "voicevox_help_setting_user_exe",
-                        "description" : "ユーザー情報の設定について",
+                        "description" : "ユーザー情報の設定についてなのだ",
                         "emoji" : "👤"
                     },
                     {
                         "label" : "setting_server",
                         "value" : "voicevox_help_setting_server_exe",
-                        "description" : "サーバー情報の設定について",
+                        "description" : "サーバー情報の設定についてなのだ",
                         "emoji" : "👥"
                     },
                     {
                         "label" : "dictionary_add",
                         "value" : "voicevox_help_dictionary_add_exe",
-                        "description" : "辞書の追加について",
+                        "description" : "辞書の追加についてなのだ",
                         "emoji" : "📥"
                     },
                     {
                         "label" : "dictionary_delete",
                         "value" : "voicevox_dictionary_delete_exe",
-                        "description" : "辞書の削除について",
+                        "description" : "辞書の削除についてなのだ",
                         "emoji" : "📤"
                     }
                 ]
             }
         ],
         "buttons" : [
+            {
+                "label" : "ホーム",
+                "emoji" : "🏠",
+                "id" : "home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
+            {
+                "label" : "戻る",
+                "emoji" : "🎙️",
+                "id" : "voicevox_home",
+                "style" : "Secondary",
+                "disabled" : "false"
+            },
             {
                 "label" : "終わる",
                 "emoji" : "⚠️",
