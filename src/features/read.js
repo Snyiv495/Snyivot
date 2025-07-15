@@ -238,8 +238,8 @@ async function setUser(interaction, map){
     const user_info = await db.getUserInfo(interaction.user.id);
     const server_info = await db.getServerInfo(interaction.guild.id);
 
-    const input_speaker = interaction.options?.get("speaker")?.value ?? interaction.customId?.includes("speaker") ? interaction.customId.split("@")[1] : null;
-    const input_style = interaction.options?.get("style")?.value ?? interaction.customId?.includes("style") ? interaction.customId.split("@")[1] : null;
+    const input_speaker = interaction.options?.get("speaker")?.value ?? (interaction.customId?.includes("speaker") ? interaction.customId.split("@")[1] : null);
+    const input_style = interaction.options?.get("style")?.value ?? (interaction.customId?.includes("style") ? interaction.customId.split("@")[1] : null);
     const input_pitch = interaction.options?.get("pitch")?.value ?? (interaction.fields?.fields?.get("pitch") ? parseFloat(interaction.fields.getTextInputValue("pitch")) : NaN);
     const input_intonation = interaction.options?.get("intonation")?.value ?? (interaction.fields?.fields?.get("intonation") ? parseFloat(interaction.fields.getTextInputValue("intonation")) : NaN);
     const input_username = interaction.options?.get("username")?.value ?? (interaction.fields?.fields?.get("username") ? interaction.fields.getTextInputValue("username").trim() : null);
@@ -258,7 +258,7 @@ async function setUser(interaction, map){
         const vv_style = input_style ?? user_info.vv_id ?? server_info.vv_id;
         let vv_speaker_info = null;
         let vv_style_info = null;
-        
+
         //スピーカー設定
         if(vv_speaker === "ランダム"){
             const rand = Math.floor(Math.random()*vv_speakers.length);
@@ -527,8 +527,8 @@ async function setServer(interaction, map){
     const input_read_app = interaction.options?.get("read_app")?.value ?? interaction.fields?.fields?.get("read_app")?.value.match(/VOICEVOX/);
     const input_read_set_override = interaction.options?.get("read_set_override")?.value ?? /(y|Y|yes|Yes|YES)/.test(interaction.fields?.fields?.get("read_set_override")?.value);
 
-    const input_speaker = interaction.options?.get("speaker")?.value ?? interaction.customId?.includes("speaker") ? interaction.customId.split("@")[1] : null;
-    const input_style = interaction.options?.get("style")?.value ?? interaction.customId?.includes("style") ? interaction.customId.split("@")[1] : null;
+    const input_speaker = interaction.options?.get("speaker")?.value ?? (interaction.customId?.includes("speaker") ? interaction.customId.split("@")[1] : null);
+    const input_style = interaction.options?.get("style")?.value ?? (interaction.customId?.includes("style") ? interaction.customId.split("@")[1] : null);
     const input_speed = interaction.options?.get("speed")?.value ?? (interaction.fields?.fields?.get("speed") ? parseFloat(interaction.fields.getTextInputValue("speed")) : NaN);
     const input_pitch = interaction.options?.get("pitch")?.value ?? (interaction.fields?.fields?.get("pitch") ? parseFloat(interaction.fields.getTextInputValue("pitch")) : NaN);
     const input_intonation = interaction.options?.get("intonation")?.value ?? (interaction.fields?.fields?.get("intonation") ? parseFloat(interaction.fields.getTextInputValue("intonation")) : NaN);

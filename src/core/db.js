@@ -1,7 +1,7 @@
 /*****************
     db.js
     スニャイヴ
-    2025/05/21
+    2025/07/15
 *****************/
 
 module.exports = {
@@ -33,15 +33,8 @@ async function getUserInfo(id){
         vv_intonation: null,
     };
 
-    info.username = info.username ?? null;
-    info.gemini_log = info.gemini_log ?? [];
-    info.vv_uuid = info.vv_uuid ?? null;
-    info.vv_id = info.vv_id ?? null;
-    info.vv_pitch = info.vv_pitch ?? null;
-    info.vv_intonation = info.vv_intonation ?? null;
-
     //一定期間引継ぎ用
-    if(await pre_user.has(id)){
+    if(!(await user.has(id)) && await pre_user.has(id)){
         const pre_info = await pre_user.get(id);
         info.username = pre_info.username ?? info.username;
         info.vv_uuid = pre_info.uuid ?? info.vv_uuid;
@@ -49,6 +42,13 @@ async function getUserInfo(id){
         info.vv_pitch = pre_info.pitch ?? info.vv_pitch;
         info.vv_intonation = pre_info.intonation ?? info.vv_intonation;
     }
+
+    info.username = info.username ?? null;
+    info.gemini_log = info.gemini_log ?? [];
+    info.vv_uuid = info.vv_uuid ?? null;
+    info.vv_id = info.vv_id ?? null;
+    info.vv_pitch = info.vv_pitch ?? null;
+    info.vv_intonation = info.vv_intonation ?? null;
 
     return info;
 }
