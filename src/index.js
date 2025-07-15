@@ -1,25 +1,20 @@
 /*****************
     index.js
     スニャイヴ
-    2025/01/08
+    2025/07/15
 *****************/
 
 require('dotenv').config();
-const {Client, GatewayIntentBits} = require('discord.js');
+const {Client, GatewayIntentBits, Partials} = require('discord.js');
 const fs = require('fs');
-const cui = require('./cui');
-const gui = require('./gui');
-const cohere = require('./cohere/cohere');
-const game = require('./game/game');
-const voicevox = require('./voicevox/voicevox');
+// const psd = require('ag-psd');
 
-const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates]});
-const voicevox_map = new Map();
-const game_map = new Map();
+const cui = require('./core/cui');
+const gui = require('./core/gui');
+const observe = require('./core/observe');
 
-let readme;
-let scene;
-let vv_speakers;
+const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions], partials: [Partials.Message, Partials.Channel, Partials.Reaction]});
+const map = new Map();
 
 //botのログイン
 client.login(process.env.BOT_TOKEN);
@@ -28,73 +23,84 @@ client.login(process.env.BOT_TOKEN);
 client.once('ready', async () => {
     //READMEの取得
     try{
-        readme = fs.readFileSync("./README.md", {encoding: "utf8"});
+        map.set("readme_md", fs.readFileSync("./README.md", "utf-8"));
     }catch(e){
-        console.log("### READMEの取得に失敗しました ###\n### 再起動してください ###\n");
+        console.log(`↓↓↓ READMEの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ READMEの取得に失敗しました ↑↑↑`);
         process.exit();
     }
 
-    //voicevoxのGUIの取得
+    //GUIの取得
     try{
-        scene = JSON.parse(fs.readFileSync("./src/scene.json", {encoding: "utf8"}));
+        const files = ["./src/json/home.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/read.json"];
+        map.set("gui_json", files.flatMap(file => JSON.parse(fs.readFileSync(file, "utf-8"))));
     }catch(e){
-        console.log("### シーンの取得に失敗しました ###\n### 再起動してください ###\n");
+        console.log(`↓↓↓ GUIの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ GUIの取得に失敗しました ↑↑↑`);
         process.exit();
     }
 
-    //voicevoxのスピーカーの取得
+    //psdの取得
+    /*
     try{
-        vv_speakers = await voicevox.getSpeakers();
+        psd.initializeCanvas(require('canvas').createCanvas, require('canvas').loadImage);
+        map.set("kasukabe_tsumugi_psd", psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/kasukabe_tsumugi.psd")));
+        map.set("zundamon_psd", psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/zundamon.psd")));
+        fs.writeFileSync("./assets/sakamoto_ahiru/kasukabe_tsumugi/default.json", JSON.stringify(JSON.parse(JSON.stringify(psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/kasukabe_tsumugi/default.psd"), {skipLayerImageData: true, skipCompositeImageData: true, skipThumbnail: true}))), null, 4), 'utf-8');
+        fs.writeFileSync("./assets/sakamoto_ahiru/zundamon/default.json", JSON.stringify(JSON.parse(JSON.stringify(psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/zundamon/default.psd"), {skipLayerImageData: true, skipCompositeImageData: true, skipThumbnail: true}))), null, 4), 'utf-8');
     }catch(e){
-        console.log("### voicevoxのスピーカーの取得に失敗しました ###\n### 再起動してください ###\n");
+        console.log(`↓↓↓ psdの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ psdの取得に失敗しました ↑↑↑`);
         process.exit();
     }
+    */
 
     //コマンドの登録
     try{
-        client.application.commands.set(cui.getSlashCmds());
+        client.application.commands.set(cui.getSlashCmds(JSON.parse(fs.readFileSync("./src/json/slashcmd.json", "utf-8"))));
     }catch(e){
-        console.log("### コマンドの登録に失敗しました ###\n### 再起動してください ###\n");
+        console.log(`↓↓↓ コマンドの登録に失敗しました ↓↓↓\n${e}\n↑↑↑ コマンドの登録に失敗しました ↑↑↑`);
+        process.exit();
+    }
+
+    //スピーカーの取得
+    try{
+        map.set("voicevox_speakers", (await require("./integrations/voicevox").getSpeakers()).data);
+    }catch(e){
+        console.log(`↓↓↓ スピーカーの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ スピーカーの取得に失敗しました ↑↑↑`);
         process.exit();
     }
 
     //botのステータス設定
     client.user.setActivity("メンションで質問できるよ！");
-    console.log("### Snyivotが起動しました ###\n");
+    console.log("### すにゃBotが起動しました ###\n");
 });
-
+  
 //メッセージ動作
-client.on('messageCreate', async message => {
-    //botの発言, スポイラーのみ, コードブロックを含むメッセージを除外
-    if(message.author.bot || (message.content.match(/^\|\|.*?\|\|$/)) || (message.content.match(/```.*?```/))){
-        return -1;
-    }
+client.on('messageCreate', async (message) => {
 
-    //メンションに反応
-    if(message.mentions.users.has(client.user.id)){
-
-        //内容がなければGUIの送信
-        if(message.content.match(new RegExp('^<@'+process.env.BOT_ID+'>$'))){
-            await gui.send(message, scene);
-        }
-       
-        //内容があれば回答
-        else{
-            await cohere.mention(message, readme);
-        }
-        
-        //メンション文を削除
-        if(message.deletable){
-            await message.delete().catch(() => null);
-        }
-
+    //botの発言を除外
+    if(message.author.bot){
         return 0;
     }
-    
+
+    //呼び出しに反応
+    if(message.content.match(new RegExp(`^<@${process.env.BOT_ID}>.?`)) || message.content.match(new RegExp(`^@${message.guild.members.me.displayName}.?`)) || message.content.match(new RegExp(/(すにゃ|スニャ|すな|スナ|すに|スニ)(ぼっと|ボット|ぼ|ボ|bot|Bot|BOT)/))){
+        try{
+            await cui.call(message, map);
+            return 0;
+        }catch(e){
+            console.log(`↓↓↓ 呼び出しの反応に失敗しました ↓↓↓\n${e}\n↑↑↑ 呼び出しの反応に失敗しました ↑↑↑`);
+            return -1;
+        }
+    }
+
     //読み上げ
-    if(voicevox_map.get(`text_${message.channelId}`)){
-        voicevox.read(message, voicevox_map.get(`voice_${voicevox_map.get(`text_${message.channelId}`)}`));
-        return 0;
+    if(map.get(`read_text_${message.channelId}`)){
+        try{
+            await observe.textChannel(message, map);
+            return 0;
+        }catch(e){
+            console.log(`↓↓↓ 読み上げに失敗しました ↓↓↓\n${e}\n↑↑↑ 読み上げに失敗しました ↑↑↑`);
+            return -1;
+        }
     }
     
     return -1;
@@ -102,145 +108,101 @@ client.on('messageCreate', async message => {
 
 //インタラクション動作
 client.on('interactionCreate', async (interaction) => {
+
+    //ギルド以外での動作
+    if(!interaction.guild){
+        try{
+            gui.nguild(interaction, map);
+            return 0;
+        }catch(e){
+            console.log(`↓↓↓ ギルド外での反応に失敗しました ↓↓↓\n${e}\n↑↑↑ ギルド外での反応に失敗しました ↑↑↑`);
+            return -1;
+        }
+    }
+
     //スラッシュコマンド
     if(interaction.isCommand()){
-        //cohere
-        if(interaction.commandName.includes("cohere")){
-            await cohere.cuiCmd(interaction);
+        try{
+            await cui.slashCmd(interaction, map);
             return 0;
+        }catch(e){
+            console.log(`↓↓↓ コマンドの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ コマンドの実行に失敗しました ↑↑↑`);
+            return -1;
         }
-
-        //game
-        if(interaction.commandName.includes("game")){
-            await game.cuiCmd(interaction, game_map);
-            return 0;
-        }
-
-        //voicevox
-        if(interaction.commandName.includes("voicevox")){
-            await voicevox.cuiCmd(interaction, voicevox_map, vv_speakers);
-            return 0;
-        }
-
-        //readme
-        if(interaction.commandName === "readme"){
-            await cui.cmd(interaction);
-            return 0;
-        }
-
-        return -1;
     }
 
     //スラッシュコマンド補助
     if(interaction.isAutocomplete()){
-        //voicevox
-        if(interaction.commandName.includes("voicevox")){
-            await voicevox.autocomplete(interaction, vv_speakers);
+        try{
+            await cui.autoComplete(interaction, map);
             return 0;
-        }
-
-        return -1;
-    }
-
-    //セレクトメニュー
-    if(interaction.isAnySelectMenu()){
-        //実行
-        if(interaction.values[0].includes("exe")){
-            //cohere
-            if(interaction.customId.includes("cohere")){
-                await cohere.guiMenu(interaction);
-                return 0;
-            }
-
-            //game
-            if(interaction.customId.includes("game")){
-                await game.guiMenu(interaction, game_map);
-                return 0;
-            }
-
-            //voicevox
-            if(interaction.customId.includes("voicevox")){
-                await voicevox.guiMenu(interaction, voicevox_map, vv_speakers);
-                return 0;
-            }
-
-            //GUI
-            if(interaction.customId.includes("home")){
-                await gui.menu(interaction);
-                return 0;
-            }
-
+        }catch(e){
+            console.log(`↓↓↓ コマンドの補助に失敗しました ↓↓↓\n${e}\n↑↑↑ コマンドの補助に失敗しました ↑↑↑`);
             return -1;
         }
-
-        //GUIの遷移
-        await gui.send(interaction, scene);
-
-        return 0;
+    }
+    
+    //セレクトメニュー
+    if(interaction.isAnySelectMenu()){
+        try{
+            await gui.menu(interaction, map);
+            return 0;
+        }catch(e){
+            console.log(`↓↓↓ メニューの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ メニューの実行に失敗しました ↑↑↑`);
+            return -1;
+        }
     }
 
     //ボタン
     if(interaction.isButton()){
-        //実行
-        if(interaction.customId.includes("exe")){
-            //cohere
-            if(interaction.customId.includes("cohere")){
-                await cohere.guiButton(interaction);
-                return 0;
-            }
-    
-            //game
-            if(interaction.customId.includes("game")){
-                await game.guiButton(interaction, game_map);
-                return 0;
-            }
-    
-            //voicevox
-            if(interaction.customId.includes("voicevox")){
-                await voicevox.guiButton(interaction, vv_speakers);
-                return 0
-            }
-    
+        try{
+            await gui.button(interaction, map);
+            return 0;
+        }catch(e){
+            console.log(`↓↓↓ ボタンの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ ボタンの実行に失敗しました ↑↑↑`);
             return -1;
         }
-    
-        //GUIの遷移
-        await gui.send(interaction, scene);
-    
-        return 0;
     }
 
     //モーダル
     if(interaction.isModalSubmit()){
-        //cohere
-        if(interaction.customId.includes("cohere")){
-            await cohere.guiModal(interaction, readme);
+        try{
+            await gui.modal(interaction, map);
             return 0;
+        }catch(e){
+            console.log(`↓↓↓ モーダルの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ モーダルの実行に失敗しました ↑↑↑`);
+            return -1;
         }
-
-        //game
-        if(interaction.customId.includes("game")){
-            await game.guiModal(interaction, game_map);
-            return 0;
-        }
-
-        //voicevox
-        if(interaction.customId.includes("voicevox")){
-            await voicevox.guiModal(interaction, vv_speakers);
-            return 0;
-        }
-
-        return -1;
     }
 
     return -1;
 });
 
 //ボイスチャンネル動作
-client.on('voiceStateUpdate', (oldState, newState) => {
+client.on('voiceStateUpdate', async (old_state, new_state) => {
+    try{
+        observe.voiceChannel(old_state, new_state, map);
+        return 0;
+    }catch(e){
+        console.log(`↓↓↓ ボイチャの操作に失敗しました ↓↓↓\n${e}\n↑↑↑ ボイチャの操作に失敗しました ↑↑↑`);
+        return -1;
+    }
+});
 
-    //voicevox
-    voicevox.observe(oldState, newState, voicevox_map);
+//リアクション動作
+client.on('messageReactionAdd', async (reaction) => {
+    const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
 
-    return 0;
+    //他人のメッセージを除外
+    if(message.author.id != client.user.id){
+        return 0;
+    }
+
+    try{
+        await gui.reaction(message, reaction, map);
+        return 0;
+    }catch(e){
+        console.log(`↓↓↓ リアクションの反応に失敗しました ↓↓↓\n${e}\n↑↑↑ リアクションの反応に失敗しました ↑↑↑`);
+        return -1;
+    }
 });

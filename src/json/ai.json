@@ -1,0 +1,381 @@
+[
+    {
+        "id" : "String",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : null,
+                "fields" : [
+                    {
+                        "name" : "String",
+                        "value" : "String"
+                    }
+                ]
+            }
+        ],
+        "files" : [
+            {
+                "name" : "String",
+                "base64" : "String"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "String",
+                "placeholder" : "String",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "String",
+                        "value" : "String",
+                        "description" : null,
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "String",
+                "id" : "String",
+                "emoji" : null,
+                "style" : null,
+                "disabled" : false
+            }
+        ],
+        "modals" : [
+            {
+                "title" : "String",
+                "id" : "String",
+                "inputs" : [
+                    {
+                        "label" : "String",
+                        "id" : "String",
+                        "placeholder" : "String",
+                        "style" : "String",
+                        "max" : "num",
+                        "min" : "num",
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+    
+
+    {
+        "id" : "ai",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【AI】",
+                "url" : null,
+                "description" : "🗨️⠀AIメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "ai",
+                "placeholder" : "👉 AIメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "AIチャット",
+                        "value" : "ai_chat_modal",
+                        "description" : "AIとチャットを行います",
+                        "emoji" : "💬"
+                    },
+                    {
+                        "label" : "AIイラスト",
+                        "value" : "ai_illust",
+                        "description" : "AIにイラストを出力させます",
+                        "emoji" : "🎨"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "ai_chat",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【AIチャット】",
+                "url" : null,
+                "description" : "🗨️\n<#{chat_response}>",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "ai_chat",
+                "placeholder" : "👉 AIチャットメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "AIチャット",
+                        "value" : "ai_chat_modal",
+                        "description" : "続けてAIとチャットを行います",
+                        "emoji" : "💬"
+                    },
+                    {
+                        "label" : "AIチャットログ",
+                        "value" : "ai_chat_log",
+                        "description" : "チャットの履歴を表示します",
+                        "emoji" : "📃"
+                    },
+                    {
+                        "label" : "AIチャットログ削除",
+                        "value" : "ai_chat_log_clear",
+                        "description" : "チャットの履歴を削除します",
+                        "emoji" : "🗑️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "ai",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "ai_chat_modal",
+        "content" : null,
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : [
+            {
+                "title" : "【チャット入力フォーム】",
+                "id" : "ai_chat",
+                "inputs" : [
+                    {
+                        "label" : "チャット",
+                        "id" : "request",
+                        "placeholder" : "読み上げはどうやって始めるの？",
+                        "style" : "Short",
+                        "max" : 100,
+                        "min" : 1,
+                        "required" : true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "ai_chat_log",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【AIチャットログ】",
+                "url" : null,
+                "description" : "🗨️⠀履歴は過去5件まで覚えてるよ",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name": "<#{chat_request_1}>",
+                        "value": "<#{chat_response_1}>",
+                        "inline": false
+                    },
+                    {
+                        "name": "<#{chat_request_2}>",
+                        "value": "<#{chat_response_2}>",
+                        "inline": false
+                    },
+                    {
+                        "name": "<#{chat_request_3}>",
+                        "value": "<#{chat_response_3}>",
+                        "inline": false
+                    },
+                    {
+                        "name": "<#{chat_request_4}>",
+                        "value": "<#{chat_response_4}>",
+                        "inline": false
+                    },
+                    {
+                        "name": "<#{chat_request_5}>",
+                        "value": "<#{chat_response_5}>",
+                        "inline": false
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "ai_chat_log",
+                "placeholder" : "👉 AIチャットメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "AIチャット",
+                        "value" : "ai_chat_modal",
+                        "description" : "続けてAIとチャットを行います",
+                        "emoji" : "💬"
+                    },
+                    {
+                        "label" : "AIチャットログ",
+                        "value" : "ai_chat_log",
+                        "description" : "チャットの履歴を表示します",
+                        "emoji" : "📃"
+                    },
+                    {
+                        "label" : "AIチャットログ削除",
+                        "value" : "ai_chat_log_clear",
+                        "description" : "チャットの履歴を削除します",
+                        "emoji" : "🗑️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "ai",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "ai_illust",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【AIイラスト】",
+                "url" : null,
+                "description" : "🗨️⠀まだイラストの生成はできないんだ\n⠀⠀⠀アップデートを待ってね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "ai_illust",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : [
+                    {
+                        "label" : "disabled",
+                        "value" : "disabled",
+                        "description" : "disabled",
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "ai",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    }
+]

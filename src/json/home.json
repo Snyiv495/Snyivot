@@ -1,0 +1,254 @@
+[
+    {
+        "id" : "String",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : null,
+                "fields" : [
+                    {
+                        "name" : "String",
+                        "value" : "String"
+                    }
+                ]
+            }
+        ],
+        "files" : [
+            {
+                "name" : "String",
+                "base64" : "String"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "String",
+                "placeholder" : "String",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "String",
+                        "value" : "String",
+                        "description" : null,
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "String",
+                "id" : "String",
+                "emoji" : null,
+                "style" : null,
+                "disabled" : false
+            }
+        ],
+        "modals" : [
+            {
+                "title" : "String",
+                "id" : "String",
+                "inputs" : [
+                    {
+                        "label" : "String",
+                        "id" : "String",
+                        "placeholder" : "String",
+                        "style" : "String",
+                        "max" : "num",
+                        "min" : "num",
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+
+    
+    {
+        "id" : "mention",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "すにゃBot",
+                "url" : "https://github.com/Snyiv495/Snyivot",
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : "Ver. 1.6.0\nVOICEVOX:春日部つむぎ",
+                "color" : "000000",
+                "fields" : [
+                    {
+                        "name" : "ℹ️ 更新情報",
+                        "value" : "- 案内役を春日部つむぎに変更\n- 多数機能の追加および改修"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [
+            {
+                "label" : "開始",
+                "id" : "home",
+                "emoji" : "🛎️",
+                "style" : "Primary",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "not_guild",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "すにゃBot",
+                "url" : "https://github.com/Snyiv495/Snyivot",
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : "Ver. 1.6.0\nVOICEVOX:春日部つむぎ",
+                "color" : "000000",
+                "fields" : [
+                    {
+                        "name" : "⚠️ Error",
+                        "value" : "- ここでは「すにゃbot」を利用できません\n- サーバー内で利用してください"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [
+            {
+                "label" : "開始",
+                "id" : "home",
+                "emoji" : "🛎️",
+                "style" : "Primary",
+                "disabled" : true
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "home",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ホーム】",
+                "url" : null,
+                "description" : "🗨️⠀機能メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "home",
+                "placeholder" : "👉 機能メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "AI",
+                        "value" : "ai",
+                        "description" : "AI機能のメニューを起動します",
+                        "emoji" : "🤖"
+                    },
+                    {
+                        "label" : "おみくじ",
+                        "value" : "omikuji",
+                        "description" : "今日のおみくじを引きます",
+                        "emoji" : "🥠"
+                    },
+                    {
+                        "label" : "読み上げ",
+                        "value" : "read",
+                        "description" : "読み上げ機能のメニューを起動します",
+                        "emoji" : "🎙️"
+                    },
+                    {
+                        "label" : "FAQ",
+                        "value" : "faq",
+                        "description" : "よくある質問",
+                        "emoji" : "❓"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled1",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "disabled2",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "quit",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【終了確認】",
+                "url" : null,
+                "description" : "🗨️⠀お疲れ様でした\n⠀⠀⠀「これらのメッセージを削除する」\n⠀⠀⠀を押して終了してね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "000000",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "quit",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : [
+                    {
+                        "label" : "disabled",
+                        "value" : "disabled",
+                        "description" : "disabled",
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "再開",
+                "id" : "home",
+                "emoji" : "🛎️",
+                "style" : "Secondary",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    }
+]

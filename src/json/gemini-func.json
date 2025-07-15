@@ -1,0 +1,86 @@
+[
+    {
+        "name": "String",
+        "description": "String",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+
+
+    {
+        "name": "ai_chat_call",
+        "description": "他の関数呼び出しが不適切な場合に、チャットに返信するデフォルトの関数です。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "reply": {
+                    "type": "string",
+                    "description": "ユーザーへの返信メッセージ"
+                }
+            },
+            "required": ["reply"]
+        }
+    },
+    {
+        "name": "mention",
+        "description": "他の関数呼び出しが不適切で、内容がただ呼ばれただけの場合に反応する関数です。",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "read_start",
+        "description": "読み上げを開始する関数です。",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "read_end",
+        "description": "読み上げを終了する関数です",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "read_dict_add",
+        "description": "辞書に語句を追加する関数です",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "word": {
+                    "type": "string",
+                    "description": "語句"
+                },
+                "kana": {
+                    "type": "string",
+                    "description": "読み方"
+                }
+            },
+            "required": ["word", "kana"]
+        }
+    },
+    {
+        "name": "read_dict_del",
+        "description": "辞書の語句を削除する関数です",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "word": {
+                    "type": "string",
+                    "description": "語句"
+                }
+            },
+            "required": ["word"]
+        }
+    }
+]

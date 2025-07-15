@@ -1,0 +1,1837 @@
+[
+    {
+        "id" : "String",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : null,
+                "fields" : [
+                    {
+                        "name" : "String",
+                        "value" : "String"
+                    }
+                ]
+            }
+        ],
+        "files" : [
+            {
+                "name" : "String",
+                "base64" : "String"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "String",
+                "placeholder" : "String",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "String",
+                        "value" : "String",
+                        "description" : null,
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "String",
+                "id" : "String",
+                "emoji" : null,
+                "style" : null,
+                "disabled" : false
+            }
+        ],
+        "modals" : [
+            {
+                "title" : "String",
+                "id" : "String",
+                "inputs" : [
+                    {
+                        "label" : "String",
+                        "id" : "String",
+                        "placeholder" : "String",
+                        "style" : "String",
+                        "max" : "num",
+                        "min" : "num",
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+    
+
+    {
+        "id" : "read",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ】",
+                "url" : null,
+                "description" : "🗨️⠀読み上げメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read",
+                "placeholder" : "👉 読み上げメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "読み上げ開始",
+                        "value" : "read_start",
+                        "description" : "このチャンネルの文章の読み上げを始めます",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "読み上げ終了",
+                        "value" : "read_end",
+                        "description" : "このチャンネルの文章の読み上げを終わります",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "辞書追加",
+                        "value" : "read_dict_add_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "辞書削除",
+                        "value" : "read_dict_del_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "ユーザー設定",
+                        "value" : "read_set_user_select",
+                        "description" : "あなたの読み上げの設定をするよ",
+                        "emoji" : "🔧"
+                    },
+                    {
+                        "label" : "サーバー設定",
+                        "value" : "read_set_server_select",
+                        "description" : "みんなの読み上げの設定をするよ",
+                        "emoji" : "🛠️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_start",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ開始】",
+                "url" : null,
+                "description" : "🗨️⠀<#{text_channel}>の文章を\n⠀⠀⠀<#{voice_channel}>で読み上げるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : "VOICEVOX:春日部つむぎ",
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_start_failure",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ開始エラー】",
+                "url" : null,
+                "description" : "🗨️⠀読み上げ開始に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "✅<#{text_channel}>について",
+                        "value" : "- テキストチャンネルでない\n- botがチャンネルのメンバーでない\n- プライベートチャンネルである"
+                    },
+                    {
+                        "name" : "✅<#{voice_channel}>について",
+                        "value" : "- チャンネルに接続していない\n- botに接続・喋る権限がない\n- 制限人数を超えている"
+                    },
+                    {
+                        "name" : "✅その他",
+                        "value" : "- すでに読み上げを行っている"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_start_failure",
+                "placeholder" : "👉 読み上げメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "読み上げ開始",
+                        "value" : "read_start",
+                        "description" : "このチャンネルの文章の読み上げを始めます",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "読み上げ終了",
+                        "value" : "read_end",
+                        "description" : "このチャンネルの文章の読み上げを終わります",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "辞書追加",
+                        "value" : "read_dict_add_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "辞書削除",
+                        "value" : "read_dict_del_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "ユーザー設定",
+                        "value" : "read_set_user_select",
+                        "description" : "あなたの読み上げの設定をするよ",
+                        "emoji" : "🔧"
+                    },
+                    {
+                        "label" : "サーバー設定",
+                        "value" : "read_set_server_select",
+                        "description" : "みんなの読み上げの設定をするよ",
+                        "emoji" : "🛠️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_start_failure*",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ開始エラー】",
+                "url" : null,
+                "description" : "🗨️⠀読み上げ開始に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "✅<#{text_channel}>について",
+                        "value" : "- テキストチャンネルでない\n- botがチャンネルのメンバーでない\n- プライベートチャンネルである"
+                    },
+                    {
+                        "name" : "✅<#{voice_channel}>について",
+                        "value" : "- チャンネルに接続していない\n- botに接続・喋る権限がない\n- 制限人数を超えている"
+                    },
+                    {
+                        "name" : "✅その他",
+                        "value" : "- すでに読み上げを行っている"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_end",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ終了】",
+                "url" : null,
+                "description" : "🗨️⠀<#{voice_channel}>での\n⠀⠀⠀<#{text_channel}>の読み上げを終了するね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_end_failure",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ終了エラー】",
+                "url" : null,
+                "description" : "🗨️⠀読み上げ終了に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "✅<#{text_channel}>について",
+                        "value" : "- 読み上げを行っていない"
+                    },
+                    {
+                        "name" : "✅<#{voice_channel}>について",
+                        "value" : "- 読み上げを行っているボイスチャンネルに接続していない"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_end_failure",
+                "placeholder" : "👉 読み上げメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "読み上げ開始",
+                        "value" : "read_start",
+                        "description" : "このチャンネルの文章の読み上げを始めます",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "読み上げ終了",
+                        "value" : "read_end",
+                        "description" : "このチャンネルの文章の読み上げを終わります",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "辞書追加",
+                        "value" : "read_dict_add_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "辞書削除",
+                        "value" : "read_dict_del_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "ユーザー設定",
+                        "value" : "read_set_user_select",
+                        "description" : "あなたの読み上げの設定をするよ",
+                        "emoji" : "🔧"
+                    },
+                    {
+                        "label" : "サーバー設定",
+                        "value" : "read_set_server_select",
+                        "description" : "みんなの読み上げの設定をするよ",
+                        "emoji" : "🛠️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_end_failure*",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ終了エラー】",
+                "url" : null,
+                "description" : "🗨️⠀読み上げ終了に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "✅<#{text_channel}>について",
+                        "value" : "- 読み上げを行っていない"
+                    },
+                    {
+                        "name" : "✅<#{voice_channel}>について",
+                        "value" : "- 読み上げを行っているボイスチャンネルに接続していない"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_dict_add",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書追加】",
+                "url" : null,
+                "description" : "🗨️⠀辞書に「<#{word}>」(<#{kana}>)を登録したよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_dict_add_modal",
+        "content" : null,
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : [
+            {
+                "title" : "【辞書追加入力フォーム】",
+                "id" : "read_dict_add",
+                "inputs" : [
+                    {
+                        "label" : "語句",
+                        "id" : "word",
+                        "placeholder" : "hogehoge",
+                        "style" : "Short",
+                        "max" : 10,
+                        "min" : 1,
+                        "required" : true
+                    },
+                    {
+                        "label" : "読み方",
+                        "id" : "kana",
+                        "placeholder" : "ホゲホゲ",
+                        "style" : "Short",
+                        "max" : 10,
+                        "min" : 1,
+                        "required" : true
+                    },
+                    {
+                        "label" : "アクセント位置",
+                        "id" : "accent",
+                        "placeholder" : "1",
+                        "style" : "Short",
+                        "max" : 2,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "優先度",
+                        "id" : "priority",
+                        "placeholder" : "5",
+                        "style" : "Short",
+                        "max" : 2,
+                        "min" : 1,
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "read_dict_add_interrupt_error",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書追加エラー】",
+                "url" : null,
+                "description" : "🗨️⠀辞書の追加に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "💡Tips",
+                        "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_dict_add_interrupt_error",
+                "placeholder" : "👉 読み上げメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "読み上げ開始",
+                        "value" : "read_start",
+                        "description" : "このチャンネルの文章の読み上げを始めます",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "読み上げ終了",
+                        "value" : "read_end",
+                        "description" : "このチャンネルの文章の読み上げを終わります",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "辞書追加",
+                        "value" : "read_dict_add_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "辞書削除",
+                        "value" : "read_dict_del_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "ユーザー設定",
+                        "value" : "read_set_user_select",
+                        "description" : "あなたの読み上げの設定をするよ",
+                        "emoji" : "🔧"
+                    },
+                    {
+                        "label" : "サーバー設定",
+                        "value" : "read_set_server_select",
+                        "description" : "みんなの読み上げの設定をするよ",
+                        "emoji" : "🛠️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_dict_add_interrupt_error*",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書追加エラー】",
+                "url" : null,
+                "description" : "🗨️⠀辞書の追加に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "💡Tips",
+                        "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_dict_del",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書削除】",
+                "url" : null,
+                "description" : "💬 辞書から「<#{word}>」を削除したよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_dict_del_modal",
+        "content" : null,
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : [
+            {
+                "title" : "【辞書削除入力フォーム】",
+                "id" : "read_dict_del",
+                "inputs" : [
+                    {
+                        "label" : "語句",
+                        "id" : "word",
+                        "placeholder" : "hogehoge",
+                        "style" : "Short",
+                        "max" : 10,
+                        "min" : 1,
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "read_dict_del_send_csv",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書送信】",
+                "url" : null,
+                "description" : "🗨️⠀いま登録されてる辞書はこんな感じだよ\n⠀⠀⠀辞書にない語句は削除できないよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FFFF00",
+                "fields" : []
+            }
+        ],
+        "files" : [
+            {
+                "name" : "dictionary.csv",
+                "base64" : "<#{base64_csv}>"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "read_dict_del_not_find_word",
+                "placeholder" : "👉 読み上げメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "読み上げ開始",
+                        "value" : "read_start",
+                        "description" : "このチャンネルの文章の読み上げを始めます",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "読み上げ終了",
+                        "value" : "read_end",
+                        "description" : "このチャンネルの文章の読み上げを終わります",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "辞書追加",
+                        "value" : "read_dict_add_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "辞書削除",
+                        "value" : "read_dict_del_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "ユーザー設定",
+                        "value" : "read_set_user_select",
+                        "description" : "あなたの読み上げの設定をするよ",
+                        "emoji" : "🔧"
+                    },
+                    {
+                        "label" : "サーバー設定",
+                        "value" : "read_set_server_select",
+                        "description" : "みんなの読み上げの設定をするよ",
+                        "emoji" : "🛠️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_dict_del_send_csv*",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書送信】",
+                "url" : null,
+                "description" : "🗨️⠀いま登録されてる辞書はこんな感じだよ\n⠀⠀⠀辞書にない語句は削除できないよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FFFF00",
+                "fields" : []
+            }
+        ],
+        "files" : [
+            {
+                "name" : "dictionary.csv",
+                "base64" : "<#{base64_csv}>"
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_dict_del_interrupt_error",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書削除エラー】",
+                "url" : null,
+                "description" : "🗨️⠀辞書の削除に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "💡Tips",
+                        "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_dict_del_interrupt_error",
+                "placeholder" : "👉 読み上げメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "読み上げ開始",
+                        "value" : "read_start",
+                        "description" : "このチャンネルの文章の読み上げを始めます",
+                        "emoji" : "🔈"
+                    },
+                    {
+                        "label" : "読み上げ終了",
+                        "value" : "read_end",
+                        "description" : "このチャンネルの文章の読み上げを終わります",
+                        "emoji" : "🔇"
+                    },
+                    {
+                        "label" : "辞書追加",
+                        "value" : "read_dict_add_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📥"
+                    },
+                    {
+                        "label" : "辞書削除",
+                        "value" : "read_dict_del_modal",
+                        "description" : "辞書に新しい語句を追加します",
+                        "emoji" : "📤"
+                    },
+                    {
+                        "label" : "ユーザー設定",
+                        "value" : "read_set_user_select",
+                        "description" : "あなたの読み上げの設定をするよ",
+                        "emoji" : "🔧"
+                    },
+                    {
+                        "label" : "サーバー設定",
+                        "value" : "read_set_server_select",
+                        "description" : "みんなの読み上げの設定をするよ",
+                        "emoji" : "🛠️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_dict_del_interrupt_error*",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【辞書削除エラー】",
+                "url" : null,
+                "description" : "🗨️⠀辞書の削除に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "💡Tips",
+                        "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_set_user",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ユーザー設定完了】",
+                "url" : null,
+                "description" : "💬 ユーザー情報の設定が完了したよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : "<#{credit}>",
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "キャラクター",
+                        "value" : "- <#{speaker}>"
+                    },
+                    {
+                        "name" : "スタイル",
+                        "value" : "- <#{style}>"
+                    },
+                    {
+                        "name" : "読み上げの高さ",
+                        "value" : "- <#{pitch}>"
+                    },
+                    {
+                        "name" : "読み上げの抑揚",
+                        "value" : "- <#{intonation}>"
+                    },
+                    {
+                        "name" : "名前の読み方",
+                        "value" : "- <#{username}>"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_set_user",
+                "placeholder" : "👉 ユーザー設定メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "スピーカー設定",
+                        "value" : "read_set_user_speaker",
+                        "description" : "読み上げるスピーカーを設定します",
+                        "emoji" : "👥"
+                    },
+                    {
+                        "label" : "スタイル設定",
+                        "value" : "read_set_user_style",
+                        "description" : "スピーカーのスタイルを設定します",
+                        "emoji" : "👤"
+                    },
+                    {
+                        "label" : "パラメーター設定",
+                        "value" : "read_set_user_parameters_modal",
+                        "description" : "読み上げ方を設定します",
+                        "emoji" : "🗣️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_user_select",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ユーザー設定】",
+                "url" : null,
+                "description" : "🗨️⠀ユーザー設定メニューを開いて\n⠀⠀⠀設定したい項目を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_set_user_select",
+                "placeholder" : "👉 ユーザー設定メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "スピーカー設定",
+                        "value" : "read_set_user_speaker",
+                        "description" : "読み上げるスピーカーを設定します",
+                        "emoji" : "👥"
+                    },
+                    {
+                        "label" : "スタイル設定",
+                        "value" : "read_set_user_style",
+                        "description" : "スピーカーのスタイルを設定します",
+                        "emoji" : "👤"
+                    },
+                    {
+                        "label" : "パラメーター設定",
+                        "value" : "read_set_user_parameters_modal",
+                        "description" : "読み上げ方を設定します",
+                        "emoji" : "🗣️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_user_speaker",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ユーザー設定＠スピーカー】",
+                "url" : null,
+                "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
+                "thumbnail" : null,
+                "image" : "attachment://<#{icon_name}>",
+                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [
+            {
+                "name" : "<#{icon_name}>",
+                "base64" : "<#{icon_base64}>"
+            },
+            {
+                "name" : "<#{voice_sample_name}>",
+                "base64" : "<#{voice_sample_base64}>"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "read_set_user_speaker@<#{speaker_uuid}>",
+                "placeholder" : "👉 スピーカー設定メニュー",
+                "disabled" : false,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read_set_user_select",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_user_style",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ユーザー設定＠スタイル】",
+                "url" : null,
+                "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
+                "thumbnail" : null,
+                "image" : "attachment://<#{icon_name}>",
+                "footer" : "🔼 前のページへ\n✅ スタイルの決定\n🔘 スタイルの選択\n🔽 次のページへ",
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [
+            {
+                "name" : "<#{icon_name}>",
+                "base64" : "<#{icon_base64}>"
+            },
+            {
+                "name" : "<#{voice_sample_name}>",
+                "base64" : "<#{voice_sample_base64}>"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "read_set_user_style@<#{style_id}>",
+                "placeholder" : "👉 スタイル設定メニュー",
+                "disabled" : false,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read_set_user_select",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_user_parameters_modal",
+        "content" : null,
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : [
+            {
+                "title" : "【ユーザー設定＠パラメーター入力フォーム】",
+                "id" : "read_set_user",
+                "inputs" : [
+                    {
+                        "label" : "音程",
+                        "id" : "pitch",
+                        "placeholder" : "0.0",
+                        "style" : "Short",
+                        "max" : 5,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "抑揚",
+                        "id" : "intonation",
+                        "placeholder" : "1.0",
+                        "style" : "Short",
+                        "max" : 5,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "読み上げるユーザー名",
+                        "id" : "username",
+                        "placeholder" : "hogehoge",
+                        "style" : "Short",
+                        "max" : 10,
+                        "min" : 1,
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },    
+    {
+        "id" : "read_set_user_failure",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ユーザー設定エラー】",
+                "url" : null,
+                "description" : "🗨️⠀ユーザー設定に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "✅スピーカーについて",
+                        "value" : "- 候補にないスピーカーを入力している\n(読み上げソフトのアップデートが行われていない可能性があります)"
+                    },
+                    {
+                        "name" : "✅スタイルについて",
+                        "value" : "- 候補にないスタイルを入力している\n- 別の操作画面でスピーカーを変更している"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_set_user_failure",
+                "placeholder" : "👉 ユーザー設定メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "スピーカー設定",
+                        "value" : "read_set_user_speaker",
+                        "description" : "読み上げるスピーカーを設定します",
+                        "emoji" : "👥"
+                    },
+                    {
+                        "label" : "スタイル設定",
+                        "value" : "read_set_user_style",
+                        "description" : "スピーカーのスタイルを設定します",
+                        "emoji" : "👤"
+                    },
+                    {
+                        "label" : "パラメーター設定",
+                        "value" : "read_set_user_parameters_modal",
+                        "description" : "読み上げ方を設定します",
+                        "emoji" : "🗣️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_set_server",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【サーバー設定完了】",
+                "url" : null,
+                "description" : "💬 サーバー情報の設定が完了したよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : "<#{credit}>",
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "キャラクター",
+                        "value" : "- <#{speaker}>"
+                    },
+                    {
+                        "name" : "スタイル",
+                        "value" : "- <#{style}>"
+                    },
+                    {
+                        "name" : "名前の読み上げ",
+                        "value" : "- <#{read_username}>"
+                    },
+                    {
+                        "name" : "連投時の名前の読み上げ",
+                        "value" : "- <#{read_username_always}>"
+                    },
+                    {
+                        "name" : "読み上げる文字数の最大",
+                        "value" : "- <#{read_max}>"
+                    },
+                    {
+                        "name" : "読み上げのアプリ",
+                        "value" : "- <#{read_app}>"
+                    },
+                    {
+                        "name" : "設定の上書き",
+                        "value" : "- <#{read_set_override}>"
+                    },
+                    {
+                        "name" : "読み上げの速度",
+                        "value" : "- <#{speed}>"
+                    },
+                    {
+                        "name" : "読み上げの高さ",
+                        "value" : "- <#{pitch}>"
+                    },
+                    {
+                        "name" : "読み上げの抑揚",
+                        "value" : "- <#{intonation}>"
+                    },
+                    {
+                        "name" : "読み上げの大きさ",
+                        "value" : "- <#{volume}>"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_server_select",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【サーバー設定】",
+                "url" : null,
+                "description" : "🗨️⠀サーバー設定メニューを開いて\n⠀⠀⠀設定したい項目を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_set_server_select",
+                "placeholder" : "👉 サーバー設定メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "スピーカー設定",
+                        "value" : "read_set_server_speaker",
+                        "description" : "読み上げるスピーカーを設定します",
+                        "emoji" : "👥"
+                    },
+                    {
+                        "label" : "スタイル設定",
+                        "value" : "read_set_server_style",
+                        "description" : "スピーカーのスタイルを設定します",
+                        "emoji" : "👤"
+                    },
+                    {
+                        "label" : "パラメーター設定",
+                        "value" : "read_set_server_parameters_modal",
+                        "description" : "読み上げ方を設定します",
+                        "emoji" : "🗣️"
+                    },
+                    {
+                        "label" : "詳細設定",
+                        "value" : "read_set_server_detail_modal",
+                        "description" : "その他の設定",
+                        "emoji" : "⚙️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_server_speaker",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【サーバー設定＠スピーカー】",
+                "url" : null,
+                "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
+                "thumbnail" : null,
+                "image" : "attachment://<#{icon_name}>",
+                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [
+            {
+                "name" : "<#{icon_name}>",
+                "base64" : "<#{icon_base64}>"
+            },
+            {
+                "name" : "<#{voice_sample_name}>",
+                "base64" : "<#{voice_sample_base64}>"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "read_set_server_speaker@<#{speaker_uuid}>",
+                "placeholder" : "👉 スピーカー設定メニュー",
+                "disabled" : false,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read_set_server_select",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_server_style",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【サーバー設定＠スタイル】",
+                "url" : null,
+                "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
+                "thumbnail" : null,
+                "image" : "attachment://<#{icon_name}>",
+                "footer" : "🔼 前のページへ\n✅ スタイルの決定\n🔘 スタイルの選択\n🔽 次のページへ",
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [
+            {
+                "name" : "<#{icon_name}>",
+                "base64" : "<#{icon_base64}>"
+            },
+            {
+                "name" : "<#{voice_sample_name}>",
+                "base64" : "<#{voice_sample_base64}>"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "read_set_server_style@<#{style_id}>",
+                "placeholder" : "👉 スタイル設定メニュー",
+                "disabled" : false,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read_set_server_select",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "read_set_server_parameters_modal",
+        "content" : null,
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : [
+            {
+                "title" : "【サーバー設定＠パラメーター入力フォーム】",
+                "id" : "read_set_server",
+                "inputs" : [
+                    {
+                        "label" : "速度",
+                        "id" : "speed",
+                        "placeholder" : "1.0",
+                        "style" : "Short",
+                        "max" : 5,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "音程",
+                        "id" : "pitch",
+                        "placeholder" : "0.0",
+                        "style" : "Short",
+                        "max" : 5,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "抑揚",
+                        "id" : "intonation",
+                        "placeholder" : "1.0",
+                        "style" : "Short",
+                        "max" : 5,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "音量",
+                        "id" : "volume",
+                        "placeholder" : "1.0",
+                        "style" : "Short",
+                        "max" : 5,
+                        "min" : 1,
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id" : "read_set_server_detail_modal",
+        "content" : null,
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : [
+            {
+                "title" : "【サーバー設定＠詳細入力フォーム】",
+                "id" : "read_set_server",
+                "inputs" : [
+                    {
+                        "label" : "名前を読み上げる",
+                        "id" : "read_username",
+                        "placeholder" : "yes/no",
+                        "style" : "Short",
+                        "max" : 3,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "常に名前を読み上げる",
+                        "id" : "read_username_always",
+                        "placeholder" : "yes/no",
+                        "style" : "Short",
+                        "max" : 3,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "読み上げる最大文字数",
+                        "id" : "read_max",
+                        "placeholder" : "10~80",
+                        "style" : "Short",
+                        "max" : 2,
+                        "min" : 1,
+                        "required" : false
+                    },
+                    {
+                        "label" : "読み上げのアプリ",
+                        "id" : "read_app",
+                        "placeholder" : "VOICEVOX",
+                        "style" : "Short",
+                        "max" : 8,
+                        "min" : 0,
+                        "required" : false
+                    },
+                    {
+                        "label" : "読み上げ設定を上書きする",
+                        "id" : "read_set_override",
+                        "placeholder" : "yes/no",
+                        "style" : "Short",
+                        "max" : 3,
+                        "min" : 1,
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    }, 
+    {
+        "id" : "read_set_server_failure",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【サーバー設定エラー】",
+                "url" : null,
+                "description" : "🗨️⠀サーバー設定に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000",
+                "fields" : [
+                    {
+                        "name" : "✅スピーカーについて",
+                        "value" : "- 候補にないスピーカーを入力している\n(読み上げソフトのアップデートが行われていない可能性があります)"
+                    },
+                    {
+                        "name" : "✅スタイルについて",
+                        "value" : "- 候補にないスタイルを入力している\n- 別の操作画面でスピーカーを変更している"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "read_set_server_failure",
+                "placeholder" : "👉 サーバー設定メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "スピーカー設定",
+                        "value" : "read_set_server_speaker",
+                        "description" : "読み上げるスピーカーを設定します",
+                        "emoji" : "👥"
+                    },
+                    {
+                        "label" : "スタイル設定",
+                        "value" : "read_set_server_style",
+                        "description" : "スピーカーのスタイルを設定します",
+                        "emoji" : "👤"
+                    },
+                    {
+                        "label" : "パラメーター設定",
+                        "value" : "read_set_server_parameters_modal",
+                        "description" : "読み上げ方を設定します",
+                        "emoji" : "🗣️"
+                    },
+                    {
+                        "label" : "詳細設定",
+                        "value" : "read_set_server_detail_modal",
+                        "description" : "その他の設定",
+                        "emoji" : "⚙️"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "read",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "read_observe_exit",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ自動終了】",
+                "url" : null,
+                "description" : "🗨️⠀みんないなくなったかな？\n⠀⠀⠀<#{old_voice_channel}>の読み上げを終了するね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_observe_kick",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ強制終了】",
+                "url" : null,
+                "description" : "🗨️⠀ボイチャからキックされちゃった...\n⠀⠀⠀<#{old_voice_channel}>の読み上げを終了するね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FFFF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "read_observe_move",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【読み上げ場所移動】",
+                "url" : null,
+                "description" : "🗨️⠀ボイチャを移動させられたよ\n⠀⠀⠀<#{old_voice_channel}>の読み上げを終了して\n⠀⠀⠀<#{new_voice_channel}>で読み上げをするね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "FFFF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    }
+]

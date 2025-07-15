@@ -1,0 +1,1295 @@
+[
+    {
+        "id" : "String",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : null,
+                "fields" : [
+                    {
+                        "name" : "String",
+                        "value" : "String"
+                    }
+                ]
+            }
+        ],
+        "files" : [
+            {
+                "name" : "String",
+                "base64" : "String"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "String",
+                "placeholder" : "String",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "String",
+                        "value" : "String",
+                        "description" : null,
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "String",
+                "id" : "String",
+                "emoji" : null,
+                "style" : null,
+                "disabled" : false
+            }
+        ],
+        "modals" : [
+            {
+                "title" : "String",
+                "id" : "String",
+                "inputs" : [
+                    {
+                        "label" : "String",
+                        "id" : "String",
+                        "placeholder" : "String",
+                        "style" : "String",
+                        "max" : "num",
+                        "min" : "num",
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+
+
+    {
+        "id" : "faq",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【FAQ】",
+                "url" : null,
+                "description" : "🗨️⠀FAQメニューを開いて\n⠀⠀⠀知りたい機能を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq",
+                "placeholder" : "👉 FAQメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "AI",
+                        "value" : "faq_ai",
+                        "description" : "AI機能について",
+                        "emoji" : "🤖"
+                    },
+                    {
+                        "label" : "おみくじ",
+                        "value" : "faq_omikuji",
+                        "description" : "おみくじ機能について",
+                        "emoji" : "🥠"
+                    },
+                    {
+                        "label" : "読み上げ",
+                        "value" : "faq_read",
+                        "description" : "読み上げ機能について",
+                        "emoji" : "🎙️"
+                    },
+                    {
+                        "label" : "その他",
+                        "value" : "faq_others",
+                        "description" : "その他の機能について",
+                        "emoji" : "📔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "faq_ai",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【FAQ＠AI】",
+                "url" : null,
+                "description" : "🗨️⠀FAQ＠AIメニューを開いて\n⠀⠀⠀知りたい内容を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_ai",
+                "placeholder" : "👉 FAQ＠AIメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_ai_q1",
+                        "description" : "AI生成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.チャット出力はどうやるの？",
+                        "value" : "faq_ai_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "Please wait for update...",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.呼びかけはどうやるの？",
+                        "value" : "faq_ai_q4",
+                        "description" : "テキストチャンネルから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_ai_q1",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q1.何ができるの？】",
+                "url" : null,
+                "description" : "🗨️⠀チャットをしたり\n⠀⠀⠀イラストを描いたり\n⠀⠀⠀呼びかけに応えたりできるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_ai_q1",
+                "placeholder" : "👉 FAQ＠AIメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_ai_q1",
+                        "description" : "AI生成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.チャット出力はどうやるの？",
+                        "value" : "faq_ai_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "Please wait for update...",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.呼びかけはどうやるの？",
+                        "value" : "faq_ai_q4",
+                        "description" : "テキストチャンネルから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_ai_q2",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q2.チャット出力はどうやるの？】",
+                "url" : null,
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから始められるよ\nメンション➨[開始]➨[AI]➨[AIチャット]",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/ai _chat 」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「<#{BOT_ID}>」"
+                    }
+                    
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_ai_q2",
+                "placeholder" : "👉 FAQ＠AIメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_ai_q1",
+                        "description" : "AI生成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.チャット出力はどうやるの？",
+                        "value" : "faq_ai_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "Please wait for update...",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.呼びかけはどうやるの？",
+                        "value" : "faq_ai_q4",
+                        "description" : "テキストチャンネルから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_ai_q3",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q3.イラスト出力はどうやるの？】",
+                "url" : null,
+                "description" : "🗨️⠀まだ実装してないんだ\n⠀⠀⠀アップデートを待っててね",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_ai_q3",
+                "placeholder" : "👉 FAQ＠AIメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_ai_q1",
+                        "description" : "AI生成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.チャット出力はどうやるの？",
+                        "value" : "faq_ai_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "Please wait for update...",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.呼びかけはどうやるの？",
+                        "value" : "faq_ai_q4",
+                        "description" : "テキストチャンネルから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_ai_q4",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q4.呼びかけはどうやるの？】",
+                "url" : null,
+                "description" : "🗨️⠀テキストチャンネルで呼びかけてくれると返事するよ\n⠀⠀⠀一部機能を直接利用したりもできるよ",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "呼びかけの例",
+                        "value" : "- 「おはようすにゃbot」"
+                    },
+                    {
+                        "name" : "機能の利用の例",
+                        "value" : "- 「すにゃぼ　読み上げを始めて」"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_ai_q4",
+                "placeholder" : "👉 FAQ＠AIメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_ai_q1",
+                        "description" : "AI生成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.チャット出力はどうやるの？",
+                        "value" : "faq_ai_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "Please wait for update...",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.呼びかけはどうやるの？",
+                        "value" : "faq_ai_q4",
+                        "description" : "テキストチャンネルから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    
+
+    {
+        "id" : "faq_omikuji",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【FAQ＠おみくじ】",
+                "url" : null,
+                "description" : "🗨️⠀まだ実装してないんだ\n⠀⠀⠀アップデートを待っててね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_omikuji",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : [
+                    {
+                        "label" : "disabled",
+                        "value" : "disabled",
+                        "description" : "disabled",
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "faq_read",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【FAQ＠読み上げ】",
+                "url" : null,
+                "description" : "🗨️⠀FAQ＠読み上げメニューを開いて\n⠀⠀⠀知りたい内容を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_read_q1",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q1.何ができるの？】",
+                "url" : null,
+                "description" : "🗨️⠀テキストチャンネルの文章を\n⠀⠀⠀ボイスチャンネルで読み上げるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read_q1",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_read_q2",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q2.読み上げはどうやって始めるの？】",
+                "url" : null,
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから始められるよ\nメンション➨[開始]➨[読み上げ]➨[読み上げ開始]",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/read _start」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「<#{BOT_ID}>」"
+                    }
+                    
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read_q2",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_read_q3",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q3.読み上げはどうやって終わるの？】",
+                "url" : null,
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから終了できるよ\n⠀⠀⠀ボイチャに誰もいなくなったら自動で終了するよ\nメンション➨[開始]➨[読み上げ]➨[読み上げ終了]",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/read _end」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「<#{BOT_ID}>」"
+                    }
+                    
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read_q3",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_read_q4",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q4.辞書はどうやって追加するの？】",
+                "url" : null,
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから追加できるよ\n⠀⠀⠀語句とその読み方は必ず指定してね\nメンション➨[開始]➨[読み上げ]➨[辞書追加]",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/read _dict_add」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「<#{BOT_ID}>」"
+                    }
+                    
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read_q4",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_read_q5",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q5.辞書はどうやって削除するの？】",
+                "url" : null,
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから削除できるよ\n⠀⠀⠀語句が存在しない時は辞書を送信するよ\nメンション➨[開始]➨[読み上げ]➨[辞書削除]",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/read _dict_del」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「<#{BOT_ID}>」"
+                    }
+                    
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read_q5",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_read_q6",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q5.読み上げの設定はどうやるの？】",
+                "url" : null,
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから設定できるよ\nメンション➨[開始]➨[読み上げ]➨[ユーザー設定]",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/read _set_user」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「<#{BOT_ID}>」"
+                    }
+                    
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_read_q6",
+                "placeholder" : "👉 FAQ＠読み上げメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_read_q1",
+                        "description" : "文章の読み上げができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.読み上げはどうやって始めるの？",
+                        "value" : "faq_read_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.読み上げはどうやって終わるの？",
+                        "value" : "faq_ai_q3",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.辞書はどうやって追加するの？",
+                        "value" : "faq_read_q4",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q5.辞書はどうやって削除するの？",
+                        "value" : "faq_read_q5",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q6.読み上げの設定はどうやるの？",
+                        "value" : "faq_read_q6",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+    {
+        "id" : "faq_others",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【FAQ＠その他】",
+                "url" : null,
+                "description" : "🗨️⠀botのメッセージに「✂️」のリアクションをつけると\n⠀⠀⠀そのメッセージを削除できるよ",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_others",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : [
+                    {
+                        "label" : "disabled",
+                        "value" : "disabled",
+                        "description" : "disabled",
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    }
+
+]
