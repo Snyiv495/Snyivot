@@ -15,9 +15,11 @@ const Keyv = require('keyv');
 
 const user = new Keyv('sqlite://db.sqlite', {table: 'user'});
 const server = new Keyv('sqlite://db.sqlite', {table: 'server'});
+const pre_user = new Keyv('sqlite://db.sqlite', {table: 'voicevox_user'});  //一定期間引継ぎ用
 
 user.on('error', e => console.error('データベースの接続に失敗しました:', e));
 server.on('error', e => console.error('データベースの接続に失敗しました:', e));
+pre_user.on('error', e => console.error('データベースの接続に失敗しました:', e));   //一定期間引継ぎ用
 
 //ユーザ情報を取得する
 async function getUserInfo(id){
@@ -37,6 +39,16 @@ async function getUserInfo(id){
     info.vv_id = info.vv_id ?? null;
     info.vv_pitch = info.vv_pitch ?? null;
     info.vv_intonation = info.vv_intonation ?? null;
+
+    //一定期間引継ぎ用
+    if(await pre_user.has(id)){
+        const pre_info = await pre_user.get(id);
+        info.username = pre_info.username ?? info.username;
+        info.vv_uuid = pre_info.uuid ?? info.vv_uuid;
+        info.vv_id = pre_info.id ?? info.vv_id;
+        info.vv_pitch = pre_info.pitch ?? info.vv_pitch;
+        info.vv_intonation = pre_info.intonation ?? info.vv_intonation;
+    }
 
     return info;
 }

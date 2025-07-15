@@ -427,6 +427,6 @@ Please wait for update...
 
 - [ ] おみくじ機能の実装
 
-- [ ] FAQ機能の整理
+- [x] FAQ機能の整理
 
 - [ ] 謝辞をまとめる
