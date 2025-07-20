@@ -124,8 +124,15 @@ async function dictAdd(interaction, map){
             word = word.replace(/[A-Za-z0-9]/g, function(str){return String.fromCharCode(str.charCodeAt(0) + 0xFEE0);});
             kana = audio_query.data.kana.replace(/\/|、|_|'|？/g, "");
 
-            //辞書の登録
-            await voicevox.postImportUserDict(server_info.vv_dict);
+            //辞書の置き換え
+            if(map.get("voicevox_dictionary") != message.guild.id){
+                try{
+                    await voicevox.postImportUserDict(server_info.vv_dict);
+                    map.set("voicevox_dictionaty", message.guild.id);
+                }catch(e){
+                    console.log(`↓↓↓ 辞書の置き換えに失敗しました ↓↓↓\n${e}\n↑↑↑ 辞書の置き換えに失敗しました ↑↑↑`);
+                }
+            }
 
             //単語の登録
             const word_index = server_info.read_dict.findIndex(entry => entry.word === word);
@@ -192,8 +199,15 @@ async function dictDel(interaction, map){
         //VOICEVOXの辞書削除
         if(server_info.read_app === "VOICEVOX"){
 
-            //辞書の登録
-            await voicevox.postImportUserDict(server_info.vv_dict);
+            //辞書の置き換え
+            if(map.get("voicevox_dictionary") != message.guild.id){
+                try{
+                    await voicevox.postImportUserDict(server_info.vv_dict);
+                    map.set("voicevox_dictionaty", message.guild.id);
+                }catch(e){
+                    console.log(`↓↓↓ 辞書の置き換えに失敗しました ↓↓↓\n${e}\n↑↑↑ 辞書の置き換えに失敗しました ↑↑↑`);
+                }
+            }
             
             //単語の削除
             const uuids = Object.keys(server_info.vv_dict);
