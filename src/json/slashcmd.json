@@ -75,22 +75,22 @@
         ]
     },
     {
-        "name" : "qna",
-        "description" : "Q&Aコマンドだよ",
+        "name" : "faq",
+        "description" : "FAQコマンドだよ",
         "subcommand" : [
             {
                 "name" : "_ai",
-                "description" : "ずんだもんAIのQ&Aだよ",
+                "description" : "AI機能についてのFAQ",
                 "option" : []
             },
             {
                 "name" : "_omikuji",
-                "description" : "おみくじ機能のQ&Aだよ",
+                "description" : "おみくじ機能についてのFAQ",
                 "option" : []
             },
             {
                 "name" : "_read",
-                "description" : "読み上げ機能のQ&Aだよ",
+                "description" : "読み上げ機能についてのFAQ",
                 "option" : []
             }
         ]

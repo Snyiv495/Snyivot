@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/07/10
+    2025/07/20
 *****************/
 
 module.exports = {
@@ -20,6 +20,12 @@ const ai = require("../features/ai");
 const faq = require("../features/faq");
 const omikuji = require("../features/omikuji");
 const read = require("../features/read");
+const feature_modules = {
+    "ai": ai,
+    "faq": faq,
+    "omikuji": omikuji,
+    "read": read,
+};
 
 //GUIの作成
 function create(map, id, pattern={}){
@@ -155,44 +161,16 @@ function nguild(interaction, map){
 
 //メニューの実行
 async function menu(interaction, map){
+    const value = interaction.values[0];
 
-    //AIの実行
-    if(interaction.values[0].startsWith("ai")){
-        try{
-            await ai.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //FAQの実行
-    if(interaction.values[0].startsWith("faq")){
-        try{
-            await faq.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //おみくじの実行
-    if(interaction.values[0].startsWith("omikuji")){
-        try{
-            await omikuji.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //読み上げの実行
-    if(interaction.values[0].startsWith("read")){
-        try{
-            await read.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
+    for(const prefix in feature_modules){
+        if(value.startsWith(prefix)){
+            try{
+                await feature_modules[prefix].exe(interaction, map);
+                return 0;
+            }catch(e){
+                throw new Error(e);
+            }
         }
     }
 
@@ -209,44 +187,16 @@ async function menu(interaction, map){
 
 //ボタンの実行
 async function button(interaction, map){
+    const custom_id = interaction.customId;
 
-    //AIの実行
-    if(interaction.customId.startsWith("ai")){
-        try{
-            await ai.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //FAQの実行
-    if(interaction.customId.startsWith("faq")){
-        try{
-            await faq.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //おみくじの実行
-    if(interaction.customId.startsWith("omikuji")){
-        try{
-            await omikuji.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //読み上げの実行
-    if(interaction.customId.startsWith("read")){
-        try{
-            await read.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
+    for(const prefix in feature_modules){
+        if(custom_id.startsWith(prefix)){
+            try{
+                await feature_modules[prefix].exe(interaction, map);
+                return 0;
+            }catch(e){
+                throw new Error(e);
+            }
         }
     }
 
@@ -263,48 +213,20 @@ async function button(interaction, map){
 
 //モーダルの実行
 async function modal(interaction, map){
+    const custom_id = interaction.customId;
 
-    //AIの実行
-    if(interaction.customId.startsWith("ai")){
-        try{
-            await ai.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //FAQの実行
-    if(interaction.customId.startsWith("faq")){
-        try{
-            await faq.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //おみくじの実行
-    if(interaction.customId.startsWith("omikuji")){
-        try{
-            await omikuji.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //読み上げの実行
-    if(interaction.customId.startsWith("read")){
-        try{
-            await read.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
+    for(const prefix in feature_modules){
+        if(custom_id.startsWith(prefix)){
+            try{
+                await feature_modules[prefix].exe(interaction, map);
+                return 0;
+            }catch(e){
+                throw new Error(e);
+            }
         }
     }
     
-    return 0;
+    return -1;
 }
 
 //リアクションの実行

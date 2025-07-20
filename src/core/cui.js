@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/07/10
+    2025/07/20
 *****************/
 
 module.exports = {
@@ -14,10 +14,17 @@ module.exports = {
 
 const {SlashCommandBuilder, SlashCommandStringOption, SlashCommandNumberOption, SlashCommandSubcommandBuilder, SlashCommandBooleanOption} = require("discord.js");
 const gui = require("./gui");
+
 const ai = require("../features/ai");
 const faq = require("../features/faq");
 const omikuji = require("../features/omikuji");
 const read = require("../features/read");
+const feature_modules = {
+    "ai": ai,
+    "faq": faq,
+    "omikuji": omikuji,
+    "read": read,
+};
 
 //コマンドの取得
 function getSlashCmds(json){
@@ -96,44 +103,16 @@ function getSlashCmds(json){
 
 //コマンドの実行
 async function slashCmd(interaction, map){
+    const command_name = interaction.commandName;
 
-    //AIの実行
-    if(interaction.commandName.startsWith("ai")){
-        try{
-            await ai.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //FAQの実行
-    if(interaction.commandName.startsWith("faq")){
-        try{
-            await faq.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //おみくじの実行
-    if(interaction.commandName.startsWith("omikuji")){
-        try{
-            await omikuji.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //読み上げの実行
-    if(interaction.commandName.startsWith("read")){
-        try{
-            await read.exe(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
+    for(const prefix in feature_modules){
+        if(command_name.startsWith(prefix)){
+            try{
+                await feature_modules[prefix].exe(interaction, map);
+                return 0;
+            }catch(e){
+                throw new Error(e);
+            }
         }
     }
 
@@ -142,44 +121,16 @@ async function slashCmd(interaction, map){
 
 //コマンドの補助
 async function autoComplete(interaction, map){
+    const command_name = interaction.commandName;
 
-    //AIの補助
-    if(interaction.commandName.startsWith("ai")){
-        try{
-            await ai.autoComplete(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //FAQの補助
-    if(interaction.commandName.startsWith("faq")){
-        try{
-            await faq.autoComplete(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //おみくじの補助
-    if(interaction.commandName.startsWith("omikuji")){
-        try{
-            await omikuji.autoComplete(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //読み上げの補助
-    if(interaction.commandName.startsWith("read")){
-        try{
-            await read.autoComplete(interaction, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
+    for(const prefix in feature_modules){
+        if(command_name.startsWith(prefix)){
+            try{
+                await feature_modules[prefix].autoComplete(interaction, map);
+                return 0;
+            }catch(e){
+                throw new Error(e);
+            }
         }
     }
 
@@ -224,44 +175,16 @@ async function call(message, map){
 
 //関数呼び出しの実行
 async function callFunc(message, map){
+    const command_name = interaction.commandName;
 
-    //AIの実行
-    if(message.customId.startsWith("ai")){
-        try{
-            await ai.exe(message, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //FAQの実行
-    if(message.customId.startsWith("faq")){
-        try{
-            await faq.exe(message, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //おみくじの実行
-    if(message.customId.startsWith("omikuji")){
-        try{
-            await omikuji.exe(message, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //読み上げの実行
-    if(message.customId.startsWith("read")){
-        try{
-            await read.exe(message, map);
-            return 0;
-        }catch(e){
-            throw new Error(e);
+    for(const prefix in feature_modules){
+        if(command_name.startsWith(prefix)){
+            try{
+                await feature_modules[prefix].exe(interaction, map);
+                return 0;
+            }catch(e){
+                throw new Error(e);
+            }
         }
     }
 
