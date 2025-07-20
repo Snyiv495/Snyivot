@@ -1,7 +1,7 @@
 /*****************
     db.js
     スニャイヴ
-    2025/07/15
+    2025/07/20
 *****************/
 
 module.exports = {
@@ -55,8 +55,12 @@ async function getUserInfo(id){
 
 //ユーザ情報を保存する
 async function setUserInfo(id, info){
-    await user.set(id, info);
-    return 0;
+    try{
+        await user.set(id, info);
+        return 0;
+    }catch(e){
+        throw new Error(e);
+    }
 }
 
 //サーバ情報を取得する
@@ -99,6 +103,10 @@ async function getServerInfo(id){
 
 //サーバ情報を保存する
 async function setServerInfo(id, info){
-    await server.set(id, info);
-    return 0;
+    try{
+        await server.set(id, info);
+        return 0;
+    }catch(e){
+        throw new Error(e);
+    }
 }

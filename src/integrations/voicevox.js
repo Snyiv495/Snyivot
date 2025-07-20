@@ -94,7 +94,7 @@ async function deleteUserDictWord(uuid){
 //辞書のインポート
 async function postImportUserDict(dictionary){
     try{
-        fs.unlink(process.env.VOICEVOX_DICTIONARY, (e) => {});
+        fs.unlinkSync(process.env.VOICEVOX_DICTIONARY);
         return await axios.post("import_user_dict?override=true", dictionary, {headers:{"Content-Type": "application/json"}});
     }catch(e){
         throw new Error(e);
