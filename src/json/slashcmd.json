@@ -28,11 +28,11 @@
     },
     {
         "name" : "ai",
-        "description" : "ずんだもんAIコマンドだよ",
+        "description" : "AIコマンド",
         "subcommand" : [
             {
                 "name" : "_chat",
-                "description" : "ずんだもんAIと会話できるよ",
+                "description" : "AIと会話を行います",
                 "option" : [
                     {
                         "type" : "string",
@@ -48,17 +48,17 @@
             },
             {
                 "name" : "_chat_log",
-                "description" : "ずんだもんAIとの会話履歴を確認できるよ",
+                "description" : "AIとの会話履歴を確認します",
                 "option" : []
             },
             {
                 "name" : "_chat_log_clear",
-                "description" : "ずんだもんAIとの会話記録を消去するよ",
+                "description" : "AIとの会話履歴を消去します",
                 "option" : []
             },
             {
                 "name" : "_illust",
-                "description" : "ずんだもんAIが絵を描くよ",
+                "description" : "AIにイラストを出力させます",
                 "option" : [
                     {
                         "type" : "string",
@@ -76,7 +76,7 @@
     },
     {
         "name" : "faq",
-        "description" : "FAQコマンドだよ",
+        "description" : "FAQコマンド",
         "subcommand" : [
             {
                 "name" : "_ai",
@@ -96,22 +96,33 @@
         ]
     },
     {
+        "name" : "omikuji",
+        "description" : "おみくじコマンド",
+        "subcommand" : [
+            {
+                "name" : "_draw",
+                "description" : "今日のおみくじをひきます",
+                "option" : []
+            }
+        ]
+    },
+    {
         "name" : "read",
-        "description" : "読み上げコマンドだよ",
+        "description" : "読み上げコマンド",
         "subcommand" : [
             {
                 "name" : "_start",
-                "description" : "このチャンネルで文章の読み上げを始めるよ",
+                "description" : "読み上げを始めます",
                 "option" : []
             },
             {
                 "name" : "_end",
-                "description" : "このチャンネルでの文章の読み上げを終わるよ",
+                "description" : "読み上げを終わります",
                 "option" : []
             },
             {
                 "name" : "_dict_add",
-                "description" : "辞書に新しい語句を追加するよ",
+                "description" : "辞書に新しい語句を追加します",
                 "option" : [
                     {
                         "type" : "string",
@@ -157,7 +168,7 @@
             },
             {
                 "name" : "_dict_del",
-                "description" : "辞書に登録された語句を削除するよ",
+                "description" : "辞書に登録された語句を削除します",
                 "option" : [
                     {
                         "type" : "string",
@@ -173,7 +184,7 @@
             },
             {
                 "name" : "_set_user",
-                "description" : "あなたの読み上げに関する設定をするよ",
+                "description" : "あなたの読み上げに関する設定をします",
                 "option" : [
                     {
                         "type" : "string",
@@ -229,7 +240,7 @@
             },
             {
                 "name" : "_set_server",
-                "description" : "みんなの読み上げに関する設定をするよ",
+                "description" : "みんなの読み上げに関する設定をします",
                 "option" : [
                     {
                         "type" : "bool",

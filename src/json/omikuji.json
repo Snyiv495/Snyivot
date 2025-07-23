@@ -1,0 +1,163 @@
+[
+    {
+        "id" : "String",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "description" : null,                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : null,
+                "fields" : [
+                    {
+                        "name" : "String",
+                        "value" : "String"
+                    }
+                ]
+            }
+        ],
+        "files" : [
+            {
+                "name" : "String",
+                "base64" : "String"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "String",
+                "placeholder" : "String",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "String",
+                        "value" : "String",
+                        "description" : null,
+                        "emoji" : null
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "String",
+                "id" : "String",
+                "emoji" : null,
+                "style" : null,
+                "disabled" : false
+            }
+        ],
+        "modals" : [
+            {
+                "title" : "String",
+                "id" : "String",
+                "inputs" : [
+                    {
+                        "label" : "String",
+                        "id" : "String",
+                        "placeholder" : "String",
+                        "style" : "String",
+                        "max" : "num",
+                        "min" : "num",
+                        "required" : false
+                    }
+                ]
+            }
+        ]
+    },
+    
+
+    {
+        "id" : "omikuji",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【おみくじ】",
+                "url" : null,
+                "description" : "🗨️⠀おみくじメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00",
+                "fields" : []
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "omikuji",
+                "placeholder" : "👉 おみくじメニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "引く",
+                        "value" : "ai_draw",
+                        "description" : "今日のおみくじを引きます",
+                        "emoji" : "🥠"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "omikuji_draw",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【<#{fortune}>】",
+                "url" : null,
+                "description" : "[今日のwikipedia](http://ja.wikipedia.org/wiki/Special:Randompage)",
+                "thumbnail" : null,
+                "image" : null,
+                "footer" : "<#{username}>さんの<#{date}>のおみくじ",
+                "color" : "<#{color}>",
+                "fields" : [
+                    {
+                        "name": "ラッキーアイテム",
+                        "value": "<#{item}>"
+                    },
+                    {
+                        "name": "おすすめの夕食",
+                        "value": "<#{dinner}>"
+                    },
+                    {
+                        "name": "今日の一言",
+                        "value": "<#{advice}>"
+                    }
+                ]
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    }
+]

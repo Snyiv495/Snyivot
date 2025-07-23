@@ -1,8 +1,7 @@
 [
     {
         "id": "String",
-        "role": [],
-        "style": []
+        "prompt": "object"
     },
 
 
@@ -64,5 +63,27 @@
             "## README",
             "<#{readme}>"
         ]
+    },
+
+
+    {
+        "id": "omikuji",
+        "content": "今日のおみくじの各項目を日本語で生成してください。",
+        "type": "object",
+        "properties": {
+            "item": {
+                "type": "string",
+                "description": "一般的に存在しなさそうなラッキーアイテム（父親のカチューシャ, 一昨年のレシート, ボールペンのばね, etc...）"
+            },
+            "dinner": {
+                "type": "string",
+                "description": "今日のおすすめの夜ご飯のおかず"
+            },
+            "advice": {
+                "type": "string",
+                "description": "ユーモアのある一言アドバイス"
+            }
+        },
+        "required": ["item", "dinner", "advice"]
     }
 ]

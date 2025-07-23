@@ -1,12 +1,13 @@
 /******************
     gemini.js
     スニャイヴ
-    2025/07/07
+    2025/07/23
 ******************/
 
 module.exports = {
+    genCon: genCon,
     genConFunc: genConFunc,
-    genCon: genCon
+    genConJson: genConJson
 }
 
 const {GoogleGenAI} = require('@google/genai');
@@ -28,12 +29,35 @@ function getFuncDec(){
     return functions;
 }
 
+//応答作成
+async function genCon(text, instruction){
+    try{
+        return await gemini.models.generateContent(
+            {
+                model: "gemini-2.5-flash",
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{text: text}]
+                    }
+                ],
+                config: {
+                    systemInstruction: instruction,
+                    maxOutputTokens: 200
+                },
+            }
+        );
+    }catch(e){
+        throw new Error(e);
+    }
+}
+
 //関数呼び出し付き応答作成
 async function genConFunc(text, instruction){
     try{
         return await gemini.models.generateContent(
             {
-                model: "gemini-2.0-flash",
+                model: "gemini-2.5-flash",
                 contents: [
                     {
                         role: "user",
@@ -44,7 +68,7 @@ async function genConFunc(text, instruction){
                     tools: [{functionDeclarations: getFuncDec()}],
                     toolConfig: {functionCallingConfig: {mode: "any"}},
                     systemInstruction: instruction,
-                    maxOutputTokens: 500
+                    maxOutputTokens: 200
                 },
             }
         );
@@ -53,20 +77,17 @@ async function genConFunc(text, instruction){
     }
 }
 
-//応答作成
-async function genCon(text, instruction){
+//JSON制約付き応答作成
+async function genConJson(content, schema){
     try{
         return await gemini.models.generateContent(
             {
-                model: "gemini-2.0-flash",
-                contents: [
-                    {
-                        role: "user",
-                        parts: [{text: text}]
-                    }
-                ],
+                model: "gemini-2.5-flash",
+                contents: content,
                 config: {
-                    systemInstruction: instruction,
+                    responseMimeType: "application/json",
+                    responseSchema: schema,
+                    temperature: 0.9,
                     maxOutputTokens: 200
                 },
             }

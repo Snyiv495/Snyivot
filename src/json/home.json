@@ -165,7 +165,7 @@
                     },
                     {
                         "label" : "おみくじ",
-                        "value" : "omikuji",
+                        "value" : "omikuji_draw",
                         "description" : "今日のおみくじを引きます",
                         "emoji" : "🥠"
                     },

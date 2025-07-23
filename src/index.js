@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/07/15
+    2025/07/23
 *****************/
 
 require('dotenv').config();
@@ -31,7 +31,7 @@ client.once('ready', async () => {
 
     //GUIの取得
     try{
-        const files = ["./src/json/home.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/read.json"];
+        const files = ["./src/json/home.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/omikuji.json", "./src/json/read.json"];
         map.set("gui_json", files.flatMap(file => JSON.parse(fs.readFileSync(file, "utf-8"))));
     }catch(e){
         console.log(`↓↓↓ GUIの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ GUIの取得に失敗しました ↑↑↑`);

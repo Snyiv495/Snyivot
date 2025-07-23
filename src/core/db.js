@@ -1,7 +1,7 @@
 /*****************
     db.js
     スニャイヴ
-    2025/07/20
+    2025/07/23
 *****************/
 
 module.exports = {
@@ -31,6 +31,7 @@ async function getUserInfo(id){
         vv_id: null,
         vv_pitch: null,
         vv_intonation: null,
+        uranai: {}
     };
 
     //一定期間引継ぎ用
@@ -49,6 +50,7 @@ async function getUserInfo(id){
     info.vv_id = info.vv_id ?? null;
     info.vv_pitch = info.vv_pitch ?? null;
     info.vv_intonation = info.vv_intonation ?? null;
+    info.uranai = {};
 
     return info;
 }
