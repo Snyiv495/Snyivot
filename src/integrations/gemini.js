@@ -43,7 +43,7 @@ async function genCon(text, instruction){
                 ],
                 config: {
                     systemInstruction: instruction,
-                    maxOutputTokens: 200
+                    maxOutputTokens: 500
                 },
             }
         );
@@ -68,7 +68,7 @@ async function genConFunc(text, instruction){
                     tools: [{functionDeclarations: getFuncDec()}],
                     toolConfig: {functionCallingConfig: {mode: "any"}},
                     systemInstruction: instruction,
-                    maxOutputTokens: 200
+                    maxOutputTokens: 500
                 },
             }
         );
@@ -88,7 +88,7 @@ async function genConJson(content, schema){
                     responseMimeType: "application/json",
                     responseSchema: schema,
                     temperature: 0.9,
-                    maxOutputTokens: 200
+                    maxOutputTokens: 500
                 },
             }
         );

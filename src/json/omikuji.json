@@ -134,7 +134,7 @@
             {
                 "title" : "【<#{fortune}>】",
                 "url" : null,
-                "description" : "[今日のwikipedia](http://ja.wikipedia.org/wiki/Special:Randompage)",
+                "description" : "[今日のwikipedia](<#{wiki}>)",
                 "thumbnail" : null,
                 "image" : null,
                 "footer" : "<#{username}>さんの<#{date}>のおみくじ",

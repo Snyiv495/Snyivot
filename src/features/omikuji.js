@@ -9,6 +9,7 @@ module.exports = {
 }
 
 const fs = require('fs');
+const axios = require('axios');
 const db = require('../core/db');
 const gui = require('../core/gui');
 const gemini = require('../integrations/gemini');
@@ -31,7 +32,8 @@ async function draw(interaction, map){
 
     let prompt;
     let content;
-
+    console.log(date)
+    console.log(today)
     //すでに今日実行していたら再送信
     if(date === today){
         //おみくじ送信
@@ -44,7 +46,8 @@ async function draw(interaction, map){
                 "<#{item}>" : item,
                 "<#{dinner}>" : dinner,
                 "<#{advice}>" : advice,
-                "<#{date}>" : date
+                "<#{username}>" : interaction.user.displayName,
+                "<#{date}>" : today
             }
         ));
 
@@ -52,7 +55,29 @@ async function draw(interaction, map){
     }
 
     //運勢
+    const rand = Math.floor(Math.random() * 100);
+    switch(true){
+        case rand===0: fortune = "超大吉"; break;
+        case (0<rand&&rand<=4): fortune = "大吉"; break;
+        case (4<rand&&rand<=19): fortune = "中吉"; break;
+        case (19<rand&&rand<=39): fortune = "小吉"; break;
+        case (39<rand&&rand<=59): fortune = "末吉"; break;
+        case (59<rand&&rand<=79): fortune = "吉"; break;
+        case (79<rand&&rand<=94): fortune = "凶"; break;
+        case (94<rand&&rand<=98): fortune = "大凶"; break;
+        case rand===99: fortune = "超大凶"; break;
+        default : fortune = "シークレット"; break;
+    }
 
+    //wiki
+    wiki = (await axios.get('https://ja.wikipedia.org/wiki/Special:Random', {
+      maxRedirects: 0, // リダイレクトを追跡しない
+      validateStatus: status => status === 301 || status === 302
+    })).headers.location;
+
+    //ラッキーカラー
+    color = Math.random().toString(16).slice(-6);
+    console.log(color);
 
     //プロンプトの取得
     for(const element of gemini_prompt_json){
@@ -65,6 +90,7 @@ async function draw(interaction, map){
     try{
         //レスポンスの取得
         const gemini_res = await gemini.genConJson(content, prompt);
+        console.log(gemini_res.candidates)
         const gemini_res_json = JSON.parse(gemini_res.candidates[0].content.parts[0].text);
         item = gemini_res_json.item;
         dinner = gemini_res_json.dinner;
@@ -73,7 +99,7 @@ async function draw(interaction, map){
         throw new Error(e);
     }
 
-    user_info.uranai = {date: date, fortune: fortune, wiki: wiki, speaker: speaker, color: color, item: item, dinner: dinner, advice: advice};
+    user_info.uranai = {date: today, fortune: fortune, wiki: wiki, speaker: speaker, color: color, item: item, dinner: dinner, advice: advice};
     await db.setUserInfo(interaction.user.id, user_info);
 
     //おみくじ送信
@@ -86,7 +112,8 @@ async function draw(interaction, map){
             "<#{item}>" : item,
             "<#{dinner}>" : dinner,
             "<#{advice}>" : advice,
-            "<#{date}>" : date
+            "<#{username}>" : interaction.user.displayName,
+            "<#{date}>" : today
         }
     ));
 
