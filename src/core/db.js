@@ -50,7 +50,7 @@ async function getUserInfo(id){
     info.vv_id = info.vv_id ?? null;
     info.vv_pitch = info.vv_pitch ?? null;
     info.vv_intonation = info.vv_intonation ?? null;
-    info.uranai = {};
+    info.uranai = info.uranai ?? {};
 
     return info;
 }

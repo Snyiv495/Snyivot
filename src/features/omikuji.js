@@ -23,7 +23,6 @@ async function draw(interaction, map){
 
     let date = user_info_uranai.date;
     let fortune = user_info_uranai.fortune;
-    let wiki = user_info_uranai.wiki;
     let speaker = user_info_uranai.speaker;
     let color = user_info_uranai.color;
     let item = user_info_uranai.item;
@@ -32,15 +31,13 @@ async function draw(interaction, map){
 
     let prompt;
     let content;
-    console.log(date)
-    console.log(today)
+
     //すでに今日実行していたら再送信
     if(date === today){
         //おみくじ送信
         interaction.editReply(gui.create(map, "omikuji_draw", 
             {
                 "<#{fortune}>" : fortune,
-                "<#{wiki}>" : wiki,
                 "<#{speaker}>" : speaker,
                 "<#{color}>" : color,
                 "<#{item}>" : item,
@@ -69,12 +66,6 @@ async function draw(interaction, map){
         default : fortune = "シークレット"; break;
     }
 
-    //wiki
-    wiki = (await axios.get('https://ja.wikipedia.org/wiki/Special:Random', {
-      maxRedirects: 0, // リダイレクトを追跡しない
-      validateStatus: status => status === 301 || status === 302
-    })).headers.location;
-
     //ラッキーカラー
     color = Math.random().toString(16).slice(-6);
     console.log(color);
@@ -90,7 +81,6 @@ async function draw(interaction, map){
     try{
         //レスポンスの取得
         const gemini_res = await gemini.genConJson(content, prompt);
-        console.log(gemini_res.candidates)
         const gemini_res_json = JSON.parse(gemini_res.candidates[0].content.parts[0].text);
         item = gemini_res_json.item;
         dinner = gemini_res_json.dinner;
@@ -106,7 +96,6 @@ async function draw(interaction, map){
     interaction.editReply(gui.create(map, "omikuji_draw", 
         {
             "<#{fortune}>" : fortune,
-            "<#{wiki}>" : wiki,
             "<#{speaker}>" : speaker,
             "<#{color}>" : color,
             "<#{item}>" : item,
