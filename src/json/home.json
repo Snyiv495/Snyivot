@@ -79,12 +79,12 @@
                 "description" : null,                
                 "thumbnail" : null,
                 "image" : null,
-                "footer" : "Ver. 1.6.0\nVOICEVOX:春日部つむぎ",
+                "footer" : "Ver. 1.6.1\nVOICEVOX:春日部つむぎ",
                 "color" : "000000",
                 "fields" : [
                     {
                         "name" : "ℹ️ 更新情報",
-                        "value" : "- 案内役を春日部つむぎに変更\n- 多数機能の追加および改修"
+                        "value" : "- 1.6.1 おみくじ機能の実装\n- 1.6.0 AI機能の強化"
                     }
                 ]
             }

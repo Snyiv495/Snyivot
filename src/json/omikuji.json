@@ -132,24 +132,28 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【<#{fortune}>】",
+                "title" : "【おみくじ結果】\n<#{date}> <#{username}>さんのおみくじ",
                 "url" : null,
-                "description" : "[今日のwikipedia](<#{wiki}>)",
+                "description" : "🎴今日の運勢\n<#{fortune}>",
                 "thumbnail" : null,
                 "image" : null,
-                "footer" : "<#{username}>さんの<#{date}>のおみくじ",
+                "footer" : "開運スピーカー：<#{speaker}>",
                 "color" : "<#{color}>",
                 "fields" : [
                     {
-                        "name": "ラッキーアイテム",
+                        "name": "🔮ラッキーアイテム",
                         "value": "<#{item}>"
                     },
                     {
-                        "name": "おすすめの夕食",
+                        "name": "🍽️ごきげんな夕食",
                         "value": "<#{dinner}>"
                     },
                     {
-                        "name": "今日の一言",
+                        "name": "🏅プチクエスト",
+                        "value": "<#{quest}>"
+                    },
+                    {
+                        "name": "💭今日の一言",
                         "value": "<#{advice}>"
                     }
                 ]

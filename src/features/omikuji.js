@@ -9,7 +9,6 @@ module.exports = {
 }
 
 const fs = require('fs');
-const axios = require('axios');
 const db = require('../core/db');
 const gui = require('../core/gui');
 const gemini = require('../integrations/gemini');
@@ -18,6 +17,7 @@ const gemini = require('../integrations/gemini');
 async function draw(interaction, map){
     const user_info = await db.getUserInfo(interaction.user.id);
     const user_info_uranai = user_info.uranai;
+    const vv_speakers = map.get("voicevox_speakers");
     const gemini_prompt_json = JSON.parse(fs.readFileSync("./src/json/gemini-prompt.json", "utf-8"));
     const today = (new Date()).toLocaleDateString();
 
@@ -27,6 +27,7 @@ async function draw(interaction, map){
     let color = user_info_uranai.color;
     let item = user_info_uranai.item;
     let dinner = user_info_uranai.dinner;
+    let quest = user_info_uranai.quest;
     let advice = user_info_uranai.advice;
 
     let prompt;
@@ -37,14 +38,15 @@ async function draw(interaction, map){
         //おみくじ送信
         interaction.editReply(gui.create(map, "omikuji_draw", 
             {
+                "<#{date}>" : today,
+                "<#{username}>" : interaction.user.displayName,
                 "<#{fortune}>" : fortune,
                 "<#{speaker}>" : speaker,
                 "<#{color}>" : color,
                 "<#{item}>" : item,
                 "<#{dinner}>" : dinner,
-                "<#{advice}>" : advice,
-                "<#{username}>" : interaction.user.displayName,
-                "<#{date}>" : today
+                "<#{quest}>" : quest,
+                "<#{advice}>" : advice
             }
         ));
 
@@ -52,23 +54,26 @@ async function draw(interaction, map){
     }
 
     //運勢
-    const rand = Math.floor(Math.random() * 100);
+    const fortune_random = Math.floor(Math.random() * 100);
     switch(true){
-        case rand===0: fortune = "超大吉"; break;
-        case (0<rand&&rand<=4): fortune = "大吉"; break;
-        case (4<rand&&rand<=19): fortune = "中吉"; break;
-        case (19<rand&&rand<=39): fortune = "小吉"; break;
-        case (39<rand&&rand<=59): fortune = "末吉"; break;
-        case (59<rand&&rand<=79): fortune = "吉"; break;
-        case (79<rand&&rand<=94): fortune = "凶"; break;
-        case (94<rand&&rand<=98): fortune = "大凶"; break;
-        case rand===99: fortune = "超大凶"; break;
+        case fortune_random===0: fortune = "超大吉"; break;
+        case (0<fortune_random&&fortune_random<=4): fortune = "大吉"; break;
+        case (4<fortune_random&&fortune_random<=19): fortune = "中吉"; break;
+        case (19<fortune_random&&fortune_random<=39): fortune = "小吉"; break;
+        case (39<fortune_random&&fortune_random<=59): fortune = "末吉"; break;
+        case (59<fortune_random&&fortune_random<=79): fortune = "吉"; break;
+        case (79<fortune_random&&fortune_random<=94): fortune = "凶"; break;
+        case (94<fortune_random&&fortune_random<=98): fortune = "大凶"; break;
+        case fortune_random===99: fortune = "超大凶"; break;
         default : fortune = "シークレット"; break;
     }
 
-    //ラッキーカラー
+    //スピーカー
+    const speaker_random = Math.floor(Math.random() * vv_speakers.length);
+    speaker = vv_speakers[speaker_random].name;
+
+    //カラー
     color = Math.random().toString(16).slice(-6);
-    console.log(color);
 
     //プロンプトの取得
     for(const element of gemini_prompt_json){
@@ -84,25 +89,27 @@ async function draw(interaction, map){
         const gemini_res_json = JSON.parse(gemini_res.candidates[0].content.parts[0].text);
         item = gemini_res_json.item;
         dinner = gemini_res_json.dinner;
+        quest = gemini_res_json.quest;
         advice = gemini_res_json.advice;
     }catch(e){
         throw new Error(e);
     }
 
-    user_info.uranai = {date: today, fortune: fortune, wiki: wiki, speaker: speaker, color: color, item: item, dinner: dinner, advice: advice};
+    user_info.uranai = {date: today, fortune: fortune, speaker: speaker, color: color, item: item, dinner: dinner, quest: quest, advice: advice};
     await db.setUserInfo(interaction.user.id, user_info);
 
     //おみくじ送信
     interaction.editReply(gui.create(map, "omikuji_draw", 
         {
+            "<#{date}>" : today,
+            "<#{username}>" : interaction.user.displayName,
             "<#{fortune}>" : fortune,
             "<#{speaker}>" : speaker,
             "<#{color}>" : color,
             "<#{item}>" : item,
             "<#{dinner}>" : dinner,
-            "<#{advice}>" : advice,
-            "<#{username}>" : interaction.user.displayName,
-            "<#{date}>" : today
+            "<#{quest}>" : quest,
+            "<#{advice}>" : advice
         }
     ));
 

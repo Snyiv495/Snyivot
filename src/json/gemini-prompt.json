@@ -73,11 +73,15 @@
         "properties": {
             "item": {
                 "type": "string",
-                "description": "一般的に存在しなさそうなラッキーアイテム（父親のカチューシャ, 一昨年のレシート, ボールペンのばね, etc...）"
+                "description": "一般的に持っていなさそうなラッキーアイテム（父親のカチューシャ, 一昨年のレシート, ボールペンのばね, etc...）"
             },
             "dinner": {
                 "type": "string",
                 "description": "今日のおすすめの夜ご飯のおかず"
+            },
+            "quest": {
+                "type": "string",
+                "description": "軽い行動を促すプチクエスト（3人に感謝を伝える, 1部屋掃除をする, 知らない曲を聴く, 道に落ちている硬貨を見つける, etc...）"
             },
             "advice": {
                 "type": "string",
