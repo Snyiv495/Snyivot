@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/07/20
+    2025/07/25
 *****************/
 
 module.exports = {
@@ -64,7 +64,7 @@ function create(map, id, pattern={}){
                     }
                     
                     const attachment = new AttachmentBuilder();
-                    attachment.setFile(embed_0.thumbnail??fs.existsSync(`assets/sakamoto_ahiru/kasukabe_tsumugi/${id}.png`)?`assets/sakamoto_ahiru/kasukabe_tsumugi/${id}.png`:"assets/sakamoto_ahiru/kasukabe_tsumugi/default.png");
+                    attachment.setFile(embed_0.thumbnail??fs.existsSync(`assets/sakamoto_ahiru/kasukabe_tsumugi/${id}.png`)?`assets/sakamoto_ahiru/kasukabe_tsumugi/${id}.png`:"assets/default.png");
                     attachment.setName("thumbnail.png");
                     embed.setThumbnail("attachment://thumbnail.png");
                     files.push(attachment);
