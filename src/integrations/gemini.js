@@ -1,7 +1,7 @@
 /******************
     gemini.js
     スニャイヴ
-    2025/07/23
+    2025/08/20
 ******************/
 
 module.exports = {
@@ -43,12 +43,12 @@ async function genCon(text, instruction){
                 ],
                 config: {
                     systemInstruction: instruction,
-                    maxOutputTokens: 500
+                    maxOutputTokens: 1000
                 },
             }
         );
     }catch(e){
-        throw new Error(e);
+        throw new Error(`gemini.js => genCon() \n ${e}`);
     }
 }
 
@@ -68,12 +68,12 @@ async function genConFunc(text, instruction){
                     tools: [{functionDeclarations: getFuncDec()}],
                     toolConfig: {functionCallingConfig: {mode: "any"}},
                     systemInstruction: instruction,
-                    maxOutputTokens: 500
+                    maxOutputTokens: 1000
                 },
             }
         );
     }catch(e){
-        throw new Error(e);
+        throw new Error(`gemini.js => genConFunc() \n ${e}`);
     }
 }
 
@@ -88,11 +88,11 @@ async function genConJson(content, schema){
                     responseMimeType: "application/json",
                     responseSchema: schema,
                     temperature: 0.9,
-                    maxOutputTokens: 500
+                    maxOutputTokens: 1000
                 },
             }
         );
     }catch(e){
-        throw new Error(e);
+        throw new Error(`gemini.js => genConJson() \n ${e}`);
     }
 }

@@ -1,41 +1,47 @@
 [
     {
         "id" : "String",
-        "content" : null,
+        "content" : "String || null",
         "embeds" : [
             {
-                "title" : null,
-                "url" : null,
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : null,
+                "title" : "String || null",
+                "url" : "String || null",
+                "thumbnail" : {
+                    "name" : "String || null",
+                    "path" : "String || null",
+                    "base64" : "String || null"
+                },
+                "description" : "String || null",                
                 "fields" : [
                     {
                         "name" : "String",
-                        "value" : "String"
+                        "value" : "String",
+                        "inline" : "bool"
                     }
-                ]
+                ],
+                "image" : "String || null",
+                "footer" : "String || null",
+                "color" : "###### || null"
             }
         ],
         "files" : [
             {
-                "name" : "String",
-                "base64" : "String"
+                "name" : "String || null",
+                "path" : "String || null",
+                "base64" : "String || null"
             }
         ],
         "menus" : [
             {
                 "id" : "String",
                 "placeholder" : "String",
-                "disabled" : false,
+                "disabled" : "bool || null",
                 "options" : [
                     {
                         "label" : "String",
                         "value" : "String",
-                        "description" : null,
-                        "emoji" : null
+                        "description" : "String || null",
+                        "emoji" : "String || null"
                     }
                 ]
             }
@@ -44,9 +50,9 @@
             {
                 "label" : "String",
                 "id" : "String",
-                "emoji" : null,
-                "style" : null,
-                "disabled" : false
+                "emoji" : "String || null",
+                "style" : "String || null",
+                "disabled" : "bool || null"
             }
         ],
         "modals" : [
@@ -57,11 +63,11 @@
                     {
                         "label" : "String",
                         "id" : "String",
-                        "placeholder" : "String",
-                        "style" : "String",
-                        "max" : "num",
-                        "min" : "num",
-                        "required" : false
+                        "placeholder" : "String || null",
+                        "style" : "String || null",
+                        "max" : "Number || null",
+                        "min" : "Number || null",
+                        "required" : "bool || null"
                     }
                 ]
             }
@@ -76,12 +82,16 @@
             {
                 "title" : "【おみくじ】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀おみくじメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -93,7 +103,7 @@
                 "options" : [
                     {
                         "label" : "引く",
-                        "value" : "ai_draw",
+                        "value" : "omikuji_draw",
                         "description" : "今日のおみくじを引きます",
                         "emoji" : "🥠"
                     }
@@ -132,36 +142,100 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【おみくじ結果】\n<#{date}> <#{username}>さんのおみくじ",
+                "title" : "【おみくじ】\n{{__DATE__}} {{__USERNAME__}}さんのおみくじ",
                 "url" : null,
-                "description" : "🎴今日の運勢\n<#{fortune}>",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : "開運スピーカー：<#{speaker}>",
-                "color" : "<#{color}>",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🎴今日の運勢\n{{__FORTUNE__}}",                
                 "fields" : [
                     {
                         "name": "🔮ラッキーアイテム",
-                        "value": "<#{item}>"
+                        "value": "{{__ITEM__}}"
                     },
                     {
                         "name": "🍽️ごきげんな夕食",
-                        "value": "<#{dinner}>"
+                        "value": "{{__DINNER__}}"
                     },
                     {
                         "name": "🏅プチクエスト",
-                        "value": "<#{quest}>"
+                        "value": "{{__QUEST__}}"
                     },
                     {
                         "name": "💭今日の一言",
-                        "value": "<#{advice}>"
+                        "value": "{{__ADVICE__}}"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : "開運スピーカー：{{__SPEAKER__}} \n 👈ラッキーカラー：{{__COLOR__}}",
+                "color" : "{{__COLOR__}}"
             }
         ],
         "files" : [],
         "menus" : [],
         "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "omikuji_luck",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【おみくじ＠開運】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀おみくじ＠開運メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "omikuji_luck",
+                "placeholder" : "👉 おみくじ＠開運メニュー",
+                "disabled" : false,
+                "options" : [
+                    {
+                        "label" : "開運スピーカー設定",
+                        "value" : "read_set_user_speaker@{{__SPEAKER_UUID__}}",
+                        "description" : "ユーザー設定＠スピーカーへ移動します",
+                        "emoji" : "👥"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "omikuji",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
         "modals" : []
     }
 ]

@@ -1,41 +1,47 @@
 [
     {
         "id" : "String",
-        "content" : null,
+        "content" : "String || null",
         "embeds" : [
             {
-                "title" : null,
-                "url" : null,
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : null,
+                "title" : "String || null",
+                "url" : "String || null",
+                "thumbnail" : {
+                    "name" : "String || null",
+                    "path" : "String || null",
+                    "base64" : "String || null"
+                },
+                "description" : "String || null",                
                 "fields" : [
                     {
                         "name" : "String",
-                        "value" : "String"
+                        "value" : "String",
+                        "inline" : "bool"
                     }
-                ]
+                ],
+                "image" : "String || null",
+                "footer" : "String || null",
+                "color" : "###### || null"
             }
         ],
         "files" : [
             {
-                "name" : "String",
-                "base64" : "String"
+                "name" : "String || null",
+                "path" : "String || null",
+                "base64" : "String || null"
             }
         ],
         "menus" : [
             {
                 "id" : "String",
                 "placeholder" : "String",
-                "disabled" : false,
+                "disabled" : "bool || null",
                 "options" : [
                     {
                         "label" : "String",
                         "value" : "String",
-                        "description" : null,
-                        "emoji" : null
+                        "description" : "String || null",
+                        "emoji" : "String || null"
                     }
                 ]
             }
@@ -44,9 +50,9 @@
             {
                 "label" : "String",
                 "id" : "String",
-                "emoji" : null,
-                "style" : null,
-                "disabled" : false
+                "emoji" : "String || null",
+                "style" : "String || null",
+                "disabled" : "bool || null"
             }
         ],
         "modals" : [
@@ -57,11 +63,11 @@
                     {
                         "label" : "String",
                         "id" : "String",
-                        "placeholder" : "String",
-                        "style" : "String",
-                        "max" : "num",
-                        "min" : "num",
-                        "required" : false
+                        "placeholder" : "String || null",
+                        "style" : "String || null",
+                        "max" : "Number || null",
+                        "min" : "Number || null",
+                        "required" : "bool || null"
                     }
                 ]
             }
@@ -70,23 +76,36 @@
 
     
     {
+        "id" : "reply",
+        "content" : "{{__REPLY__}}",
+        "embeds" : [],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
         "id" : "mention",
         "content" : null,
         "embeds" : [
             {
                 "title" : "すにゃBot",
                 "url" : "https://github.com/Snyiv495/Snyivot",
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : "Ver. 1.6.1\nVOICEVOX:春日部つむぎ",
-                "color" : "000000",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point.png",
+                    "base64" : null
+                },
+                "description" : null,
                 "fields" : [
                     {
                         "name" : "ℹ️ 更新情報",
-                        "value" : "- 1.6.1 おみくじ機能の実装\n- 1.6.0 AI機能の強化"
+                        "value" : "- 1.6.2 AIでおみくじを引けるようにしました\n- 1.6.1 おみくじ機能の実装\n- 1.6.0 AI機能の強化"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : "Ver. 1.6.2\nVOICEVOX:春日部つむぎ",
+                "color" : "000000"
             }
         ],
         "files" : [],
@@ -109,17 +128,21 @@
             {
                 "title" : "すにゃBot",
                 "url" : "https://github.com/Snyiv495/Snyivot",
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : "Ver. 1.6.0\nVOICEVOX:春日部つむぎ",
-                "color" : "000000",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_sad.png",
+                    "base64" : null
+                },
+                "description" : null,
                 "fields" : [
                     {
                         "name" : "⚠️ Error",
                         "value" : "- ここでは「すにゃbot」を利用できません\n- サーバー内で利用してください"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : "Ver. 1.6.2\nVOICEVOX:春日部つむぎ",
+                "color" : "000000"
             }
         ],
         "files" : [],
@@ -142,12 +165,16 @@
             {
                 "title" : "【ホーム】",
                 "url" : null,
-                "description" : "🗨️⠀機能メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀機能メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -165,8 +192,8 @@
                     },
                     {
                         "label" : "おみくじ",
-                        "value" : "omikuji_draw",
-                        "description" : "今日のおみくじを引きます",
+                        "value" : "omikuji",
+                        "description" : "おみくじ機能のメニューを起動します",
                         "emoji" : "🥠"
                     },
                     {
@@ -216,12 +243,16 @@
             {
                 "title" : "【終了確認】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/peace_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀お疲れ様でした\n⠀⠀⠀「これらのメッセージを削除する」\n⠀⠀⠀を押して終了してね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "000000",
-                "fields" : []
+                "color" : "000000"
             }
         ],
         "files" : [],
@@ -230,14 +261,7 @@
                 "id" : "quit",
                 "placeholder" : "❌現在利用できません",
                 "disabled" : true,
-                "options" : [
-                    {
-                        "label" : "disabled",
-                        "value" : "disabled",
-                        "description" : "disabled",
-                        "emoji" : null
-                    }
-                ]
+                "options" : []
             }
         ],
         "buttons" : [
@@ -246,6 +270,51 @@
                 "id" : "home",
                 "emoji" : "🛎️",
                 "style" : "Secondary",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+    {
+        "id" : "null",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "500 Internal Server Error",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [
+                    {
+                        "name" : "⚠️ Error",
+                        "value" : "このメッセージは想定されていません"
+                    }
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "null",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🛎️",
+                "style" : "Primary",
                 "disabled" : false
             }
         ],

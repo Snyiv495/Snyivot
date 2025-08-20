@@ -1,51 +1,41 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/07/20
+    2025/08/12
 *****************/
 
 module.exports = {
-    getSlashCmds: getSlashCmds,
-    slashCmd: slashCmd,
-    autoComplete: autoComplete,
-    call: call,
-    callFunc: callFunc
+    getSlashCmds : getSlashCmds,
+    slashCmd : slashCmd,
+    autoComplete : autoComplete,
+    msgCmd : msgCmd,
 }
 
 const {SlashCommandBuilder, SlashCommandStringOption, SlashCommandNumberOption, SlashCommandSubcommandBuilder, SlashCommandBooleanOption} = require("discord.js");
-const gui = require("./gui");
 
-const ai = require("../features/ai");
-const faq = require("../features/faq");
-const omikuji = require("../features/omikuji");
-const read = require("../features/read");
-const feature_modules = {
-    "ai": ai,
-    "faq": faq,
-    "omikuji": omikuji,
-    "read": read,
-};
+const gui = require("./gui");
+const helper = require("./helper");
 
 //コマンドの取得
 function getSlashCmds(json){
-    try{
-        const cmds = [];
+    const cmds = [];
 
-        //コマンドを順に作成
+    try{
+        //コマンドを作成
         for(let i=1; i<json.length; i++){
             const cmd = new SlashCommandBuilder();
 
             cmd.setName(json[i].name);
             cmd.setDescription(json[i].description);
 
-            //サブコマンドを順に作成
+            //サブコマンドを作成
             for(let j=0; j<json[i].subcommand.length; j++){
                 const sub_cmd = new SlashCommandSubcommandBuilder();
 
                 sub_cmd.setName(json[i].subcommand[j].name);
                 sub_cmd.setDescription(json[i].subcommand[j].description);
 
-                //オプションを順に作成
+                //オプションを作成
                 for(let k=0; k<json[i].subcommand[j].option.length; k++){
 
                     //stringオプション
@@ -97,102 +87,73 @@ function getSlashCmds(json){
 
         return cmds;
     }catch(e){
-        throw new Error(e);
+        throw new Error(`cui.js => getSlashCmds() \n ${e}`);
     }
 }
 
 //コマンドの実行
 async function slashCmd(interaction, map){
-    const command_name = interaction.commandName;
+    try{
+        const system_id = helper.getSystemId(interaction);
+        const feature_modules = helper.getFeatureModules();
 
-    for(const prefix in feature_modules){
-        if(command_name.startsWith(prefix)){
-            try{
-                await feature_modules[prefix].exe(interaction, map);
-                return 0;
-            }catch(e){
-                throw new Error(e);
+        for(const prefix in feature_modules){
+            if(system_id.startsWith(prefix)){
+                feature_modules[prefix].exe(interaction, map);
+                return;
             }
         }
+
+    }catch(e){
+        throw new Error(`cui.js => slashCmd() \n ${e}`);
     }
 
-    return -1;
+    throw new Error("cui.js => slashCmd() \n not define feature.exe()");
 }
 
 //コマンドの補助
 async function autoComplete(interaction, map){
-    const command_name = interaction.commandName;
-
-    for(const prefix in feature_modules){
-        if(command_name.startsWith(prefix)){
-            try{
-                await feature_modules[prefix].autoComplete(interaction, map);
-                return 0;
-            }catch(e){
-                throw new Error(e);
-            }
-        }
-    }
-
-    return -1;
-}
-
-//呼び出しの実行
-async function call(message, map){
-    
-    //GUIの送信
-    if(message.content.match(new RegExp(`^<@${process.env.BOT_ID}>$`)) || message.content.match(new RegExp(`^@${message.guild.members.me.displayName}$`))){
-        try{
-            await message.reply(gui.create(map, "mention"));
-            await message.delete().catch(() => null);
-            return 0;
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //メンション呼び出し
-    if(message.content.match(new RegExp(`^<@${process.env.BOT_ID}>.+`)) || message.content.match(new RegExp(`^@${message.guild.members.me.displayName}.+`))){
-        try{
-            await ai.call(message, map);
-            return 0
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-    //名指し呼び出し    (メンションと名指しでわける意味が発生した時用)
-    if(message.content.match(new RegExp(/(すにゃ|スニャ|すな|スナ|すに|スニ)(ぼっと|ボット|ぼ|ボ|bot|Bot|BOT)/))){
-        try{
-            await ai.call(message, map);
-            return 0
-        }catch(e){
-            throw new Error(e);
-        }
-    }
-
-}
-
-//関数呼び出しの実行
-async function callFunc(message, map){
-    const command_name = interaction.commandName;
-
-    for(const prefix in feature_modules){
-        if(command_name.startsWith(prefix)){
-            try{
-                await feature_modules[prefix].exe(interaction, map);
-                return 0;
-            }catch(e){
-                throw new Error(e);
-            }
-        }
-    }
-
-    //ホームの実行
     try{
-        message.reply(gui.create(map, message.customId));
-        return 0;
+        const system_id = helper.getSystemId(interaction);
+        const feature_modules = helper.getFeatureModules();
+
+        for(const prefix in feature_modules){
+            if(system_id.startsWith(prefix)){
+                feature_modules[prefix].autoComplete(interaction, map);
+                return;
+            }
+        }
+
     }catch(e){
-        throw new Error(e);
+        throw new Error(`cui.js => autoComplete() \n ${e}`);
+    }
+
+    throw new Error("cui.js => autoComplete() \n not define feature.autoComplete()");
+}
+
+//メッセージコマンド実行
+async function msgCmd(message, map){
+    try{
+        const system_id = helper.getSystemId(message);
+        const feature_modules = helper.getFeatureModules();
+
+        //機能の実行
+        for(const prefix in feature_modules){
+            if(system_id.startsWith(prefix)){
+                await feature_modules[prefix].exe(message, map);
+                return;
+            }
+        }
+
+        //GUIの送信
+        await helper.sendGUI(message, gui.create(map, system_id, {"{{__REPLY__}}":message.args?.reply}));
+        await message.delete().catch(() => null);
+        return;
+    }catch(e){
+        throw new Error(`cui.js => msgCmd() \n ${e}`);
     }
 }
+
+/* todo
+getSlashCmdsの改修
+*/

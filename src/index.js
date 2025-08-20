@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/07/23
+    2025/08/20
 *****************/
 
 require('dotenv').config();
@@ -11,7 +11,8 @@ const fs = require('fs');
 
 const cui = require('./core/cui');
 const gui = require('./core/gui');
-const observe = require('./core/observe');
+const vc = require('./core/vc');
+const helper = require('./core/helper');
 
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions], partials: [Partials.Message, Partials.Channel, Partials.Reaction]});
 const map = new Map();
@@ -25,7 +26,7 @@ client.once('ready', async () => {
     try{
         map.set("readme_md", fs.readFileSync("./README.md", "utf-8"));
     }catch(e){
-        console.log(`↓↓↓ READMEの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ READMEの取得に失敗しました ↑↑↑`);
+        console.error("index.js => client.once() \n READMEの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -34,7 +35,7 @@ client.once('ready', async () => {
         const files = ["./src/json/home.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/omikuji.json", "./src/json/read.json"];
         map.set("gui_json", files.flatMap(file => JSON.parse(fs.readFileSync(file, "utf-8"))));
     }catch(e){
-        console.log(`↓↓↓ GUIの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ GUIの取得に失敗しました ↑↑↑`);
+        console.error("index.js => client.once() \n GUIの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -56,7 +57,7 @@ client.once('ready', async () => {
     try{
         client.application.commands.set(cui.getSlashCmds(JSON.parse(fs.readFileSync("./src/json/slashcmd.json", "utf-8"))));
     }catch(e){
-        console.log(`↓↓↓ コマンドの登録に失敗しました ↓↓↓\n${e}\n↑↑↑ コマンドの登録に失敗しました ↑↑↑`);
+        console.error("index.js => client.once() \n コマンドの登録に失敗しました \n", e);
         process.exit();
     }
 
@@ -64,129 +65,139 @@ client.once('ready', async () => {
     try{
         map.set("voicevox_speakers", (await require("./integrations/voicevox").getSpeakers()).data);
     }catch(e){
-        console.log(`↓↓↓ スピーカーの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ スピーカーの取得に失敗しました ↑↑↑`);
+        console.error("index.js => client.once() \n スピーカーの取得に失敗しました \n", e);
         process.exit();
     }
 
     //botのステータス設定
-    client.user.setActivity("メンションで質問できるよ！");
+    client.user.setActivity("メンションで起動できるよ！");
     console.log("### すにゃBotが起動しました ###\n");
 });
   
 //メッセージ動作
 client.on('messageCreate', async (message) => {
-
-    //botの発言を除外
-    if(message.author.bot){
-        return 0;
-    }
-
-    //呼び出しに反応
-    if(message.content.match(new RegExp(`^<@${process.env.BOT_ID}>.?`)) || message.content.match(new RegExp(`^@${message.guild.members.me.displayName}.?`)) || message.content.match(new RegExp(/(すにゃ|スニャ|すな|スナ|すに|スニ)(ぼっと|ボット|ぼ|ボ|bot|Bot|BOT)/))){
-        try{
-            await cui.call(message, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ 呼び出しの反応に失敗しました ↓↓↓\n${e}\n↑↑↑ 呼び出しの反応に失敗しました ↑↑↑`);
-            return -1;
+    try{
+        //botの発言を除外
+        if(message.author.bot){
+            return;
         }
-    }
 
-    //読み上げ
-    if(map.get(`read_text_${message.channelId}`)){
-        try{
-            await observe.textChannel(message, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ 読み上げに失敗しました ↓↓↓\n${e}\n↑↑↑ 読み上げに失敗しました ↑↑↑`);
-            return -1;
+        //ギルド以外での動作
+        if(!message.guild){
+            await gui.nguild(message, map);
+            return;
         }
+
+        //メンションに反応
+        if(helper.isContainBotMention(message)){
+            message.system_id = "mention";
+            await cui.msgCmd(message, map);
+            return;
+        }
+
+        //名前に反応
+        if(helper.isContainBotName(message)){
+            message.system_id = "ai_chat_public";
+            await cui.msgCmd(message, map);
+            return;
+        }
+
+        //読み上げ
+        if(map.get(`read_text_${message.channelId}`)){
+            message.system_id = "read_text";
+            await cui.msgCmd(message, map);
+            return;
+        }
+
+    }catch(e){
+        console.error("index.js => client.on(messageCreate) \n", e);
     }
     
-    return -1;
+    return;
 });
 
 //インタラクション動作
 client.on('interactionCreate', async (interaction) => {
-
-    //ギルド以外での動作
-    if(!interaction.guild){
-        try{
-            gui.nguild(interaction, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ ギルド外での反応に失敗しました ↓↓↓\n${e}\n↑↑↑ ギルド外での反応に失敗しました ↑↑↑`);
-            return -1;
+    try{
+        //ギルド以外での動作
+        if(!interaction.guild){
+            await gui.nguild(interaction, map);
+            return;
         }
-    }
 
-    //スラッシュコマンド
-    if(interaction.isCommand()){
-        try{
+        //スラッシュコマンド
+        if(interaction.isCommand()){
             await cui.slashCmd(interaction, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ コマンドの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ コマンドの実行に失敗しました ↑↑↑`);
-            return -1;
+            return;
         }
-    }
 
-    //スラッシュコマンド補助
-    if(interaction.isAutocomplete()){
-        try{
+        //スラッシュコマンド補助
+        if(interaction.isAutocomplete()){
             await cui.autoComplete(interaction, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ コマンドの補助に失敗しました ↓↓↓\n${e}\n↑↑↑ コマンドの補助に失敗しました ↑↑↑`);
-            return -1;
+            return;
         }
-    }
-    
-    //セレクトメニュー
-    if(interaction.isAnySelectMenu()){
-        try{
+        
+        //セレクトメニュー
+        if(interaction.isAnySelectMenu()){
             await gui.menu(interaction, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ メニューの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ メニューの実行に失敗しました ↑↑↑`);
-            return -1;
+            return;
         }
-    }
 
-    //ボタン
-    if(interaction.isButton()){
-        try{
+        //ボタン
+        if(interaction.isButton()){
             await gui.button(interaction, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ ボタンの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ ボタンの実行に失敗しました ↑↑↑`);
-            return -1;
+            return;
         }
-    }
 
-    //モーダル
-    if(interaction.isModalSubmit()){
-        try{
+        //モーダル
+        if(interaction.isModalSubmit()){
             await gui.modal(interaction, map);
-            return 0;
-        }catch(e){
-            console.log(`↓↓↓ モーダルの実行に失敗しました ↓↓↓\n${e}\n↑↑↑ モーダルの実行に失敗しました ↑↑↑`);
-            return -1;
+            return;
         }
+
+    }catch(e){
+        console.error("index.js => client.on(interactionCreate) \n", e);
+        return;
     }
 
-    return -1;
+    console.error("index.js => client.on(interactionCreate) \n not define interaction");
+    return;
 });
 
 //ボイスチャンネル動作
 client.on('voiceStateUpdate', async (old_state, new_state) => {
     try{
-        observe.voiceChannel(old_state, new_state, map);
-        return 0;
+        //関与していないチャンネルを除外
+        if(!map.get(`read_voice_${old_state.channelId}`)){
+           return;
+        }
+
+        //ボイチャにユーザーがいなくなる
+        if(!old_state.channel.members.filter((member)=>!member.user.bot).size){
+            old_state.system_id = "read_voice_auto_end";
+            await vc.voiceStateCmd(old_state, new_state, map);
+            return;
+        }
+
+        //ボイチャを蹴られる
+        if(!old_state.channel.members.has(process.env.BOT_ID) && !new_state.channel){
+            old_state.system_id = "read_voice_manual_kick";
+            await vc.voiceStateCmd(old_state, new_state, map);
+            return;
+        }
+
+        //ボイチャを移動させられる
+        if(!old_state.channel.members.has(process.env.BOT_ID) && new_state.channel){
+            old_state.system_id = "read_voice_manual_move";
+            await vc.voiceStateCmd(old_state, new_state, map);
+            return;
+        }
+
     }catch(e){
-        console.log(`↓↓↓ ボイチャの操作に失敗しました ↓↓↓\n${e}\n↑↑↑ ボイチャの操作に失敗しました ↑↑↑`);
-        return -1;
+        console.error("index.js => client.on(voiceStateUpdate) \n", e);
     }
+
+    return;
 });
 
 //リアクション動作
@@ -194,15 +205,21 @@ client.on('messageReactionAdd', async (reaction) => {
     const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
 
     //他人のメッセージを除外
-    if(message.author.id != client.user.id){
-        return 0;
+    if(helper.getUserId(message) != client.user.id){
+        return;
     }
 
     try{
-        await gui.reaction(message, reaction, map);
-        return 0;
+        gui.reaction(message, reaction, map);
+        return;
     }catch(e){
-        console.log(`↓↓↓ リアクションの反応に失敗しました ↓↓↓\n${e}\n↑↑↑ リアクションの反応に失敗しました ↑↑↑`);
-        return -1;
+        console.error("index.js => client.on(messageReactionAdd) \n", e);
     }
+
+    return;
 });
+
+/*  todo
+psdの読み取り
+リアクション動作の改修
+*/

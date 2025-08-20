@@ -11,14 +11,14 @@
 
 
     {
-        "name": "ai_chat_call",
-        "description": "他の関数呼び出しが不適切な場合に、チャットに返信するデフォルトの関数です。",
+        "name": "reply",
+        "description": "他の関数呼び出しが不適切な場合に、返信するデフォルトの関数です。",
         "parameters": {
             "type": "object",
             "properties": {
                 "reply": {
                     "type": "string",
-                    "description": "ユーザーへの返信メッセージ"
+                    "description": "返信メッセージ"
                 }
             },
             "required": ["reply"]
@@ -26,7 +26,7 @@
     },
     {
         "name": "mention",
-        "description": "他の関数呼び出しが不適切で、内容がただ呼ばれただけの場合に反応する関数です。",
+        "description": "他の関数呼び出しが不適切で、すにゃbotが呼ばれただけの場合に反応する関数です。",
         "parameters": {
             "type": "object",
             "properties": {},
@@ -81,6 +81,15 @@
                 }
             },
             "required": ["word"]
+        }
+    },
+    {
+        "name": "omikuji_draw",
+        "description": "おみくじを引く関数です。",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
         }
     }
 ]

@@ -1,14 +1,14 @@
 /*****************
     db.js
     スニャイヴ
-    2025/07/23
+    2025/08/05
 *****************/
 
 module.exports = {
-    getUserInfo: getUserInfo,
-    setUserInfo: setUserInfo,
-    getServerInfo: getServerInfo,
-    setServerInfo: setServerInfo,
+    getUserInfo : getUserInfo,
+    setUserInfo : setUserInfo,
+    getServerInfo : getServerInfo,
+    setServerInfo : setServerInfo,
 }
 
 const Keyv = require('keyv');
@@ -17,9 +17,9 @@ const user = new Keyv('sqlite://db.sqlite', {table: 'user'});
 const server = new Keyv('sqlite://db.sqlite', {table: 'server'});
 const pre_user = new Keyv('sqlite://db.sqlite', {table: 'voicevox_user'});  //一定期間引継ぎ用
 
-user.on('error', e => console.error('データベースの接続に失敗しました:', e));
-server.on('error', e => console.error('データベースの接続に失敗しました:', e));
-pre_user.on('error', e => console.error('データベースの接続に失敗しました:', e));   //一定期間引継ぎ用
+user.on("error", e => console.error("db.js => user.on() \n データベースの接続に失敗しました \n", e));
+server.on("error", e => console.error("db.js => server.on() \n データベースの接続に失敗しました \n", e));
+pre_user.on("error", e => console.error("db.js => pre_user.on() \n データベースの接続に失敗しました \n", e));   //一定期間引継ぎ用
 
 //ユーザ情報を取得する
 async function getUserInfo(id){
@@ -59,9 +59,9 @@ async function getUserInfo(id){
 async function setUserInfo(id, info){
     try{
         await user.set(id, info);
-        return 0;
+        return;
     }catch(e){
-        throw new Error(e);
+        throw new Error(`db.js => setUserInfo() \n ${e}`);
     }
 }
 
@@ -107,8 +107,8 @@ async function getServerInfo(id){
 async function setServerInfo(id, info){
     try{
         await server.set(id, info);
-        return 0;
+        return;
     }catch(e){
-        throw new Error(e);
+        throw new Error(`db.js => setServerInfo() \n ${e}`);
     }
 }

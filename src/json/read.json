@@ -1,41 +1,47 @@
 [
     {
         "id" : "String",
-        "content" : null,
+        "content" : "String || null",
         "embeds" : [
             {
-                "title" : null,
-                "url" : null,
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : null,
+                "title" : "String || null",
+                "url" : "String || null",
+                "thumbnail" : {
+                    "name" : "String || null",
+                    "path" : "String || null",
+                    "base64" : "String || null"
+                },
+                "description" : "String || null",                
                 "fields" : [
                     {
                         "name" : "String",
-                        "value" : "String"
+                        "value" : "String",
+                        "inline" : "bool"
                     }
-                ]
+                ],
+                "image" : "String || null",
+                "footer" : "String || null",
+                "color" : "###### || null"
             }
         ],
         "files" : [
             {
-                "name" : "String",
-                "base64" : "String"
+                "name" : "String || null",
+                "path" : "String || null",
+                "base64" : "String || null"
             }
         ],
         "menus" : [
             {
                 "id" : "String",
                 "placeholder" : "String",
-                "disabled" : false,
+                "disabled" : "bool || null",
                 "options" : [
                     {
                         "label" : "String",
                         "value" : "String",
-                        "description" : null,
-                        "emoji" : null
+                        "description" : "String || null",
+                        "emoji" : "String || null"
                     }
                 ]
             }
@@ -44,9 +50,9 @@
             {
                 "label" : "String",
                 "id" : "String",
-                "emoji" : null,
-                "style" : null,
-                "disabled" : false
+                "emoji" : "String || null",
+                "style" : "String || null",
+                "disabled" : "bool || null"
             }
         ],
         "modals" : [
@@ -57,11 +63,11 @@
                     {
                         "label" : "String",
                         "id" : "String",
-                        "placeholder" : "String",
-                        "style" : "String",
-                        "max" : "num",
-                        "min" : "num",
-                        "required" : false
+                        "placeholder" : "String || null",
+                        "style" : "String || null",
+                        "max" : "Number || null",
+                        "min" : "Number || null",
+                        "required" : "bool || null"
                     }
                 ]
             }
@@ -76,12 +82,16 @@
             {
                 "title" : "【読み上げ】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀読み上げメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -118,13 +128,13 @@
                     {
                         "label" : "ユーザー設定",
                         "value" : "read_set_user_select",
-                        "description" : "あなたの読み上げの設定をするよ",
+                        "description" : "あなたの読み上げを設定します",
                         "emoji" : "🔧"
                     },
                     {
                         "label" : "サーバー設定",
                         "value" : "read_set_server_select",
-                        "description" : "みんなの読み上げの設定をするよ",
+                        "description" : "みんなの読み上げを設定します",
                         "emoji" : "🛠️"
                     }
                 ]
@@ -164,12 +174,16 @@
             {
                 "title" : "【読み上げ開始】",
                 "url" : null,
-                "description" : "🗨️⠀<#{text_channel}>の文章を\n⠀⠀⠀<#{voice_channel}>で読み上げるよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀{{__TEXT_CHANNEL__}}の文章を\n⠀⠀⠀{{__VOICE_CHANNEL__}}で読み上げるよ",                
+                "fields" : [],
                 "image" : null,
                 "footer" : "VOICEVOX:春日部つむぎ",
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -184,25 +198,29 @@
             {
                 "title" : "【読み上げ開始エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀読み上げ開始に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
-                        "name" : "✅<#{text_channel}>について",
+                        "name" : "✅{{__TEXT_CHANNEL__}}について",
                         "value" : "- テキストチャンネルでない\n- botがチャンネルのメンバーでない\n- プライベートチャンネルである"
                     },
                     {
-                        "name" : "✅<#{voice_channel}>について",
+                        "name" : "✅{{__VOICE_CHANNEL__}}について",
                         "value" : "- チャンネルに接続していない\n- botに接続・喋る権限がない\n- 制限人数を超えている"
                     },
                     {
                         "name" : "✅その他",
                         "value" : "- すでに読み上げを行っている"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -239,13 +257,13 @@
                     {
                         "label" : "ユーザー設定",
                         "value" : "read_set_user_select",
-                        "description" : "あなたの読み上げの設定をするよ",
+                        "description" : "あなたの読み上げを設定します",
                         "emoji" : "🔧"
                     },
                     {
                         "label" : "サーバー設定",
                         "value" : "read_set_server_select",
-                        "description" : "みんなの読み上げの設定をするよ",
+                        "description" : "みんなの読み上げを設定します",
                         "emoji" : "🛠️"
                     }
                 ]
@@ -283,25 +301,29 @@
             {
                 "title" : "【読み上げ開始エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀読み上げ開始に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
-                        "name" : "✅<#{text_channel}>について",
+                        "name" : "✅{{__TEXT_CHANNEL__}}について",
                         "value" : "- テキストチャンネルでない\n- botがチャンネルのメンバーでない\n- プライベートチャンネルである"
                     },
                     {
-                        "name" : "✅<#{voice_channel}>について",
+                        "name" : "✅{{__VOICE_CHANNEL__}}について",
                         "value" : "- チャンネルに接続していない\n- botに接続・喋る権限がない\n- 制限人数を超えている"
                     },
                     {
                         "name" : "✅その他",
                         "value" : "- すでに読み上げを行っている"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -318,12 +340,16 @@
             {
                 "title" : "【読み上げ終了】",
                 "url" : null,
-                "description" : "🗨️⠀<#{voice_channel}>での\n⠀⠀⠀<#{text_channel}>の読み上げを終了するね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀{{__VOICE_CHANNEL__}}での\n⠀⠀⠀{{__TEXT_CHANNEL__}}の読み上げを終了するね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -338,21 +364,25 @@
             {
                 "title" : "【読み上げ終了エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀読み上げ終了に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
-                        "name" : "✅<#{text_channel}>について",
+                        "name" : "✅{{__TEXT_CHANNEL__}}について",
                         "value" : "- 読み上げを行っていない"
                     },
                     {
-                        "name" : "✅<#{voice_channel}>について",
+                        "name" : "✅{{__VOICE_CHANNEL__}}について",
                         "value" : "- 読み上げを行っているボイスチャンネルに接続していない"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -389,13 +419,13 @@
                     {
                         "label" : "ユーザー設定",
                         "value" : "read_set_user_select",
-                        "description" : "あなたの読み上げの設定をするよ",
+                        "description" : "あなたの読み上げを設定します",
                         "emoji" : "🔧"
                     },
                     {
                         "label" : "サーバー設定",
                         "value" : "read_set_server_select",
-                        "description" : "みんなの読み上げの設定をするよ",
+                        "description" : "みんなの読み上げを設定します",
                         "emoji" : "🛠️"
                     }
                 ]
@@ -433,21 +463,25 @@
             {
                 "title" : "【読み上げ終了エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀読み上げ終了に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
-                        "name" : "✅<#{text_channel}>について",
+                        "name" : "✅{{__TEXT_CHANNEL__}}について",
                         "value" : "- 読み上げを行っていない"
                     },
                     {
-                        "name" : "✅<#{voice_channel}>について",
+                        "name" : "✅{{__VOICE_CHANNEL__}}について",
                         "value" : "- 読み上げを行っているボイスチャンネルに接続していない"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -464,12 +498,16 @@
             {
                 "title" : "【辞書追加】",
                 "url" : null,
-                "description" : "🗨️⠀辞書に「<#{word}>」(<#{kana}>)を登録したよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀辞書に「{{__WORD__}}({{__KANA__}})」を登録したよ",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -519,7 +557,7 @@
                     {
                         "label" : "優先度",
                         "id" : "priority",
-                        "placeholder" : "5",
+                        "placeholder" : "9",
                         "style" : "Short",
                         "max" : 2,
                         "min" : 1,
@@ -536,17 +574,21 @@
             {
                 "title" : "【辞書追加エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀辞書の追加に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
                         "name" : "💡Tips",
                         "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -583,13 +625,13 @@
                     {
                         "label" : "ユーザー設定",
                         "value" : "read_set_user_select",
-                        "description" : "あなたの読み上げの設定をするよ",
+                        "description" : "あなたの読み上げを設定します",
                         "emoji" : "🔧"
                     },
                     {
                         "label" : "サーバー設定",
                         "value" : "read_set_server_select",
-                        "description" : "みんなの読み上げの設定をするよ",
+                        "description" : "みんなの読み上げを設定します",
                         "emoji" : "🛠️"
                     }
                 ]
@@ -627,17 +669,21 @@
             {
                 "title" : "【辞書追加エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀辞書の追加に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
                         "name" : "💡Tips",
                         "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -654,12 +700,16 @@
             {
                 "title" : "【辞書削除】",
                 "url" : null,
-                "description" : "💬 辞書から「<#{word}>」を削除したよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "💬 辞書から「{{__WORD__}}」を削除したよ",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -699,18 +749,23 @@
             {
                 "title" : "【辞書送信】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀いま登録されてる辞書はこんな感じだよ\n⠀⠀⠀辞書にない語句は削除できないよ",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "FFFF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [
             {
-                "name" : "dictionary.csv",
-                "base64" : "<#{base64_csv}>"
+                "name" : "{{__CSV_NAME__}}",
+                "path" : null,
+                "base64" : "{{__CSV_BASE64__}}"
             }
         ],
         "menus" : [
@@ -746,13 +801,13 @@
                     {
                         "label" : "ユーザー設定",
                         "value" : "read_set_user_select",
-                        "description" : "あなたの読み上げの設定をするよ",
+                        "description" : "あなたの読み上げを設定します",
                         "emoji" : "🔧"
                     },
                     {
                         "label" : "サーバー設定",
                         "value" : "read_set_server_select",
-                        "description" : "みんなの読み上げの設定をするよ",
+                        "description" : "みんなの読み上げを設定します",
                         "emoji" : "🛠️"
                     }
                 ]
@@ -790,18 +845,23 @@
             {
                 "title" : "【辞書送信】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀いま登録されてる辞書はこんな感じだよ\n⠀⠀⠀辞書にない語句は削除できないよ",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "FFFF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [
             {
-                "name" : "dictionary.csv",
-                "base64" : "<#{base64_csv}>"
+                "name" : "{{__CSV_NAME__}}",
+                "path" : null,
+                "base64" : "{{__CSV_BASE64__}}"
             }
         ],
         "menus" : [],
@@ -815,17 +875,21 @@
             {
                 "title" : "【辞書削除エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀辞書の削除に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
                         "name" : "💡Tips",
                         "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -862,13 +926,13 @@
                     {
                         "label" : "ユーザー設定",
                         "value" : "read_set_user_select",
-                        "description" : "あなたの読み上げの設定をするよ",
+                        "description" : "あなたの読み上げを設定します",
                         "emoji" : "🔧"
                     },
                     {
                         "label" : "サーバー設定",
                         "value" : "read_set_server_select",
-                        "description" : "みんなの読み上げの設定をするよ",
+                        "description" : "みんなの読み上げを設定します",
                         "emoji" : "🛠️"
                     }
                 ]
@@ -906,17 +970,21 @@
             {
                 "title" : "【辞書削除エラー】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀辞書の削除に失敗しちゃった...\n⠀⠀⠀もう一度試してみて",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "FF0000",
                 "fields" : [
                     {
                         "name" : "💡Tips",
                         "value" : "- 何度も同じエラーが出るときは時間をおいて試してください"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -933,33 +1001,37 @@
             {
                 "title" : "【ユーザー設定完了】",
                 "url" : null,
-                "description" : "💬 ユーザー情報の設定が完了したよ",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : "<#{credit}>",
-                "color" : "00FF00",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "💬 こんな感じでユーザーの設定を保存したよ",                
                 "fields" : [
                     {
                         "name" : "キャラクター",
-                        "value" : "- <#{speaker}>"
+                        "value" : "- {{__SPEAKER__}}"
                     },
                     {
                         "name" : "スタイル",
-                        "value" : "- <#{style}>"
+                        "value" : "- {{__STYLE__}}"
                     },
                     {
                         "name" : "読み上げの高さ",
-                        "value" : "- <#{pitch}>"
+                        "value" : "- {{__PITCH__}}"
                     },
                     {
                         "name" : "読み上げの抑揚",
-                        "value" : "- <#{intonation}>"
+                        "value" : "- {{__INTONATION__}}"
                     },
                     {
                         "name" : "名前の読み方",
-                        "value" : "- <#{username}>"
+                        "value" : "- {{__USERNAME__}}"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : "{{__CREDIT__}}",
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1022,12 +1094,16 @@
             {
                 "title" : "【ユーザー設定】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀ユーザー設定メニューを開いて\n⠀⠀⠀設定したい項目を選んでね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1090,27 +1166,33 @@
             {
                 "title" : "【ユーザー設定＠スピーカー】",
                 "url" : null,
-                "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
-                "thumbnail" : null,
-                "image" : "attachment://<#{icon_name}>",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
+                "fields" : [],
+                "image" : "attachment://{{__ICON_NAME__}}",
                 "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [
             {
-                "name" : "<#{icon_name}>",
-                "base64" : "<#{icon_base64}>"
+                "name" : "{{__ICON_NAME__}}",
+                "path" : null,
+                "base64" : "{{__ICON_BASE64__}}"
             },
             {
-                "name" : "<#{voice_sample_name}>",
-                "base64" : "<#{voice_sample_base64}>"
+                "name" : "{{__VOICE_SAMPLE_NAME__}}",
+                "path" : null,
+                "base64" : "{{__VOICE_SAMPLE_BASE64__}}"
             }
         ],
         "menus" : [
             {
-                "id" : "read_set_user_speaker@<#{speaker_uuid}>",
+                "id" : "read_set_user_speaker@{{__SPEAKER_UUID__}}",
                 "placeholder" : "👉 スピーカー設定メニュー",
                 "disabled" : false,
                 "options" : []
@@ -1148,27 +1230,33 @@
             {
                 "title" : "【ユーザー設定＠スタイル】",
                 "url" : null,
-                "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
-                "thumbnail" : null,
-                "image" : "attachment://<#{icon_name}>",
-                "footer" : "🔼 前のページへ\n✅ スタイルの決定\n🔘 スタイルの選択\n🔽 次のページへ",
-                "color" : "00FF00",
-                "fields" : []
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
+                "fields" : [],
+                "image" : "attachment://{{__ICON_NAME__}}",
+                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "color" : "00FF00"
             }
         ],
         "files" : [
             {
-                "name" : "<#{icon_name}>",
-                "base64" : "<#{icon_base64}>"
+                "name" : "{{__ICON_NAME__}}",
+                "path" : null,
+                "base64" : "{{__ICON_BASE64__}}"
             },
             {
-                "name" : "<#{voice_sample_name}>",
-                "base64" : "<#{voice_sample_base64}>"
+                "name" : "{{__VOICE_SAMPLE_NAME__}}",
+                "path" : null,
+                "base64" : "{{__VOICE_SAMPLE_BASE64__}}"
             }
         ],
         "menus" : [
             {
-                "id" : "read_set_user_style@<#{style_id}>",
+                "id" : "read_set_user_style@{{__STYLE_ID__}}",
                 "placeholder" : "👉 スタイル設定メニュー",
                 "disabled" : false,
                 "options" : []
@@ -1249,21 +1337,16 @@
             {
                 "title" : "【ユーザー設定エラー】",
                 "url" : null,
-                "description" : "🗨️⠀ユーザー設定に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀ユーザー設定に失敗しちゃった...\n⠀⠀⠀「{{__CHARACTER__}}」が見つからなかったよ",
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "FF0000",
-                "fields" : [
-                    {
-                        "name" : "✅スピーカーについて",
-                        "value" : "- 候補にないスピーカーを入力している\n(読み上げソフトのアップデートが行われていない可能性があります)"
-                    },
-                    {
-                        "name" : "✅スタイルについて",
-                        "value" : "- 候補にないスタイルを入力している\n- 別の操作画面でスピーカーを変更している"
-                    }
-                ]
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -1328,57 +1411,61 @@
             {
                 "title" : "【サーバー設定完了】",
                 "url" : null,
-                "description" : "💬 サーバー情報の設定が完了したよ",                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : "<#{credit}>",
-                "color" : "00FF00",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "💬 こんな感じでサーバーの設定を保存したよ",                
                 "fields" : [
                     {
                         "name" : "キャラクター",
-                        "value" : "- <#{speaker}>"
+                        "value" : "- {{__SPEAKER__}}"
                     },
                     {
                         "name" : "スタイル",
-                        "value" : "- <#{style}>"
+                        "value" : "- {{__STYLE__}}"
                     },
                     {
                         "name" : "名前の読み上げ",
-                        "value" : "- <#{read_username}>"
+                        "value" : "- {{__READ_USERNAME__}}"
                     },
                     {
                         "name" : "連投時の名前の読み上げ",
-                        "value" : "- <#{read_username_always}>"
+                        "value" : "- {{__READ_USERNAME_ALWAYS__}}"
                     },
                     {
                         "name" : "読み上げる文字数の最大",
-                        "value" : "- <#{read_max}>"
+                        "value" : "- {{__READ_MAX__}}"
                     },
                     {
                         "name" : "読み上げのアプリ",
-                        "value" : "- <#{read_app}>"
+                        "value" : "- {{__READ_APP__}}"
                     },
                     {
                         "name" : "設定の上書き",
-                        "value" : "- <#{read_set_override}>"
+                        "value" : "- {{__READ_SET_OVERRIDE__}}"
                     },
                     {
                         "name" : "読み上げの速度",
-                        "value" : "- <#{speed}>"
+                        "value" : "- {{__SPEED__}}"
                     },
                     {
                         "name" : "読み上げの高さ",
-                        "value" : "- <#{pitch}>"
+                        "value" : "- {{__PITCH__}}"
                     },
                     {
                         "name" : "読み上げの抑揚",
-                        "value" : "- <#{intonation}>"
+                        "value" : "- {{__INTONATION__}}"
                     },
                     {
                         "name" : "読み上げの大きさ",
-                        "value" : "- <#{volume}>"
+                        "value" : "- {{__VOLUME__}}"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : "{{__CREDIT__}}",
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1393,12 +1480,16 @@
             {
                 "title" : "【サーバー設定】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀サーバー設定メニューを開いて\n⠀⠀⠀設定したい項目を選んでね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1467,27 +1558,33 @@
             {
                 "title" : "【サーバー設定＠スピーカー】",
                 "url" : null,
-                "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
-                "thumbnail" : null,
-                "image" : "attachment://<#{icon_name}>",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
+                "fields" : [],
+                "image" : "attachment://{{__ICON_NAME__}}",
                 "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [
             {
-                "name" : "<#{icon_name}>",
-                "base64" : "<#{icon_base64}>"
+                "name" : "{{__ICON_NAME__}}",
+                "path" : null,
+                "base64" : "{{__ICON_BASE64__}}"
             },
             {
-                "name" : "<#{voice_sample_name}>",
-                "base64" : "<#{voice_sample_base64}>"
+                "name" : "{{__VOICE_SAMPLE_NAME__}}",
+                "path" : null,
+                "base64" : "{{__VOICE_SAMPLE_BASE64__}}"
             }
         ],
         "menus" : [
             {
-                "id" : "read_set_server_speaker@<#{speaker_uuid}>",
+                "id" : "read_set_server_speaker@{{__SPEAKER_UUID__}}",
                 "placeholder" : "👉 スピーカー設定メニュー",
                 "disabled" : false,
                 "options" : []
@@ -1525,27 +1622,33 @@
             {
                 "title" : "【サーバー設定＠スタイル】",
                 "url" : null,
-                "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[<#{speaker_name}>](<#{policy_url}>)(<#{style_name}>)",                
-                "thumbnail" : null,
-                "image" : "attachment://<#{icon_name}>",
-                "footer" : "🔼 前のページへ\n✅ スタイルの決定\n🔘 スタイルの選択\n🔽 次のページへ",
-                "color" : "00FF00",
-                "fields" : []
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
+                "fields" : [],
+                "image" : "attachment://{{__ICON_NAME__}}",
+                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "color" : "00FF00"
             }
         ],
         "files" : [
             {
-                "name" : "<#{icon_name}>",
-                "base64" : "<#{icon_base64}>"
+                "name" : "{{__ICON_NAME__}}",
+                "path" : null,
+                "base64" : "{{__ICON_BASE64__}}"
             },
             {
-                "name" : "<#{voice_sample_name}>",
-                "base64" : "<#{voice_sample_base64}>"
+                "name" : "{{__VOICE_SAMPLE_NAME__}}",
+                "path" : null,
+                "base64" : "{{__VOICE_SAMPLE_BASE64__}}"
             }
         ],
         "menus" : [
             {
-                "id" : "read_set_server_style@<#{style_id}>",
+                "id" : "read_set_server_style@{{__STYLE_ID__}}",
                 "placeholder" : "👉 スタイル設定メニュー",
                 "disabled" : false,
                 "options" : []
@@ -1643,7 +1746,7 @@
                     {
                         "label" : "名前を読み上げる",
                         "id" : "read_username",
-                        "placeholder" : "yes/no",
+                        "placeholder" : "y/n",
                         "style" : "Short",
                         "max" : 3,
                         "min" : 1,
@@ -1652,7 +1755,7 @@
                     {
                         "label" : "常に名前を読み上げる",
                         "id" : "read_username_always",
-                        "placeholder" : "yes/no",
+                        "placeholder" : "y/n",
                         "style" : "Short",
                         "max" : 3,
                         "min" : 1,
@@ -1679,7 +1782,7 @@
                     {
                         "label" : "読み上げ設定を上書きする",
                         "id" : "read_set_override",
-                        "placeholder" : "yes/no",
+                        "placeholder" : "y/n",
                         "style" : "Short",
                         "max" : 3,
                         "min" : 1,
@@ -1696,21 +1799,16 @@
             {
                 "title" : "【サーバー設定エラー】",
                 "url" : null,
-                "description" : "🗨️⠀サーバー設定に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀サーバー設定に失敗しちゃった...\n⠀⠀⠀「{{__CHARACTER__}}」が見つからなかったよ",
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "FF0000",
-                "fields" : [
-                    {
-                        "name" : "✅スピーカーについて",
-                        "value" : "- 候補にないスピーカーを入力している\n(読み上げソフトのアップデートが行われていない可能性があります)"
-                    },
-                    {
-                        "name" : "✅スタイルについて",
-                        "value" : "- 候補にないスタイルを入力している\n- 別の操作画面でスピーカーを変更している"
-                    }
-                ]
+                "color" : "FF0000"
             }
         ],
         "files" : [],
@@ -1775,18 +1873,22 @@
 
 
     {
-        "id" : "read_observe_exit",
+        "id" : "read_voice_auto_end",
         "content" : null,
         "embeds" : [
             {
                 "title" : "【読み上げ自動終了】",
                 "url" : null,
-                "description" : "🗨️⠀みんないなくなったかな？\n⠀⠀⠀<#{old_voice_channel}>の読み上げを終了するね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀みんないなくなっちゃったから\n⠀⠀⠀{{__OLD_VOICE_CHANNEL__}}の読み上げを終了するね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1795,18 +1897,22 @@
         "modals" : []
     },
     {
-        "id" : "read_observe_kick",
+        "id" : "read_voice_manual_kick",
         "content" : null,
         "embeds" : [
             {
                 "title" : "【読み上げ強制終了】",
                 "url" : null,
-                "description" : "🗨️⠀ボイチャからキックされちゃった...\n⠀⠀⠀<#{old_voice_channel}>の読み上げを終了するね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀切断されちゃったから\n⠀⠀⠀{{__OLD_VOICE_CHANNEL__}}の読み上げを終了するね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "FFFF00",
-                "fields" : []
+                "color" : "FFFF00"
             }
         ],
         "files" : [],
@@ -1815,18 +1921,22 @@
         "modals" : []
     },
     {
-        "id" : "read_observe_move",
+        "id" : "read_voice_manual_move",
         "content" : null,
         "embeds" : [
             {
                 "title" : "【読み上げ場所移動】",
                 "url" : null,
-                "description" : "🗨️⠀ボイチャを移動させられたよ\n⠀⠀⠀<#{old_voice_channel}>の読み上げを終了して\n⠀⠀⠀<#{new_voice_channel}>で読み上げをするね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀ボイチャを移動されたよ\n⠀⠀⠀{{__OLD_VOICE_CHANNEL__}}の読み上げを終了して\n⠀⠀⠀{{__NEW_VOICE_CHANNEL__}}で読み上げをするね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "FFFF00",
-                "fields" : []
+                "color" : "FFFF00"
             }
         ],
         "files" : [],

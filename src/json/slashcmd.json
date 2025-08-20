@@ -31,8 +31,8 @@
         "description" : "AIコマンド",
         "subcommand" : [
             {
-                "name" : "_chat",
-                "description" : "AIと会話を行います",
+                "name" : "_chat_private",
+                "description" : "AIと非公開チャットを行います",
                 "option" : [
                     {
                         "type" : "string",

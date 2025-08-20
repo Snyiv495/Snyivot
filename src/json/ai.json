@@ -1,41 +1,47 @@
 [
     {
         "id" : "String",
-        "content" : null,
+        "content" : "String || null",
         "embeds" : [
             {
-                "title" : null,
-                "url" : null,
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : null,
+                "title" : "String || null",
+                "url" : "String || null",
+                "thumbnail" : {
+                    "name" : "String || null",
+                    "path" : "String || null",
+                    "base64" : "String || null"
+                },
+                "description" : "String || null",                
                 "fields" : [
                     {
                         "name" : "String",
-                        "value" : "String"
+                        "value" : "String",
+                        "inline" : "bool"
                     }
-                ]
+                ],
+                "image" : "String || null",
+                "footer" : "String || null",
+                "color" : "###### || null"
             }
         ],
         "files" : [
             {
-                "name" : "String",
-                "base64" : "String"
+                "name" : "String || null",
+                "path" : "String || null",
+                "base64" : "String || null"
             }
         ],
         "menus" : [
             {
                 "id" : "String",
                 "placeholder" : "String",
-                "disabled" : false,
+                "disabled" : "bool || null",
                 "options" : [
                     {
                         "label" : "String",
                         "value" : "String",
-                        "description" : null,
-                        "emoji" : null
+                        "description" : "String || null",
+                        "emoji" : "String || null"
                     }
                 ]
             }
@@ -44,9 +50,9 @@
             {
                 "label" : "String",
                 "id" : "String",
-                "emoji" : null,
-                "style" : null,
-                "disabled" : false
+                "emoji" : "String || null",
+                "style" : "String || null",
+                "disabled" : "bool || null"
             }
         ],
         "modals" : [
@@ -57,11 +63,11 @@
                     {
                         "label" : "String",
                         "id" : "String",
-                        "placeholder" : "String",
-                        "style" : "String",
-                        "max" : "num",
-                        "min" : "num",
-                        "required" : false
+                        "placeholder" : "String || null",
+                        "style" : "String || null",
+                        "max" : "Number || null",
+                        "min" : "Number || null",
+                        "required" : "bool || null"
                     }
                 ]
             }
@@ -76,12 +82,16 @@
             {
                 "title" : "【AI】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀AIメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -134,18 +144,22 @@
 
 
     {
-        "id" : "ai_chat",
+        "id" : "ai_chat_private",
         "content" : null,
         "embeds" : [
             {
                 "title" : "【AIチャット】",
                 "url" : null,
-                "description" : "🗨️\n<#{chat_response}>",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️\n{{__CHAT_RESPONSE__}}",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -211,7 +225,7 @@
         "modals" : [
             {
                 "title" : "【チャット入力フォーム】",
-                "id" : "ai_chat",
+                "id" : "ai_chat_private",
                 "inputs" : [
                     {
                         "label" : "チャット",
@@ -233,38 +247,67 @@
             {
                 "title" : "【AIチャットログ】",
                 "url" : null,
-                "description" : "🗨️⠀履歴は過去5件まで覚えてるよ",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀履歴は過去10件まで保存してるよ",                
                 "fields" : [
                     {
-                        "name": "<#{chat_request_1}>",
-                        "value": "<#{chat_response_1}>",
+                        "name": "{{__CHAT_REQUEST_1__}}",
+                        "value": "{{__CHAT_RESPONSE_1__}}",
                         "inline": false
                     },
                     {
-                        "name": "<#{chat_request_2}>",
-                        "value": "<#{chat_response_2}>",
+                        "name": "{{__CHAT_REQUEST_2__}}",
+                        "value": "{{__CHAT_RESPONSE_2__}}",
                         "inline": false
                     },
                     {
-                        "name": "<#{chat_request_3}>",
-                        "value": "<#{chat_response_3}>",
+                        "name": "{{__CHAT_REQUEST_3__}}",
+                        "value": "{{__CHAT_RESPONSE_3__}}",
                         "inline": false
                     },
                     {
-                        "name": "<#{chat_request_4}>",
-                        "value": "<#{chat_response_4}>",
+                        "name": "{{__CHAT_REQUEST_4__}}",
+                        "value": "{{__CHAT_RESPONSE_4__}}",
                         "inline": false
                     },
                     {
-                        "name": "<#{chat_request_5}>",
-                        "value": "<#{chat_response_5}>",
+                        "name": "{{__CHAT_REQUEST_5__}}",
+                        "value": "{{__CHAT_RESPONSE_5__}}",
+                        "inline": false
+                    },
+                    {
+                        "name": "{{__CHAT_REQUEST_6__}}",
+                        "value": "{{__CHAT_RESPONSE_6__}}",
+                        "inline": false
+                    },
+                    {
+                        "name": "{{__CHAT_REQUEST_7__}}",
+                        "value": "{{__CHAT_RESPONSE_7__}}",
+                        "inline": false
+                    },
+                    {
+                        "name": "{{__CHAT_REQUEST_8__}}",
+                        "value": "{{__CHAT_RESPONSE_8__}}",
+                        "inline": false
+                    },
+                    {
+                        "name": "{{__CHAT_REQUEST_9__}}",
+                        "value": "{{__CHAT_RESPONSE_9__}}",
+                        "inline": false
+                    },
+                    {
+                        "name": "{{__CHAT_REQUEST_10__}}",
+                        "value": "{{__CHAT_RESPONSE_10__}}",
                         "inline": false
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -329,12 +372,16 @@
             {
                 "title" : "【AIイラスト】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀まだイラストの生成はできないんだ\n⠀⠀⠀アップデートを待ってね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -343,14 +390,7 @@
                 "id" : "ai_illust",
                 "placeholder" : "❌現在利用できません",
                 "disabled" : true,
-                "options" : [
-                    {
-                        "label" : "disabled",
-                        "value" : "disabled",
-                        "description" : "disabled",
-                        "emoji" : null
-                    }
-                ]
+                "options" : []
             }
         ],
         "buttons" : [
