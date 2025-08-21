@@ -1,7 +1,7 @@
 /*****************
     ai.js
     スニャイヴ
-    2025/08/04
+    2025/08/21
 *****************/
 
 module.exports = {
@@ -9,36 +9,11 @@ module.exports = {
 }
 
 const fs = require('fs');
-// const canvas = require('canvas');
 const db = require('../core/db');
 const cui = require('../core/cui');
 const gui = require('../core/gui');
 const helper = require('../core/helper');
 const gemini = require('../integrations/gemini');
-
-//サムネイルの作成
-// async function createThumbnail(params){
-//     const layer_names = [];
-//     const psd = map.get("kasukabe_tsumugi_psd");
-//     const layers_child = [];
-//     const layers = psd.children?.filter(layer =>
-//         {
-//             if(layer.children){
-//                 layers_child.push(layer.children.find(layer => !layer.hidden));
-//             }else if(!layer.hidden){
-//                 return layer;
-//             }
-//         }
-//     );
-    
-//     const thumbnail = canvas.createCanvas(psd.width, psd.height);
-//     const canvas_2d = thumbnail.getContext('2d');
-
-//     for(const layer of layers.concat(layers_child)){
-//         canvas_2d.drawImage(await canvas.loadImage(layer.canvas.toDataURL()), layer.left || 0, layer.top || 0);
-//     }
-//     return thumbnail.createPNGStream();
-// }
 
 //命令文の取得
 function getPrompt(trigger, log, map, system_id){

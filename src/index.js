@@ -1,13 +1,12 @@
 /*****************
     index.js
     スニャイヴ
-    2025/08/20
+    2025/08/21
 *****************/
 
 require('dotenv').config();
 const {Client, GatewayIntentBits, Partials} = require('discord.js');
 const fs = require('fs');
-// const psd = require('ag-psd');
 
 const cui = require('./core/cui');
 const gui = require('./core/gui');
@@ -220,6 +219,5 @@ client.on('messageReactionAdd', async (reaction) => {
 });
 
 /*  todo
-psdの読み取り
 リアクション動作の改修
 */
