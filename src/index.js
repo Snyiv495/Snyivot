@@ -20,7 +20,7 @@ const map = new Map();
 client.login(process.env.BOT_TOKEN);
 
 //起動動作
-client.once('ready', async () => {
+client.once('clientReady', async () => {
     //READMEの取得
     try{
         map.set("readme_md", fs.readFileSync("./README.md", "utf-8"));

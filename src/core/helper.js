@@ -1,7 +1,7 @@
 /*****************
     helper.js
     スニャイヴ
-    2025/08/20
+    2025/08/21
 *****************/
 
 module.exports = {
@@ -23,6 +23,8 @@ module.exports = {
     removeBotMention : removeBotMention,
     removeBotName : removeBotName
 }
+
+const {MessageFlags} = require('discord.js');
 
 const ai = require("../features/ai");
 const faq = require("../features/faq");
@@ -171,7 +173,7 @@ async function sendDefer(interaction){
                 await interaction.deferUpdate();
             }
             if(!interaction.deferred && !interaction.message?.flags?.bitfield){
-                await interaction.deferReply({ephemeral:true});
+                await interaction.deferReply({flags: MessageFlags.Ephemeral});
             }
             return;
         }
@@ -216,7 +218,7 @@ async function sendGUI(trigger, gui){
                 }
 
                 if(!trigger.deferred && !trigger.message?.flags?.bitfield){
-                    await trigger.deferReply({ephemeral:true});
+                    await trigger.deferReply({flags: MessageFlags.Ephemeral});
                 }
             }catch(e){}//showModalの後だと補足される
 

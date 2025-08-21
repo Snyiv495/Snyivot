@@ -474,7 +474,7 @@ async function setUserSpeaker(interaction, map){
             }
 
             //スピーカーページの送信
-            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_user_speaker", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BESE64__}}":vv_style_info.voice_samples[0], "{{__SPEAKER_UUID__}}":vv_speaker_uuid}));
+            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_user_speaker", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BASE64__}}":vv_style_info.voice_samples[0], "{{__SPEAKER_UUID__}}":vv_speaker_uuid}));
             tmp_map.clear();
         }
         
@@ -566,7 +566,7 @@ async function setUserStyle(interaction, map){
             }
 
             //スタイルページの送信
-            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_user_style", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BESE64__}}":vv_style_info.voice_samples[0], "{{__STYLE_ID__}}":vv_style_id}));
+            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_user_style", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BASE64__}}":vv_style_info.voice_samples[0], "{{__STYLE_ID__}}":vv_style_id}));
             tmp_map.clear();
         }
         
@@ -768,7 +768,7 @@ async function setServerSpeaker(interaction, map){
             }
 
             //スピーカーページの送信
-            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_server_speaker", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BESE64__}}":vv_style_info.voice_samples[0], "{{__SPEAKER_UUID__}}":vv_speaker_uuid}));
+            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_server_speaker", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BASE64__}}":vv_style_info.voice_samples[0], "{{__SPEAKER_UUID__}}":vv_speaker_uuid}));
             tmp_map.clear();
         }
         
@@ -859,7 +859,7 @@ async function setServerStyle(interaction, map){
             }
 
             //スタイルページの送信
-            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_server_style", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BESE64__}}":vv_style_info.voice_samples[0], "{{__STYLE_ID__}}":vv_style_id}));
+            await helper.sendGUI(interaction, gui.create(tmp_map, "read_set_server_style", {"{{__SPEAKER_NAME__}}":vv_speaker_name, "{{__STYLE_NAME__}}":vv_style_name, "{{__POLICY_URL__}}":vv_speaker_info.policy.match(/(https?:\/\/[\w\-\.\/\?\,\#\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)/)[0], "{{__ICON_NAME__}}":`icon.jpg`, "{{__ICON_BASE64__}}":vv_style_info.icon, "{{__VOICE_SAMPLE_NAME__}}":`${vv_speaker_name}(${vv_style_name})のサンプル音声.mp3`, "{{__VOICE_SAMPLE_BASE64__}}":vv_style_info.voice_samples[0], "{{__STYLE_ID__}}":vv_style_id}));
             tmp_map.clear();
         }
         

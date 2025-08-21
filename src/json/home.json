@@ -100,11 +100,11 @@
                 "fields" : [
                     {
                         "name" : "ℹ️ 更新情報",
-                        "value" : "- 1.6.2 AIでおみくじを引けるようにしました\n- 1.6.1 おみくじ機能の実装\n- 1.6.0 AI機能の強化"
+                        "value" : "- 1.8.0 AIでおみくじを引けるようにしました\n- 1.7.0 おみくじ機能の実装\n- 1.6.0 AI機能の強化"
                     }
                 ],
                 "image" : null,
-                "footer" : "Ver. 1.6.2\nVOICEVOX:春日部つむぎ",
+                "footer" : "Ver. 1.8.1\nVOICEVOX:春日部つむぎ",
                 "color" : "000000"
             }
         ],
@@ -141,7 +141,7 @@
                     }
                 ],
                 "image" : null,
-                "footer" : "Ver. 1.6.2\nVOICEVOX:春日部つむぎ",
+                "footer" : "Ver. 1.8.1\nVOICEVOX:春日部つむぎ",
                 "color" : "000000"
             }
         ],
