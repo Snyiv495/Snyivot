@@ -1,7 +1,7 @@
 /*****************
     helper.js
     スニャイヴ
-    2025/08/21
+    2025/08/22
 *****************/
 
 module.exports = {
@@ -29,6 +29,7 @@ const {MessageFlags} = require('discord.js');
 const ai = require("../features/ai");
 const faq = require("../features/faq");
 const omikuji = require("../features/omikuji");
+const quote = require("../features/quote");
 const read = require("../features/read");
 
 const bot_name = new RegExp(/(すにゃ|スニャ|すな|スナ|すに|スニ)(ぼっと|ボット|ぼ|ボ|bot|Bot|BOT)/);
@@ -87,6 +88,7 @@ function getFeatureModules(){
         "ai": ai,
         "faq": faq,
         "omikuji": omikuji,
+        "quote" : quote,
         "read": read
     }
 }

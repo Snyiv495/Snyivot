@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/08/21
+    2025/08/22
 *****************/
 
 require('dotenv').config();
@@ -37,20 +37,6 @@ client.once('clientReady', async () => {
         console.error("index.js => client.once() \n GUIの取得に失敗しました \n", e);
         process.exit();
     }
-
-    //psdの取得
-    /*
-    try{
-        psd.initializeCanvas(require('canvas').createCanvas, require('canvas').loadImage);
-        map.set("kasukabe_tsumugi_psd", psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/kasukabe_tsumugi.psd")));
-        map.set("zundamon_psd", psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/zundamon.psd")));
-        fs.writeFileSync("./assets/sakamoto_ahiru/kasukabe_tsumugi/default.json", JSON.stringify(JSON.parse(JSON.stringify(psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/kasukabe_tsumugi/default.psd"), {skipLayerImageData: true, skipCompositeImageData: true, skipThumbnail: true}))), null, 4), 'utf-8');
-        fs.writeFileSync("./assets/sakamoto_ahiru/zundamon/default.json", JSON.stringify(JSON.parse(JSON.stringify(psd.readPsd(fs.readFileSync("./assets/sakamoto_ahiru/zundamon/default.psd"), {skipLayerImageData: true, skipCompositeImageData: true, skipThumbnail: true}))), null, 4), 'utf-8');
-    }catch(e){
-        console.log(`↓↓↓ psdの取得に失敗しました ↓↓↓\n${e}\n↑↑↑ psdの取得に失敗しました ↑↑↑`);
-        process.exit();
-    }
-    */
 
     //コマンドの登録
     try{
@@ -201,23 +187,29 @@ client.on('voiceStateUpdate', async (old_state, new_state) => {
 
 //リアクション動作
 client.on('messageReactionAdd', async (reaction) => {
-    const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
-
-    //他人のメッセージを除外
-    if(helper.getUserId(message) != client.user.id){
-        return;
-    }
-
     try{
-        gui.reaction(message, reaction, map);
+        const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
+        const emoji_name = reaction.emoji.name;
+
+        //引用リアクション
+        if(emoji_name.match(/🤖|🦈/)){
+            message.system_id = "quote";
+            await gui.reaction(message, map, emoji_name);
+            return;
+        }
+
+        //削除リアクション
+        if(emoji_name.match(/✂️|🗑️/)){
+            message.system_id = "delete";
+            await gui.reaction(message, map, emoji_name);
+            return;
+        }
+
+        //その他のリアクション
+        message.system_id = "undefined";
+        await gui.reaction(message, map, emoji_name);
         return;
     }catch(e){
         console.error("index.js => client.on(messageReactionAdd) \n", e);
     }
-
-    return;
 });
-
-/*  todo
-リアクション動作の改修
-*/
