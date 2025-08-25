@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/08/22
+    2025/08/25
 *****************/
 
 module.exports = {
@@ -312,6 +312,6 @@ async function reaction(message, map, emoji_name){
         await message.reactions.removeAll();
         return;
     }catch(e){
-        throw new Error(`gui.js => modal() \n ${e}`);
+        throw new Error(`gui.js => reaction() \n ${e}`);
     }
 }
