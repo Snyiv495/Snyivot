@@ -68,7 +68,7 @@
 
     {
         "id": "omikuji",
-        "content": "今日のおみくじの各項目を日本語で生成してください。本日の運勢は{{__FORTUNE__}}です。",
+        "content": "今日のおみくじの各項目を日本語で生成してください。ただし500トークン以内とし、advice以外は1問1答で説明などの余計な文章をつけないでください。本日の運勢は{{__FORTUNE__}}です。",
         "type": "object",
         "properties": {
             "item": {
@@ -85,9 +85,9 @@
             },
             "advice": {
                 "type": "string",
-                "description": "ユーモアのある一言アドバイス"
+                "description": "ユーモアのある一言アドバイス（2~3文）"
             }
         },
-        "required": ["item", "dinner", "advice"]
+        "required": ["item", "dinner", "quest", "advice"]
     }
 ]
