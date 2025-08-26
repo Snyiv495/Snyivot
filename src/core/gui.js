@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/08/25
+    2025/08/26
 *****************/
 
 module.exports = {
@@ -290,14 +290,14 @@ async function modal(interaction, map){
 }
 
 //リアクションの実行
-async function reaction(message, map, emoji_name){
+async function reaction(message, map){
     try{
         const system_id = helper.getSystemId(message);
         const feature_modules = helper.getFeatureModules();
 
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
-                await feature_modules[prefix].exe(message, map, emoji_name);
+                await feature_modules[prefix].exe(message, map);
                 return;
             }
         }
@@ -309,8 +309,10 @@ async function reaction(message, map, emoji_name){
         }
 
         //リアクションを削除する
-        await message.reactions.removeAll();
-        return;
+        if(system_id === "undefined"){
+            await message.reactions.removeAll();
+            return;
+        }
     }catch(e){
         throw new Error(`gui.js => reaction() \n ${e}`);
     }

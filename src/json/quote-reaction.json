@@ -1,0 +1,35 @@
+[
+    {
+        "emoji" : "🤓",
+        "path" : "./assets/quote/tigyu.png",
+        "bubble" : {
+            "x" : 200,
+            "y" : 60,
+            "width" : 150,
+            "height" : 380,
+            "vertical" : true
+        }
+    },
+    {
+        "emoji" : "🤖",
+        "path" : "./assets/quote/robot.png",
+        "bubble" : {
+            "x" : 950,
+            "y": 250,
+            "width": 530,
+            "height": 300,
+            "vertical" : false
+        }
+    },
+    {
+        "emoji" : "🦈",
+        "path" : "./assets/quote/shark.png",
+        "bubble" : {
+            "x" : 50,
+            "y": 50,
+            "width": 260,
+            "height": 115,
+            "vertical" : false
+        }
+    }
+]
