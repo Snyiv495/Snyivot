@@ -873,6 +873,7 @@ async function setServerStyle(interaction, map){
 async function getSpeakerChoices(interaction, map){
     try{
         const vv_speakers = map.get("voicevox_speakers");
+        const focus_opt = interaction.options.getFocused(true);
         const choices = new Array();
 
         vv_speakers.find(speaker => {
@@ -900,6 +901,7 @@ async function getStyleChoices(interaction, map){
         const vv_speakers = map.get("voicevox_speakers");
         const vv_speaker = interaction.options.getString("speaker") ?? (system_id.includes("user") ? user_info.vv_uuid : null) ?? server_info.vv_uuid;
         const vv_speaker_info = vv_speakers.find(speaker => speaker.name===vv_speaker || speaker.speaker_uuid===vv_speaker);
+        const focus_opt = interaction.options.getFocused(true);
         const choices = new Array();
         
         vv_speaker_info.styles?.find(style => {

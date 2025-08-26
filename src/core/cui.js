@@ -99,7 +99,7 @@ async function slashCmd(interaction, map){
 
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
-                feature_modules[prefix].exe(interaction, map);
+                await feature_modules[prefix].exe(interaction, map);
                 return;
             }
         }
@@ -119,7 +119,7 @@ async function autoComplete(interaction, map){
 
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
-                feature_modules[prefix].autoComplete(interaction, map);
+                await feature_modules[prefix].autoComplete(interaction, map);
                 return;
             }
         }
