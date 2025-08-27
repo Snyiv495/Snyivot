@@ -1,7 +1,7 @@
 [
     {
         "emoji" : "🤓",
-        "path" : "./assets/quote/tigyu.png",
+        "path" : "./assets/collage/tigyu.png",
         "bubble" : {
             "x" : 200,
             "y" : 60,
@@ -12,7 +12,7 @@
     },
     {
         "emoji" : "🤖",
-        "path" : "./assets/quote/robot.png",
+        "path" : "./assets/collage/robot.png",
         "bubble" : {
             "x" : 950,
             "y": 250,
@@ -23,7 +23,7 @@
     },
     {
         "emoji" : "🦈",
-        "path" : "./assets/quote/shark.png",
+        "path" : "./assets/collage/shark.png",
         "bubble" : {
             "x" : 50,
             "y": 50,

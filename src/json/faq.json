@@ -1,41 +1,47 @@
 [
     {
         "id" : "String",
-        "content" : null,
+        "content" : "String || null",
         "embeds" : [
             {
-                "title" : null,
-                "url" : null,
-                "description" : null,                
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : null,
+                "title" : "String || null",
+                "url" : "String || null",
+                "thumbnail" : {
+                    "name" : "String || null",
+                    "path" : "String || null",
+                    "base64" : "String || null"
+                },
+                "description" : "String || null",                
                 "fields" : [
                     {
                         "name" : "String",
-                        "value" : "String"
+                        "value" : "String",
+                        "inline" : "bool"
                     }
-                ]
+                ],
+                "image" : "String || null",
+                "footer" : "String || null",
+                "color" : "###### || null"
             }
         ],
         "files" : [
             {
-                "name" : "String",
-                "base64" : "String"
+                "name" : "String || null",
+                "path" : "String || null",
+                "base64" : "String || null"
             }
         ],
         "menus" : [
             {
                 "id" : "String",
                 "placeholder" : "String",
-                "disabled" : false,
+                "disabled" : "bool || null",
                 "options" : [
                     {
                         "label" : "String",
                         "value" : "String",
-                        "description" : null,
-                        "emoji" : null
+                        "description" : "String || null",
+                        "emoji" : "String || null"
                     }
                 ]
             }
@@ -44,9 +50,9 @@
             {
                 "label" : "String",
                 "id" : "String",
-                "emoji" : null,
-                "style" : null,
-                "disabled" : false
+                "emoji" : "String || null",
+                "style" : "String || null",
+                "disabled" : "bool || null"
             }
         ],
         "modals" : [
@@ -57,11 +63,11 @@
                     {
                         "label" : "String",
                         "id" : "String",
-                        "placeholder" : "String",
-                        "style" : "String",
-                        "max" : "num",
-                        "min" : "num",
-                        "required" : false
+                        "placeholder" : "String || null",
+                        "style" : "String || null",
+                        "max" : "Number || null",
+                        "min" : "Number || null",
+                        "required" : "bool || null"
                     }
                 ]
             }
@@ -76,12 +82,16 @@
             {
                 "title" : "【FAQ】",
                 "url" : null,
-                "description" : "🗨️⠀FAQメニューを開いて\n⠀⠀⠀知りたい機能を選んでね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀FAQメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -96,6 +106,12 @@
                         "value" : "faq_ai",
                         "description" : "AI機能について",
                         "emoji" : "🤖"
+                    },
+                    {
+                        "label" : "コラ作成",
+                        "value" : "faq_collage",
+                        "description" : "コラ作成機能について",
+                        "emoji" : "✍️"
                     },
                     {
                         "label" : "おみくじ",
@@ -152,12 +168,16 @@
             {
                 "title" : "【FAQ＠AI】",
                 "url" : null,
-                "description" : "🗨️⠀FAQ＠AIメニューを開いて\n⠀⠀⠀知りたい内容を選んでね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀FAQ＠AIメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -173,13 +193,13 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.チャット出力はどうやるの？",
+                        "label" : "Q2.チャット生成はどうやるの？",
                         "value" : "faq_ai_q2",
                         "description" : "コマンドやメニューから利用できるよ",
                         "emoji" : "❔"
                     },
                     {
-                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "label" : "Q3.イラスト生成はどうやるの？",
                         "value" : "faq_ai_q3",
                         "description" : "Please wait for update...",
                         "emoji" : "❓"
@@ -187,7 +207,7 @@
                     {
                         "label" : "Q4.呼びかけはどうやるの？",
                         "value" : "faq_ai_q4",
-                        "description" : "テキストチャンネルから利用できるよ",
+                        "description" : "テキストチャンネルで名前を呼んでね",
                         "emoji" : "❔"
                     }
                 ]
@@ -225,12 +245,16 @@
             {
                 "title" : "【Q1.何ができるの？】",
                 "url" : null,
-                "description" : "🗨️⠀チャットをしたり\n⠀⠀⠀イラストを描いたり\n⠀⠀⠀呼びかけに応えたりできるよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀チャットやイラストを生成をしたり、\n⠀⠀⠀呼びかけに反応することができるよ",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -246,13 +270,13 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.チャット出力はどうやるの？",
+                        "label" : "Q2.チャット生成はどうやるの？",
                         "value" : "faq_ai_q2",
                         "description" : "コマンドやメニューから利用できるよ",
                         "emoji" : "❔"
                     },
                     {
-                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "label" : "Q3.イラスト生成はどうやるの？",
                         "value" : "faq_ai_q3",
                         "description" : "Please wait for update...",
                         "emoji" : "❓"
@@ -260,7 +284,7 @@
                     {
                         "label" : "Q4.呼びかけはどうやるの？",
                         "value" : "faq_ai_q4",
-                        "description" : "テキストチャンネルから利用できるよ",
+                        "description" : "テキストチャンネルで名前を呼んでね",
                         "emoji" : "❔"
                     }
                 ]
@@ -296,24 +320,27 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q2.チャット出力はどうやるの？】",
+                "title" : "【Q2.チャット生成はどうやるの？】",
                 "url" : null,
-                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから始められるよ\nメンション➨[開始]➨[AI]➨[AIチャット]",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから始められるよ\nメンション➨[開始]➨[AI]➨[AIチャット]",                
                 "fields" : [
                     {
                         "name" : "コピペコマンド",
-                        "value" : "- 「/ai _chat 」"
+                        "value" : "- 「/ai _chat_private 」"
                     },
                     {
                         "name" : "コピペメンション",
-                        "value" : "- 「<#{BOT_ID}>」"
+                        "value" : "- 「{{__BOT_ID__}}」"
                     }
-                    
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -329,13 +356,13 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.チャット出力はどうやるの？",
+                        "label" : "Q2.チャット生成はどうやるの？",
                         "value" : "faq_ai_q2",
                         "description" : "コマンドやメニューから利用できるよ",
                         "emoji" : "❔"
                     },
                     {
-                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "label" : "Q3.イラスト生成はどうやるの？",
                         "value" : "faq_ai_q3",
                         "description" : "Please wait for update...",
                         "emoji" : "❓"
@@ -343,7 +370,7 @@
                     {
                         "label" : "Q4.呼びかけはどうやるの？",
                         "value" : "faq_ai_q4",
-                        "description" : "テキストチャンネルから利用できるよ",
+                        "description" : "テキストチャンネルで名前を呼んでね",
                         "emoji" : "❔"
                     }
                 ]
@@ -379,14 +406,18 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q3.イラスト出力はどうやるの？】",
+                "title" : "【Q3.イラスト生成はどうやるの？】",
                 "url" : null,
-                "description" : "🗨️⠀まだ実装してないんだ\n⠀⠀⠀アップデートを待っててね",
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀まだ実装してないんだ\n⠀⠀⠀アップデートを待っててね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -402,13 +433,13 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.チャット出力はどうやるの？",
+                        "label" : "Q2.チャット生成はどうやるの？",
                         "value" : "faq_ai_q2",
                         "description" : "コマンドやメニューから利用できるよ",
                         "emoji" : "❔"
                     },
                     {
-                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "label" : "Q3.イラスト生成はどうやるの？",
                         "value" : "faq_ai_q3",
                         "description" : "Please wait for update...",
                         "emoji" : "❓"
@@ -416,7 +447,7 @@
                     {
                         "label" : "Q4.呼びかけはどうやるの？",
                         "value" : "faq_ai_q4",
-                        "description" : "テキストチャンネルから利用できるよ",
+                        "description" : "テキストチャンネルで名前を呼んでね",
                         "emoji" : "❔"
                     }
                 ]
@@ -454,11 +485,12 @@
             {
                 "title" : "【Q4.呼びかけはどうやるの？】",
                 "url" : null,
-                "description" : "🗨️⠀テキストチャンネルで呼びかけてくれると返事するよ\n⠀⠀⠀一部機能を直接利用したりもできるよ",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀テキストチャンネルで\n⠀⠀⠀名前を呼んでくれると返事をするよ\n⠀⠀⠀名前を呼びながらやりたいことを言ってくれれば\n⠀⠀⠀あーしの判断で実行できる機能もあるよ",
                 "fields" : [
                     {
                         "name" : "呼びかけの例",
@@ -466,9 +498,12 @@
                     },
                     {
                         "name" : "機能の利用の例",
-                        "value" : "- 「すにゃぼ　読み上げを始めて」"
+                        "value" : "- 「すにゃぼ読み上げをして」"
                     }
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -484,13 +519,13 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.チャット出力はどうやるの？",
+                        "label" : "Q2.チャット生成はどうやるの？",
                         "value" : "faq_ai_q2",
                         "description" : "コマンドやメニューから利用できるよ",
                         "emoji" : "❔"
                     },
                     {
-                        "label" : "Q3.イラスト出力はどうやるの？",
+                        "label" : "Q3.イラスト生成はどうやるの？",
                         "value" : "faq_ai_q3",
                         "description" : "Please wait for update...",
                         "emoji" : "❓"
@@ -498,7 +533,7 @@
                     {
                         "label" : "Q4.呼びかけはどうやるの？",
                         "value" : "faq_ai_q4",
-                        "description" : "テキストチャンネルから利用できるよ",
+                        "description" : "テキストチャンネルで名前を呼んでね",
                         "emoji" : "❔"
                     }
                 ]
@@ -532,32 +567,382 @@
     
 
     {
+        "id" : "faq_collage",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【FAQ＠コラ】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀FAQ＠コラメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_collage",
+                "placeholder" : "👉 FAQ＠コラメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_collage_q1",
+                        "description" : "コラの作成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.どうやって作るの？",
+                        "value" : "faq_collage_q2",
+                        "description" : "リアクションを付けると作成できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_collage_q1",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q1.何ができるの？】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀画像に好きな文章を入れたコラ画像が作成できるよ",                
+                "fields" : [],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_collage_q1",
+                "placeholder" : "👉 FAQ＠コラメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_collage_q1",
+                        "description" : "コラの作成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.どうやって作るの？",
+                        "value" : "faq_collage_q2",
+                        "description" : "リアクションを付けると作成できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_collage_q2",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q2.どうやって作るの？】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀テキストチャンネルに好きな文章を送信して\n⠀⠀⠀そのメッセージにリアクションを付けると作成できるよ",                
+                "fields" : [
+                    {
+                        "name" : "使えるリアクション",
+                        "value" : "🤓🤖🦈"
+                    }
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_collage_q2",
+                "placeholder" : "👉 FAQ＠コラメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_collage_q1",
+                        "description" : "コラの作成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.どうやって作るの？",
+                        "value" : "faq_collage_q2",
+                        "description" : "リアクションを付けると作成できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
         "id" : "faq_omikuji",
         "content" : null,
         "embeds" : [
             {
                 "title" : "【FAQ＠おみくじ】",
                 "url" : null,
-                "description" : "🗨️⠀まだ実装してないんだ\n⠀⠀⠀アップデートを待っててね",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀FAQ＠おみくじメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
         "menus" : [
             {
                 "id" : "faq_omikuji",
-                "placeholder" : "❌現在利用できません",
-                "disabled" : true,
+                "placeholder" : "👉 FAQ＠おみくじメニュー",
                 "options" : [
                     {
-                        "label" : "disabled",
-                        "value" : "disabled",
-                        "description" : "disabled",
-                        "emoji" : null
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_omikuji_q1",
+                        "description" : "おみくじが引けるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.どうやって引くの？",
+                        "value" : "faq_omikuji_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_omikuji_q1",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q1.何ができるの？】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀1日1回おみくじを引くことができるよ",                
+                "fields" : [],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_omikuji_q1",
+                "placeholder" : "👉 FAQ＠おみくじメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_omikuji_q1",
+                        "description" : "おみくじが引けるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.どうやって引くの？",
+                        "value" : "faq_omikuji_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_omikuji_q2",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q2.どうやって引くの？】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから始められるよ\nメンション➨[開始]➨[おみくじ]➨[引く]",                
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/omikuji _draw 」"
+                    },
+                    {
+                        "name" : "コピペメンション",
+                        "value" : "- 「{{__BOT_ID__}}」"
+                    }
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_omikuji_q2",
+                "placeholder" : "👉 FAQ＠おみくじメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_omikuji_q1",
+                        "description" : "おみくじが引けるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.どうやって引くの？",
+                        "value" : "faq_omikuji_q2",
+                        "description" : "コマンドやメニューから利用できるよ",
+                        "emoji" : "❔"
                     }
                 ]
             }
@@ -596,12 +981,16 @@
             {
                 "title" : "【FAQ＠読み上げ】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀FAQ＠読み上げメニューを開いて\n⠀⠀⠀知りたい内容を選んでね",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -681,12 +1070,16 @@
             {
                 "title" : "【Q1.何ができるの？】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀テキストチャンネルの文章を\n⠀⠀⠀ボイスチャンネルで読み上げるよ",                
-                "thumbnail" : null,
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -766,11 +1159,12 @@
             {
                 "title" : "【Q2.読み上げはどうやって始めるの？】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから始められるよ\nメンション➨[開始]➨[読み上げ]➨[読み上げ開始]",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
                 "fields" : [
                     {
                         "name" : "コピペコマンド",
@@ -778,10 +1172,12 @@
                     },
                     {
                         "name" : "コピペメンション",
-                        "value" : "- 「<#{BOT_ID}>」"
+                        "value" : "- 「{{__BOT_ID__}}」"
                     }
-                    
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -859,13 +1255,14 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q3.読み上げはどうやって終わるの？】",
+                "title" : "【Q2.読み上げはどうやって終わるの？】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから終了できるよ\n⠀⠀⠀ボイチャに誰もいなくなったら自動で終了するよ\nメンション➨[開始]➨[読み上げ]➨[読み上げ終了]",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
                 "fields" : [
                     {
                         "name" : "コピペコマンド",
@@ -873,10 +1270,12 @@
                     },
                     {
                         "name" : "コピペメンション",
-                        "value" : "- 「<#{BOT_ID}>」"
+                        "value" : "- 「{{__BOT_ID__}}」"
                     }
-                    
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -954,13 +1353,14 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q4.辞書はどうやって追加するの？】",
+                "title" : "【Q2.辞書はどうやって追加するの？】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから追加できるよ\n⠀⠀⠀語句とその読み方は必ず指定してね\nメンション➨[開始]➨[読み上げ]➨[辞書追加]",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
                 "fields" : [
                     {
                         "name" : "コピペコマンド",
@@ -968,10 +1368,12 @@
                     },
                     {
                         "name" : "コピペメンション",
-                        "value" : "- 「<#{BOT_ID}>」"
+                        "value" : "- 「{{__BOT_ID__}}」"
                     }
-                    
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1049,13 +1451,14 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q5.辞書はどうやって削除するの？】",
+                "title" : "【Q2.辞書はどうやって削除するの？】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから削除できるよ\n⠀⠀⠀語句が存在しない時は辞書を送信するよ\nメンション➨[開始]➨[読み上げ]➨[辞書削除]",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
                 "fields" : [
                     {
                         "name" : "コピペコマンド",
@@ -1063,10 +1466,12 @@
                     },
                     {
                         "name" : "コピペメンション",
-                        "value" : "- 「<#{BOT_ID}>」"
+                        "value" : "- 「{{__BOT_ID__}}」"
                     }
-                    
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1144,13 +1549,14 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q5.読み上げの設定はどうやるの？】",
+                "title" : "【Q2.読み上げの設定はどうやるの？】",
                 "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
                 "description" : "🗨️⠀コマンドを送信するか\n⠀⠀⠀メンションから設定できるよ\nメンション➨[開始]➨[読み上げ]➨[ユーザー設定]",
-                "thumbnail" : null,
-                "image" : null,
-                "footer" : null,
-                "color" : "00FF00",
                 "fields" : [
                     {
                         "name" : "コピペコマンド",
@@ -1158,10 +1564,12 @@
                     },
                     {
                         "name" : "コピペメンション",
-                        "value" : "- 「<#{BOT_ID}>」"
+                        "value" : "- 「{{__BOT_ID__}}」"
                     }
-                    
-                ]
+                ],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
             }
         ],
         "files" : [],
@@ -1235,6 +1643,7 @@
         "modals" : []
     },
 
+
     {
         "id" : "faq_others",
         "content" : null,
@@ -1242,26 +1651,88 @@
             {
                 "title" : "【FAQ＠その他】",
                 "url" : null,
-                "description" : "🗨️⠀botのメッセージに「✂️」のリアクションをつけると\n⠀⠀⠀そのメッセージを削除できるよ",                
-                "thumbnail" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀FAQ＠その他メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "fields" : [],
                 "image" : null,
                 "footer" : null,
-                "color" : "00FF00",
-                "fields" : []
+                "color" : "00FF00"
             }
         ],
         "files" : [],
         "menus" : [
             {
                 "id" : "faq_others",
-                "placeholder" : "❌現在利用できません",
-                "disabled" : true,
+                "placeholder" : "👉 FAQ＠その他メニュー",
                 "options" : [
                     {
-                        "label" : "disabled",
-                        "value" : "disabled",
-                        "description" : "disabled",
-                        "emoji" : null
+                        "label" : "Q1.メッセージの削除方法",
+                        "value" : "faq_others_q1",
+                        "description" : "リアクションで削除できるよ",
+                        "emoji" : "❓"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_others_q1",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q1.メッセージの削除方法】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀botのメッセージに\n⠀⠀⠀「✂️」か「🗑️」のリアクションをつけると\n⠀⠀⠀そのメッセージを削除できるよ\n⠀⠀⠀「これらはあなただけに表示されています」\n⠀⠀⠀と書かれたメッセージは 時間経過や\n⠀⠀⠀「これらのメッセージを削除する」\n⠀⠀⠀を押すことで削除できるよ",
+                "fields" : [],
+                "image" : null,
+                "footer" : null,
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_others_q1",
+                "placeholder" : "👉 FAQ＠その他メニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.メッセージの削除方法",
+                        "value" : "faq_others_q1",
+                        "description" : "リアクションで削除できるよ",
+                        "emoji" : "❓"
                     }
                 ]
             }
@@ -1291,5 +1762,4 @@
         ],
         "modals" : []
     }
-
 ]

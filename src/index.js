@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/08/26
+    2025/08/27
 *****************/
 
 require('dotenv').config();
@@ -29,11 +29,11 @@ client.once('clientReady', async () => {
         process.exit();
     }
 
-    //リアクションの取得
+    //オリジナルコラ画像の取得
     try{
-        map.set("quote_reaction_json", JSON.parse(fs.readFileSync("./src/json/quote-reaction.json", "utf-8")));
+        map.set("collage_original_json", JSON.parse(fs.readFileSync("./src/json/collage-original.json", "utf-8")));
     }catch(e){
-        console.error("index.js => client.once() \n リアクションの取得に失敗しました \n", e);
+        console.error("index.js => client.once() \n オリジナルコラ画像の取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -198,14 +198,14 @@ client.on('messageReactionAdd', async (reaction) => {
     try{
         const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
         const emoji_name = reaction.emoji.name;
-        const quote_reaction_json = map.get("quote_reaction_json");
+        const collage_original_json = map.get("collage_original_json");
 
         //他人が送信したメッセージに対応
         if(message.author.id != client.user.id){
             //引用リアクション
-            for(const element of quote_reaction_json){
+            for(const element of collage_original_json){
                 if(element.emoji === emoji_name){
-                    message.system_id = `quote_emoji_${emoji_name}`;
+                    message.system_id = `collage_emoji_${emoji_name}`;
                     await gui.reaction(message, map);
                     return;
                 }

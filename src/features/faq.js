@@ -1,25 +1,29 @@
 /*****************
     faq.js
     スニャイヴ
-    2025/07/215
+    2025/08/27
 *****************/
 
 module.exports = {
     exe: execute,
 }
 
-const gui = require('../core/gui');
+const gui = require("../core/gui");
+const helper = require("../core/helper");
 
 //FAQの実行
-async function execute(interaction, map){
-    const id = interaction?.commandName ? `${interaction.commandName}${interaction.options.getSubcommand()}` : interaction?.values?.[0] ?? interaction.customId;
-    
-    //ephemeralメッセージか確認
-    if(!id.includes("modal")){
-        interaction.message?.flags.bitfield ? await interaction.deferUpdate() : await interaction.deferReply?.({ephemeral:true});
-    }
+async function execute(trigger, map){
+    try{
+        const system_id = helper.getSystemId(trigger);
+        
+        //延期の送信
+        if(helper.isInteraction(trigger) && !system_id.includes("modal")){
+            await helper.sendDefer(trigger);
+        }
 
-    interaction.editReply(gui.create(map, id, {"<#{BOT_ID}>":`<@${process.env.BOT_ID}>`}));
-    
-    return 0;
+        await helper.sendGUI(trigger, gui.create(map, system_id, {"{{__BOT_ID__}}":`<@${process.env.BOT_ID}>`}));
+        return;
+    }catch(e){
+        throw new Error(`faq.js => execute() \n ${e}`);
+    }
 }

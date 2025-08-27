@@ -1,19 +1,18 @@
 /*****************
-    quote.js
+    collage.js
     スニャイヴ
-    2025/08/26
+    2025/08/27
 *****************/
 
 module.exports = {
     exe : execute
 }
 
-const fs = require("fs");
 const {AttachmentBuilder} = require("discord.js");
 const {createCanvas, loadImage, registerFont} = require("canvas");
 const helper = require('../core/helper');
 
-registerFont("./assets/quote/NotoSansJP-Regular.ttf", {family: "Noto Sans JP"});
+registerFont("./assets/collage/NotoSansJP-Regular.ttf", {family: "Noto Sans JP"});
 
 //縦書き
 function writeVertical(ctx, font_family, bubble, text){
@@ -89,15 +88,15 @@ function writeHorizontal(ctx, font_family, bubble, text){
     return;
 }
 
-//引用作成
-async function makeQuote(text, quote_path, bubble){
+//コラ作成
+async function makeCollage(text, collage_original_path, bubble){
     try{
-        const quote_image = await loadImage(quote_path);
-        const canvas = createCanvas(quote_image.width, quote_image.height);
+        const collage_original_image = await loadImage(collage_original_path);
+        const canvas = createCanvas(collage_original_image.width, collage_original_image.height);
         const ctx = canvas.getContext("2d");
         const font_family = "Noto Sans JP, sans-serif";
 
-        ctx.drawImage(quote_image, 0, 0);
+        ctx.drawImage(collage_original_image, 0, 0);
         ctx.font = `16px "${font_family}"`;
         ctx.fillStyle = "000000";
         ctx.textBaseline = "top";
@@ -112,34 +111,34 @@ async function makeQuote(text, quote_path, bubble){
             writeHorizontal(ctx, font_family, bubble, text);
         }
 
-        return new AttachmentBuilder(canvas.toBuffer("image/png"), {name: "quote.png"});
+        return new AttachmentBuilder(canvas.toBuffer("image/png"), {name: "collage.png"});
     }catch(e){
-        throw new Error(`quote.js => makeQuote() \n ${e}`);
+        throw new Error(`collage.js => makeCollage() \n ${e}`);
     }
 }
 
-//引用送信
-async function sendQuote(trigger, map){
+//コラ送信
+async function sendCollage(trigger, map){
     try{
         const system_id = helper.getSystemId(trigger);
-        const quote_reaction_json = map.get("quote_reaction_json");
+        const collage_original_json = map.get("collage_original_json");
         const emoji_name = system_id.split("_")[2];
         
-        for(const element of quote_reaction_json){
+        for(const element of collage_original_json){
             if(element.emoji === emoji_name){
-                const file = await makeQuote(trigger.cleanContent, element.path, element.bubble);
+                const file = await makeCollage(trigger.cleanContent, element.path, element.bubble);
                 await helper.sendGUI(trigger, {files: [file]});
                 return;
             }
         }
     }catch(e){
-        throw new Error(`quote.js => sendQuote() \n ${e}`);
+        throw new Error(`collage.js => sendCollage() \n ${e}`);
     }
 
-    throw new Error(`quote.js => sendQuote() \n not define emoji : ${emoji_name}`);
+    throw new Error(`collage.js => sendCollage() \n not define emoji : ${emoji_name}`);
 }
 
-//引用実行
+//コラージュ実行
 async function execute(trigger, map){
     try{
         const system_id = helper.getSystemId(trigger);
@@ -150,8 +149,8 @@ async function execute(trigger, map){
         }
 
         //引用送信
-        if(system_id.startsWith("quote_emoji")){
-            await sendQuote(trigger, map);
+        if(system_id.startsWith("collage_emoji")){
+            await sendCollage(trigger, map);
             return;
         }
 
@@ -160,6 +159,6 @@ async function execute(trigger, map){
         return;
 
     }catch(e){
-        throw new Error(`quote.js => execute() \n ${e}`);
+        throw new Error(`collage.js => execute() \n ${e}`);
     }
 }
