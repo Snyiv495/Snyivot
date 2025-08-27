@@ -16,7 +16,7 @@ registerFont("./assets/collage/NotoSansJP-Regular.ttf", {family: "Noto Sans JP"}
 
 //縦書き
 function writeVertical(ctx, font_family, bubble, text){
-    const lines = text.split(/、|\n/);
+    const lines = text.split(/、\n|。\n|、|。|\n/);
     const widest_line = lines.reduce((wider_line, line) => {return (ctx.measureText(line).width > ctx.measureText(wider_line).width) ? line : wider_line;}, "");
     let font_size = 96;
 
@@ -55,7 +55,7 @@ function writeVertical(ctx, font_family, bubble, text){
 
 //横書き
 function writeHorizontal(ctx, font_family, bubble, text){
-    const lines = text.split(/、|\n/);
+    const lines = text.split(/、\n|。\n|、|。|\n/);
     const widest_line = lines.reduce((wider_line, line) => {return (ctx.measureText(line).width > ctx.measureText(wider_line).width) ? line : wider_line;}, "");
     let font_size = 96;
 
@@ -123,6 +123,10 @@ async function sendCollage(trigger, map){
         const system_id = helper.getSystemId(trigger);
         const collage_original_json = map.get("collage_original_json");
         const emoji_name = system_id.split("_")[2];
+        
+        if(!trigger.cleanContent){
+            return;
+        }
         
         for(const element of collage_original_json){
             if(element.emoji === emoji_name){
