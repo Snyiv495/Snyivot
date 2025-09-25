@@ -95,6 +95,10 @@ async function deleteUserDictWord(uuid){
 async function postImportUserDict(dictionary){
     try{
         fs.unlinkSync(process.env.VOICEVOX_DICTIONARY);
+    }catch(e){
+        console.error("voicevox.js => postImportUserDict() \n", e);
+    }
+    try{
         return await axios.post("import_user_dict?override=true", dictionary, {headers:{"Content-Type": "application/json"}});
     }catch(e){
         throw new Error(e);
