@@ -20,7 +20,10 @@
                     }
                 ],
                 "image" : "String || null",
-                "footer" : "String || null",
+                "footer" : {
+                    "text" : "String || null",
+                    "url" : "String || null"
+                },
                 "color" : "###### || null"
             }
         ],
@@ -90,7 +93,10 @@
                 "description" : "🗨️⠀読み上げメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -182,7 +188,10 @@
                 "description" : "🗨️⠀{{__TEXT_CHANNEL__}}の文章を\n⠀⠀⠀{{__VOICE_CHANNEL__}}で読み上げるよ",                
                 "fields" : [],
                 "image" : null,
-                "footer" : "VOICEVOX:春日部つむぎ",
+                "footer" : {
+                    "text" : "VOICEVOX:春日部つむぎ",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -219,7 +228,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -322,7 +334,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -348,7 +363,10 @@
                 "description" : "🗨️⠀{{__VOICE_CHANNEL__}}での\n⠀⠀⠀{{__TEXT_CHANNEL__}}の読み上げを終了するね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -381,7 +399,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -480,7 +501,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -506,7 +530,10 @@
                 "description" : "🗨️⠀辞書に「{{__WORD__}}({{__KANA__}})」を登録したよ",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -587,7 +614,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -682,7 +712,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -708,7 +741,10 @@
                 "description" : "💬 辞書から「{{__WORD__}}」を削除したよ",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -757,7 +793,10 @@
                 "description" : "🗨️⠀いま登録されてる辞書はこんな感じだよ\n⠀⠀⠀辞書にない語句は削除できないよ",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -853,7 +892,10 @@
                 "description" : "🗨️⠀いま登録されてる辞書はこんな感じだよ\n⠀⠀⠀辞書にない語句は削除できないよ",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -888,7 +930,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -983,7 +1028,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -1030,7 +1078,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : "{{__CREDIT__}}",
+                "footer" : {
+                    "text" : "{{__CREDIT__}}",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1102,7 +1153,10 @@
                 "description" : "🗨️⠀ユーザー設定メニューを開いて\n⠀⠀⠀設定したい項目を選んでね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1174,7 +1228,10 @@
                 "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
                 "fields" : [],
                 "image" : "attachment://{{__ICON_NAME__}}",
-                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "footer" : {
+                    "text" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1238,7 +1295,10 @@
                 "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
                 "fields" : [],
                 "image" : "attachment://{{__ICON_NAME__}}",
-                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "footer" : {
+                    "text" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1345,7 +1405,10 @@
                 "description" : "🗨️⠀ユーザー設定に失敗しちゃった...\n⠀⠀⠀「{{__CHARACTER__}}」が見つからなかったよ",
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -1464,7 +1527,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : "{{__CREDIT__}}",
+                "footer" : {
+                    "text" : "{{__CREDIT__}}",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1488,7 +1554,10 @@
                 "description" : "🗨️⠀サーバー設定メニューを開いて\n⠀⠀⠀設定したい項目を選んでね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1566,7 +1635,10 @@
                 "description" : "🗨️⠀スピーカー設定メニューを開いて\n⠀⠀⠀好きなスピーカーを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
                 "fields" : [],
                 "image" : "attachment://{{__ICON_NAME__}}",
-                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "footer" : {
+                    "text" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1630,7 +1702,10 @@
                 "description" : "🗨️⠀スタイル設定メニューを開いて\n⠀⠀⠀好きなスタイルを選んでね\n[{{__SPEAKER_NAME__}}]({{__POLICY_URL__}})({{__STYLE_NAME__}})",                
                 "fields" : [],
                 "image" : "attachment://{{__ICON_NAME__}}",
-                "footer" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                "footer" : {
+                    "text" : "🔼 前のページへ\n✅ スピーカーの決定\n🔘 スピーカーの選択\n🔽 次のページへ",
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1807,7 +1882,10 @@
                 "description" : "🗨️⠀サーバー設定に失敗しちゃった...\n⠀⠀⠀「{{__CHARACTER__}}」が見つからなかったよ",
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FF0000"
             }
         ],
@@ -1887,7 +1965,10 @@
                 "description" : "🗨️⠀みんないなくなっちゃったから\n⠀⠀⠀{{__OLD_VOICE_CHANNEL__}}の読み上げを終了するね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -1911,7 +1992,10 @@
                 "description" : "🗨️⠀切断されちゃったから\n⠀⠀⠀{{__OLD_VOICE_CHANNEL__}}の読み上げを終了するね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FFFF00"
             }
         ],
@@ -1935,7 +2019,10 @@
                 "description" : "🗨️⠀ボイチャを移動されたよ\n⠀⠀⠀{{__OLD_VOICE_CHANNEL__}}の読み上げを終了して\n⠀⠀⠀{{__NEW_VOICE_CHANNEL__}}で読み上げをするね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "FFFF00"
             }
         ],

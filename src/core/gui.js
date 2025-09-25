@@ -31,7 +31,7 @@ function getEmbeds(gui, replacement){
         embed.setDescription(helper.replaceholder(gui_embed.description, replacement));
         embed.setImage(helper.replaceholder(gui_embed.image, replacement));
         embed.setColor(helper.replaceholder(gui_embed.color, replacement));
-        embed.setFooter({text: helper.replaceholder(gui_embed.footer, replacement)});
+        embed.setFooter({text: helper.replaceholder(gui_embed.footer.text, replacement), iconURL: helper.replaceholder(gui_embed.footer.url, replacement)});
         embed.setThumbnail(`attachment://${helper.replaceholder(gui_embed.thumbnail?.name, replacement) ?? "thumbnail.png"}`);
 
         for(const field of Object.values(gui_embed.fields??{})){

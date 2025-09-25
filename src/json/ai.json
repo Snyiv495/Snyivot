@@ -20,7 +20,10 @@
                     }
                 ],
                 "image" : "String || null",
-                "footer" : "String || null",
+                "footer" : {
+                    "text" : "String || null",
+                    "url" : "String || null"
+                },
                 "color" : "###### || null"
             }
         ],
@@ -90,7 +93,10 @@
                 "description" : "🗨️⠀AIメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -158,7 +164,10 @@
                 "description" : "🗨️\n{{__CHAT_RESPONSE__}}",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -306,7 +315,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -380,7 +392,10 @@
                 "description" : "🗨️⠀まだイラストの生成はできないんだ\n⠀⠀⠀アップデートを待ってね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],

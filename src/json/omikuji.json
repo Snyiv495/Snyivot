@@ -20,7 +20,10 @@
                     }
                 ],
                 "image" : "String || null",
-                "footer" : "String || null",
+                "footer" : {
+                    "text" : "String || null",
+                    "url" : "String || null"
+                },
                 "color" : "###### || null"
             }
         ],
@@ -90,7 +93,10 @@
                 "description" : "🗨️⠀おみくじメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
@@ -169,7 +175,10 @@
                     }
                 ],
                 "image" : null,
-                "footer" : "開運スピーカー：{{__SPEAKER__}} \n 👈ラッキーカラー：{{__COLOR__}}",
+                "footer" : {
+                    "text" : "開運スピーカー：{{__SPEAKER__}} \n 👈ラッキーカラー：{{__COLOR__}}",
+                    "url" : null
+                },
                 "color" : "{{__COLOR__}}"
             }
         ],
@@ -193,7 +202,10 @@
                 "description" : "🗨️⠀おみくじ＠開運メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
                 "fields" : [],
                 "image" : null,
-                "footer" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
                 "color" : "00FF00"
             }
         ],
