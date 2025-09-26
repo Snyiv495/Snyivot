@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/08/26
+    2025/09/26
 *****************/
 
 module.exports = {
@@ -60,10 +60,12 @@ function getFiles(gui, replacement){
         const file_path = helper.replaceholder(gui.embeds[0].thumbnail?.path, replacement);
         const file_base64 = helper.replaceholder(gui.embeds[0].thumbnail?.base64, replacement);
 
-        attachment.setName(file_name??"thumbnail.png");
-        attachment.setFile((file_path&&fs.existsSync(file_path))?file_path:file_base64?Buffer.from(file_base64, "base64"):"assets/default.png");
+        if(file_path || file_base64){
+            attachment.setName(file_name??"thumbnail.png");
+            attachment.setFile((file_path&&fs.existsSync(file_path))?file_path:file_base64?Buffer.from(file_base64, "base64"):"assets/default.png");
 
-        files.push(attachment);
+            files.push(attachment);
+        }
     }
 
     if(gui.files.length){
@@ -303,7 +305,7 @@ async function reaction(message, map){
         }
 
         //メッセージを削除する
-        if(system_id === "delete"){
+        if(system_id.startsWith("delete")){
             await message.delete().catch(() => null);
             return;
         }

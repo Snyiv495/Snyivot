@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/08/27
+    2025/09/27
 *****************/
 
 require('dotenv').config();
@@ -39,7 +39,7 @@ client.once('clientReady', async () => {
 
     //GUIの取得
     try{
-        const files = ["./src/json/home.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/omikuji.json", "./src/json/read.json"];
+        const files = ["./src/json/home.json", "./src/json/collage.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/omikuji.json", "./src/json/read.json"];
         map.set("gui_json", files.flatMap(file => JSON.parse(fs.readFileSync(file, "utf-8"))));
     }catch(e){
         console.error("index.js => client.once() \n GUIの取得に失敗しました \n", e);
@@ -194,18 +194,26 @@ client.on('voiceStateUpdate', async (old_state, new_state) => {
 });
 
 //リアクション動作
-client.on('messageReactionAdd', async (reaction) => {
+client.on('messageReactionAdd', async (reaction, user) => {
     try{
         const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
         const emoji_name = reaction.emoji.name;
         const collage_original_json = map.get("collage_original_json");
+        const react_user_id = user.id;
+
+        //2個以上の同じ絵文字はスルー
+        message.reactions.cache.forEach(reaction => {
+            if(reaction.emoji.name===emoji_name && reaction.count>1){
+                return;
+            }
+        })
 
         //他人が送信したメッセージに対応
         if(message.author.id != client.user.id){
-            //引用リアクション
+            //コラ画像リアクション
             for(const element of collage_original_json){
                 if(element.emoji === emoji_name){
-                    message.system_id = `collage_emoji_${emoji_name}`;
+                    message.system_id = `collage_emoji_${emoji_name}_${react_user_id}`;
                     await gui.reaction(message, map);
                     return;
                 }
@@ -216,7 +224,7 @@ client.on('messageReactionAdd', async (reaction) => {
         if(message.author.id === client.user.id){
             //削除リアクション
             if(emoji_name.match(/✂️|🗑️/)){
-                message.system_id = "delete";
+                message.system_id = `delete_${emoji_name}_${react_user_id}`;
                 await gui.reaction(message, map);
                 return;
             }

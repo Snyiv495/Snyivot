@@ -16,6 +16,7 @@ module.exports = {
     getUserName : getUserName,
     getSystemId : getSystemId,
     getArgValue : getArgValue,
+    getCreatedAt : getCreatedAt,
     replaceholder : replaceholder,
     sendDefer : sendDefer,
     sendModal : sendModal,
@@ -156,6 +157,33 @@ function getArgValue(trigger, arg){
     }
 
     throw new Error("helper.js => getArgValue() \n trigger is not message or interaction")
+}
+
+//作成時間の取得
+function getCreatedAt(trigger){
+    if(isMessage(trigger)){
+        const time = trigger.createdAt;
+        const year = time.getFullYear();
+        const month = String(time.getMonth()+1).padStart(2,"0");
+        const date =  String(time.getDate()).padStart(2,"0");
+        const hours = String(time.getHours()).padStart(2,"0");
+        const minutes = String(time.getMinutes()).padStart(2,"0");
+        const seconds = String(time.getSeconds()).padStart(2,"0");
+        return {year: year, month: month, date: date, hours: hours, minutes: minutes, seconds: seconds};
+    }
+
+    if(isInteraction(trigger)){
+        const time = trigger.createdAt;
+        const year = time.getFullYear();
+        const month = String(time.getMonth()+1).padStart(2,"0");
+        const date =  String(time.getDate()).padStart(2,"0");
+        const hours = String(time.getHours()).padStart(2,"0");
+        const minutes = String(time.getMinutes()).padStart(2,"0");
+        const seconds = String(time.getSeconds()).padStart(2,"0");
+        return {year: year, month: month, date: date, hours: hours, minutes: minutes, seconds: seconds};
+    }
+
+    throw new Error("helper.js => getCreatedAt() \n trigger is not message or interaction")
 }
 
 //プレースホルダーの置換

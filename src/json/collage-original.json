@@ -2,6 +2,10 @@
     {
         "emoji" : "🤓",
         "path" : "./assets/collage/tigyu.png",
+        "canvas" : {
+            "width" : 800,
+            "height" : 519
+        },
         "bubble" : {
             "x" : 200,
             "y" : 60,
@@ -13,6 +17,10 @@
     {
         "emoji" : "🤖",
         "path" : "./assets/collage/robot.png",
+        "canvas" : {
+            "width" : 1600,
+            "height" : 800
+        },
         "bubble" : {
             "x" : 950,
             "y": 250,
@@ -24,6 +32,10 @@
     {
         "emoji" : "🦈",
         "path" : "./assets/collage/shark.png",
+        "canvas" : {
+            "width" : 500,
+            "height" : 330
+        },
         "bubble" : {
             "x" : 50,
             "y": 50,
@@ -33,13 +45,17 @@
         }
     },
     {
-        "emoji" : "🦉",
-        "path" : "./assets/collage/owl.png",
+        "emoji" : "👁‍🗨",
+        "path" : "quote.png",
+        "canvas" : {
+            "width" : 800,
+            "height" : 400
+        },
         "bubble" : {
-            "x" : 350,
-            "y": 100,
-            "width": 400,
-            "height": 300,
+            "x" : 50,
+            "y": 50,
+            "width": 260,
+            "height": 115,
             "vertical" : false
         }
     }

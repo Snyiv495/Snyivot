@@ -1,0 +1,172 @@
+[
+    {
+        "id" : "String",
+        "content" : "String || null",
+        "embeds" : [
+            {
+                "title" : "String || null",
+                "url" : "String || null",
+                "thumbnail" : {
+                    "name" : "String || null",
+                    "path" : "String || null",
+                    "base64" : "String || null"
+                },
+                "description" : "String || null",                
+                "fields" : [
+                    {
+                        "name" : "String",
+                        "value" : "String",
+                        "inline" : "bool"
+                    }
+                ],
+                "image" : "String || null",
+                "footer" : {
+                    "text" : "String || null",
+                    "url" : "String || null"
+                },
+                "color" : "###### || null"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "String || null",
+                "path" : "String || null",
+                "base64" : "String || null"
+            }
+        ],
+        "menus" : [
+            {
+                "id" : "String",
+                "placeholder" : "String",
+                "disabled" : "bool || null",
+                "options" : [
+                    {
+                        "label" : "String",
+                        "value" : "String",
+                        "description" : "String || null",
+                        "emoji" : "String || null"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "String",
+                "id" : "String",
+                "emoji" : "String || null",
+                "style" : "String || null",
+                "disabled" : "bool || null"
+            }
+        ],
+        "modals" : [
+            {
+                "title" : "String",
+                "id" : "String",
+                "inputs" : [
+                    {
+                        "label" : "String",
+                        "id" : "String",
+                        "placeholder" : "String || null",
+                        "style" : "String || null",
+                        "max" : "Number || null",
+                        "min" : "Number || null",
+                        "required" : "bool || null"
+                    }
+                ]
+            }
+        ]
+    },
+    
+
+    {
+        "id" : "collage",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【コラ画像】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀ここからの利用はまだできないんだ\n⠀⠀⠀リアクションで遊べるよ",
+                "fields" : [],
+                "image" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "collage",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+
+
+    {
+        "id" : "collage_view",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "thumbnail" : {
+                    "name" : null,
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [],
+                "image" : "attachment://{{__COLLAGE_NAME__}}",
+                "footer" : {
+                    "text" : "created by {{__REACT_USER_NAME__}}",
+                    "url" : "{{__REACT_USER_ICON__}}"
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "{{__COLLAGE_NAME__}}",
+                "path" : null,
+                "base64" : "{{__COLLAGE_BASE64__}}"
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    }
+]
