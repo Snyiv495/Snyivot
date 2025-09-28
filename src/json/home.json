@@ -103,12 +103,12 @@
                 "fields" : [
                     {
                         "name" : "ℹ️ 更新情報",
-                        "value" : "- 1.9.0 ミーム画像作成機能の実装\n- 1.8.0 AI機能の強化(おみくじ)\n- 1.7.0 おみくじ機能の実装\n- 1.6.0 AI機能の強化(読み上げ)"
+                        "value" : "-1.9.5 Make it a Quote画像作成機能の追加[👁️‍🗨️]\n- 1.9.0 ミーム画像作成機能の実装[🤓🤖🦈]\n- 1.8.0 AI機能の強化(おみくじ)\n- 1.7.0 おみくじ機能の実装\n- 1.6.0 AI機能の強化(読み上げ)"
                     }
                 ],
                 "image" : null,
                 "footer" : {
-                    "text" : "Ver. 1.9.4\nVOICEVOX:春日部つむぎ",
+                    "text" : "Ver. 1.9.5\nVOICEVOX:春日部つむぎ",
                     "url" : null
                 },
                 "color" : "000000"
@@ -148,7 +148,7 @@
                 ],
                 "image" : null,
                 "footer" : {
-                    "text" : "Ver. 1.9.4\nVOICEVOX:春日部つむぎ",
+                    "text" : "Ver. 1.9.5\nVOICEVOX:春日部つむぎ",
                     "url" : null
                 },
                 "color" : "000000"

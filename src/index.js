@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/09/27
+    2025/09/28
 *****************/
 
 require('dotenv').config();
@@ -202,18 +202,18 @@ client.on('messageReactionAdd', async (reaction, user) => {
         const react_user_id = user.id;
 
         //2個以上の同じ絵文字はスルー
-        message.reactions.cache.forEach(reaction => {
-            if(reaction.emoji.name===emoji_name && reaction.count>1){
-                return;
-            }
-        })
+        if(reaction.count > 1){
+            return;
+        }
 
         //他人が送信したメッセージに対応
         if(message.author.id != client.user.id){
+
             //コラ画像リアクション
             for(const element of collage_original_json){
                 if(element.emoji === emoji_name){
                     message.system_id = `collage_emoji_${emoji_name}_${react_user_id}`;
+                    message.react(reaction.emoji);
                     await gui.reaction(message, map);
                     return;
                 }
@@ -223,7 +223,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         //自身が送信したメッセージに対応
         if(message.author.id === client.user.id){
             //削除リアクション
-            if(emoji_name.match(/✂️|🗑️/)){
+            if(emoji_name.match(/✂️|🗑️|❌|🚮/)){
                 message.system_id = `delete_${emoji_name}_${react_user_id}`;
                 await gui.reaction(message, map);
                 return;

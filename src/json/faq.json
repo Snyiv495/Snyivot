@@ -592,14 +592,14 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【FAQ＠コラ】",
+                "title" : "【FAQ＠コラ作成】",
                 "url" : null,
                 "thumbnail" : {
                     "name" : "thumbnail.png",
                     "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
                     "base64" : null
                 },
-                "description" : "🗨️⠀FAQ＠コラメニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
+                "description" : "🗨️⠀FAQ＠コラ作成メニューを開いて\n⠀⠀⠀使いたい機能を選んでね",                
                 "fields" : [],
                 "image" : null,
                 "footer" : {
@@ -613,7 +613,7 @@
         "menus" : [
             {
                 "id" : "faq_collage",
-                "placeholder" : "👉 FAQ＠コラメニュー",
+                "placeholder" : "👉 FAQ＠コラ作成メニュー",
                 "options" : [
                     {
                         "label" : "Q1.何ができるの？",
@@ -681,7 +681,7 @@
         "menus" : [
             {
                 "id" : "faq_collage_q1",
-                "placeholder" : "👉 FAQ＠コラメニュー",
+                "placeholder" : "👉 FAQ＠コラ作成メニュー",
                 "options" : [
                     {
                         "label" : "Q1.何ができるの？",
@@ -739,7 +739,7 @@
                 "fields" : [
                     {
                         "name" : "使えるリアクション",
-                        "value" : "🤓🤖🦈🐬🦉"
+                        "value" : "🤓🤖🦈👁️‍🗨️"
                     }
                 ],
                 "image" : null,

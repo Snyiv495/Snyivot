@@ -11,6 +11,7 @@ module.exports = {
     isContainBotMention : isContainBotMention,
     isContainBotName : isContainBotName,
     getFeatureModules : getFeatureModules,
+    getUserObj : getUserObj,
     getUserId : getUserId,
     getGuildId : getGuildId,
     getUserName : getUserName,
@@ -92,6 +93,19 @@ function getFeatureModules(){
         "collage" : collage,
         "read": read
     }
+}
+
+//ユーザーオブジェクトの取得
+function getUserObj(trigger){
+    if(isMessage(trigger)){
+        return trigger.author;
+    }
+
+    if(isInteraction(trigger)){
+        return trigger.user;
+    }
+
+    throw new Error("helper.js => getUserObj() \n trigger is not message or interaction")
 }
 
 //ユーザーIDの取得

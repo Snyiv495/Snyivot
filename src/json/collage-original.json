@@ -4,13 +4,16 @@
         "path" : "./assets/collage/tigyu.png",
         "canvas" : {
             "width" : 800,
-            "height" : 519
+            "height" : 500
         },
         "bubble" : {
-            "x" : 200,
-            "y" : 60,
-            "width" : 150,
-            "height" : 380,
+            "x" : 45,
+            "y" : 75,
+            "width" : 155,
+            "height" : 355,
+            "font_size" : 36,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
             "vertical" : true
         }
     },
@@ -26,6 +29,9 @@
             "y": 250,
             "width": 530,
             "height": 300,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
             "vertical" : false
         }
     },
@@ -41,6 +47,9 @@
             "y": 50,
             "width": 260,
             "height": 115,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
             "vertical" : false
         }
     },
@@ -52,11 +61,42 @@
             "height" : 400
         },
         "bubble" : {
-            "x" : 50,
-            "y": 50,
-            "width": 260,
-            "height": 115,
-            "vertical" : false
+            "icon" : {
+                "x" : 0,
+                "y": 0,
+                "width": 320,
+                "height": 400
+            },
+            "content" : {
+                "x" : 320,
+                "y": 0,
+                "width": 480,
+                "height": 350,
+                "font_size" : 48,
+                "alignment_x" : "center",
+                "alignment_y" : "center",
+                "vertical" : false
+            },
+            "author" : {
+                "x" : 320,
+                "y": 350,
+                "width": 480,
+                "height": 25,
+                "font_size" : 24,
+                "alignment_x" : "center",
+                "alignment_y" : "center",
+                "vertical" : false
+            },
+            "date" : {
+                "x" : 320,
+                "y": 375,
+                "width": 480,
+                "height": 25,
+                "font_size" : 24,
+                "alignment_x" : "right",
+                "alignment_y" : "center",
+                "vertical" : false
+            }
         }
     }
 ]
