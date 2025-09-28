@@ -13,6 +13,8 @@ const twemoji = require("twemoji");
 const gui = require("../core/gui");
 const helper = require("../core/helper");
 
+registerFont("./assets/collage/NotoSansJP-Regular.ttf", {family: "Noto Sans JP"});
+
 //縦書き
 async function writeVertical(ctx, text, bubble){
     try{
@@ -38,7 +40,7 @@ async function writeVertical(ctx, text, bubble){
         let omit_line = null;
 
         //各行の作成
-        ctx.font = `${font_size}px "sans-serif"`;
+        ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
         text = text.replace("ー", "｜").replace("～", "≀").replace("、", "﹅").replace("。", "°");
         while((match = custom_emoji_regex.exec(text)) !== null){
             let char_height = font_size;
@@ -77,7 +79,7 @@ async function writeVertical(ctx, text, bubble){
         //範囲外の行を削除
         if(lines_info.length*font_size > bubble.width){
             lines_info = lines_info.slice(0, Math.ceil(bubble.width/font_size-2));
-            ctx.font = `${bubble.font_size/2}px "sans-serif"`;
+            ctx.font = `${bubble.font_size/2}px "Noto Sans JP, sans-serif"`;
             while((match = custom_emoji_regex.exec("以下略")) !== null){
                 current_line.push(match);
                 current_height += ctx.measureText(match[3]).actualBoundingBoxAscent + ctx.measureText(match[3]).actualBoundingBoxDescent;
@@ -88,7 +90,7 @@ async function writeVertical(ctx, text, bubble){
 
         let current_x = bubble.x;
         let current_y = bubble.y;
-        ctx.font = `${font_size}px "sans-serif"`;
+        ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
 
         //揃え位置の決定 x軸
         if(bubble.alignment_x === "left"){
@@ -106,7 +108,7 @@ async function writeVertical(ctx, text, bubble){
 
             //省略行の判定
             if(line_info === omit_line){
-                ctx.font = `${font_size/2}px "sans-serif"`;
+                ctx.font = `${font_size/2}px "Noto Sans JP, sans-serif"`;
             }
             
             //揃え位置の決定 y軸
@@ -179,7 +181,7 @@ async function writeHorizontal(ctx, text, bubble){
         let omit_line = null;
 
         //各行の作成
-        ctx.font = `${font_size}px "sans-serif"`;
+        ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
         while((match = custom_emoji_regex.exec(text)) !== null){
             let char_width = font_size;
 
@@ -217,7 +219,7 @@ async function writeHorizontal(ctx, text, bubble){
         //範囲外の行を削除
         if(lines_info.length*font_size > bubble.height){
             lines_info = lines_info.slice(0, Math.ceil(bubble.height/font_size-2));
-            ctx.font = `${bubble.font_size/2}px "sans-serif"`;
+            ctx.font = `${bubble.font_size/2}px "Noto Sans JP, sans-serif"`;
             while((match = custom_emoji_regex.exec("（以下略）")) !== null){
                 current_line.push(match);
                 current_width += ctx.measureText(match[3]).width;
@@ -228,7 +230,7 @@ async function writeHorizontal(ctx, text, bubble){
 
         let current_x = bubble.x;
         let current_y = bubble.y;
-        ctx.font = `${font_size}px "sans-serif"`;
+        ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
 
         //揃え位置の決定 y軸
         if(bubble.alignment_y === "up"){
@@ -246,7 +248,7 @@ async function writeHorizontal(ctx, text, bubble){
 
             //省略行の判定
             if(line_info === omit_line){
-                ctx.font = `${font_size/2}px "sans-serif"`;
+                ctx.font = `${font_size/2}px "Noto Sans JP, sans-serif"`;
             }
 
             //揃え位置の決定 x軸
@@ -302,7 +304,7 @@ async function makeMemeImage(trigger, element){
         const ctx = canvas.getContext("2d");
 
         ctx.drawImage(collage_original_image, 0, 0);
-        ctx.font = `${element.bubble.font_size}px "sans-serif"`;
+        ctx.font = `${element.bubble.font_size}px "Noto Sans JP, sans-serif"`;
         ctx.fillStyle = "#000000";
         ctx.strokeStyle = "#FFFFFF";
 
@@ -364,14 +366,14 @@ async function makeQuoteImage(trigger, element){
     await writeHorizontal(ctx, trigger.content, element.bubble.content);
 
     //著者
-    ctx.font = `${element.bubble.author.font_size}px "sans-serif"`;
+    ctx.font = `${element.bubble.author.font_size}px "Noto Sans JP, sans-serif"`;
     ctx.fillStyle = "#FFFFFF";
     ctx.strokeStyle = "#000000";
     await writeHorizontal(ctx, `- ${trigger.author.displayName}`, element.bubble.author);
 
     //公開日
     const create_time = helper.getCreatedAt(trigger);
-    ctx.font = `${element.bubble.date.font_size}px "sans-serif"`;
+    ctx.font = `${element.bubble.date.font_size}px "Noto Sans JP, sans-serif"`;
     ctx.fillStyle = "#FFFFFF90";
     ctx.strokeStyle = "#000000";
     await writeHorizontal(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, element.bubble.date);
