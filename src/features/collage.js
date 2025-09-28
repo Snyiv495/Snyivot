@@ -141,8 +141,8 @@ async function writeVertical(ctx, text, bubble){
                 //任意の1文字
                 if(match[3]){
                     const char = match[3];
-                    ctx.fillText(char, current_x, current_y+font_size);
                     ctx.strokeText(char, current_x, current_y+font_size);
+                    ctx.fillText(char, current_x, current_y+font_size);
                     current_y += ctx.measureText(char).actualBoundingBoxAscent + ctx.measureText(char).actualBoundingBoxDescent;
                 }
             }
@@ -281,8 +281,8 @@ async function writeHorizontal(ctx, text, bubble){
                 //任意の1文字
                 if(match[3]){
                     const char = match[3];
-                    ctx.fillText(char, current_x, current_y+font_size);
                     ctx.strokeText(char, current_x, current_y+font_size);
+                    ctx.fillText(char, current_x, current_y+font_size);
                     current_x += ctx.measureText(char).width;
                 }
             }
