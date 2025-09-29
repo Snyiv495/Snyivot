@@ -14,6 +14,8 @@
             "font_size" : 36,
             "alignment_x" : "center",
             "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF",
             "vertical" : true
         }
     },
@@ -32,6 +34,8 @@
             "font_size" : 48,
             "alignment_x" : "center",
             "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF",
             "vertical" : false
         }
     },
@@ -50,53 +54,303 @@
             "font_size" : 24,
             "alignment_x" : "center",
             "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF",
             "vertical" : false
         }
     },
     {
-        "emoji" : "👁‍🗨",
-        "path" : "quote.png",
+        "emoji" : "🦉",
+        "path" : "./assets/collage/owl.png",
         "canvas" : {
-            "width" : 800,
-            "height" : 400
+            "width" : 500,
+            "height" : 250
         },
         "bubble" : {
-            "icon" : {
-                "x" : 0,
-                "y": 0,
-                "width": 320,
-                "height": 400
-            },
-            "content" : {
-                "x" : 320,
-                "y": 0,
-                "width": 480,
-                "height": 350,
-                "font_size" : 48,
-                "alignment_x" : "center",
-                "alignment_y" : "center",
-                "vertical" : false
-            },
-            "author" : {
-                "x" : 320,
-                "y": 350,
-                "width": 480,
-                "height": 25,
-                "font_size" : 24,
-                "alignment_x" : "center",
-                "alignment_y" : "center",
-                "vertical" : false
-            },
-            "date" : {
-                "x" : 320,
-                "y": 375,
-                "width": 480,
-                "height": 25,
-                "font_size" : 24,
-                "alignment_x" : "right",
-                "alignment_y" : "center",
-                "vertical" : false
-            }
+            "x" : 200,
+            "y": 0,
+            "width": 300,
+            "height": 250,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        }
+    },
+    {
+        "emoji" : "🙄",
+        "path" : "./assets/collage/veruna.png",
+        "canvas" : {
+            "width" : 1100,
+            "height" : 980
+        },
+        "bubble" : {
+            "x" : 0,
+            "y": 730,
+            "width": 1100,
+            "height": 250,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        }
+    },
+    {
+        "emoji" : "😟",
+        "path" : "./assets/collage/sagawa_tsukasa.png",
+        "canvas" : {
+            "width" : 1920,
+            "height" : 1080
+        },
+        "bubble" : {
+            "x" : 0,
+            "y": 950,
+            "width": 1920,
+            "height": 130,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        }
+    },
+
+
+    {
+        "emoji" : "🔳",
+        "path" : "gyotaku_white_black.png",
+        "canvas" : {
+            "width" : 800,
+            "height" : 400,
+            "fill_style" : "#FFFFFF",
+            "gradient_start_x" : 0,
+            "gradient_start_y" : 200,
+            "gradient_start_r" : 0,
+            "gradient_start_color" : "#FFFFFF00",
+            "gradient_end_x" : 0,
+            "gradient_end_y" : 200,
+            "gradient_end_r" : 320,
+            "gradient_end_color" : "#1a1a1aFF"
+        },
+        "icon" : {
+            "x" : 0,
+            "y": 0,
+            "size" : 400
+        },
+        "content" : {
+            "x" : 320,
+            "y": 0,
+            "width": 480,
+            "height": 350,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        },
+        "author" : {
+            "x" : 320,
+            "y": 350,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        },
+        "date" : {
+            "x" : 320,
+            "y": 375,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF90",
+            "stroke_style" : "#000000FF",
+            "vertical" : false
+        }
+    },
+    {
+        "emoji" : "🔲",
+        "path" : "gyotaku_black_white.png",
+        "canvas" : {
+            "width" : 800,
+            "height" : 400,
+            "fill_style" : "#000000",
+            "gradient_start_x" : 0,
+            "gradient_start_y" : 200,
+            "gradient_start_r" : 0,
+            "gradient_start_color" : "#1a1a1a00",
+            "gradient_end_x" : 0,
+            "gradient_end_y" : 200,
+            "gradient_end_r" : 320,
+            "gradient_end_color" : "#FFFFFFFF"
+        },
+        "icon" : {
+            "x" : 0,
+            "y": 0,
+            "size" : 400
+        },
+        "content" : {
+            "x" : 320,
+            "y": 0,
+            "width": 480,
+            "height": 350,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF",
+            "vertical" : false
+        },
+        "author" : {
+            "x" : 320,
+            "y": 350,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF",
+            "vertical" : false
+        },
+        "date" : {
+            "x" : 320,
+            "y": 375,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#00000090",
+            "stroke_style" : "#FFFFFFFF",
+            "vertical" : false
+        }
+    },
+    {
+        "emoji" : "⬜",
+        "path" : "gyotaku_white_white.png",
+        "canvas" : {
+            "width" : 800,
+            "height" : 400,
+            "fill_style" : "#FFFFFF",
+            "gradient_start_x" : 0,
+            "gradient_start_y" : 200,
+            "gradient_start_r" : 0,
+            "gradient_start_color" : "#FFFFFF00",
+            "gradient_end_x" : 0,
+            "gradient_end_y" : 200,
+            "gradient_end_r" : 320,
+            "gradient_end_color" : "#FFFFFFFF"
+        },
+        "icon" : {
+            "x" : 0,
+            "y": 0,
+            "size" : 400
+        },
+        "content" : {
+            "x" : 320,
+            "y": 0,
+            "width": 480,
+            "height": 350,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        },
+        "author" : {
+            "x" : 320,
+            "y": 350,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000",
+            "vertical" : false
+        },
+        "date" : {
+            "x" : 320,
+            "y": 375,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#00000090",
+            "stroke_style" : "#000000FF",
+            "vertical" : false
+        }
+    },
+    {
+        "emoji" : "⬛",
+        "path" : "gyotaku_black_black.png",
+        "canvas" : {
+            "width" : 800,
+            "height" : 400,
+            "fill_style" : "#000000",
+            "gradient_start_x" : 0,
+            "gradient_start_y" : 200,
+            "gradient_start_r" : 0,
+            "gradient_start_color" : "#1a1a1a00",
+            "gradient_end_x" : 0,
+            "gradient_end_y" : 200,
+            "gradient_end_r" : 320,
+            "gradient_end_color" : "#000000FF"
+        },
+        "icon" : {
+            "x" : 0,
+            "y": 0,
+            "size" : 400
+        },
+        "content" : {
+            "x" : 320,
+            "y": 0,
+            "width": 480,
+            "height": 350,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#FFFFFF",
+            "vertical" : false
+        },
+        "author" : {
+            "x" : 320,
+            "y": 350,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#FFFFFF",
+            "vertical" : false
+        },
+        "date" : {
+            "x" : 320,
+            "y": 375,
+            "width": 480,
+            "height": 25,
+            "font_size" : 24,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF90",
+            "stroke_style" : "#FFFFFFFF",
+            "vertical" : false
         }
     }
 ]

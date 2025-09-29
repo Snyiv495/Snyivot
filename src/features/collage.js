@@ -1,7 +1,7 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/09/27
+    2025/09/29
 *****************/
 
 module.exports = {
@@ -91,6 +91,8 @@ async function writeVertical(ctx, text, bubble){
         let current_x = bubble.x;
         let current_y = bubble.y;
         ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
+        ctx.fillStyle = bubble.fill_style;
+        ctx.strokeStyle = bubble.stroke_style;
 
         //揃え位置の決定 x軸
         if(bubble.alignment_x === "left"){
@@ -231,6 +233,8 @@ async function writeHorizontal(ctx, text, bubble){
         let current_x = bubble.x;
         let current_y = bubble.y;
         ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
+        ctx.fillStyle = bubble.fill_style;
+        ctx.strokeStyle = bubble.stroke_style;
 
         //揃え位置の決定 y軸
         if(bubble.alignment_y === "up"){
@@ -325,60 +329,51 @@ async function makeMemeImage(trigger, element){
 }
 
 //引用作成
-async function makeQuoteImage(trigger, element){
-    //白紙キャンバスの作成
-    const canvas_width = element.canvas.width;
-    const canvas_height = element.canvas.height;
-    const canvas = createCanvas(canvas_width, canvas_height);
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, canvas_width, canvas_height);
+async function makeGyotakuImage(trigger, element){
+    try{
+        const canvas_info = element.canvas;
+        const icon_info = element.icon;
+        const create_time = helper.getCreatedAt(trigger);
 
-    //アイコンを描画
-    const buble_icon_width = element.bubble.icon.width;
-    const buble_icon_height = element.bubble.icon.height;
-    const icon_size = (element.bubble.icon.width<element.bubble.icon.height) ? element.bubble.icon.width : element.bubble.icon.height;
-    const org_icon = await loadImage(helper.getUserObj(trigger).displayAvatarURL({extension: "png", size: 256}));
-    ctx.drawImage(org_icon, 0, (buble_icon_height-icon_size)/2, icon_size, icon_size);
+        
+        //キャンバスの作成
+        const canvas = createCanvas(canvas_info.width, canvas_info.height);
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = canvas_info.fill_style;
+        ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
 
-    //アイコンをグレースケール化
-    const ctx_icon = ctx.getImageData(0, 0, buble_icon_width, buble_icon_height);
-    const ctx_icon_data = ctx_icon.data;
-    for(let i=0; i<ctx_icon_data.length; i+=4){
-        const r = ctx_icon_data[i];
-        const g = ctx_icon_data[i+1];
-        const b = ctx_icon_data[i+2];
-        const rgb_average = (r+g+b)/3;
-        ctx_icon_data[i] = ctx_icon_data[i+1] = ctx_icon_data[i+2] = (rgb_average-50)<0 ? 0 : (rgb_average-50);
+        //アイコンを描画
+        const org_icon = await loadImage(helper.getUserObj(trigger).displayAvatarURL({extension: "png", size: 256}));
+        ctx.drawImage(org_icon, icon_info.x, icon_info.y, icon_info.size, icon_info.size);
+
+        //アイコンをグレースケール化
+        const ctx_icon = ctx.getImageData(icon_info.x, icon_info.y, icon_info.size, icon_info.size);
+        const ctx_icon_data = ctx_icon.data;
+        for(let i=0; i<ctx_icon_data.length; i+=4){
+            const r = ctx_icon_data[i];
+            const g = ctx_icon_data[i+1];
+            const b = ctx_icon_data[i+2];
+            const rgb_average = (r+g+b)/3;
+            ctx_icon_data[i] = ctx_icon_data[i+1] = ctx_icon_data[i+2] = (rgb_average-50)<0 ? 0 : (rgb_average-50);
+        }
+        ctx.putImageData(ctx_icon, icon_info.x, icon_info.y);
+
+        //グラデーション背景を描画
+        const gradient = ctx.createRadialGradient(canvas_info.gradient_start_x, canvas_info.gradient_start_y, canvas_info.gradient_start_r, canvas_info.gradient_end_x,  canvas_info.gradient_end_y,  canvas_info.gradient_end_r);
+        gradient.addColorStop(0, canvas_info.gradient_start_color);
+        gradient.addColorStop(1, canvas_info.gradient_end_color);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
+
+        //文字入れ
+        await writeHorizontal(ctx, trigger.content, element.content);
+        await writeHorizontal(ctx, `- ${helper.getUserName(trigger)}`, element.author);
+        await writeHorizontal(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, element.date);
+
+        return canvas.toBuffer("image/png").toString("base64");
+    }catch(e){
+        throw new Error(`collage.js => makeGyotakuImage() \n ${e}`)
     }
-    ctx.putImageData(ctx_icon, 0, 0);
-
-    //グラデーション背景を描画
-    const gradient = ctx.createRadialGradient(0, buble_icon_height/2, 0, 0, buble_icon_height/2, buble_icon_width);
-    gradient.addColorStop(0, "#FFFFFF00");
-    gradient.addColorStop(1, "#1a1a1aFF");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas_width, canvas_height);
-
-    //内容
-    ctx.fillStyle = "#FFFFFF";
-    ctx.strokeStyle = "#000000";
-    await writeHorizontal(ctx, trigger.content, element.bubble.content);
-
-    //著者
-    ctx.font = `${element.bubble.author.font_size}px "Noto Sans JP, sans-serif"`;
-    ctx.fillStyle = "#FFFFFF";
-    ctx.strokeStyle = "#000000";
-    await writeHorizontal(ctx, `- ${trigger.author.displayName}`, element.bubble.author);
-
-    //公開日
-    const create_time = helper.getCreatedAt(trigger);
-    ctx.font = `${element.bubble.date.font_size}px "Noto Sans JP, sans-serif"`;
-    ctx.fillStyle = "#FFFFFF90";
-    ctx.strokeStyle = "#000000";
-    await writeHorizontal(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, element.bubble.date);
-
-    return canvas.toBuffer("image/png").toString("base64");
 }
 
 //コラ送信
@@ -395,7 +390,7 @@ async function sendCollage(trigger, map){
         
         for(const element of collage_original_json){
             if(element.emoji === emoji_name){
-                const collage_base64 = element.path.includes("/") ? await makeMemeImage(trigger, element) : await makeQuoteImage(trigger, element);
+                const collage_base64 = element.path.includes("gyotaku") ? await makeGyotakuImage(trigger, element) : await makeMemeImage(trigger, element);
                 await helper.sendGUI(trigger, gui.create(map, "collage_view", {"{{__COLLAGE_NAME__}}":element.path.split("/").slice(-1)[0], "{{__COLLAGE_BASE64__}}":collage_base64, "{{__REACT_USER_NAME__}}":react_user.displayName, "{{__REACT_USER_ICON__}}":react_user.displayAvatarURL()}));
                 return;
             }
