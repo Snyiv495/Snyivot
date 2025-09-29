@@ -335,8 +335,8 @@
                 ],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "FF0000"
             }
@@ -364,8 +364,8 @@
                 "fields" : [],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "00FF00"
             }
@@ -502,8 +502,8 @@
                 ],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "FF0000"
             }
@@ -531,8 +531,8 @@
                 "fields" : [],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "00FF00"
             }
@@ -713,8 +713,8 @@
                 ],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "FF0000"
             }
@@ -738,12 +738,12 @@
                     "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
                     "base64" : null
                 },
-                "description" : "💬 辞書から「{{__WORD__}}」を削除したよ",                
+                "description" : "🗨️ 辞書から「{{__WORD__}}」を削除したよ",                
                 "fields" : [],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "00FF00"
             }
@@ -893,8 +893,8 @@
                 "fields" : [],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "00FF00"
             }
@@ -1029,8 +1029,8 @@
                 ],
                 "image" : null,
                 "footer" : {
-                    "text" : null,
-                    "url" : null
+                    "text" : "requested by {{__REQUEST_USER_NAME__}}",
+                    "url" : "{{__REQUEST_USER_ICON__}}"
                 },
                 "color" : "FF0000"
             }

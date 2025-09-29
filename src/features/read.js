@@ -100,7 +100,7 @@ async function start(trigger, map){
 
         //読み上げ開始要件の確認
         if((!(text_channel.type === 0 || text_channel.type === 2)) || (text_channel.type === 2 && !text_channel.joinable) || (!voice_channel) || (!voice_channel.joinable) || (!voice_channel.speakable) || (text_channel.type === 0 && !text_channel.members.find((member) => member.id === process.env.BOT_ID)) || (voice_channel.id === map.get(`read_text_${text_channel.id}`)) || (old_voice_channel && old_voice_channel.id != voice_channel.id)){
-            await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger)?"read_start_failure":"read_start_failure*", {"{{__TEXT_CHANNEL__}}":text_channel??"テキストチャンネル", "{{__VOICE_CHANNEL__}}":voice_channel??"ボイスチャンネル"}));
+            await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger)?"read_start_failure":"read_start_failure*", {"{{__TEXT_CHANNEL__}}":text_channel??"テキストチャンネル", "{{__VOICE_CHANNEL__}}":voice_channel??"ボイスチャンネル", "{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}));
             return;
         }
 
@@ -136,7 +136,7 @@ async function end(trigger, map){
 
         //読み上げ終了要件の確認
         if(!voice_channel || (voice_channel != old_voice_channel) || (map.get(`read_text_${text_channel.id}`) != voice_channel.id)){
-            await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger)?"read_end_failure":"read_end_failure*", {"{{__TEXT_CHANNEL__}}":text_channel??"テキストチャンネル", "{{__VOICE_CHANNEL__}}":voice_channel??"ボイスチャンネル"}));
+            await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger)?"read_end_failure":"read_end_failure*", {"{{__TEXT_CHANNEL__}}":text_channel??"テキストチャンネル", "{{__VOICE_CHANNEL__}}":voice_channel??"ボイスチャンネル", "{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}));
             return;
         }
 
@@ -159,7 +159,7 @@ async function end(trigger, map){
         if(helper.isInteraction(trigger)){
             await helper.sendGUI(trigger, gui.create(map, "read"));
         }
-        await helper.sendGUI(trigger.channel, gui.create(map, "read_end", {"{{__TEXT_CHANNEL__}}":text_channel, "{{__VOICE_CHANNEL__}}":voice_channel}));
+        await helper.sendGUI(trigger.channel, gui.create(map, "read_end", {"{{__TEXT_CHANNEL__}}":text_channel, "{{__VOICE_CHANNEL__}}":voice_channel, "{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}));
         
         return;
     }catch(e){
@@ -220,7 +220,7 @@ async function dictAdd(trigger, map){
             const read_dict_set = new Set(server_info.read_dict.map(entry => entry.word));
             for(const entry of Object.values(server_info.vv_dict)) {
                 if(!read_dict_set.has(entry.surface)){
-                    await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger)?"read_dict_add_interrupt_error":"read_dict_add_interrupt_error*"))
+                    await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger)?"read_dict_add_interrupt_error":"read_dict_add_interrupt_error*", {"{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}))
                     return;
                 }
             }
@@ -233,7 +233,7 @@ async function dictAdd(trigger, map){
         if(helper.isInteraction(trigger)){
             await helper.sendGUI(trigger, gui.create(map, "read"));
         }
-        await helper.sendGUI(trigger.channel, gui.create(map, "read_dict_add", {"{{__WORD__}}":word, "{{__KANA__}}":kana}))
+        await helper.sendGUI(trigger.channel, gui.create(map, "read_dict_add", {"{{__WORD__}}":word, "{{__KANA__}}":kana, "{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}))
         
         return;
     }catch(e){
@@ -255,7 +255,7 @@ async function dictDel(trigger, map){
             for(const word_kana of server_info.read_dict){
                 str_csv += `${word_kana.word},${word_kana.kana}\n`;
             }
-            await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger) ? "read_dict_del_send_csv" : "read_dict_del_send_csv*", {"{{__CSV_NAME__}}": "dictionary.csv", "{{__CSV_BASE64__}}":Buffer.from(str_csv, "utf-8").toString("base64")}));
+            await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger) ? "read_dict_del_send_csv" : "read_dict_del_send_csv*", {"{{__CSV_NAME__}}": "dictionary.csv", "{{__CSV_BASE64__}}":Buffer.from(str_csv, "utf-8").toString("base64"), "{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}));
             return;
         }
 
@@ -284,7 +284,7 @@ async function dictDel(trigger, map){
             const read_dict_set = new Set(server_info.read_dict.map(entry => entry.word));
             for(const entry of Object.values(server_info.vv_dict)){
                 if(!read_dict_set.has(entry.surface)){
-                    await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger) ? "read_dict_del_interrupt_error" : "read_dict_del_interrupt_error*"));
+                    await helper.sendGUI(trigger, gui.create(map, helper.isInteraction(trigger) ? "read_dict_del_interrupt_error" : "read_dict_del_interrupt_error*", {"{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}));
                     return;
                 }
             }
@@ -300,7 +300,7 @@ async function dictDel(trigger, map){
         if(helper.isInteraction(trigger)){
             await helper.sendGUI(trigger, gui.create(map, "read"));
         }
-        await helper.sendGUI(trigger.channel, gui.create(map, "read_dict_del", {"{{__WORD__}}":word}));
+        await helper.sendGUI(trigger.channel, gui.create(map, "read_dict_del", {"{{__WORD__}}":word, "{{__REQUEST_USER_NAME__}}":helper.getUserName(trigger), "{{__REQUEST_USER_ICON__}}":helper.getUserObj(trigger).avatarURL()}));
 
         return;
     }catch(e){
@@ -904,7 +904,7 @@ async function getStyleChoices(interaction, map){
         const focus_opt = interaction.options.getFocused(true);
         const choices = new Array();
         
-        vv_speaker_info.styles?.find(style => {
+        vv_speaker_info?.styles?.find(style => {
             if(style.name.includes(focus_opt.value)){
                 choices.push(style.name);
             }
