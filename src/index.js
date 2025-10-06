@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/09/28
+    2025/10/06
 *****************/
 
 require('dotenv').config();
@@ -201,8 +201,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
         const collage_original_json = map.get("collage_original_json");
         const react_user_id = user.id;
 
-        //2個以上の同じ絵文字はスルー
-        if(reaction.count > 1){
+        //botのリアクションと2個以上の同じリアクションはスルー
+        if(reaction.me || reaction.count > 1){
             return;
         }
 

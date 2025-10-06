@@ -1,7 +1,7 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/09/29
+    2025/10/06
 *****************/
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
 }
 
 const {createCanvas, loadImage, registerFont} = require("canvas");
-const twemoji = require("twemoji");
+const twemoji = require("@twemoji/api");
 const gui = require("../core/gui");
 const helper = require("../core/helper");
 
@@ -174,7 +174,7 @@ async function writeHorizontal(ctx, text, bubble){
             array[3] : undefined    or undefined        or x
         */
         const font_size = bubble.font_size;
-        const custom_emoji_regex = /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
+        const emoji_regex = /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
 
         let lines_info = [];
         let current_line = [];
@@ -184,7 +184,7 @@ async function writeHorizontal(ctx, text, bubble){
 
         //各行の作成
         ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
-        while((match = custom_emoji_regex.exec(text)) !== null){
+        while((match = emoji_regex.exec(text)) !== null){
             let char_width = font_size;
 
             //普通の文字なら幅計算
@@ -222,7 +222,7 @@ async function writeHorizontal(ctx, text, bubble){
         if(lines_info.length*font_size > bubble.height){
             lines_info = lines_info.slice(0, Math.ceil(bubble.height/font_size-2));
             ctx.font = `${bubble.font_size/2}px "Noto Sans JP, sans-serif"`;
-            while((match = custom_emoji_regex.exec("（以下略）")) !== null){
+            while((match = emoji_regex.exec("（以下略）")) !== null){
                 current_line.push(match);
                 current_width += ctx.measureText(match[3]).width;
             }
@@ -277,9 +277,18 @@ async function writeHorizontal(ctx, text, bubble){
 
                 //Unicode絵文字
                 if(match[2]){
-                    const unicode_emoji = await loadImage(twemoji.parse(match[2], {ext: ".png"}).match(/src="([^"]+)"/)[1]);
-                    ctx.drawImage(unicode_emoji, current_x, current_y+font_size/4, font_size, font_size);
-                    current_x += font_size;
+                    const unicode_emoji_url = `https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/${twemoji.convert.toCodePoint(match[2])}.png`;
+                    const exist_emoji = (await fetch(unicode_emoji_url, {method: "HEAD"})).ok;
+
+                    if(exist_emoji){
+                        const unicode_emoji = await loadImage(unicode_emoji_url);
+                        ctx.drawImage(unicode_emoji, current_x, current_y+font_size/4, font_size, font_size);
+                        current_x += font_size;
+                    }
+
+                    if(!exist_emoji){
+                        match[3] = match[2];
+                    }
                 }
 
                 //任意の1文字
