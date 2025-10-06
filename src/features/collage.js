@@ -15,151 +15,8 @@ const helper = require("../core/helper");
 
 registerFont("./assets/collage/NotoSansJP-Regular.ttf", {family: "Noto Sans JP"});
 
-//縦書き
-async function writeVertical(ctx, text, bubble){
-    try{
-        /*
-            カスタム絵文字の形式
-                <:custom_emoji_name:unique_number>      <= (png)
-                <a:custom_emoji_name:unique_number>     <= animation(gif)
-            正規表現
-                /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
-                カスタム絵文字 or Unicode絵文字 or 任意の1文字
-            array[0] : <:xxx:000>   or Unicode絵文字    or x
-            array[1] : 000          or undefind         or undefined
-            array[2] : undefined    or Unicode絵文字    or undefined
-            array[3] : undefined    or undefined        or x
-        */
-        const font_size = bubble.font_size;
-        const custom_emoji_regex = /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
-
-        let lines_info = [];
-        let current_line = [];
-        let current_height = 0;
-        let match = null;
-        let omit_line = null;
-
-        //各行の作成
-        ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
-        text = text.replace("ー", "｜").replace("～", "≀").replace("、", "﹅").replace("。", "°");
-        while((match = custom_emoji_regex.exec(text)) !== null){
-            let char_height = font_size;
-
-            //普通の文字なら高さ計算
-            if(match[3]){
-                char_height = ctx.measureText(match[3]).actualBoundingBoxAscent + ctx.measureText(match[3]).actualBoundingBoxDescent;
-            }
-
-            //範囲外
-            if(current_height+char_height > bubble.height){
-                lines_info.push({line: current_line, height: current_height});
-                current_line = [];
-                current_height = 0;
-            }
-
-            //文字の接続
-            current_line.push(match);
-            current_height += char_height;
-
-            //改行コード
-            if(match[3]==="\n"){
-                lines_info.push({line: current_line, height: current_height});
-                current_line = [];
-                current_height = 0;
-            }
-        }
-
-        //最後の行を追加
-        if(current_line.length > 0){
-            lines_info.push({line: current_line, height: current_height});
-            current_line = [];
-            current_height = 0;
-        }
-
-        //範囲外の行を削除
-        if(lines_info.length*font_size > bubble.width){
-            lines_info = lines_info.slice(0, Math.ceil(bubble.width/font_size-2));
-            ctx.font = `${bubble.font_size/2}px "Noto Sans JP, sans-serif"`;
-            while((match = custom_emoji_regex.exec("以下略")) !== null){
-                current_line.push(match);
-                current_height += ctx.measureText(match[3]).actualBoundingBoxAscent + ctx.measureText(match[3]).actualBoundingBoxDescent;
-            }
-            omit_line = {line: current_line, height: current_height};
-            lines_info.push(omit_line);
-        }
-
-        let current_x = bubble.x;
-        let current_y = bubble.y;
-        ctx.font = `${font_size}px "Noto Sans JP, sans-serif"`;
-        ctx.fillStyle = bubble.fill_style;
-        ctx.strokeStyle = bubble.stroke_style;
-
-        //揃え位置の決定 x軸
-        if(bubble.alignment_x === "left"){
-            current_x = bubble.x + bubble.width - lines_info.length*font_size - font_size;
-        }
-        if(bubble.alignment_x === "center"){
-            current_x = bubble.x + bubble.width - (bubble.width-lines_info.length*font_size)/2 - font_size;
-        }
-        if(bubble.alignment_x === "right"){
-            current_x = bubble.x + bubble.width - font_size;
-        }
-
-        //各行の描画
-        for(const line_info of lines_info){
-
-            //省略行の判定
-            if(line_info === omit_line){
-                ctx.font = `${font_size/2}px "Noto Sans JP, sans-serif"`;
-            }
-            
-            //揃え位置の決定 y軸
-            if(bubble.alignment_y === "up"){
-                current_y = bubble.y;
-            }
-            if(bubble.alignment_y === "center"){
-                current_y = bubble.y + (bubble.height-line_info.height)/2;
-            }
-            if(bubble.alignment_y === "down"){
-                current_y = bubble.y + bubble.height -line_info.height;
-            }
-
-            for(const match of line_info.line){
-
-                //カスタム絵文字
-                if(match[1]){
-                    const custom_emoji = await loadImage(`https://cdn.discordapp.com/emojis/${match[1]}.png`);
-                    ctx.drawImage(custom_emoji, current_x-font_size/4, current_y, font_size*3/2, font_size*3/2);
-                    current_y += font_size;
-                }
-
-                //Unicode絵文字
-                if(match[2]){
-                    const unicode_emoji = await loadImage(twemoji.parse(match[2], {ext: ".png"}).match(/src="([^"]+)"/)[1]);
-                    ctx.drawImage(unicode_emoji, current_x, current_y+font_size/4, font_size, font_size);
-                    current_y += font_size;
-                }
-
-                //任意の1文字
-                if(match[3]){
-                    const char = match[3];
-                    ctx.strokeText(char, current_x, current_y+font_size);
-                    ctx.fillText(char, current_x, current_y+font_size);
-                    current_y += ctx.measureText(char).actualBoundingBoxAscent + ctx.measureText(char).actualBoundingBoxDescent;
-                }
-            }
-
-            current_x -= font_size;
-        }
-
-        return;
-    }catch(e){
-        throw new Error(`collage.js => writeVertical() \n ${e}`);
-    }
-}
-
-//横書き
-async function writeHorizontal(ctx, text, bubble){
+//文章記述
+async function writeSentence(ctx, text, bubble){
     try{
         /*
             カスタム絵文字の形式
@@ -220,14 +77,7 @@ async function writeHorizontal(ctx, text, bubble){
 
         //範囲外の行を削除
         if(lines_info.length*font_size > bubble.height){
-            lines_info = lines_info.slice(0, Math.ceil(bubble.height/font_size-2));
-            ctx.font = `${bubble.font_size/2}px "Noto Sans JP, sans-serif"`;
-            while((match = emoji_regex.exec("（以下略）")) !== null){
-                current_line.push(match);
-                current_width += ctx.measureText(match[3]).width;
-            }
-            omit_line = {line: current_line, width: current_width};
-            lines_info.push(omit_line);
+            lines_info = lines_info.slice(0, Math.ceil(bubble.height/font_size-1));
         }
 
         let current_x = bubble.x;
@@ -317,19 +167,8 @@ async function makeMemeImage(trigger, element){
         const ctx = canvas.getContext("2d");
 
         ctx.drawImage(collage_original_image, 0, 0);
-        ctx.font = `${element.bubble.font_size}px "Noto Sans JP, sans-serif"`;
-        ctx.fillStyle = "#000000";
-        ctx.strokeStyle = "#FFFFFF";
 
-        //縦書き
-        if(element.bubble.vertical){
-            await writeVertical(ctx, trigger.content, element.bubble);
-        }
-
-        //横書き
-        if(!element.bubble.vertical){
-            await writeHorizontal(ctx, trigger.content, element.bubble);
-        }
+        await writeSentence(ctx, trigger.content, element.bubble);
 
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
@@ -337,7 +176,7 @@ async function makeMemeImage(trigger, element){
     }
 }
 
-//引用作成
+//魚拓作成
 async function makeGyotakuImage(trigger, element){
     try{
         const canvas_info = element.canvas;
@@ -375,9 +214,9 @@ async function makeGyotakuImage(trigger, element){
         ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
 
         //文字入れ
-        await writeHorizontal(ctx, trigger.content, element.content);
-        await writeHorizontal(ctx, `- ${helper.getUserName(trigger)}`, element.author);
-        await writeHorizontal(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, element.date);
+        await writeSentence(ctx, trigger.content, element.content);
+        await writeSentence(ctx, `- ${helper.getUserName(trigger)}`, element.author);
+        await writeSentence(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, element.date);
 
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
