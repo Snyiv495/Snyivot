@@ -382,12 +382,13 @@ Please wait for update...
 現在実装しているリアクションは以下になります。
 - ミーム画像
 ```
-🤓🤖🦈🦉
+🤓🤖🦈🐬🦉🧞‍♂️🔲
 ```
 - 魚拓
 ```
-🔳🔲⬜⬛
+🟥🟧🟨🟩🟦🟪🟫⬛⬜◼️◻️◾◽▪️▫️
 ```
+
 ## おみくじ機能
 テキストチャンネル上で起動することで、1日1回のおみくじを引くことができます。\
 生成には[gemini AI](https://gemini.google/about/?hl=ja)を利用しています。
@@ -441,12 +442,19 @@ Please wait for update...
 - VOICEVOX開発者の皆様([github](https://github.com/VOICEVOX/voicevox_engine))
 - Technical Bot様([YouTube](https://www.youtube.com/c/technicalbot))
 
+## アップデート履歴
+- 1.5.0 コラ作成機能搭載
+- 1.4.0 おみくじ機能搭載
+- 1.3.0 AI機能搭載
+- 1.2.0 FAQ機能搭載
+- 1.1.0 読み上げ機能搭載
+- 1.0.0 すにゃbot稼働
+
 ## TODO
 
 - [ ] AIのファイル入力
 - [ ] AIのイラスト出力機能
 
-- [x] 謝辞をまとめる
-
-- [x] リアクション関連の実装
 - [ ] スラッシュコマンドの整理
+- [ ] 録音機能(倫理的にやらなそう)
+- [ ] sperchatリアクション

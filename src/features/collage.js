@@ -1,7 +1,7 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/10/06
+    2025/10/11
 *****************/
 
 module.exports = {
@@ -132,7 +132,7 @@ async function writeSentence(ctx, text, bubble){
 
                     if(exist_emoji){
                         const unicode_emoji = await loadImage(unicode_emoji_url);
-                        ctx.drawImage(unicode_emoji, current_x, current_y+font_size/4, font_size, font_size);
+                        ctx.drawImage(unicode_emoji, current_x, current_y, font_size, font_size);
                         current_x += font_size;
                     }
 
@@ -180,36 +180,40 @@ async function makeMemeImage(trigger, element){
 async function makeGyotakuImage(trigger, element){
     try{
         const canvas_info = element.canvas;
-        const icon_info = element.icon;
+        const filter_info = element.filter;
+        const icon_x = (canvas_info.width*2/5-canvas_info.height)/2;
+        const icon_y = 0;
+        const icon_size = Math.min(canvas_info.width, canvas_info.height);
         const create_time = helper.getCreatedAt(trigger);
-
         
         //キャンバスの作成
         const canvas = createCanvas(canvas_info.width, canvas_info.height);
         const ctx = canvas.getContext("2d");
-        ctx.fillStyle = canvas_info.fill_style;
+        ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
 
         //アイコンを描画
         const org_icon = await loadImage(helper.getUserObj(trigger).displayAvatarURL({extension: "png", size: 256}));
-        ctx.drawImage(org_icon, icon_info.x, icon_info.y, icon_info.size, icon_info.size);
+        ctx.drawImage(org_icon, icon_x, icon_y, icon_size, icon_size);
 
-        //アイコンをグレースケール化
-        const ctx_icon = ctx.getImageData(icon_info.x, icon_info.y, icon_info.size, icon_info.size);
+        //アイコンフィルター
+        const ctx_icon = ctx.getImageData(icon_x, icon_y, icon_size, icon_size);
         const ctx_icon_data = ctx_icon.data;
         for(let i=0; i<ctx_icon_data.length; i+=4){
             const r = ctx_icon_data[i];
             const g = ctx_icon_data[i+1];
             const b = ctx_icon_data[i+2];
             const rgb_average = (r+g+b)/3;
-            ctx_icon_data[i] = ctx_icon_data[i+1] = ctx_icon_data[i+2] = (rgb_average-50)<0 ? 0 : (rgb_average-50);
+            ctx_icon_data[i] = Math.min(rgb_average*filter_info.r, 255);
+            ctx_icon_data[i+1] = Math.min(rgb_average*filter_info.g, 255);
+            ctx_icon_data[i+2] = Math.min(rgb_average*filter_info.b, 255);
         }
-        ctx.putImageData(ctx_icon, icon_info.x, icon_info.y);
+        ctx.putImageData(ctx_icon, icon_x, icon_y);
 
         //グラデーション背景を描画
-        const gradient = ctx.createRadialGradient(canvas_info.gradient_start_x, canvas_info.gradient_start_y, canvas_info.gradient_start_r, canvas_info.gradient_end_x,  canvas_info.gradient_end_y,  canvas_info.gradient_end_r);
-        gradient.addColorStop(0, canvas_info.gradient_start_color);
-        gradient.addColorStop(1, canvas_info.gradient_end_color);
+        const gradient = ctx.createRadialGradient(0, canvas_info.height/2, 0, 0,  canvas_info.height/2,  canvas_info.width*2/5);
+        gradient.addColorStop(0, canvas_info.gra_start);
+        gradient.addColorStop(1, canvas_info.gra_end);
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
 
@@ -222,6 +226,11 @@ async function makeGyotakuImage(trigger, element){
     }catch(e){
         throw new Error(`collage.js => makeGyotakuImage() \n ${e}`)
     }
+}
+
+//スパチャ作成
+async function makeSuperChatImage(trigger, element){
+    
 }
 
 //コラ送信
@@ -238,7 +247,19 @@ async function sendCollage(trigger, map){
         
         for(const element of collage_original_json){
             if(element.emoji === emoji_name){
-                const collage_base64 = element.path.includes("gyotaku") ? await makeGyotakuImage(trigger, element) : await makeMemeImage(trigger, element);
+                let collage_base64;
+                if(element.path.includes("meme")){
+                    collage_base64 = await makeMemeImage(trigger, element);
+                }
+
+                if(element.path.includes("gyotaku")){
+                    collage_base64 = await makeGyotakuImage(trigger, element);
+                }
+
+                if(element.path.includes("superchat")){
+                    collage_base64 = await makeSuperChatImage(trigger, element);
+                }
+
                 await helper.sendGUI(trigger, gui.create(map, "collage_view", {"{{__COLLAGE_NAME__}}":element.path.split("/").slice(-1)[0], "{{__COLLAGE_BASE64__}}":collage_base64, "{{__REACT_USER_NAME__}}":react_user.displayName, "{{__REACT_USER_ICON__}}":react_user.displayAvatarURL()}));
                 return;
             }

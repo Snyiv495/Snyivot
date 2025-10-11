@@ -114,7 +114,7 @@
         }
     },
     {
-        "emoji" : "🖼️",
+        "emoji" : "🔲",
         "path" : "./assets/collage/suga.png",
         "canvas" : {
             "width" : 750,
@@ -135,25 +135,18 @@
 
 
     {
-        "emoji" : "🔳",
-        "path" : "gyotaku_white_black.png",
+        "emoji" : "🟥",
+        "path" : "gyotaku_red.png",
         "canvas" : {
             "width" : 1920,
             "height" : 1080,
-            "fill_style" : "#FFFFFF",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 540,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#FFFFFF00",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 540,
-            "gradient_end_r" : 768,
-            "gradient_end_color" : "#1a1a1aFF"
+            "gra_start" : "#FF000000",
+            "gra_end" : "#FF0000FF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 1080
+        "filter" : {
+            "r" : 1.5,
+            "g" : 0.5,
+            "b" : 0.5
         },
         "content" : {
             "x" : 768,
@@ -185,30 +178,71 @@
             "font_size" : 48,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF90",
+            "fill_style" : "#FFFFFF80",
             "stroke_style" : "#000000FF"
         }
     },
     {
-        "emoji" : "🔲",
-        "path" : "gyotaku_black_white.png",
+        "emoji" : "🟧",
+        "path" : "gyotaku_orange.png",
         "canvas" : {
             "width" : 1920,
             "height" : 1080,
-            "fill_style" : "#000000",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 540,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#1a1a1a00",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 540,
-            "gradient_end_r" : 768,
-            "gradient_end_color" : "#FFFFFFFF"
+            "gra_start" : "#FF800000",
+            "gra_end" : "#FF8000FF"
         },
-        "icon" : {
-            "x" : 0,
+        "filter" : {
+            "r" : 1.5,
+            "g" : 1.0,
+            "b" : 0.5
+        },
+        "content" : {
+            "x" : 768,
             "y": 0,
-            "size" : 1080
+            "width": 1152,
+            "height": 936,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "author" : {
+            "x" : 768,
+            "y": 936,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 768,
+            "y": 1008,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "🟨",
+        "path" : "gyotaku_yellow.png",
+        "canvas" : {
+            "width" : 1920,
+            "height" : 1080,
+            "gra_start" : "#FFFF0000",
+            "gra_end" : "#FFFF00FF"
+        },
+        "filter" : {
+            "r" : 1.5,
+            "g" : 1.5,
+            "b" : 0.5
         },
         "content" : {
             "x" : 768,
@@ -240,30 +274,23 @@
             "font_size" : 48,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#00000090",
+            "fill_style" : "#00000080",
             "stroke_style" : "#FFFFFFFF"
         }
     },
     {
-        "emoji" : "⬜",
-        "path" : "gyotaku_white_fhd.png",
+        "emoji" : "🟩",
+        "path" : "gyotaku_green.png",
         "canvas" : {
             "width" : 1920,
             "height" : 1080,
-            "fill_style" : "#FFFFFF",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 540,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#FFFFFF00",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 540,
-            "gradient_end_r" : 768,
-            "gradient_end_color" : "#FFFFFFFF"
+            "gra_start" : "#00FF0000",
+            "gra_end" : "#00FF00FF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 1080
+        "filter" : {
+            "r" : 0.5,
+            "g" : 1.5,
+            "b" : 0.5
         },
         "content" : {
             "x" : 768,
@@ -273,7 +300,7 @@
             "font_size" : 96,
             "alignment_x" : "center",
             "alignment_y" : "center",
-            "fill_style" : "#000000",
+            "fill_style" : "#FFFFFF",
             "stroke_style" : "#000000"
         },
         "author" : {
@@ -284,7 +311,7 @@
             "font_size" : 48,
             "alignment_x" : "center",
             "alignment_y" : "center",
-            "fill_style" : "#000000",
+            "fill_style" : "#FFFFFF",
             "stroke_style" : "#000000"
         },
         "date" : {
@@ -295,8 +322,152 @@
             "font_size" : 48,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#00000090",
-            "stroke_style" : "#FFFFFFFF"
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "🟦",
+        "path" : "gyotaku_blue.png",
+        "canvas" : {
+            "width" : 1920,
+            "height" : 1080,
+            "gra_start" : "#0000FF00",
+            "gra_end" : "#0000FFFF"
+        },
+        "filter" : {
+            "r" : 0.5,
+            "g" : 0.5,
+            "b" : 1.5
+        },
+        "content" : {
+            "x" : 768,
+            "y": 0,
+            "width": 1152,
+            "height": 936,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "author" : {
+            "x" : 768,
+            "y": 936,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 768,
+            "y": 1008,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "🟪",
+        "path" : "gyotaku_purple.png",
+        "canvas" : {
+            "width" : 1920,
+            "height" : 1080,
+            "gra_start" : "#00FFFF00",
+            "gra_end" : "#00FFFFFF"
+        },
+        "filter" : {
+            "r" : 0.5,
+            "g" : 1.5,
+            "b" : 1.5
+        },
+        "content" : {
+            "x" : 768,
+            "y": 0,
+            "width": 1152,
+            "height": 936,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "author" : {
+            "x" : 768,
+            "y": 936,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 768,
+            "y": 1008,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "🟫",
+        "path" : "gyotaku_brown.png",
+        "canvas" : {
+            "width" : 1920,
+            "height" : 1080,
+            "gra_start" : "#80404000",
+            "gra_end" : "#804040FF"
+        },
+        "filter" : {
+            "r" : 1.0,
+            "g" : 0.75,
+            "b" : 0.75
+        },
+        "content" : {
+            "x" : 768,
+            "y": 0,
+            "width": 1152,
+            "height": 936,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "author" : {
+            "x" : 768,
+            "y": 936,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 768,
+            "y": 1008,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
         }
     },
     {
@@ -305,20 +476,13 @@
         "canvas" : {
             "width" : 1920,
             "height" : 1080,
-            "fill_style" : "#000000",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 540,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#00000000",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 540,
-            "gradient_end_r" : 768,
-            "gradient_end_color" : "#000000FF"
+            "gra_start" : "#00000000",
+            "gra_end" : "#000000FF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 1080
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
         },
         "content" : {
             "x" : 768,
@@ -329,7 +493,7 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
-            "stroke_style" : "#FFFFFF"
+            "stroke_style" : "#000000"
         },
         "author" : {
             "x" : 768,
@@ -340,6 +504,54 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 768,
+            "y": 1008,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "⬜",
+        "path" : "gyotaku_white_fhd.png",
+        "canvas" : {
+            "width" : 1920,
+            "height" : 1080,
+            "gra_start" : "#FFFFFF00",
+            "gra_end" : "#FFFFFFFF"
+        },
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
+        },
+        "content" : {
+            "x" : 768,
+            "y": 0,
+            "width": 1152,
+            "height": 936,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF"
+        },
+        "author" : {
+            "x" : 768,
+            "y": 936,
+            "width": 1152,
+            "height": 72,
+            "font_size" : 48,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
             "stroke_style" : "#FFFFFF"
         },
         "date" : {
@@ -350,62 +562,7 @@
             "font_size" : 48,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF90",
-            "stroke_style" : "#000000FF"
-        }
-    },
-    {
-        "emoji" : "◻️",
-        "path" : "gyotaku_white_hd.png",
-        "canvas" : {
-            "width" : 1280,
-            "height" : 720,
-            "fill_style" : "#FFFFFF",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 360,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#FFFFFF00",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 360,
-            "gradient_end_r" : 512,
-            "gradient_end_color" : "#FFFFFFFF"
-        },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 720
-        },
-        "content" : {
-            "x" : 512,
-            "y": 0,
-            "width": 768,
-            "height": 624,
-            "font_size" : 96,
-            "alignment_x" : "center",
-            "alignment_y" : "center",
-            "fill_style" : "#000000",
-            "stroke_style" : "#000000"
-        },
-        "author" : {
-            "x" : 512,
-            "y": 624,
-            "width": 768,
-            "height": 48,
-            "font_size" : 32,
-            "alignment_x" : "center",
-            "alignment_y" : "center",
-            "fill_style" : "#000000",
-            "stroke_style" : "#000000"
-        },
-        "date" : {
-            "x" : 512,
-            "y": 672,
-            "width": 768,
-            "height": 48,
-            "font_size" : 32,
-            "alignment_x" : "right",
-            "alignment_y" : "center",
-            "fill_style" : "#00000090",
+            "fill_style" : "#00000080",
             "stroke_style" : "#FFFFFFFF"
         }
     },
@@ -415,20 +572,13 @@
         "canvas" : {
             "width" : 1280,
             "height" : 720,
-            "fill_style" : "#000000",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 360,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#00000000",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 360,
-            "gradient_end_r" : 512,
-            "gradient_end_color" : "#000000FF"
+            "gra_start" : "#00000000",
+            "gra_end" : "#000000FF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 720
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
         },
         "content" : {
             "x" : 512,
@@ -439,7 +589,7 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
-            "stroke_style" : "#FFFFFF"
+            "stroke_style" : "#000000"
         },
         "author" : {
             "x" : 512,
@@ -450,7 +600,7 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
-            "stroke_style" : "#FFFFFF"
+            "stroke_style" : "#000000"
         },
         "date" : {
             "x" : 512,
@@ -460,62 +610,55 @@
             "font_size" : 38,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF90",
+            "fill_style" : "#FFFFFF80",
             "stroke_style" : "#000000FF"
         }
     },
     {
-        "emoji" : "◽",
-        "path" : "gyotaku_white_hfhd.png",
+        "emoji" : "◻️",
+        "path" : "gyotaku_white_hd.png",
         "canvas" : {
-            "width" : 960,
-            "height" : 540,
-            "fill_style" : "#FFFFFF",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 270,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#FFFFFF00",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 270,
-            "gradient_end_r" : 384,
-            "gradient_end_color" : "#FFFFFFFF"
+            "width" : 1280,
+            "height" : 720,
+            "gra_start" : "#FFFFFF00",
+            "gra_end" : "#FFFFFFFF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 540
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
         },
         "content" : {
-            "x" : 384,
+            "x" : 512,
             "y": 0,
-            "width": 576,
-            "height": 468,
+            "width": 768,
+            "height": 624,
             "font_size" : 96,
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#000000",
-            "stroke_style" : "#000000"
+            "stroke_style" : "#FFFFFF"
         },
         "author" : {
-            "x" : 384,
-            "y": 468,
-            "width": 576,
-            "height": 36,
-            "font_size" : 24,
+            "x" : 512,
+            "y": 624,
+            "width": 768,
+            "height": 48,
+            "font_size" : 32,
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#000000",
-            "stroke_style" : "#000000"
+            "stroke_style" : "#FFFFFF"
         },
         "date" : {
-            "x" : 384,
-            "y": 504,
-            "width": 576,
-            "height": 36,
-            "font_size" : 24,
+            "x" : 512,
+            "y": 672,
+            "width": 768,
+            "height": 48,
+            "font_size" : 32,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#00000090",
+            "fill_style" : "#00000080",
             "stroke_style" : "#FFFFFFFF"
         }
     },
@@ -525,20 +668,13 @@
         "canvas" : {
             "width" : 960,
             "height" : 540,
-            "fill_style" : "#000000",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 270,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#00000000",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 270,
-            "gradient_end_r" : 384,
-            "gradient_end_color" : "#000000FF"
+            "gra_start" : "#00000000",
+            "gra_end" : "#000000FF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 540
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
         },
         "content" : {
             "x" : 384,
@@ -549,7 +685,7 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
-            "stroke_style" : "#FFFFFF"
+            "stroke_style" : "#000000"
         },
         "author" : {
             "x" : 384,
@@ -560,6 +696,54 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 384,
+            "y": 504,
+            "width": 576,
+            "height": 36,
+            "font_size" : 24,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "◽",
+        "path" : "gyotaku_white_hfhd.png",
+        "canvas" : {
+            "width" : 960,
+            "height" : 540,
+            "gra_start" : "#FFFFFF00",
+            "gra_end" : "#FFFFFFFF"
+        },
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
+        },
+        "content" : {
+            "x" : 384,
+            "y": 0,
+            "width": 576,
+            "height": 468,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF"
+        },
+        "author" : {
+            "x" : 384,
+            "y": 468,
+            "width": 576,
+            "height": 36,
+            "font_size" : 24,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
             "stroke_style" : "#FFFFFF"
         },
         "date" : {
@@ -570,62 +754,7 @@
             "font_size" : 24,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF90",
-            "stroke_style" : "#000000FF"
-        }
-    },
-    {
-        "emoji" : "▫️",
-        "path" : "gyotaku_white_tfhd.png",
-        "canvas" : {
-            "width" : 640,
-            "height" : 360,
-            "fill_style" : "#FFFFFF",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 180,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#FFFFFF00",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 180,
-            "gradient_end_r" : 256,
-            "gradient_end_color" : "#FFFFFFFF"
-        },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 360
-        },
-        "content" : {
-            "x" : 256,
-            "y": 0,
-            "width": 384,
-            "height": 312,
-            "font_size" : 96,
-            "alignment_x" : "center",
-            "alignment_y" : "center",
-            "fill_style" : "#000000",
-            "stroke_style" : "#000000"
-        },
-        "author" : {
-            "x" : 256,
-            "y": 312,
-            "width": 384,
-            "height": 24,
-            "font_size" : 16,
-            "alignment_x" : "center",
-            "alignment_y" : "center",
-            "fill_style" : "#000000",
-            "stroke_style" : "#000000"
-        },
-        "date" : {
-            "x" : 256,
-            "y": 336,
-            "width": 384,
-            "height": 24,
-            "font_size" : 16,
-            "alignment_x" : "right",
-            "alignment_y" : "center",
-            "fill_style" : "#00000090",
+            "fill_style" : "#00000080",
             "stroke_style" : "#FFFFFFFF"
         }
     },
@@ -635,20 +764,13 @@
         "canvas" : {
             "width" : 640,
             "height" : 360,
-            "fill_style" : "#000000",
-            "gradient_start_x" : 0,
-            "gradient_start_y" : 180,
-            "gradient_start_r" : 0,
-            "gradient_start_color" : "#00000000",
-            "gradient_end_x" : 0,
-            "gradient_end_y" : 180,
-            "gradient_end_r" : 256,
-            "gradient_end_color" : "#000000FF"
+            "gra_start" : "#00000000",
+            "gra_end" : "#000000FF"
         },
-        "icon" : {
-            "x" : 0,
-            "y": 0,
-            "size" : 360
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
         },
         "content" : {
             "x" : 256,
@@ -659,7 +781,7 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
-            "stroke_style" : "#FFFFFF"
+            "stroke_style" : "#000000"
         },
         "author" : {
             "x" : 256,
@@ -670,6 +792,54 @@
             "alignment_x" : "center",
             "alignment_y" : "center",
             "fill_style" : "#FFFFFF",
+            "stroke_style" : "#000000"
+        },
+        "date" : {
+            "x" : 256,
+            "y": 336,
+            "width": 384,
+            "height": 24,
+            "font_size" : 16,
+            "alignment_x" : "right",
+            "alignment_y" : "center",
+            "fill_style" : "#FFFFFF80",
+            "stroke_style" : "#000000FF"
+        }
+    },
+    {
+        "emoji" : "▫️",
+        "path" : "gyotaku_white_tfhd.png",
+        "canvas" : {
+            "width" : 640,
+            "height" : 360,
+            "gra_start" : "#FFFFFF00",
+            "gra_end" : "#FFFFFFFF"
+        },
+        "filter" : {
+            "r" : 1.0,
+            "g" : 1.0,
+            "b" : 1.0
+        },
+        "content" : {
+            "x" : 256,
+            "y": 0,
+            "width": 384,
+            "height": 312,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF"
+        },
+        "author" : {
+            "x" : 256,
+            "y": 312,
+            "width": 384,
+            "height": 24,
+            "font_size" : 16,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
             "stroke_style" : "#FFFFFF"
         },
         "date" : {
@@ -680,8 +850,8 @@
             "font_size" : 16,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF90",
-            "stroke_style" : "#000000FF"
+            "fill_style" : "#00000080",
+            "stroke_style" : "#FFFFFFFF"
         }
     }
 ]

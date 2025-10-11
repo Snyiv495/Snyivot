@@ -1,7 +1,7 @@
 /*****************
     ai.js
     スニャイヴ
-    2025/08/21
+    2025/10/11
 *****************/
 
 module.exports = {
@@ -42,7 +42,7 @@ async function publicChat(message, map){
         const gemini_res_function_call = (await gemini.genConFunc(message.content, getPrompt(message, chat_log, map, system_id))).functionCalls?.[0];
 
         message.system_id = gemini_res_function_call?.name ?? "reply";
-        message.args = gemini_res_function_call?.args ?? {"reply":"Error"}; 
+        message.args = gemini_res_function_call?.args ?? {"reply":"はっ ちょっとボ～っとしちゃってたよ ごめんね"}; 
 
         await cui.msgCmd(message, map);
         return;

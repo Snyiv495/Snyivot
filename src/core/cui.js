@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/08/12
+    2025/10/11
 *****************/
 
 module.exports = {
@@ -147,7 +147,6 @@ async function msgCmd(message, map){
 
         //GUIの送信
         await helper.sendGUI(message, gui.create(map, system_id, {"{{__REPLY__}}":message.args?.reply}));
-        await message.delete().catch(() => null);
         return;
     }catch(e){
         throw new Error(`cui.js => msgCmd() \n ${e}`);
