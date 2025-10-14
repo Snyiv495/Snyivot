@@ -132,6 +132,44 @@
             "stroke_style" : "#000000"
         }
     },
+    {
+        "emoji" : "takuoko",
+        "path" : "./assets/collage/kyohe/takuoko.png",
+        "canvas" : {
+            "width" : 1800,
+            "height" : 1200
+        },
+        "bubble" : {
+            "x" : 250,
+            "y": 250,
+            "width": 700,
+            "height": 550,
+            "font_size" : 128,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000"
+        }
+    },
+    {
+        "emoji" : "wnpiyen",
+        "path" : "./assets/collage/kyohe/wnpiyen.png",
+        "canvas" : {
+            "width" : 1536,
+            "height" : 1024
+        },
+        "bubble" : {
+            "x" : 265,
+            "y": 269,
+            "width": 570,
+            "height": 404,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000"
+        }
+    },
 
 
     {
