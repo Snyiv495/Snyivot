@@ -300,8 +300,8 @@
             "font_size" : 96,
             "alignment_x" : "center",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF"
         },
         "author" : {
             "x" : 768,
@@ -311,8 +311,8 @@
             "font_size" : 48,
             "alignment_x" : "center",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "fill_style" : "#000000",
+            "stroke_style" : "#FFFFFF"
         },
         "date" : {
             "x" : 768,
@@ -322,8 +322,8 @@
             "font_size" : 48,
             "alignment_x" : "right",
             "alignment_y" : "center",
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "fill_style" : "#00000080",
+            "stroke_style" : "#FFFFFFFF"
         }
     },
     {
@@ -380,8 +380,8 @@
         "canvas" : {
             "width" : 1920,
             "height" : 1080,
-            "gra_start" : "#00FFFF00",
-            "gra_end" : "#00FFFFFF"
+            "gra_start" : "#FF00FF00",
+            "gra_end" : "#FF00FFFF"
         },
         "filter" : {
             "r" : 0.5,
