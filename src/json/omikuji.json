@@ -148,7 +148,7 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【おみくじ】\n{{__DATE__}} {{__USERNAME__}}さんのおみくじ",
+                "title" : "【おみくじ】\n{{__DATE__}}\n{{__USERNAME__}}さんのおみくじ",
                 "url" : null,
                 "thumbnail" : {
                     "name" : "thumbnail.png",
@@ -180,6 +180,60 @@
                     "url" : null
                 },
                 "color" : "{{__COLOR__}}"
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "omikuji_draw_roading",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【ローディング画面】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀おみくじを引いてるよ\n⠀⠀⠀しばらく待ってね",                
+                "fields" : [],
+                "image" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "omikuji_draw_failure",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【おみくじエラー】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀おみくじが引けなかったよ...\n⠀⠀⠀もう一度試してみて",                
+                "fields" : [],
+                "image" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "FF0000"
             }
         ],
         "files" : [],

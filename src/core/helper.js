@@ -1,7 +1,7 @@
 /*****************
     helper.js
     スニャイヴ
-    2025/08/27
+    2025/10/14
 *****************/
 
 module.exports = {
@@ -22,6 +22,7 @@ module.exports = {
     sendDefer : sendDefer,
     sendModal : sendModal,
     sendGUI : sendGUI,
+    editGUI : editGUI,
     removeBotMention : removeBotMention,
     removeBotName : removeBotName
 }
@@ -246,13 +247,11 @@ async function sendModal(interaction, gui){
 async function sendGUI(trigger, gui){
     try{
         if(isChannnel(trigger)){
-            await trigger.send(gui);
-            return;
+            return await trigger.send(gui);
         }
 
         if(isMessage(trigger)){
-            await trigger.reply(gui);
-            return;
+            return await trigger.reply(gui);
         }
 
         if(isInteraction(trigger)){
@@ -266,14 +265,30 @@ async function sendGUI(trigger, gui){
                 }
             }catch(e){}//showModalの後だと補足される
 
-            await trigger.editReply(gui);
-            return;
+            return await trigger.editReply(gui);
         }
     }catch(e){
         throw new Error(`helper.js => sendGUI() \n ${e}`);
     }
 
     throw new Error("helper.js => sendGUI() \n trigger is not message or interaction");
+}
+
+//GUIの編集
+async function editGUI(trigger, gui){
+    try{
+        if(isMessage(trigger)){
+            return await trigger.edit(gui);;
+        }
+
+        if(isInteraction(trigger)){
+            return await trigger.editReply(gui);
+        }
+    }catch(e){
+        throw new Error(`helper.js => editGUI() \n ${e}`);
+    }
+
+    throw new Error("helper.js => editGUI() \n trigger is not message or interaction");
 }
 
 //Botのメンションを除去
