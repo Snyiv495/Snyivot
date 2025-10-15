@@ -248,9 +248,6 @@ async function sendCollage(trigger, map){
         for(const element of collage_original_json){
             if(element.emoji === emoji_name){
                 let collage_base64;
-                if(element.path.includes("kyohe")){
-                    collage_base64 = await makeMemeImage(trigger, element);
-                }
 
                 if(element.path.includes("meme")){
                     collage_base64 = await makeMemeImage(trigger, element);
