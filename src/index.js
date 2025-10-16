@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/10/06
+    2025/10/16
 *****************/
 
 require('dotenv').config();
@@ -26,6 +26,14 @@ client.once('clientReady', async () => {
         map.set("readme_md", fs.readFileSync("./README.md", "utf-8"));
     }catch(e){
         console.error("index.js => client.once() \n READMEの取得に失敗しました \n", e);
+        process.exit();
+    }
+
+    //リアクションの取得
+    try{
+        map.set("reaction_json", JSON.parse(fs.readFileSync("./src/json/reaction.json", "utf-8")));
+    }catch(e){
+        console.error("index.js => client.once() \n リアクションの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -198,6 +206,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     try{
         const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
         const emoji_name = reaction.emoji.name;
+        const reaction_json = map.get("reaction_json");
         const collage_original_json = map.get("collage_original_json");
         const react_user_id = user.id;
 
@@ -206,33 +215,23 @@ client.on('messageReactionAdd', async (reaction, user) => {
             return;
         }
 
-        //他人が送信したメッセージに対応
-        if(message.author.id != client.user.id){
-
-            //コラ画像リアクション
-            for(const element of collage_original_json){
-                if(element.emoji === emoji_name){
-                    message.system_id = `collage_emoji_${emoji_name}_${react_user_id}`;
-                    message.react(reaction.emoji);
-                    await gui.reaction(message, map);
-                    return;
-                }
-            }
-        }
-
-        //自身が送信したメッセージに対応
-        if(message.author.id === client.user.id){
-            //削除リアクション
-            if(emoji_name.match(/✂️|🗑️|❌|🚮/)){
-                message.system_id = `delete_${emoji_name}_${react_user_id}`;
+        //コラ画像リアクション
+        for(const element of collage_original_json){
+            if(element.emoji === emoji_name){
+                message.system_id = `collage_${emoji_name}_${react_user_id}`;
+                message.react(reaction.emoji);
                 await gui.reaction(message, map);
                 return;
             }
+        }
 
-            //その他のリアクション
-            message.system_id = "undefined";
-            await gui.reaction(message, map);
-            return;
+        //その他リアクション
+        for(const element of reaction_json){
+            if(element.emoji === emoji_name){
+                message.system_id = element.system_id;
+                await gui.reaction(message, map);
+                return;
+            }
         }
 
     }catch(e){

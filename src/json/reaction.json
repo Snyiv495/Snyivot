@@ -1,0 +1,18 @@
+[
+    {
+        "emoji" : "✂️",
+        "system_id" : "delete"
+    },
+    {
+        "emoji" : "🗑️",
+        "system_id" : "delete"
+    },
+    {
+        "emoji" : "❌",
+        "system_id" : "delete"
+    },
+    {
+        "emoji" : "🚮",
+        "system_id" : "delete"
+    }
+]

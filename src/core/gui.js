@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/09/26
+    2025/10/16
 *****************/
 
 module.exports = {
@@ -304,17 +304,24 @@ async function reaction(message, map){
             }
         }
 
-        //メッセージを削除する
+        //削除リアクション
         if(system_id.startsWith("delete")){
-            await message.delete().catch(() => null);
-            return;
+
+            //bot自身が送信したメッセージ
+            if(message.author.id === message.client.user.id){
+                await message.delete().catch(() => null);
+                return;
+            }
+
+            //他人が送信したメッセージ
+            if(message.author.id != message.client.user.id){
+                message.reactions.cache.filter(react => react.me).map(react => react.users.remove(message.client.user.id));
+                return;
+            }
         }
 
-        //リアクションを削除する
-        if(system_id === "undefined"){
-            await message.reactions.removeAll();
-            return;
-        }
+        return;
+
     }catch(e){
         throw new Error(`gui.js => reaction() \n ${e}`);
     }

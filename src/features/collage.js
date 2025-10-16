@@ -1,7 +1,7 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/10/11
+    2025/10/16
 *****************/
 
 module.exports = {
@@ -168,7 +168,7 @@ async function makeMemeImage(trigger, element){
 
         ctx.drawImage(collage_original_image, 0, 0);
 
-        await writeSentence(ctx, trigger.content, element.bubble);
+        await writeSentence(ctx, trigger.cleanContent, element.bubble);
 
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
@@ -195,8 +195,6 @@ async function makeGyotakuImage(trigger, element){
         //アイコンを描画
         const org_icon = await loadImage(helper.getUserObj(trigger).displayAvatarURL({extension: "png", size: 256}));
         ctx.drawImage(org_icon, icon_x, icon_y, icon_size, icon_size);
-
-        //アイコンフィルター
         const ctx_icon = ctx.getImageData(icon_x, icon_y, icon_size, icon_size);
         const ctx_icon_data = ctx_icon.data;
         for(let i=0; i<ctx_icon_data.length; i+=4){
@@ -218,7 +216,7 @@ async function makeGyotakuImage(trigger, element){
         ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
 
         //文字入れ
-        await writeSentence(ctx, trigger.content, element.content);
+        await writeSentence(ctx, trigger.cleanContent, element.content);
         await writeSentence(ctx, `- ${helper.getUserName(trigger)}`, element.author);
         await writeSentence(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, element.date);
 
@@ -236,10 +234,11 @@ async function makeSuperChatImage(trigger, element){
 //コラ送信
 async function sendCollage(trigger, map){
     try{
+        //system_id = `collage_${emoji_name}_${user_id}`
         const system_id = helper.getSystemId(trigger);
         const collage_original_json = map.get("collage_original_json");
-        const emoji_name = system_id.split("_")[2];
-        const react_user = (await trigger.guild.members.fetch(system_id.split("_")[3])).user;
+        const emoji_name = system_id.split("_")[1];
+        const react_user = (await trigger.guild.members.fetch(system_id.split("_")[2])).user;
 
         if(!trigger.cleanContent){
             return;
@@ -283,7 +282,7 @@ async function execute(trigger, map){
         }
 
         //コラ画像送信
-        if(system_id.startsWith("collage_emoji")){
+        if(system_id.startsWith("collage")){
             await sendCollage(trigger, map);
             return;
         }
