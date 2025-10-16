@@ -1,7 +1,7 @@
 /*****************
     ai.js
     スニャイヴ
-    2025/10/11
+    2025/10/16
 *****************/
 
 module.exports = {
@@ -16,9 +16,9 @@ const helper = require('../core/helper');
 const gemini = require('../integrations/gemini');
 
 //命令文の取得
-function getPrompt(trigger, log, map, system_id){
+function getPrompt(trigger, log, reference, map, system_id){
     const gemini_prompt_json = JSON.parse(fs.readFileSync("./src/json/gemini-prompt.json", "utf-8"));
-    const replacement = {"{{__TIME__}}": new Date().toLocaleString(), "{{__USER_NAME__}}": helper.getUserName(trigger), "{{__CHAT_LOG__}}": log, "{{__README__}}": map.get("readme_md")}
+    const replacement = {"{{__TIME__}}": new Date().toLocaleString(), "{{__USER_NAME__}}": helper.getUserName(trigger), "{{__CHAT_LOG__}}": log, "{{__REFERENCE_MESSAGE__}}": reference, "{{__README__}}": map.get("readme_md")}
 
     for(const element of gemini_prompt_json){
         if(element.id === system_id){
@@ -39,7 +39,8 @@ async function publicChat(message, map){
         const system_id = helper.getSystemId(message);
         const messages = [...(await message.channel.messages.fetch({limit: 21})).values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp);
         const chat_log = JSON.stringify(messages.slice(0, -1).map(message => ({username: message.author.displayName, content: message.content, timestamp: message.createdAt.toISOString()})));
-        const gemini_res_function_call = (await gemini.genConFunc(message.content, getPrompt(message, chat_log, map, system_id))).functionCalls?.[0];
+        const reference_message = (await message.fetchReference())?.cleanContent ?? "null";
+        const gemini_res_function_call = (await gemini.genConFunc(message.content, getPrompt(message, chat_log, reference_message, map, system_id))).functionCalls?.[0];
 
         message.system_id = gemini_res_function_call?.name ?? "reply";
         message.args = gemini_res_function_call?.args ?? {"reply":"はっ ちょっとボ～っとしちゃってたよ ごめんね"}; 
@@ -60,7 +61,7 @@ async function privateChat(interaction, map){
 
     try{
         //レスポンスの取得
-        const gemini_res_text = (await gemini.genCon(request, getPrompt(interaction, gemini_log, map, system_id))).text ?? "Error";
+        const gemini_res_text = (await gemini.genCon(request, getPrompt(interaction, gemini_log, "null", map, system_id))).text ?? "Error";
 
         //ログの保存
         user_info.gemini_log.push({username:interaction.user.displayName,content:request,timestamp:new Date().toLocaleString()});
@@ -109,6 +110,12 @@ async function execute(trigger, map){
         //延期の送信
         if(helper.isInteraction(trigger) && !system_id.includes("modal")){
             await helper.sendDefer(trigger);
+        }
+
+        //返信チャットコマンド
+        if(system_id === "ai_chat_reply"){
+            await replyChat(trigger, map);
+            return;
         }
 
         //公開チャットコマンド

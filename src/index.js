@@ -96,8 +96,8 @@ client.on('messageCreate', async (message) => {
             return;
         }
 
-        //名前に反応
-        if(helper.isContainBotName(message)){
+        //名前か返信に反応
+        if(helper.isContainBotName(message) || (message.reference && (await message.fetchReference())?.author.id===client.user.id)){
             message.system_id = "ai_chat_public";
             await cui.msgCmd(message, map);
             return;
