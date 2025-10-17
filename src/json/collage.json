@@ -137,7 +137,7 @@
 
 
     {
-        "id" : "collage_view",
+        "id" : "collage_meme",
         "content" : null,
         "embeds" : [
             {
@@ -150,7 +150,7 @@
                 },
                 "description" : null,                
                 "fields" : [],
-                "image" : "attachment://{{__COLLAGE_NAME__}}",
+                "image" : "attachment://{{__MEME_NAME__}}",
                 "footer" : {
                     "text" : "created by {{__REACT_USER_NAME__}}",
                     "url" : "{{__REACT_USER_ICON__}}"
@@ -160,9 +160,75 @@
         ],
         "files" : [
             {
-                "name" : "{{__COLLAGE_NAME__}}",
+                "name" : "{{__MEME_NAME__}}",
                 "path" : null,
-                "base64" : "{{__COLLAGE_BASE64__}}"
+                "base64" : "{{__MEME_BASE64__}}"
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "collage_gyotaku",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "thumbnail" : {
+                    "name" : null,
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [],
+                "image" : "attachment://{{__GYOTAKU_NAME__}}",
+                "footer" : {
+                    "text" : "created by {{__REACT_USER_NAME__}}",
+                    "url" : "{{__REACT_USER_ICON__}}"
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "{{__GYOTAKU_NAME__}}",
+                "path" : null,
+                "base64" : "{{__GYOTAKU_BASE64__}}"
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "collage_superchat",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "thumbnail" : {
+                    "name" : null,
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [],
+                "image" : "attachment://{{__SUPERCHAT_NAME__}}",
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "{{__SUPERCHAT_NAME__}}",
+                "path" : null,
+                "base64" : "{{__SUPERCHAT_BASE64__}}"
             }
         ],
         "menus" : [],

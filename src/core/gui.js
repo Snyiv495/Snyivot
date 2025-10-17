@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/10/16
+    2025/10/17
 *****************/
 
 module.exports = {
@@ -315,7 +315,7 @@ async function reaction(message, map){
 
             //他人が送信したメッセージ
             if(message.author.id != message.client.user.id){
-                message.reactions.cache.filter(react => react.me).map(react => react.users.remove(message.client.user.id));
+                await message.reactions.cache.filter(react => react.me).map(react => react.users.remove(message.client.user.id));
                 return;
             }
         }
