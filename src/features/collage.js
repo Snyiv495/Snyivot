@@ -1,7 +1,7 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/10/17
+    2025/10/20
 *****************/
 
 module.exports = {
@@ -234,6 +234,8 @@ async function makeGyotakuImage(trigger, element){
 //スパチャ作成
 async function makeSuperChatImage(trigger, element){
     try{
+        const system_id = helper.getSystemId(trigger);
+        const react_user = (await trigger.guild.members.fetch(system_id.split("_")[2])).user;
         const canvas_info = element.canvas;
         const icon_size = canvas_info.height*2/5;
         const margin = canvas_info.height/20;
@@ -251,20 +253,20 @@ async function makeSuperChatImage(trigger, element){
         ctx.fill();
 
         //アイコンを描画
-        const org_icon = await loadImage(helper.getUserObj(trigger).displayAvatarURL({extension: "png", size: 256}));
+        const org_icon = await loadImage(react_user.displayAvatarURL({extension: "png", size: 256}));
         ctx.drawImage(org_icon, margin, margin, icon_size, icon_size);
 
         //文字入れ
         const author_bubble = {"x": icon_size+margin*2, "y": 0, "width": canvas_info.width-(icon_size+margin*3), "height": canvas_info.height/4, "font_size": canvas_info.author_font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": "#FFFFFF80", "stroke_style": "#FFFFFF80"};
         const value_bubble = {"x": icon_size+margin*2, "y": canvas_info.height/4, "width": canvas_info.width-(icon_size+margin*3), "height": canvas_info.height/4, "font_size": canvas_info.value_font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": "#FFFFFFFF", "stroke_style": "#FFFFFFFF"};
         const content_bubble = {"x": margin, "y": canvas_info.height/2, "width": canvas_info.width-margin*2, "height": canvas_info.height/2, "font_size": canvas_info.value_font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": "#FFFFFFFF", "stroke_style": "#FFFFFFFF"};
-        await writeSentence(ctx, helper.getUserName(trigger), author_bubble);
+        await writeSentence(ctx, react_user.displayName, author_bubble);
         await writeSentence(ctx, canvas_info.value, value_bubble);
         await writeSentence(ctx, canvas_info.content, content_bubble);
         
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
-        throw new Error(`collage.js => makeGyotakuImage() \n ${e}`)
+        throw new Error(`collage.js => makeSuperChatImage() \n ${e}`);
     }
 }
 
@@ -279,10 +281,6 @@ async function sendCollage(trigger, map){
         const collage_original_json = map.get("collage_original_json");
         const emoji_name = system_id.split("_")[1];
         const react_user = (await trigger.guild.members.fetch(system_id.split("_")[2])).user;
-
-        if(!trigger.cleanContent){
-            return;
-        }
         
         for(const element of collage_original_json){
             if(element.emoji === emoji_name){
