@@ -1,11 +1,12 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/10/20
+    2025/10/21
 *****************/
 
 module.exports = {
-    exe : execute
+    exe : execute,
+    autoComplete : autoComplete
 }
 
 const {createCanvas, loadImage, registerFont} = require("canvas");
@@ -160,15 +161,16 @@ async function writeSentence(ctx, text, bubble){
 }
 
 //ミーム作成
-async function makeMemeImage(trigger, element){
+async function makeMemeImage(element, content){
     try{
-        const collage_original_image = await loadImage(element.path);
-        const canvas = createCanvas(collage_original_image.width, collage_original_image.height);
+        const collage_original_path = `./assets/collage/meme/${element.name}`;
+        const collage_original_image = await loadImage(collage_original_path);
+        const canvas = createCanvas(element.canvas.width, element.canvas.height);
         const ctx = canvas.getContext("2d");
 
         ctx.drawImage(collage_original_image, 0, 0);
 
-        await writeSentence(ctx, trigger.cleanContent, element.bubble);
+        await writeSentence(ctx, content, element.bubble);
 
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
@@ -176,24 +178,69 @@ async function makeMemeImage(trigger, element){
     }
 }
 
+//ミーム送信
+async function sendMemeImage(trigger, map){
+    try{
+        /*
+            triggerの内容
+                リアクション　　：リアクションを付けられたメッセージ
+                インタラクション：利用者のインタラクション
+            システムIDの形式
+                リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
+                インタラクション：collage_${type}
+        */
+        const system_id = helper.getSystemId(trigger);
+        const message_id = system_id.split("_")[2] ?? helper.getArgValue(trigger, "id");
+        const user_id = system_id.split("_")[3] ?? helper.getUserId(trigger);
+        const emoji = system_id.split("_")[4] ?? helper.getArgValue(trigger, "emoji");
+        const collage_original_json = map.get("collage_original_json");
+        
+        let user = null;
+        let message = null;
+        
+        try{user = (await trigger.guild.members.fetch(user_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
+        try{message = (await trigger.channel.messages.fetch(message_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
+
+        for(const element of collage_original_json){
+            if(element.emoji === emoji){
+                await helper.sendGUI(message, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.name, "{{__MEME_BASE64__}}": await makeMemeImage(element, message.cleanContent??""), "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
+                if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
+                return;
+            }
+        }
+    }catch(e){
+        throw new Error(`collage.js => sendMemeImage() \n ${e}`);
+    }
+
+    throw new Error(`collage.js => sendMemeImage() \n not define id`);
+}
+
 //魚拓作成
-async function makeGyotakuImage(trigger, element){
+async function makeGyotakuImage(element, content, user, time,){
     try{
         const canvas_info = element.canvas;
         const filter_info = element.filter;
-        const create_time = helper.getCreatedAt(trigger);
+        const content_info = element.content;
+        const author_info = element.author;
+        const date_info = element.date;
+
+        const canvas_width = 1920;
+        const canvas_height = 1080;
+        const content_font_size = 96;
+        const author_font_size = 72;
+        const date_font_size = 48;
         
         //キャンバスの作成
-        const canvas = createCanvas(canvas_info.width, canvas_info.height);
+        const canvas = createCanvas(canvas_width, canvas_height);
         const ctx = canvas.getContext("2d");
         ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
+        ctx.fillRect(0, 0, canvas_width, canvas_height);
 
         //アイコンを描画
-        const icon_x = (canvas_info.width*2/5-canvas_info.height)/2;
+        const icon_x = (canvas_width*2/5-canvas_height)/2;
         const icon_y = 0;
-        const icon_size = canvas_info.height;
-        const org_icon = await loadImage(helper.getUserObj(trigger).displayAvatarURL({extension: "png", size: 256}));
+        const icon_size = canvas_height;
+        const org_icon = await loadImage(user.displayAvatarURL({extension: "png", size: 256}));
         ctx.drawImage(org_icon, icon_x, icon_y, icon_size, icon_size);
         
         //フィルター
@@ -211,19 +258,19 @@ async function makeGyotakuImage(trigger, element){
         ctx.putImageData(ctx_icon, icon_x, icon_y);
 
         //グラデーション背景を描画
-        const gradient = ctx.createRadialGradient(0, canvas_info.height/2, 0, 0,  canvas_info.height/2,  canvas_info.width*2/5);
+        const gradient = ctx.createRadialGradient(0, canvas_height/2, 0, 0,  canvas_height/2,  canvas_width*2/5);
         gradient.addColorStop(0, canvas_info.gra_start);
         gradient.addColorStop(1, canvas_info.gra_end);
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas_info.width, canvas_info.height);
+        ctx.fillRect(0, 0, canvas_width, canvas_height);
 
         //文字入れ
-        const content_bubble = {"x": canvas_info.width*2/5, "y": 0, "width": canvas_info.width*3/5, "height": canvas_info.height-(element.author.height+element.date.height), "font_size": element.content.font_size, "alignment_x": "center", "alignment_y": "center", "fill_style": element.content.fill_style, "stroke_style": element.content.stroke_style};
-        const author_bubble = {"x": canvas_info.width*2/5, "y": canvas_info.height-(element.author.height+element.date.height), "width": canvas_info.width*3/5, "height": element.author.height, "font_size": element.author.font_size, "alignment_x": "center", "alignment_y": "center", "fill_style": element.author.fill_style, "stroke_style": element.author.stroke_style};
-        const date_bubble = {"x": canvas_info.width*2/5, "y": canvas_info.height-element.date.height, "width": canvas_info.width*3/5, "height": element.date.height, "font_size": element.date.font_size, "alignment_x": "right", "alignment_y": "center", "fill_style": element.date.fill_style, "stroke_style": element.date.stroke_style};
-        await writeSentence(ctx, trigger.cleanContent, content_bubble);
-        await writeSentence(ctx, `- ${helper.getUserName(trigger)}`, author_bubble);
-        await writeSentence(ctx, `${create_time.year}-${create_time.month}-${create_time.date}`, date_bubble);
+        const content_bubble = {"x": canvas_width*2/5, "y": 0, "width": canvas_width*3/5, "height": canvas_height-(author_font_size*3/2+date_font_size*3/2), "font_size": content_font_size, "alignment_x": "center", "alignment_y": "center", "fill_style": content_info.main_color, "stroke_style": content_info.sub_color};
+        const author_bubble = {"x": canvas_width*2/5, "y": canvas_height-(author_font_size*3/2+date_font_size*3/2), "width": canvas_width*3/5, "height": author_font_size*3/2, "font_size": author_font_size, "alignment_x": "center", "alignment_y": "center", "fill_style": author_info.main_color, "stroke_style": author_info.sub_color};
+        const date_bubble = {"x": canvas_width*2/5, "y": canvas_height-date_font_size*3/2, "width": canvas_width*3/5, "height": date_font_size*3/2, "font_size": date_font_size, "alignment_x": "right", "alignment_y": "center", "fill_style": date_info.main_color, "stroke_style": date_info.sub_color};
+        await writeSentence(ctx, content, content_bubble);
+        await writeSentence(ctx, `- ${user.displayName}`, author_bubble);
+        await writeSentence(ctx, `${time.year}-${time.month}-${time.date}`, date_bubble);
 
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
@@ -231,38 +278,82 @@ async function makeGyotakuImage(trigger, element){
     }
 }
 
-//スパチャ作成
-async function makeSuperChatImage(trigger, element){
+//魚拓送信
+async function sendGyotakuImage(trigger, map){
     try{
+        /*
+            triggerの内容
+                リアクション　　：リアクションを付けられたメッセージ
+                インタラクション：利用者のインタラクション
+            システムIDの形式
+                リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
+                インタラクション：collage_${type}
+        */
         const system_id = helper.getSystemId(trigger);
-        const react_user = (await trigger.guild.members.fetch(system_id.split("_")[2])).user;
-        const canvas_info = element.canvas;
-        const icon_size = canvas_info.height*2/5;
-        const margin = canvas_info.height/20;
+        const message_id = system_id.split("_")[2] ?? helper.getArgValue(trigger, "id");
+        const user_id = system_id.split("_")[3] ?? helper.getUserId(trigger);
+        const emoji = system_id.split("_")[4] ?? helper.getArgValue(trigger, "emoji");
+        const collage_original_json = map.get("collage_original_json");
         
+        let user = null;
+        let message = null;
+        
+        try{user = (await trigger.guild.members.fetch(user_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
+        try{message = (await trigger.channel.messages.fetch(message_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
+
+        for(const element of collage_original_json){
+            if(element.emoji === emoji){
+                await helper.sendGUI(message, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.name, "{{__MEME_BASE64__}}": await makeGyotakuImage(element, message.cleanContent??"", helper.getUserObj(message), helper.getCreatedAt(message)), "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
+                if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
+                return;
+            }
+        }
+    }catch(e){
+        throw new Error(`collage.js => sendGyotakuImage() \n ${e}`);
+    }
+
+    throw new Error(`collage.js => sendGyotakuImage() \n not define id`);
+}
+
+//スパチャ作成
+async function makeSuperChatImage(element, user, amount, content){
+    try{
+        const canvas_info = element.canvas;
+        const font_info = element.font;
+        const amount_info = element.amount;
+
+        const canvas_width = 900;
+        const canvas_height = 300;
+        const font_size = 48;
+        const icon_size = canvas_height*2/5;
+        const margin = canvas_height/20;
+
+        amount = amount ?? `￥${Math.floor(Math.random()*(amount_info.max-amount_info.min+1)) + amount_info.min}`;
+        content = content ?? "";
+
         //キャンバスの作成
-        const canvas = createCanvas(canvas_info.width, canvas_info.height);
+        const canvas = createCanvas(canvas_width, canvas_height);
         const ctx = canvas.getContext("2d");
 
         ctx.fillStyle = canvas_info.main_color;
-        ctx.fillRect(0, 0, canvas_info.width, canvas_info.height/2);
+        ctx.fillRect(0, 0, canvas_width, canvas_height/2);
         ctx.fillStyle = canvas_info.sub_color;
-        ctx.fillRect(0, canvas_info.height/2, canvas_info.width, canvas_info.height/2);
+        ctx.fillRect(0, canvas_height/2, canvas_width, canvas_height/2);
         ctx.fillStyle = "#FFFFFF";
         ctx.arc(icon_size/2+margin, icon_size/2+margin, icon_size/2, 0 ,2*Math.PI);
         ctx.fill();
 
         //アイコンを描画
-        const org_icon = await loadImage(react_user.displayAvatarURL({extension: "png", size: 256}));
+        const org_icon = await loadImage(user.displayAvatarURL({extension: "png", size: 256}));
         ctx.drawImage(org_icon, margin, margin, icon_size, icon_size);
 
         //文字入れ
-        const author_bubble = {"x": icon_size+margin*2, "y": 0, "width": canvas_info.width-(icon_size+margin*3), "height": canvas_info.height/4, "font_size": canvas_info.author_font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": "#FFFFFF80", "stroke_style": "#FFFFFF80"};
-        const value_bubble = {"x": icon_size+margin*2, "y": canvas_info.height/4, "width": canvas_info.width-(icon_size+margin*3), "height": canvas_info.height/4, "font_size": canvas_info.value_font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": "#FFFFFFFF", "stroke_style": "#FFFFFFFF"};
-        const content_bubble = {"x": margin, "y": canvas_info.height/2, "width": canvas_info.width-margin*2, "height": canvas_info.height/2, "font_size": canvas_info.value_font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": "#FFFFFFFF", "stroke_style": "#FFFFFFFF"};
-        await writeSentence(ctx, react_user.displayName, author_bubble);
-        await writeSentence(ctx, canvas_info.value, value_bubble);
-        await writeSentence(ctx, canvas_info.content, content_bubble);
+        const author_bubble = {"x": icon_size+margin*2, "y": 0, "width": canvas_width-(icon_size+margin*3), "height": canvas_height/4, "font_size": font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": font_info.sub_color, "stroke_style": font_info.sub_color};
+        const value_bubble = {"x": icon_size+margin*2, "y": canvas_height/4, "width": canvas_width-(icon_size+margin*3), "height": canvas_height/4, "font_size": font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": font_info.main_color, "stroke_style": font_info.main_color};
+        const content_bubble = {"x": margin, "y": canvas_height/2, "width": canvas_width-margin*2, "height": canvas_height/2, "font_size": font_size, "alignment_x": "left", "alignment_y": "center", "fill_style": font_info.main_color, "stroke_style": font_info.main_color};
+        await writeSentence(ctx, user.displayName, author_bubble);
+        await writeSentence(ctx, amount, value_bubble);
+        await writeSentence(ctx, content, content_bubble);
         
         return canvas.toBuffer("image/png").toString("base64");
     }catch(e){
@@ -270,47 +361,63 @@ async function makeSuperChatImage(trigger, element){
     }
 }
 
-//コラ送信
-async function sendCollage(trigger, map){
+//スパチャ送信
+async function sendSuperChatImage(trigger, map){
     try{
         /*
+            triggerの内容
+                リアクション　　：リアクションを付けられたメッセージ
+                インタラクション：利用者のインタラクション
             システムIDの形式
-                collage_${emoji_name}_${user_id}
+                リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
+                インタラクション：collage_${type}
         */
         const system_id = helper.getSystemId(trigger);
+        const message_id = system_id.split("_")[2] ?? helper.getArgValue(trigger, "id");
+        const user_id = system_id.split("_")[3] ?? helper.getUserId(trigger);
+        const emoji = system_id.split("_")[4] ?? helper.getArgValue(trigger, "emoji");
+        const amount = helper.isInteraction(trigger) ? helper.getArgValue(trigger, "amount") : null;
+        const content = helper.isInteraction(trigger) ? helper.getArgValue(trigger, "content") : null;
         const collage_original_json = map.get("collage_original_json");
-        const emoji_name = system_id.split("_")[1];
-        const react_user = (await trigger.guild.members.fetch(system_id.split("_")[2])).user;
+
+        let user = null;
+        let message = null;
         
+        try{user = (await trigger.guild.members.fetch(user_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
+        try{message = (await trigger.channel.messages.fetch(message_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
+
         for(const element of collage_original_json){
-            if(element.emoji === emoji_name){
-
-                //ミーム画像
-                if(element.path.includes("meme")){
-                    await helper.sendGUI(trigger, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.path.split("/").slice(-1)[0], "{{__MEME_BASE64__}}": await makeMemeImage(trigger, element), "{{__REACT_USER_NAME__}}":react_user.displayName, "{{__REACT_USER_ICON__}}":react_user.displayAvatarURL()}));
-                    return;
-                }
-
-                //魚拓画像
-                if(element.path.includes("gyotaku")){
-                    await helper.sendGUI(trigger, gui.create(map, "collage_gyotaku", {"{{__GYOTAKU_NAME__}}":element.path, "{{__GYOTAKU_BASE64__}}": await makeGyotakuImage(trigger, element), "{{__REACT_USER_NAME__}}":react_user.displayName, "{{__REACT_USER_ICON__}}":react_user.displayAvatarURL()}));
-                    return;
-                }
-
-                //スパチャ画像
-                if(element.path.includes("superchat")){
-                    await helper.sendGUI(trigger, gui.create(map, "collage_superchat", {"{{__SUPERCHAT_NAME__}}":element.path, "{{__SUPERCHAT_BASE64__}}": await makeSuperChatImage(trigger, element)}));
-                    return;
-                }
-
+            if(element.emoji === emoji){
+                await helper.sendGUI(message, gui.create(map, "collage_superchat", {"{{__SUPERCHAT_NAME__}}":element.name, "{{__SUPERCHAT_BASE64__}}": await makeSuperChatImage(element, user, amount, content)}));
+                if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
                 return;
             }
         }
     }catch(e){
-        throw new Error(`collage.js => sendCollage() \n ${e}`);
+        throw new Error(`collage.js => sendSuperChatImage() \n ${e}`);
     }
 
-    throw new Error(`collage.js => sendCollage() \n not define emoji : ${emoji_name}`);
+    throw new Error(`collage.js => sendSuperChatImage() \n not define id`);
+}
+
+//絵文字選択肢の取得
+async function getEmojiChoices(interaction, map){
+    try{
+        const system_id = helper.getSystemId(interaction);
+        const focus_opt = interaction.options.getFocused(true);
+        const collage_original_json = map.get("collage_original_json");
+        const choices = new Array();
+
+        collage_original_json.find(element => {
+            if(system_id.includes(element.type) && element.emoji.includes(focus_opt.value) && !element.custom){
+                choices.push(element.emoji);
+            }
+        });
+
+        return choices.slice(0, 25);
+    }catch(e){
+        throw new Error(`read.js => getEmojiChoices() \n ${e}`);
+    }
 }
 
 //コラ作成実行
@@ -323,9 +430,21 @@ async function execute(trigger, map){
             await helper.sendDefer(trigger);
         }
 
-        //コラ画像送信
-        if(system_id.startsWith("collage")){
-            await sendCollage(trigger, map);
+        //ミーム画像送信
+        if(system_id.startsWith("collage_meme")){
+            await sendMemeImage(trigger, map);
+            return;
+        }
+
+        //魚拓画像送信
+        if(system_id.startsWith("collage_gyotaku")){
+            await sendGyotakuImage(trigger, map);
+            return;
+        }
+
+        //スパチャ画像送信
+        if(system_id.startsWith("collage_superchat")){
+            await sendSuperChatImage(trigger, map);
             return;
         }
 
@@ -336,4 +455,22 @@ async function execute(trigger, map){
     }catch(e){
         throw new Error(`collage.js => execute() \n ${e}`);
     }
+}
+
+//コマンドの補助
+async function autoComplete(interaction, map){
+    try{
+        const focus_opt = interaction.options.getFocused(true);
+
+        //emojiオプションの補助
+        if(focus_opt.name === "emoji"){
+            await interaction.respond((await getEmojiChoices(interaction, map)).map(choice => ({name: choice, value: choice})));
+            return;
+        }
+
+    }catch(e){
+        throw new Error(`collage.js => autoComplete() \n ${e}`);
+    }
+
+    throw new Error(`collage.js => autoComplete() \n not define option`);
 }

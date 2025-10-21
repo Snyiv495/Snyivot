@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/10/16
+    2025/10/21
 *****************/
 
 require('dotenv').config();
@@ -205,10 +205,9 @@ client.on('voiceStateUpdate', async (old_state, new_state) => {
 client.on('messageReactionAdd', async (reaction, user) => {
     try{
         const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
-        const emoji_name = reaction.emoji.name;
+        const emoji = reaction.emoji.name;
         const reaction_json = map.get("reaction_json");
         const collage_original_json = map.get("collage_original_json");
-        const react_user_id = user.id;
 
         //botのリアクションと2個以上の同じリアクションはスルー
         if(reaction.me || reaction.count > 1){
@@ -217,9 +216,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
         //コラ画像リアクション
         for(const element of collage_original_json){
-            if(element.emoji === emoji_name){
-                message.system_id = `collage_${emoji_name}_${react_user_id}`;
+            if(element.emoji === emoji){
                 message.react(reaction.emoji);
+                message.system_id = `collage_${element.type}_${message.id}_${user.id}_${emoji}`;
                 await gui.reaction(message, map);
                 return;
             }
@@ -227,7 +226,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
         //その他リアクション
         for(const element of reaction_json){
-            if(element.emoji === emoji_name){
+            if(element.emoji === emoji){
                 message.system_id = element.system_id;
                 await gui.reaction(message, map);
                 return;

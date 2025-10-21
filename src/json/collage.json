@@ -90,7 +90,7 @@
                     "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/point_talk.png",
                     "base64" : null
                 },
-                "description" : "🗨️⠀ここからの利用はまだできないんだ\n⠀⠀⠀リアクションで遊べるよ",
+                "description" : "🗨️⠀ここからの利用はできないんだ\n⠀⠀⠀リアクションかコマンドから遊べるよ",
                 "fields" : [],
                 "image" : null,
                 "footer" : {
@@ -136,6 +136,71 @@
     },
 
 
+    {
+        "id" : "collage_failure",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【コラ画像エラー】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/sad_talk.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀コラ画像の作成に失敗しちゃった...\n⠀⠀⠀こんな原因が考えられるよ",                
+                "fields" : [
+                    {
+                        "name" : "✅ユーザーについて",
+                        "value" : "- ユーザーが存在していない\n- botがユーザーを確認できない"
+                    },
+                    {
+                        "name" : "✅メッセージについて",
+                        "value" : "- メッセージIDが間違っている\n- メッセージが存在していない\n- botがメッセージを見れない"
+                    }
+                ],
+                "image" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "FF0000"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "collage_failure",
+                "placeholder" : "❌現在利用できません",
+                "disabled" : true,
+                "options" : []
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "disabled",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : true
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
     {
         "id" : "collage_meme",
         "content" : null,

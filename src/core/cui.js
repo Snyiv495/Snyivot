@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/10/11
+    2025/10/21
 *****************/
 
 module.exports = {
@@ -18,73 +18,66 @@ const helper = require("./helper");
 
 //コマンドの取得
 function getSlashCmds(json){
-    const cmds = [];
-
     try{
-        //コマンドを作成
-        for(let i=1; i<json.length; i++){
+        const cmds = [];
+
+        //コマンド
+        for(const element of json){
+            if(element.name === "string") continue;
+
             const cmd = new SlashCommandBuilder();
+            cmd.setName(element.name);
+            cmd.setDescription(element.description);
 
-            cmd.setName(json[i].name);
-            cmd.setDescription(json[i].description);
-
-            //サブコマンドを作成
-            for(let j=0; j<json[i].subcommand.length; j++){
+            //サブコマンド
+            for(const sub_element of element.subcommand){
                 const sub_cmd = new SlashCommandSubcommandBuilder();
+                sub_cmd.setName(sub_element.name);
+                sub_cmd.setDescription(sub_element.description);
 
-                sub_cmd.setName(json[i].subcommand[j].name);
-                sub_cmd.setDescription(json[i].subcommand[j].description);
-
-                //オプションを作成
-                for(let k=0; k<json[i].subcommand[j].option.length; k++){
+                //オプション
+                for(const opt of sub_element.option){
 
                     //stringオプション
-                    if(json[i].subcommand[j].option[k].type === "string"){
+                    if(opt.type === "string"){
                         const str_opt = new SlashCommandStringOption();
-            
-                        str_opt.setName(json[i].subcommand[j].option[k].name);
-                        str_opt.setDescription(json[i].subcommand[j].option[k].description);
-                        str_opt.setAutocomplete(json[i].subcommand[j].option[k].autocomplete);
-                        str_opt.setRequired(json[i].subcommand[j].option[k].required);
-                        for(let l=0; l<json[i].subcommand[j].option[k].choices.length; l++){
-                            str_opt.addChoices({name : json[i].subcommand[j].option[k].choices[l].name, value : json[i].subcommand[j].option[k].choices[l].value});
+                        str_opt.setName(opt.name);
+                        str_opt.setDescription(opt.description);
+                        str_opt.setAutocomplete(opt.autocomplete);
+                        str_opt.setRequired(opt.required);
+                        if(opt.max) str_opt.setMaxLength(opt.max);
+                        if(opt.min) str_opt.setMinLength(opt.min);
+                        for(const choice of opt.choices){
+                            str_opt.addChoices({name: choice.name, value: choice.value});
                         }
-            
                         sub_cmd.addStringOption(str_opt);
                     }
 
                     //numberオプション
-                    if(json[i].subcommand[j].option[k].type === "number"){
+                    if(opt.type === "number"){
                         const num_opt = new SlashCommandNumberOption();
-            
-                        num_opt.setName(json[i].subcommand[j].option[k].name);
-                        num_opt.setDescription(json[i].subcommand[j].option[k].description);
-                        num_opt.setAutocomplete(json[i].subcommand[j].option[k].autocomplete);
-                        num_opt.setRequired(json[i].subcommand[j].option[k].required);
-                        num_opt.setMaxValue(json[i].subcommand[j].option[k].maxvalue ?? 1);
-                        num_opt.setMinValue(json[i].subcommand[j].option[k].minvalue ?? 0);
-            
+                        num_opt.setName(opt.name);
+                        num_opt.setDescription(opt.description);
+                        num_opt.setAutocomplete(opt.autocomplete);
+                        num_opt.setRequired(opt.required);
+                        num_opt.setMaxValue(opt.max??1);
+                        num_opt.setMinValue(opt.min??0);
                         sub_cmd.addNumberOption(num_opt);
                     }
 
-                    //boolオプション
-                    if(json[i].subcommand[j].option[k].type === "bool"){
+                    //booleanオプション
+                    if(opt.type === "boolean"){
                         const bool_opt = new SlashCommandBooleanOption();
-            
-                        bool_opt.setName(json[i].subcommand[j].option[k].name);
-                        bool_opt.setDescription(json[i].subcommand[j].option[k].description);
-                        bool_opt.setRequired(json[i].subcommand[j].option[k].required);
-            
+                        bool_opt.setName(opt.name);
+                        bool_opt.setDescription(opt.description);
+                        bool_opt.setRequired(opt.required);
                         sub_cmd.addBooleanOption(bool_opt);
                     }
                 }
-            
                 cmd.addSubcommand(sub_cmd);
             }
-            
             cmds.push(cmd);
         }
-
         return cmds;
     }catch(e){
         throw new Error(`cui.js => getSlashCmds() \n ${e}`);
@@ -152,7 +145,3 @@ async function msgCmd(message, map){
         throw new Error(`cui.js => msgCmd() \n ${e}`);
     }
 }
-
-/* todo
-getSlashCmdsの改修
-*/

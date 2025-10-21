@@ -1,7 +1,9 @@
 [
     {
         "emoji" : "🤓",
-        "path" : "./assets/collage/meme/tigyu.png",
+        "type" : "meme",
+        "name" : "nerd.png",
+        "custom" : false,
         "canvas" : {
             "width" : 800,
             "height" : 500
@@ -20,7 +22,9 @@
     },
     {
         "emoji" : "🤖",
-        "path" : "./assets/collage/meme/robot.png",
+        "type" : "meme",
+        "name" : "robot.png",
+        "custom" : false,
         "canvas" : {
             "width" : 1600,
             "height" : 800
@@ -39,7 +43,9 @@
     },
     {
         "emoji" : "🦈",
-        "path" : "./assets/collage/meme/shark.png",
+        "type" : "meme",
+        "name" : "shark.png",
+        "custom" : false,
         "canvas" : {
             "width" : 500,
             "height" : 330
@@ -58,7 +64,9 @@
     },
     {
         "emoji" : "🐬",
-        "path" : "./assets/collage/meme/kairu.png",
+        "type" : "meme",
+        "name" : "dolphin.png",
+        "custom" : false,
         "canvas" : {
             "width" : 590,
             "height" : 521
@@ -77,7 +85,9 @@
     },
     {
         "emoji" : "🦉",
-        "path" : "./assets/collage/meme/owl.png",
+        "type" : "meme",
+        "name" : "owl.png",
+        "custom" : false,
         "canvas" : {
             "width" : 500,
             "height" : 250
@@ -96,7 +106,9 @@
     },
     {
         "emoji" : "🧞‍♂️",
-        "path" : "./assets/collage/meme/majin.png",
+        "type" : "meme",
+        "name" : "man_genie.png",
+        "custom" : false,
         "canvas" : {
             "width" : 1080,
             "height" : 918
@@ -114,8 +126,10 @@
         }
     },
     {
-        "emoji" : "🔲",
-        "path" : "./assets/collage/meme/suga.png",
+        "emoji" : "🖼️",
+        "type" : "meme",
+        "name" : "flame_photo.png",
+        "custom" : false,
         "canvas" : {
             "width" : 750,
             "height" : 500
@@ -136,10 +150,9 @@
 
     {
         "emoji" : "🟥",
-        "path" : "gyotaku_red.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_red.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#FF000000",
             "gra_end" : "#FF0000FF"
         },
@@ -149,29 +162,23 @@
             "b" : 0.5
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "main_color" : "#FFFFFF80",
+            "sub_color" : "#000000FF"
         }
     },
     {
         "emoji" : "🟧",
-        "path" : "gyotaku_orange.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_orange.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#FF800000",
             "gra_end" : "#FF8000FF"
         },
@@ -181,29 +188,23 @@
             "b" : 0.5
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "main_color" : "#FFFFFF80",
+            "sub_color" : "#000000FF"
         }
     },
     {
         "emoji" : "🟨",
-        "path" : "gyotaku_yellow.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_yellow.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#FFFF0000",
             "gra_end" : "#FFFF00FF"
         },
@@ -213,29 +214,23 @@
             "b" : 0.5
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
+            "main_color" : "#000000",
+            "sub_color" : "#FFFFFF"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
+            "main_color" : "#000000",
+            "sub_color" : "#FFFFFF"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#00000080",
-            "stroke_style" : "#FFFFFFFF"
+            "main_color" : "#00000080",
+            "sub_color" : "#FFFFFFFF"
         }
     },
     {
         "emoji" : "🟩",
-        "path" : "gyotaku_green.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_green.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#00FF0000",
             "gra_end" : "#00FF00FF"
         },
@@ -245,29 +240,23 @@
             "b" : 0.5
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
+            "main_color" : "#000000",
+            "sub_color" : "#FFFFFF"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
+            "main_color" : "#000000",
+            "sub_color" : "#FFFFFF"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#00000080",
-            "stroke_style" : "#FFFFFFFF"
+            "main_color" : "#00000080",
+            "sub_color" : "#FFFFFFFF"
         }
     },
     {
         "emoji" : "🟦",
-        "path" : "gyotaku_blue.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_blue.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#0000FF00",
             "gra_end" : "#0000FFFF"
         },
@@ -277,29 +266,23 @@
             "b" : 1.5
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "main_color" : "#FFFFFF80",
+            "sub_color" : "#000000FF"
         }
     },
     {
         "emoji" : "🟪",
-        "path" : "gyotaku_purple.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_purple.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#FF00FF00",
             "gra_end" : "#FF00FFFF"
         },
@@ -309,29 +292,23 @@
             "b" : 1.5
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "main_color" : "#FFFFFF80",
+            "sub_color" : "#000000FF"
         }
     },
     {
         "emoji" : "🟫",
-        "path" : "gyotaku_brown.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_brown.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#80404000",
             "gra_end" : "#804040FF"
         },
@@ -341,29 +318,23 @@
             "b" : 0.75
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "main_color" : "#FFFFFF80",
+            "sub_color" : "#000000FF"
         }
     },
     {
         "emoji" : "⬛",
-        "path" : "gyotaku_black_fhd.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_black.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#00000000",
             "gra_end" : "#000000FF"
         },
@@ -373,29 +344,23 @@
             "b" : 1.0
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
+            "main_color" : "#FFFFFF",
+            "sub_color" : "#000000"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
+            "main_color" : "#FFFFFF80",
+            "sub_color" : "#000000FF"
         }
     },
     {
         "emoji" : "⬜",
-        "path" : "gyotaku_white_fhd.png",
+        "type" : "gyotaku",
+        "name" : "gyotaku_white.png",
         "canvas" : {
-            "width" : 1920,
-            "height" : 1080,
             "gra_start" : "#FFFFFF00",
             "gra_end" : "#FFFFFFFF"
         },
@@ -405,350 +370,171 @@
             "b" : 1.0
         },
         "content" : {
-            "font_size" : 96,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
+            "main_color" : "#000000",
+            "sub_color" : "#FFFFFF"
         },
         "author" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
+            "main_color" : "#000000",
+            "sub_color" : "#FFFFFF"
         },
         "date" : {
-            "height": 72,
-            "font_size" : 48,
-            "fill_style" : "#00000080",
-            "stroke_style" : "#FFFFFFFF"
-        }
-    },
-    {
-        "emoji" : "◼️",
-        "path" : "gyotaku_black_hd.png",
-        "canvas" : {
-            "width" : 1280,
-            "height" : 720,
-            "gra_start" : "#00000000",
-            "gra_end" : "#000000FF"
-        },
-        "filter" : {
-            "r" : 1.0,
-            "g" : 1.0,
-            "b" : 1.0
-        },
-        "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
-        },
-        "author" : {
-            "height": 48,
-            "font_size" : 38,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
-        },
-        "date" : {
-            "height": 48,
-            "font_size" : 38,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
-        }
-    },
-    {
-        "emoji" : "◻️",
-        "path" : "gyotaku_white_hd.png",
-        "canvas" : {
-            "width" : 1280,
-            "height" : 720,
-            "gra_start" : "#FFFFFF00",
-            "gra_end" : "#FFFFFFFF"
-        },
-        "filter" : {
-            "r" : 1.0,
-            "g" : 1.0,
-            "b" : 1.0
-        },
-        "content" : {
-            "font_size" : 96,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
-        },
-        "author" : {
-            "height": 48,
-            "font_size" : 32,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
-        },
-        "date" : {
-            "height": 48,
-            "font_size" : 32,
-            "fill_style" : "#00000080",
-            "stroke_style" : "#FFFFFFFF"
-        }
-    },
-    {
-        "emoji" : "◾",
-        "path" : "gyotaku_black_hfhd.png",
-        "canvas" : {
-            "width" : 960,
-            "height" : 540,
-            "gra_start" : "#00000000",
-            "gra_end" : "#000000FF"
-        },
-        "filter" : {
-            "r" : 1.0,
-            "g" : 1.0,
-            "b" : 1.0
-        },
-        "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
-        },
-        "author" : {
-            "height": 36,
-            "font_size" : 24,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
-        },
-        "date" : {
-            "height": 36,
-            "font_size" : 24,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
-        }
-    },
-    {
-        "emoji" : "◽",
-        "path" : "gyotaku_white_hfhd.png",
-        "canvas" : {
-            "width" : 960,
-            "height" : 540,
-            "gra_start" : "#FFFFFF00",
-            "gra_end" : "#FFFFFFFF"
-        },
-        "filter" : {
-            "r" : 1.0,
-            "g" : 1.0,
-            "b" : 1.0
-        },
-        "content" : {
-            "font_size" : 96,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
-        },
-        "author" : {
-            "height": 36,
-            "font_size" : 24,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
-        },
-        "date" : {
-            "height": 36,
-            "font_size" : 24,
-            "fill_style" : "#00000080",
-            "stroke_style" : "#FFFFFFFF"
-        }
-    },
-    {
-        "emoji" : "▪️",
-        "path" : "gyotaku_black_tfhd.png",
-        "canvas" : {
-            "width" : 640,
-            "height" : 360,
-            "gra_start" : "#00000000",
-            "gra_end" : "#000000FF"
-        },
-        "filter" : {
-            "r" : 1.0,
-            "g" : 1.0,
-            "b" : 1.0
-        },
-        "content" : {
-            "font_size" : 96,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
-        },
-        "author" : {
-            "height": 24,
-            "font_size" : 16,
-            "fill_style" : "#FFFFFF",
-            "stroke_style" : "#000000"
-        },
-        "date" : {
-            "height": 24,
-            "font_size" : 16,
-            "fill_style" : "#FFFFFF80",
-            "stroke_style" : "#000000FF"
-        }
-    },
-    {
-        "emoji" : "▫️",
-        "path" : "gyotaku_white_tfhd.png",
-        "canvas" : {
-            "width" : 640,
-            "height" : 360,
-            "gra_start" : "#FFFFFF00",
-            "gra_end" : "#FFFFFFFF"
-        },
-        "filter" : {
-            "r" : 1.0,
-            "g" : 1.0,
-            "b" : 1.0
-        },
-        "content" : {
-            "font_size" : 96,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
-        },
-        "author" : {
-            "height": 24,
-            "font_size" : 16,
-            "fill_style" : "#000000",
-            "stroke_style" : "#FFFFFF"
-        },
-        "date" : {
-            "height": 24,
-            "font_size" : 16,
-            "fill_style" : "#00000080",
-            "stroke_style" : "#FFFFFFFF"
+            "main_color" : "#00000080",
+            "sub_color" : "#FFFFFFFF"
         }
     },
 
 
     {
         "emoji" : "🔴",
-        "path" : "superchat_red.png",
+        "type" : "superchat",
+        "name" : "superchat_red.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#AA0000",
-            "sub_color" : "#FF0000",
-            "value" : "￥10000",
-            "content" : "赤スパ！",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#FF0000"
+        },
+        "font" : {
+            "main_color" : "#FFFFFFFF",
+            "sub_color" : "#FFFFFF80"
+        },
+        "amount" : {
+            "max" : 50000,
+            "min" : 10000
         }
     },
     {
         "emoji" : "🟠",
-        "path" : "superchat_orange.png",
+        "type" : "superchat",
+        "name" : "superchat_orange.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#EE7000",
-            "sub_color" : "#FF8000",
-            "value" : "￥2000",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#FF8000"
+        },
+        "font" : {
+            "main_color" : "#FFFFFFFF",
+            "sub_color" : "#FFFFFF80"
+        },
+        "amount" : {
+            "max" : 4999,
+            "min" : 2000
         }
     },
     {
         "emoji" : "🟡",
-        "path" : "superchat_yellow.png",
+        "type" : "superchat",
+        "name" : "superchat_yellow.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#CCCC00",
-            "sub_color" : "#FFFF00",
-            "value" : "￥1000",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#FFFF00"
+        },
+        "font" : {
+            "main_color" : "#000000FF",
+            "sub_color" : "#00000080"
+        },
+        "amount" : {
+            "max" : 1999,
+            "min" : 1000
         }
     },
     {
         "emoji" : "🟢",
-        "path" : "superchat_green.png",
+        "type" : "superchat",
+        "name" : "superchat_green.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#00CC00",
-            "sub_color" : "#00FF00",
-            "value" : "￥500",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#00FF00"
+        },
+        "font" : {
+            "main_color" : "#000000FF",
+            "sub_color" : "#00000080"
+        },
+        "amount" : {
+            "max" : 999,
+            "min" : 500
         }
     },
     {
         "emoji" : "🔵",
-        "path" : "superchat_blue.png",
+        "type" : "superchat",
+        "name" : "superchat_blue.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#0000AA",
-            "sub_color" : "#0000FF",
-            "value" : "￥200",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#0000FF"
+        },
+        "font" : {
+            "main_color" : "#FFFFFFFF",
+            "sub_color" : "#FFFFFF80"
+        },
+        "amount" : {
+            "max" : 499,
+            "min" : 200
         }
     },
     {
         "emoji" : "🟣",
-        "path" : "superchat_purple.png",
+        "type" : "superchat",
+        "name" : "superchat_purple.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#CC00CC",
-            "sub_color" : "#FF00FF",
-            "value" : "￥5000",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#FF00FF"
+        },
+        "font" : {
+            "main_color" : "#FFFFFFFF",
+            "sub_color" : "#FFFFFF80"
+        },
+        "amount" : {
+            "max" : 9999,
+            "min" : 5000
         }
     },
     {
         "emoji" : "🟤",
-        "path" : "superchat_brown.png",
+        "type" : "superchat",
+        "name" : "superchat_brown.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#703030",
-            "sub_color" : "#804040",
-            "value" : "￥100",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#804040"
+        },
+        "font" : {
+            "main_color" : "#FFFFFFFF",
+            "sub_color" : "#FFFFFF80"
+        },
+        "amount" : {
+            "max" : 199,
+            "min" : 100
         }
     },
     {
         "emoji" : "⚫",
-        "path" : "superchat_black.png",
+        "type" : "superchat",
+        "name" : "superchat_black.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#000000",
-            "sub_color" : "#111111",
-            "value" : "￥50000",
-            "content" : "...。",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#111111"
+        },
+        "font" : {
+            "main_color" : "#FFFFFFFF",
+            "sub_color" : "#FFFFFF80"
+        },
+        "amount" : {
+            "max" : 99,
+            "min" : 0
         }
     },
     {
         "emoji" : "⚪",
-        "path" : "superchat_black.png",
+        "type" : "superchat",
+        "name" : "superchat_white.png",
         "canvas" : {
-            "width" : 900,
-            "height" : 300,
             "main_color" : "#EEEEEE",
-            "sub_color" : "#FFFFFF",
-            "value" : "￥5000000000000000",
-            "content" : "欲しい！",
-            "author_font_size" : 48,
-            "value_font_size" : 48,
-            "content_font_size" : 48
+            "sub_color" : "#FFFFFF"
+        },
+        "font" : {
+            "main_color" : "#000000FF",
+            "sub_color" : "#00000080"
+        },
+        "amount" : {
+            "max" : -1,
+            "min" : -10000
         }
     }
 ]
