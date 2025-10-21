@@ -622,9 +622,21 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.どうやって作るの？",
+                        "label" : "Q2.ミーム画像はどうやって作るの？",
                         "value" : "faq_collage_q2",
-                        "description" : "リアクションを付けると作成できるよ",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.魚拓画像はどうやって作るの？",
+                        "value" : "faq_collage_q3",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.スパチャ画像はどうやって作るの？",
+                        "value" : "faq_collage_q4",
+                        "description" : "コマンドやリアクションから作成できるよ",
                         "emoji" : "❔"
                     }
                 ]
@@ -690,9 +702,21 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.どうやって作るの？",
+                        "label" : "Q2.ミーム画像はどうやって作るの？",
                         "value" : "faq_collage_q2",
-                        "description" : "リアクションを付けると作成できるよ",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.魚拓画像はどうやって作るの？",
+                        "value" : "faq_collage_q3",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.スパチャ画像はどうやって作るの？",
+                        "value" : "faq_collage_q4",
+                        "description" : "コマンドやリアクションから作成できるよ",
                         "emoji" : "❔"
                     }
                 ]
@@ -728,22 +752,196 @@
         "content" : null,
         "embeds" : [
             {
-                "title" : "【Q2.どうやって作るの？】",
+                "title" : "【Q2.ミーム画像はどうやって作るの？】",
                 "url" : null,
                 "thumbnail" : {
                     "name" : "thumbnail.png",
                     "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
                     "base64" : null
                 },
-                "description" : "🗨️⠀テキストチャンネルに好きな文章を送信して\n⠀⠀⠀そのメッセージにリアクションを付けると作成できるよ",                
+                "description" : "🗨️⠀テキストチャンネルに好きな文章を送信して\n⠀⠀⠀コマンドを送信するか\n⠀⠀⠀そのメッセージにリアクションを付けると作成できるよ",                
                 "fields" : [
                     {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/collage _meme」"
+                    },
+                    {
                         "name" : "ミーム画像リアクション",
-                        "value" : "🤓🤖🦈🐬🦉🧞‍♂️🔲"
+                        "value" : "🤓🤖🦈🐬🦉🧞‍♂️🖼️"
+                    }
+                ],
+                "image" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_collage_q2",
+                "placeholder" : "👉 FAQ＠コラメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_collage_q1",
+                        "description" : "コラの作成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.ミーム画像はどうやって作るの？",
+                        "value" : "faq_collage_q2",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.魚拓画像はどうやって作るの？",
+                        "value" : "faq_collage_q3",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.スパチャ画像はどうやって作るの？",
+                        "value" : "faq_collage_q4",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_collage_q3",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q3.魚拓画像はどうやって作るの？】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀テキストチャンネルに好きな文章を送信して\n⠀⠀⠀コマンドを送信するか\n⠀⠀⠀そのメッセージにリアクションを付けると作成できるよ",                
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/collage _gyotaku」"
                     },
                     {
                         "name" : "魚拓画像リアクション",
-                        "value" : "🟥🟧🟨🟩🟦🟪🟫⬛⬜◼️◻️◾◽▪️▫️"
+                        "value" : "🟥🟧🟨🟩🟦🟪🟫⬛⬜"
+                    }
+                ],
+                "image" : null,
+                "footer" : {
+                    "text" : null,
+                    "url" : null
+                },
+                "color" : "00FF00"
+            }
+        ],
+        "files" : [],
+        "menus" : [
+            {
+                "id" : "faq_collage_q2",
+                "placeholder" : "👉 FAQ＠コラメニュー",
+                "options" : [
+                    {
+                        "label" : "Q1.何ができるの？",
+                        "value" : "faq_collage_q1",
+                        "description" : "コラの作成ができるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q2.ミーム画像はどうやって作るの？",
+                        "value" : "faq_collage_q2",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.魚拓画像はどうやって作るの？",
+                        "value" : "faq_collage_q3",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.スパチャ画像はどうやって作るの？",
+                        "value" : "faq_collage_q4",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    }
+                ]
+            }
+        ],
+        "buttons" : [
+            {
+                "label" : "戻る",
+                "id" : "faq",
+                "emoji" : "↩️",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "ホーム",
+                "id" : "home",
+                "emoji" : "🏠",
+                "style" : "Secondary",
+                "disabled" : false
+            },
+            {
+                "label" : "終わる",
+                "id" : "quit",
+                "emoji" : "⚠️",
+                "style" : "Danger",
+                "disabled" : false
+            }
+        ],
+        "modals" : []
+    },
+    {
+        "id" : "faq_collage_q4",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : "【Q4.スパチャ画像はどうやって作るの？】",
+                "url" : null,
+                "thumbnail" : {
+                    "name" : "thumbnail.png",
+                    "path" : "assets/sakamoto_ahiru/kasukabe_tsumugi/default.png",
+                    "base64" : null
+                },
+                "description" : "🗨️⠀テキストチャンネルに好きな文章を送信して\n⠀⠀⠀コマンドを送信するか\n⠀⠀⠀そのメッセージにリアクションを付けると作成できるよ",                
+                "fields" : [
+                    {
+                        "name" : "コピペコマンド",
+                        "value" : "- 「/collage _superchat」"
                     },
                     {
                         "name" : "スパチャ画像リアクション",
@@ -771,9 +969,21 @@
                         "emoji" : "❓"
                     },
                     {
-                        "label" : "Q2.どうやって作るの？",
+                        "label" : "Q2.ミーム画像はどうやって作るの？",
                         "value" : "faq_collage_q2",
-                        "description" : "リアクションを付けると作成できるよ",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❔"
+                    },
+                    {
+                        "label" : "Q3.魚拓画像はどうやって作るの？",
+                        "value" : "faq_collage_q3",
+                        "description" : "コマンドやリアクションから作成できるよ",
+                        "emoji" : "❓"
+                    },
+                    {
+                        "label" : "Q4.スパチャ画像はどうやって作るの？",
+                        "value" : "faq_collage_q4",
+                        "description" : "コマンドやリアクションから作成できるよ",
                         "emoji" : "❔"
                     }
                 ]
