@@ -63,7 +63,7 @@ async function readText(trigger, map){
             //辞書の置き換え
             if(map.get("voicevox_dictionary") != guild_id){
                 await voicevox.postImportUserDict(server_info.vv_dict);
-                map.set("voicevox_dictionaty", guild_id);
+                map.set("voicevox_dictionary", guild_id);
             }
 
             //クエリの作成
@@ -194,7 +194,7 @@ async function dictAdd(trigger, map){
             //辞書の置き換え
             if(map.get("voicevox_dictionary") != trigger.guild.id){
                 await voicevox.postImportUserDict(server_info.vv_dict);
-                map.set("voicevox_dictionaty", trigger.guild.id);
+                map.set("voicevox_dictionary", trigger.guild.id);
             }
 
             //単語の登録
@@ -265,7 +265,7 @@ async function dictDel(trigger, map){
             //辞書の置き換え
             if(map.get("voicevox_dictionary") != trigger.guild.id){
                 await voicevox.postImportUserDict(server_info.vv_dict);
-                map.set("voicevox_dictionaty", trigger.guild.id);
+                map.set("voicevox_dictionary", trigger.guild.id);
             }
             
             //単語の削除
