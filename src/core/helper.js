@@ -1,7 +1,7 @@
 /*****************
     helper.js
     スニャイヴ
-    2025/10/14
+    2025/10/24
 *****************/
 
 module.exports = {
@@ -10,29 +10,35 @@ module.exports = {
     isInteraction : isInteraction,
     isContainBotMention : isContainBotMention,
     isContainBotName : isContainBotName,
+
     getFeatureModules : getFeatureModules,
     getUserObj : getUserObj,
+    getGuildObj : getGuildObj,
     getUserId : getUserId,
     getGuildId : getGuildId,
     getUserName : getUserName,
+    getGuildName : getGuildName,
     getSystemId : getSystemId,
     getArgValue : getArgValue,
-    getCreatedAt : getCreatedAt,
-    replaceholder : replaceholder,
+    getDate : getDate,
+    getTime : getTime,
+
     sendDefer : sendDefer,
     sendModal : sendModal,
+    sendProgress : sendProgress,
     sendGUI : sendGUI,
-    editGUI : editGUI,
+
+    replaceholder : replaceholder,
     removeBotMention : removeBotMention,
     removeBotName : removeBotName
 }
 
-const {MessageFlags} = require('discord.js');
+const {MessageFlags, EmbedBuilder} = require('discord.js');
 
 const ai = require("../features/ai");
+const collage = require("../features/collage");
 const faq = require("../features/faq");
 const omikuji = require("../features/omikuji");
-const collage = require("../features/collage");
 const read = require("../features/read");
 
 const bot_name = new RegExp(/(すにゃ|スニャ|すな|スナ|すに|スニ)(ぼっと|ボット|ぼ|ボ|bot|Bot|BOT)/);
@@ -69,7 +75,7 @@ function isContainBotMention(trigger){
         return bot_mention.test(trigger.message);
     }
 
-    throw new Error("helper.js => isContainMention() \n message is not message");
+    throw new Error("helper.js => isContainMention() \n trigger is not message or interaction");
 }
 
 //Botの名前を含むか確認
@@ -82,16 +88,16 @@ function isContainBotName(trigger){
         return bot_name.test(trigger.message);
     }
 
-    throw new Error("helper.js => isContainName() \n message is not message");
+    throw new Error("helper.js => isContainName() \n trigger is not message or interaction");
 }
 
 //実装機能モジュールの取得
 function getFeatureModules(){
     return {
         "ai": ai,
+        "collage" : collage,
         "faq": faq,
         "omikuji": omikuji,
-        "collage" : collage,
         "read": read
     }
 }
@@ -106,7 +112,24 @@ function getUserObj(trigger){
         return trigger.user;
     }
 
-    throw new Error("helper.js => getUserObj() \n trigger is not message or interaction")
+    throw new Error("helper.js => getUserObj() \n trigger is not message or interaction");
+}
+
+//ギルドオブジェクトの取得
+function getGuildObj(trigger){
+    if(isChannnel(trigger)){
+        return trigger.guild;
+    }
+
+    if(isMessage(trigger)){
+        return trigger.guild;
+    }
+
+    if(isInteraction(trigger)){
+        return trigger.guild;
+    }
+
+    throw new Error("helper.js => getGuildObj() \n trigger is not channel, message or interaction");
 }
 
 //ユーザーIDの取得
@@ -119,11 +142,15 @@ function getUserId(trigger){
         return trigger.user.id;
     }
 
-    throw new Error("helper.js => getUserId() \n trigger is not message or interaction")
+    throw new Error("helper.js => getUserId() \n trigger is not message or interaction");
 }
 
 //ギルドIDの取得
 function getGuildId(trigger){
+    if(isChannnel(trigger)){
+        return trigger.guild.id;
+    }
+
     if(isMessage(trigger)){
         return trigger.guild.id;
     }
@@ -132,7 +159,7 @@ function getGuildId(trigger){
         return trigger.guild.id;
     }
 
-    throw new Error("helper.js => getUserId() \n trigger is not message or interaction")
+    throw new Error("helper.js => getUserId() \n trigger is not channel, message or interaction");
 }
 
 //ユーザーネームの取得
@@ -145,7 +172,24 @@ function getUserName(trigger){
         return trigger.user.displayName ?? trigger.user.username;
     }
 
-    throw new Error("helper.js => getUserId() \n trigger is not message or interaction")
+    throw new Error("helper.js => getUserName() \n trigger is not message or interaction");
+}
+
+//ギルドネームの取得
+function getGuildName(trigger){
+    if(isChannnel(trigger)){
+        return trigger.guild.name;
+    }
+
+    if(isMessage(trigger)){
+        return trigger.guild.name;
+    }
+
+    if(isInteraction(trigger)){
+        return trigger.guild.name;
+    }
+
+    throw new Error("helper.js => getGuildName() \n trigger is not channel, message or interaction");
 }
 
 //システムIDの取得
@@ -158,7 +202,7 @@ function getSystemId(trigger){
         return trigger.commandName ? `${trigger.commandName}${trigger.options.getSubcommand()}` : trigger.values?.[0] ?? trigger.customId ?? null;
     }
 
-    throw new Error("helper.js => getSystemId() \n trigger is not message or interaction")
+    throw new Error("helper.js => getSystemId() \n trigger is not message or interaction");
 }
 
 //引数の取得
@@ -171,43 +215,55 @@ function getArgValue(trigger, arg){
         return trigger.options?.get(`${arg}`)?.value ?? trigger.fields?.fields?.get(`${arg}`)?.value ?? null;
     }
 
-    throw new Error("helper.js => getArgValue() \n trigger is not message or interaction")
+    throw new Error("helper.js => getArgValue() \n trigger is not message or interaction");
 }
 
-//作成時間の取得
-function getCreatedAt(trigger){
+//作成日の取得
+function getDate(trigger){
     if(isMessage(trigger)){
         const time = trigger.createdAt;
+        const days = ["日", "月", "火", "水", "木", "金", "土"];
         const year = time.getFullYear();
-        const month = String(time.getMonth()+1).padStart(2,"0");
-        const date =  String(time.getDate()).padStart(2,"0");
-        const hours = String(time.getHours()).padStart(2,"0");
-        const minutes = String(time.getMinutes()).padStart(2,"0");
-        const seconds = String(time.getSeconds()).padStart(2,"0");
-        return {year: year, month: month, date: date, hours: hours, minutes: minutes, seconds: seconds};
+        const month = String(time.getMonth()+1).padStart(2, "0");
+        const date =  String(time.getDate()).padStart(2, "0");
+        const day = days[time.getDay()];
+        return {year: year, month: month, date: date, day: day};
     }
 
     if(isInteraction(trigger)){
         const time = trigger.createdAt;
+        const days = ["日", "月", "火", "水", "木", "金", "土"];
         const year = time.getFullYear();
-        const month = String(time.getMonth()+1).padStart(2,"0");
-        const date =  String(time.getDate()).padStart(2,"0");
-        const hours = String(time.getHours()).padStart(2,"0");
-        const minutes = String(time.getMinutes()).padStart(2,"0");
-        const seconds = String(time.getSeconds()).padStart(2,"0");
-        return {year: year, month: month, date: date, hours: hours, minutes: minutes, seconds: seconds};
+        const month = String(time.getMonth()+1).padStart(2, "0");
+        const date =  String(time.getDate()).padStart(2, "0");
+        const day = days[time.getDay()];
+        return {year: year, month: month, date: date, day: day};
     }
 
-    throw new Error("helper.js => getCreatedAt() \n trigger is not message or interaction")
+    throw new Error("helper.js => getCreatedAt() \n trigger is not message or interaction");
 }
 
-//プレースホルダーの置換
-function replaceholder(string, replacement){
-    if(typeof string === "string"){
-        return string.replace(/{{__.*?__}}/g, match => replacement[match]);
+//作成時間の取得
+function getTime(trigger){
+    if(isMessage(trigger)){
+        const time = trigger.createdAt;
+        const hours = String(time.getHours()).padStart(2, "0");
+        const minutes = String(time.getMinutes()).padStart(2, "0");
+        const seconds = String(time.getSeconds()).padStart(2, "0");
+        const milliseconds = String(time.getMilliseconds()).padStart(3, "0");
+        return {hours: hours, minutes: minutes, seconds: seconds, milliseconds: milliseconds};
     }
 
-    return null;
+    if(isInteraction(trigger)){
+        const time = trigger.createdAt;
+        const hours = String(time.getHours()).padStart(2, "0");
+        const minutes = String(time.getMinutes()).padStart(2, "0");
+        const seconds = String(time.getSeconds()).padStart(2, "0");
+        const milliseconds = String(time.getMilliseconds()).padStart(3, "0");
+        return {hours: hours, minutes: minutes, seconds: seconds, milliseconds: milliseconds};
+    }
+
+    throw new Error("helper.js => getCreatedAt() \n trigger is not message or interaction");
 }
 
 //延期の送信
@@ -226,7 +282,7 @@ async function sendDefer(interaction){
         throw new Error(`helper.js => sendDefer() \n ${e}`);
     }
     
-    throw new Error("helper.js => sendDefer() \n interaction is not interaction");
+    throw new Error("helper.js => sendDefer() \n argment is not interaction");
 }
 
 //モーダルの送信
@@ -240,7 +296,46 @@ async function sendModal(interaction, gui){
         throw new Error(`helper.js => sendModal() \n ${e}`);
     }
 
-    throw new Error("helper.js => sendModal() \n interaction is not interaction");
+    throw new Error("helper.js => sendModal() \n argment is not interaction");
+}
+
+//プログレスの送信
+async function sendProgress(trigger, gui){
+    try{
+        const embed = EmbedBuilder.from(gui.embeds[0]);
+        const progress = ["🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚", "🕛"];
+
+        let i=0;
+        let progress_embed = new EmbedBuilder(embed.data);
+        gui.embeds[0] = progress_embed.setFooter({text: replaceholder(embed.data.footer.text, {"{{__PROGRESS__}}": progress.at(-1)})});
+
+        if(isChannnel(trigger)){
+            const message = await trigger.send(gui);
+            const interval = setInterval(() => {
+                gui.embeds[0] = progress_embed.setFooter({text: replaceholder(embed.data.footer.text, {"{{__PROGRESS__}}": progress.at(i%progress.length)})});
+                message.edit(gui);
+                i++;
+            }, 1000);
+            message.interval = interval;
+            return message;
+        }
+
+        if(isMessage(trigger)){
+            const message = await trigger.reply(gui);
+            const interval = setInterval(() => {
+                gui.embeds[0] = progress_embed.setFooter({text: replaceholder(embed.data.footer.text, {"{{__PROGRESS__}}": progress.at(i%progress.length)})});
+                message.edit(gui);
+                i++;
+            }, 1000);
+            message.interval = interval;
+            return message;
+        }
+
+    }catch(e){
+        throw new Error(`helper.js => sendProgress() \n ${e}`);
+    }
+    
+    throw new Error("helper.js => sendProgress() \n trigger is not channel or message");
 }
 
 //GUIの送信
@@ -251,7 +346,7 @@ async function sendGUI(trigger, gui){
         }
 
         if(isMessage(trigger)){
-            return await trigger.reply(gui);
+            return (trigger.author.id!=trigger.client.user.id) ? await trigger.reply(gui) : await trigger.edit(gui);
         }
 
         if(isInteraction(trigger)){
@@ -271,24 +366,16 @@ async function sendGUI(trigger, gui){
         throw new Error(`helper.js => sendGUI() \n ${e}`);
     }
 
-    throw new Error("helper.js => sendGUI() \n trigger is not message or interaction");
+    throw new Error("helper.js => sendGUI() \n trigger is not channel, message or interaction");
 }
 
-//GUIの編集
-async function editGUI(trigger, gui){
-    try{
-        if(isMessage(trigger)){
-            return await trigger.edit(gui);;
-        }
-
-        if(isInteraction(trigger)){
-            return await trigger.editReply(gui);
-        }
-    }catch(e){
-        throw new Error(`helper.js => editGUI() \n ${e}`);
+//プレースホルダーの置換
+function replaceholder(string, replacement){
+    if(typeof string === "string"){
+        return string.replace(/{{__.*?__}}/g, match => replacement[match]);
     }
 
-    throw new Error("helper.js => editGUI() \n trigger is not message or interaction");
+    return null;
 }
 
 //Botのメンションを除去
@@ -298,7 +385,7 @@ function removeBotMention(message){
         return message.content.replace(bot_mention, "");
     }
 
-    throw new Error("helper.js => removeBotMention() \n message is not message");
+    throw new Error("helper.js => removeBotMention() \n argment is not message");
 }
 
 //Botの名前を除去
@@ -307,5 +394,5 @@ function removeBotName(message){
         return message.content.replace(bot_name, "");
     }
 
-    throw new Error("helper.js => removeBotName() \n message is not message");
+    throw new Error("helper.js => removeBotName() \n argment is not message");
 }

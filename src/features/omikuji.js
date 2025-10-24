@@ -21,7 +21,7 @@ async function draw(trigger, map){
         const user_info_uranai = user_info.uranai;
         const vv_speakers = map.get("voicevox_speakers");
         const gemini_prompt_json = JSON.parse(fs.readFileSync("./src/json/gemini-prompt.json", "utf-8"));
-        const time = helper.getCreatedAt(trigger);
+        const time = helper.getDate(trigger);
         const today = `${time.year}/${time.month}/${time.date}`;
 
         let date = user_info_uranai.date;
@@ -92,7 +92,7 @@ async function draw(trigger, map){
             if(helper.isInteraction(trigger)){
                 await helper.sendGUI(trigger, gui.create(map, "omikuji"));
             }
-            await helper.editGUI(road_gui, gui.create(map, "omikuji_draw_failure"));
+            await helper.sendGUI(road_gui, gui.create(map, "omikuji_draw_failure"));
             return;
         }
 
@@ -103,7 +103,7 @@ async function draw(trigger, map){
         if(helper.isInteraction(trigger)){
             await helper.sendGUI(trigger, gui.create(map, "omikuji_luck", {"{{__SPEAKER_UUID__}}":speaker_uuid}));
         }
-        await helper.editGUI(road_gui, gui.create(map, "omikuji_draw", {"{{__DATE__}}":today, "{{__USERNAME__}}":helper.getUserName(trigger), "{{__FORTUNE__}}" : fortune, "{{__SPEAKER__}}" : speaker_name, "{{__COLOR__}}" : color, "{{__ITEM__}}" : item, "{{__DINNER__}}" : dinner, "{{__QUEST__}}" : quest, "{{__ADVICE__}}" : advice}));
+        await helper.sendGUI(road_gui, gui.create(map, "omikuji_draw", {"{{__DATE__}}":today, "{{__USERNAME__}}":helper.getUserName(trigger), "{{__FORTUNE__}}" : fortune, "{{__SPEAKER__}}" : speaker_name, "{{__COLOR__}}" : color, "{{__ITEM__}}" : item, "{{__DINNER__}}" : dinner, "{{__QUEST__}}" : quest, "{{__ADVICE__}}" : advice}));
 
         return;
     }catch(e){

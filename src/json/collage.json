@@ -235,6 +235,39 @@
         "modals" : []
     },
     {
+        "id" : "collage_meme_progress",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "thumbnail" : {
+                    "name" : null,
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [],
+                "image" : "attachment://default.png",
+                "footer" : {
+                    "text" : "{{__PROGRESS__}}画像作成中...",
+                    "url" : null
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "default.png",
+                "path" : "./assets/collage/meme/default.png",
+                "base64" : null
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
         "id" : "collage_gyotaku",
         "content" : null,
         "embeds" : [
@@ -268,6 +301,39 @@
         "modals" : []
     },
     {
+        "id" : "collage_gyotaku_progress",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "thumbnail" : {
+                    "name" : null,
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [],
+                "image" : "attachment://default.png",
+                "footer" : {
+                    "text" : "{{__PROGRESS__}}画像作成中...",
+                    "url" : null
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "default.png",
+                "path" : "./assets/collage/gyotaku/default.png",
+                "base64" : null
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
         "id" : "collage_superchat",
         "content" : null,
         "embeds" : [
@@ -294,6 +360,39 @@
                 "name" : "{{__SUPERCHAT_NAME__}}",
                 "path" : null,
                 "base64" : "{{__SUPERCHAT_BASE64__}}"
+            }
+        ],
+        "menus" : [],
+        "buttons" : [],
+        "modals" : []
+    },
+    {
+        "id" : "collage_superchat_progress",
+        "content" : null,
+        "embeds" : [
+            {
+                "title" : null,
+                "url" : null,
+                "thumbnail" : {
+                    "name" : null,
+                    "path" : null,
+                    "base64" : null
+                },
+                "description" : null,                
+                "fields" : [],
+                "image" : "attachment://default.png",
+                "footer" : {
+                    "text" : "{{__PROGRESS__}}画像作成中...",
+                    "url" : null
+                },
+                "color" : "000000"
+            }
+        ],
+        "files" : [
+            {
+                "name" : "default.png",
+                "path" : "./assets/collage/superchat/default.png",
+                "base64" : null
             }
         ],
         "menus" : [],

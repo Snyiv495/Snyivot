@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/10/21
+    2025/10/24
 *****************/
 
 require('dotenv').config();
@@ -79,9 +79,7 @@ client.once('clientReady', async () => {
 client.on('messageCreate', async (message) => {
     try{
         //botの発言を除外
-        if(message.author.bot){
-            return;
-        }
+        if(message.author.bot) return;
 
         //ギルド以外での動作
         if(!message.guild){
@@ -168,10 +166,8 @@ client.on('interactionCreate', async (interaction) => {
 //ボイスチャンネル動作
 client.on('voiceStateUpdate', async (old_state, new_state) => {
     try{
-        //関与していないチャンネルを除外
-        if(!map.get(`read_voice_${old_state.channelId}`)){
-           return;
-        }
+        //関与していないチャンネルを無視
+        if(!map.get(`read_voice_${old_state.channelId}`)) return;
 
         //ボイチャにユーザーがいなくなる
         if(!old_state.channel.members.filter((member)=>!member.user.bot).size){
@@ -204,18 +200,14 @@ client.on('voiceStateUpdate', async (old_state, new_state) => {
 //リアクション動作
 client.on('messageReactionAdd', async (reaction, user) => {
     try{
-        const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
         const emoji = reaction.emoji.name;
-        const reaction_json = map.get("reaction_json");
-        const collage_original_json = map.get("collage_original_json");
+        const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
 
-        //botのリアクションと2個以上の同じリアクションはスルー
-        if(reaction.me || reaction.count > 1){
-            return;
-        }
+        //bot, 2個以上の同リアクションは無視
+        if(user.bot || reaction.count > 1) return;
 
         //コラ画像リアクション
-        for(const element of collage_original_json){
+        for(const element of map.get("collage_original_json")){
             if(element.emoji === emoji){
                 message.react(reaction.emoji);
                 message.system_id = `collage_${element.type}_${message.id}_${user.id}_${emoji}`;
@@ -225,7 +217,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
 
         //その他リアクション
-        for(const element of reaction_json){
+        for(const element of map.get("reaction_json")){
             if(element.emoji === emoji){
                 message.system_id = element.system_id;
                 await gui.reaction(message, map);

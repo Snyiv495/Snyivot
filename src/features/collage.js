@@ -1,7 +1,7 @@
 /*****************
     collage.js
     スニャイヴ
-    2025/10/21
+    2025/10/24
 *****************/
 
 module.exports = {
@@ -18,19 +18,19 @@ registerFont("./assets/collage/NotoSansJP-Regular.ttf", {family: "Noto Sans JP"}
 
 //文章記述
 async function writeSentence(ctx, text, bubble){
+    /*
+        カスタム絵文字の形式
+            <:custom_emoji_name:unique_number>      <= (png)
+            <a:custom_emoji_name:unique_number>     <= animation(gif)
+        正規表現
+            /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
+            カスタム絵文字 or Unicode絵文字 or 任意の1文字
+        array[0] : <:xxx:000>   or Unicode絵文字    or x
+        array[1] : 000          or undefind         or undefined
+        array[2] : undefined    or Unicode絵文字    or undefined
+        array[3] : undefined    or undefined        or x
+    */
     try{
-        /*
-            カスタム絵文字の形式
-                <:custom_emoji_name:unique_number>      <= (png)
-                <a:custom_emoji_name:unique_number>     <= animation(gif)
-            正規表現
-                /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
-                カスタム絵文字 or Unicode絵文字 or 任意の1文字
-            array[0] : <:xxx:000>   or Unicode絵文字    or x
-            array[1] : 000          or undefind         or undefined
-            array[2] : undefined    or Unicode絵文字    or undefined
-            array[3] : undefined    or undefined        or x
-        */
         const font_size = bubble.font_size;
         const emoji_regex = /<a?:\w+:(\d+)>|(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)|([\s\S])/gu;
 
@@ -163,12 +163,11 @@ async function writeSentence(ctx, text, bubble){
 //ミーム作成
 async function makeMemeImage(element, content){
     try{
-        const collage_original_path = `./assets/collage/meme/${element.name}`;
-        const collage_original_image = await loadImage(collage_original_path);
+        const image = await loadImage(`./assets/collage/meme/${element.name}`);
         const canvas = createCanvas(element.canvas.width, element.canvas.height);
         const ctx = canvas.getContext("2d");
 
-        ctx.drawImage(collage_original_image, 0, 0);
+        ctx.drawImage(image, 0, 0);
 
         await writeSentence(ctx, content, element.bubble);
 
@@ -181,30 +180,25 @@ async function makeMemeImage(element, content){
 //ミーム送信
 async function sendMemeImage(trigger, map){
     try{
-        /*
-            triggerの内容
-                リアクション　　：リアクションを付けられたメッセージ
-                インタラクション：利用者のインタラクション
-            システムIDの形式
-                リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
-                インタラクション：collage_${type}
-        */
         const system_id = helper.getSystemId(trigger);
         const message_id = system_id.split("_")[2] ?? helper.getArgValue(trigger, "id");
         const user_id = system_id.split("_")[3] ?? helper.getUserId(trigger);
         const emoji = system_id.split("_")[4] ?? helper.getArgValue(trigger, "emoji");
-        const collage_original_json = map.get("collage_original_json");
         
         let user = null;
         let message = null;
+        let progress_message = null;
         
         try{user = (await trigger.guild.members.fetch(user_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
         try{message = (await trigger.channel.messages.fetch(message_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
 
-        for(const element of collage_original_json){
+        if(!helper.isInteraction(trigger)) progress_message = await helper.sendProgress(message, gui.create(map, "collage_meme_progress", {"{{__PROGRESS__}}": "{{__PROGRESS__}}"}));
+        for(const element of map.get("collage_original_json")){
             if(element.emoji === emoji){
-                await helper.sendGUI(message, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.name, "{{__MEME_BASE64__}}": await makeMemeImage(element, message.cleanContent??""), "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
+                const meme_base64 = await makeMemeImage(element, message.cleanContent??"");
                 if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
+                if(!helper.isInteraction(trigger)) clearInterval(progress_message.interval);
+                await helper.sendGUI(progress_message??message, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.name, "{{__MEME_BASE64__}}": meme_base64, "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
                 return;
             }
         }
@@ -281,30 +275,25 @@ async function makeGyotakuImage(element, content, user, time,){
 //魚拓送信
 async function sendGyotakuImage(trigger, map){
     try{
-        /*
-            triggerの内容
-                リアクション　　：リアクションを付けられたメッセージ
-                インタラクション：利用者のインタラクション
-            システムIDの形式
-                リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
-                インタラクション：collage_${type}
-        */
         const system_id = helper.getSystemId(trigger);
         const message_id = system_id.split("_")[2] ?? helper.getArgValue(trigger, "id");
         const user_id = system_id.split("_")[3] ?? helper.getUserId(trigger);
         const emoji = system_id.split("_")[4] ?? helper.getArgValue(trigger, "emoji");
-        const collage_original_json = map.get("collage_original_json");
         
         let user = null;
         let message = null;
+        let progress_message = null;
         
         try{user = (await trigger.guild.members.fetch(user_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
         try{message = (await trigger.channel.messages.fetch(message_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
 
-        for(const element of collage_original_json){
+        if(!helper.isInteraction(trigger)) progress_message = await helper.sendProgress(message, gui.create(map, "collage_gyotaku_progress", {"{{__PROGRESS__}}": "{{__PROGRESS__}}"}));
+        for(const element of map.get("collage_original_json")){
             if(element.emoji === emoji){
-                await helper.sendGUI(message, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.name, "{{__MEME_BASE64__}}": await makeGyotakuImage(element, message.cleanContent??"", helper.getUserObj(message), helper.getCreatedAt(message)), "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
+                const gyotaku_base64 = await makeGyotakuImage(element, message.cleanContent??"", helper.getUserObj(message), helper.getDate(message));
                 if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
+                if(!helper.isInteraction(trigger)) clearInterval(progress_message.interval);
+                await helper.sendGUI(progress_message??message, gui.create(map, "collage_gyotaku", {"{{__GYOTAKU_NAME__}}":element.name, "{{__GYOTAKU_BASE64__}}": gyotaku_base64, "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
                 return;
             }
         }
@@ -364,32 +353,27 @@ async function makeSuperChatImage(element, user, amount, content){
 //スパチャ送信
 async function sendSuperChatImage(trigger, map){
     try{
-        /*
-            triggerの内容
-                リアクション　　：リアクションを付けられたメッセージ
-                インタラクション：利用者のインタラクション
-            システムIDの形式
-                リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
-                インタラクション：collage_${type}
-        */
         const system_id = helper.getSystemId(trigger);
         const message_id = system_id.split("_")[2] ?? helper.getArgValue(trigger, "id");
         const user_id = system_id.split("_")[3] ?? helper.getUserId(trigger);
         const emoji = system_id.split("_")[4] ?? helper.getArgValue(trigger, "emoji");
         const amount = helper.isInteraction(trigger) ? helper.getArgValue(trigger, "amount") : null;
         const content = helper.isInteraction(trigger) ? helper.getArgValue(trigger, "content") : null;
-        const collage_original_json = map.get("collage_original_json");
-
+        
         let user = null;
         let message = null;
-        
+        let progress_message = null;
+
         try{user = (await trigger.guild.members.fetch(user_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
         try{message = (await trigger.channel.messages.fetch(message_id));}catch(e){await helper.sendGUI(trigger, gui.create(map, "collage_failure"));};
 
-        for(const element of collage_original_json){
+        if(!helper.isInteraction(trigger)) progress_message = await helper.sendProgress(message, gui.create(map, "collage_superchat_progress", {"{{__PROGRESS__}}": "{{__PROGRESS__}}"}));
+        for(const element of map.get("collage_original_json")){
             if(element.emoji === emoji){
-                await helper.sendGUI(message, gui.create(map, "collage_superchat", {"{{__SUPERCHAT_NAME__}}":element.name, "{{__SUPERCHAT_BASE64__}}": await makeSuperChatImage(element, user, amount, content)}));
+                const superchat_base64 = await makeSuperChatImage(element, user, amount, content);
                 if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
+                if(!helper.isInteraction(trigger)) clearInterval(progress_message.interval);
+                await helper.sendGUI(progress_message??message, gui.create(map, "collage_superchat", {"{{__SUPERCHAT_NAME__}}":element.name, "{{__SUPERCHAT_BASE64__}}": superchat_base64}));
                 return;
             }
         }
@@ -400,28 +384,16 @@ async function sendSuperChatImage(trigger, map){
     throw new Error(`collage.js => sendSuperChatImage() \n not define id`);
 }
 
-//絵文字選択肢の取得
-async function getEmojiChoices(interaction, map){
-    try{
-        const system_id = helper.getSystemId(interaction);
-        const focus_opt = interaction.options.getFocused(true);
-        const collage_original_json = map.get("collage_original_json");
-        const choices = new Array();
-
-        collage_original_json.find(element => {
-            if(system_id.includes(element.type) && element.emoji.includes(focus_opt.value) && !element.custom){
-                choices.push(element.emoji);
-            }
-        });
-
-        return choices.slice(0, 25);
-    }catch(e){
-        throw new Error(`read.js => getEmojiChoices() \n ${e}`);
-    }
-}
-
 //コラ作成実行
 async function execute(trigger, map){
+    /*
+        triggerの内容
+            リアクション　　：リアクションを付けられたメッセージ
+            インタラクション：利用者のインタラクション
+        システムIDの形式
+            リアクション　　：collage_${type}_${message_id}_${user_id}_${emoji}
+            インタラクション：collage_${type}
+    */
     try{
         const system_id = helper.getSystemId(trigger);
 
@@ -454,6 +426,25 @@ async function execute(trigger, map){
 
     }catch(e){
         throw new Error(`collage.js => execute() \n ${e}`);
+    }
+}
+
+//絵文字選択肢の取得
+async function getEmojiChoices(interaction, map){
+    try{
+        const system_id = helper.getSystemId(interaction);
+        const focus_opt = interaction.options.getFocused(true);
+        const choices = new Array();
+
+        map.get("collage_original_json").find(element => {
+            if(system_id.includes(element.type) && element.emoji.includes(focus_opt.value) && !element.custom){
+                choices.push(element.emoji);
+            }
+        });
+
+        return choices.slice(0, 25);
+    }catch(e){
+        throw new Error(`read.js => getEmojiChoices() \n ${e}`);
     }
 }
 
