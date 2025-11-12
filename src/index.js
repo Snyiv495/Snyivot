@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/10/24
+    2025/11/12
 *****************/
 
 require('dotenv').config();
@@ -109,6 +109,9 @@ client.on('messageCreate', async (message) => {
         }
 
     }catch(e){
+        const date = helper.getDate(message);
+        const time = helper.getTime(message);
+        console.log(`#####\n${date.year}/${date.month}/${date.date}(${date.day}) ${time.hours}:${time.minutes}:${time.seconds}.${time.milliseconds}\n#####`);
         console.error("index.js => client.on(messageCreate) \n", e);
     }
     
@@ -155,6 +158,9 @@ client.on('interactionCreate', async (interaction) => {
         }
 
     }catch(e){
+        const date = helper.getDate(interaction);
+        const time = helper.getTime(interaction);
+        console.log(`#####\n${date.year}/${date.month}/${date.date}(${date.day}) ${time.hours}:${time.minutes}:${time.seconds}.${time.milliseconds}\n#####`);
         console.error("index.js => client.on(interactionCreate) \n", e);
         return;
     }
