@@ -1,7 +1,7 @@
 /*****************
     read.js
     スニャイヴ
-    2025/08/20
+    2025/11/12
 *****************/
 
 module.exports = {
@@ -30,6 +30,10 @@ async function readText(trigger, map){
         const stream = new Readable();
         const player = map.get(`read_voice_${map.get(`read_text_${trigger.channel.id}`)}`).player;
         
+        player.on('error', (e) => {
+            throw new Error(e);
+        });
+
         //整形
         let text = trigger.cleanContent;
         text = text.replace(/(https?|ftp)(:\/\/[\w\/:%#\$&\?\(\)~\.=\+\-]+)/g, "URL省略");  //URL

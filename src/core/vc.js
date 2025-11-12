@@ -1,7 +1,7 @@
 /*****************
     vc.js
     スニャイヴ
-    2025/08/12
+    2025/11/12
 *****************/
 
 module.exports = {
@@ -21,6 +21,10 @@ async function connect(voice_channel){
             adapterCreator: voice_channel.guild.voiceAdapterCreator,
             selfMute: false,
             selfDeaf: true,
+        });
+
+        connect_voice_channel.on('error', (e) => {
+            throw new Error(e);
         });
 
         return connect_voice_channel;
