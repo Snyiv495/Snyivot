@@ -29,10 +29,6 @@ async function readText(trigger, map){
         const server_info = await db.getServerInfo(guild_id);
         const stream = new Readable();
         const player = map.get(`read_voice_${map.get(`read_text_${trigger.channel.id}`)}`).player;
-        
-        player.on('error', (e) => {
-            throw new Error(e);
-        });
 
         //整形
         let text = trigger.cleanContent;
