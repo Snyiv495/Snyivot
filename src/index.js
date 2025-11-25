@@ -1,10 +1,16 @@
 /*****************
     index.js
     スニャイヴ
-    2025/11/12
+    2025/11/25
 *****************/
 
+//環境変数の読み込み
 require('dotenv').config();
+if(!process.env.BOT_TOKEN || !process.env.BOT_ID){
+    console.error("index.js => require('dotenv').config() \n .envの読み込みに失敗しました");
+    process.exit();
+}
+
 const {Client, GatewayIntentBits, Partials} = require('discord.js');
 const fs = require('fs');
 
@@ -23,7 +29,7 @@ client.login(process.env.BOT_TOKEN);
 client.once('clientReady', async () => {
     //READMEの取得
     try{
-        map.set("readme_md", fs.readFileSync("./README.md", "utf-8"));
+        map.set("readme_md", await fs.promises.readFile("./README.md", "utf-8"));
     }catch(e){
         console.error("index.js => client.once() \n READMEの取得に失敗しました \n", e);
         process.exit();
@@ -31,7 +37,7 @@ client.once('clientReady', async () => {
 
     //リアクションの取得
     try{
-        map.set("reaction_json", JSON.parse(fs.readFileSync("./src/json/reaction.json", "utf-8")));
+        map.set("reaction_json", JSON.parse(await fs.promises.readFile("./src/json/reaction.json", "utf-8")));
     }catch(e){
         console.error("index.js => client.once() \n リアクションの取得に失敗しました \n", e);
         process.exit();
@@ -39,7 +45,7 @@ client.once('clientReady', async () => {
 
     //オリジナルコラ画像の取得
     try{
-        map.set("collage_original_json", JSON.parse(fs.readFileSync("./src/json/collage-original.json", "utf-8")));
+        map.set("collage_original_json", JSON.parse(await fs.promises.readFile("./src/json/collage-original.json", "utf-8")));
     }catch(e){
         console.error("index.js => client.once() \n オリジナルコラ画像の取得に失敗しました \n", e);
         process.exit();
@@ -48,7 +54,7 @@ client.once('clientReady', async () => {
     //GUIの取得
     try{
         const files = ["./src/json/home.json", "./src/json/collage.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/omikuji.json", "./src/json/read.json"];
-        map.set("gui_json", files.flatMap(file => JSON.parse(fs.readFileSync(file, "utf-8"))));
+        map.set("gui_json", (await Promise.all(files.map(file => fs.promises.readFile(file, "utf-8")))).flatMap(json => JSON.parse(json)));
     }catch(e){
         console.error("index.js => client.once() \n GUIの取得に失敗しました \n", e);
         process.exit();
@@ -56,7 +62,7 @@ client.once('clientReady', async () => {
 
     //コマンドの登録
     try{
-        client.application.commands.set(cui.getSlashCmds(JSON.parse(fs.readFileSync("./src/json/slashcmd.json", "utf-8"))));
+        client.application.commands.set(cui.getSlashCmds(JSON.parse(await fs.promises.readFile("./src/json/slashcmd.json", "utf-8"))));
     }catch(e){
         console.error("index.js => client.once() \n コマンドの登録に失敗しました \n", e);
         process.exit();
@@ -165,7 +171,12 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
+    //未定義インタラクション
+    const date = helper.getDate(interaction);
+    const time = helper.getTime(interaction);
+    console.log(`#####\n${date.year}/${date.month}/${date.date}(${date.day}) ${time.hours}:${time.minutes}:${time.seconds}.${time.milliseconds}\n#####`);
     console.error("index.js => client.on(interactionCreate) \n not define interaction");
+    await helper.sendGUI(interaction, gui.create(map, "null"));
     return;
 });
 
@@ -206,11 +217,13 @@ client.on('voiceStateUpdate', async (old_state, new_state) => {
 //リアクション動作
 client.on('messageReactionAdd', async (reaction, user) => {
     try{
-        const emoji = reaction.emoji.name;
-        const message = reaction.partial ? await reaction.fetch().then(react => react.message) : reaction.message;
-
-        //bot, 2個以上の同リアクションは無視
+        //データの補完
+        if(reaction.partial) await reaction.fetch();
+        if(user.partial) await user.fetch();
         if(user.bot || reaction.count > 1) return;
+
+        const emoji = reaction.emoji.name;
+        const message = reaction.message;
 
         //コラ画像リアクション
         for(const element of map.get("collage_original_json")){
