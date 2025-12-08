@@ -23,6 +23,7 @@ function getSlashCmds(json){
 
         //コマンド
         for(const element of json){
+            //フォーマット定義のスキップ
             if(element.name === "string") continue;
 
             const cmd = new SlashCommandBuilder();
@@ -60,8 +61,8 @@ function getSlashCmds(json){
                         num_opt.setDescription(opt.description);
                         num_opt.setAutocomplete(opt.autocomplete);
                         num_opt.setRequired(opt.required);
-                        num_opt.setMaxValue(opt.max??1);
-                        num_opt.setMinValue(opt.min??0);
+                        if(opt.max) num_opt.setMaxValue(opt.max);
+                        if(opt.min) num_opt.setMinValue(opt.min);
                         sub_cmd.addNumberOption(num_opt);
                     }
 
@@ -90,6 +91,7 @@ async function slashCmd(interaction, map){
         const system_id = helper.getSystemId(interaction);
         const feature_modules = helper.getFeatureModules();
 
+        //機能選択
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
                 await feature_modules[prefix].exe(interaction, map);
@@ -101,6 +103,7 @@ async function slashCmd(interaction, map){
         throw new Error(`cui.js => slashCmd() \n ${e}`);
     }
 
+    await helper.sendGUI(interaction, gui.create(map, "null"));
     throw new Error("cui.js => slashCmd() \n not define feature.exe()");
 }
 
@@ -110,6 +113,7 @@ async function autoComplete(interaction, map){
         const system_id = helper.getSystemId(interaction);
         const feature_modules = helper.getFeatureModules();
 
+        //機能選択
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
                 await feature_modules[prefix].autoComplete(interaction, map);
@@ -121,6 +125,7 @@ async function autoComplete(interaction, map){
         throw new Error(`cui.js => autoComplete() \n ${e}`);
     }
 
+    await helper.sendGUI(interaction, gui.create(map, "null"));
     throw new Error("cui.js => autoComplete() \n not define feature.autoComplete()");
 }
 
@@ -130,7 +135,7 @@ async function msgCmd(message, map){
         const system_id = helper.getSystemId(message);
         const feature_modules = helper.getFeatureModules();
 
-        //機能の実行
+        //機能選択
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
                 await feature_modules[prefix].exe(message, map);
