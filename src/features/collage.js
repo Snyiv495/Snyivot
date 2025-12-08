@@ -195,7 +195,7 @@ async function sendMemeImage(trigger, map){
         if(!helper.isInteraction(trigger)) progress_message = await helper.sendProgress(message, gui.create(map, "collage_meme_progress", {"{{__PROGRESS__}}": "{{__PROGRESS__}}"}));
         for(const element of map.get("collage_original_json")){
             if(element.emoji === emoji){
-                const meme_base64 = await makeMemeImage(element, message.cleanContent??"");
+                const meme_base64 = await makeMemeImage(element, message.content??"");
                 if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
                 if(!helper.isInteraction(trigger)) clearInterval(progress_message.interval);
                 await helper.sendGUI(progress_message??message, gui.create(map, "collage_meme", {"{{__MEME_NAME__}}":element.name, "{{__MEME_BASE64__}}": meme_base64, "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
@@ -290,7 +290,7 @@ async function sendGyotakuImage(trigger, map){
         if(!helper.isInteraction(trigger)) progress_message = await helper.sendProgress(message, gui.create(map, "collage_gyotaku_progress", {"{{__PROGRESS__}}": "{{__PROGRESS__}}"}));
         for(const element of map.get("collage_original_json")){
             if(element.emoji === emoji){
-                const gyotaku_base64 = await makeGyotakuImage(element, message.cleanContent??"", helper.getUserObj(message), helper.getDate(message));
+                const gyotaku_base64 = await makeGyotakuImage(element, message.content??"", helper.getUserObj(message), helper.getDate(message));
                 if(helper.isInteraction(trigger)) await helper.sendGUI(trigger, gui.create(map, "home"));
                 if(!helper.isInteraction(trigger)) clearInterval(progress_message.interval);
                 await helper.sendGUI(progress_message??message, gui.create(map, "collage_gyotaku", {"{{__GYOTAKU_NAME__}}":element.name, "{{__GYOTAKU_BASE64__}}": gyotaku_base64, "{{__REACT_USER_NAME__}}":user.displayName, "{{__REACT_USER_ICON__}}":user.displayAvatarURL()}));
