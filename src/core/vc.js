@@ -1,7 +1,7 @@
 /*****************
     vc.js
     スニャイヴ
-    2025/11/12
+    2025/12/09
 *****************/
 
 module.exports = {
@@ -24,7 +24,9 @@ async function connect(voice_channel){
         });
 
         connect_voice_channel.on('error', (e) => {
-            throw new Error(e);
+            //クリーンアップ処理を検討する
+            console.error(`vc.js => connect() : 接続オブジェクトエラーが発生しました。\n ${e}`);
+            if(connect_voice_channel && connect_voice_channel.state.status !== 'destroyed') connect_voice_channel.destroy();
         });
 
         return connect_voice_channel;
@@ -45,8 +47,8 @@ async function voiceStateCmd(old_state, new_state, map){
             }
         }
     }catch(e){
-        throw new Error(`vc.js => stateCmd() \n ${e}`);
+        throw new Error(`vc.js => voiceStateCmd() \n ${e}`);
     }
 
-    throw new Error("vc.js => stateCmd() \n not define system id");
+    throw new Error(`vc.js => voiceStateCmd() \n not define system id : ${system_id}`);
 }

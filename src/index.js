@@ -285,3 +285,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
         console.error("index.js => client.on(messageReactionAdd) \n", e);
     }
 });
+
+//Discord.jsクライアントのエラー処理
+client.on('error', (e) => {
+    console.error("index.js => client.on(error) \n", e);
+});
