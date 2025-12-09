@@ -122,7 +122,7 @@ async function writeSentence(ctx, text, bubble){
                 //カスタム絵文字
                 if(match[1]){
                     const custom_emoji = await loadImage(`https://cdn.discordapp.com/emojis/${match[1]}.png`);
-                    ctx.drawImage(custom_emoji, current_x, current_y, font_size*3/2, font_size*3/2);
+                    ctx.drawImage(custom_emoji, current_x, current_y, font_size, font_size);
                     current_x += font_size;
                 }
 
