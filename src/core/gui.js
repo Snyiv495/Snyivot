@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/10/17
+    2025/12/09
 *****************/
 
 module.exports = {
@@ -14,7 +14,6 @@ module.exports = {
 }
 
 const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuOptionBuilder, ModalBuilder, TextInputBuilder, TextInputStyle} = require("discord.js");
-const fs = require('fs');
 
 const helper = require("./helper");
 
@@ -51,7 +50,7 @@ function getEmbeds(gui, replacement){
 }
 
 //ファイルの取得
-function getFiles(gui, replacement){
+function getFiles(gui, asset_images, replacement){
     const files = [];
 
     if(gui.embeds.length){
@@ -60,12 +59,10 @@ function getFiles(gui, replacement){
         const file_path = helper.replaceholder(gui.embeds[0].thumbnail?.path, replacement);
         const file_base64 = helper.replaceholder(gui.embeds[0].thumbnail?.base64, replacement);
 
-        if(file_path || file_base64){
-            attachment.setName(file_name??"thumbnail.png");
-            attachment.setFile((file_path&&fs.existsSync(file_path))?file_path:file_base64?Buffer.from(file_base64, "base64"):"assets/default.png");
-
-            files.push(attachment);
-        }
+        if(file_path) attachment.setFile(asset_images.has(file_path) ? asset_images.get(file_path) : asset_images.get("assets/default.png"));
+        if(file_base64) attachment.setFile(Buffer.from(file_base64, "base64"));
+        attachment.setName(file_name??"thumbnail.png");
+        files.push(attachment);
     }
 
     if(gui.files.length){
@@ -75,9 +72,9 @@ function getFiles(gui, replacement){
             const file_path = helper.replaceholder(file?.path, replacement);
             const file_base64 = helper.replaceholder(file?.base64, replacement);
 
+            if(file_path) attachment.setFile(asset_images.has(file_path) ? asset_images.get(file_path) : asset_images.get("assets/default.png"));
+            if(file_base64) attachment.setFile(Buffer.from(file_base64, "base64"));
             attachment.setName(file_name??"image.png");
-            attachment.setFile((file_path&&fs.existsSync(file_path))?file_path:file_base64?Buffer.from(file_base64, "base64"):"assets/default.png");
-
             files.push(attachment);
         }
     }
@@ -203,9 +200,10 @@ function getModal(gui, replacement){
 function create(map, system_id, replacement={}){
     try{
         const gui_json = map.get("gui_json");
+        const asset_images = map.get("asset_images");
         const match_gui = gui_json.find(gui => gui.id === system_id);
         const content = helper.replaceholder(match_gui.content, replacement);
-        const files = getFiles(match_gui, replacement);
+        const files = getFiles(match_gui, asset_images, replacement);
         const embeds = getEmbeds(match_gui, replacement);
         const menus = getMenus(match_gui, replacement);
         const buttons = getButtons(match_gui, replacement);

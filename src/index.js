@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/11/25
+    2025/12/09
 *****************/
 
 //環境変数の読み込み
@@ -13,6 +13,7 @@ if(!process.env.BOT_TOKEN || !process.env.BOT_ID){
 
 const {Client, GatewayIntentBits, Partials} = require('discord.js');
 const fs = require('fs');
+const path = require('path');
 
 const cui = require('./core/cui');
 const gui = require('./core/gui');
@@ -39,7 +40,7 @@ client.once('clientReady', async () => {
     try{
         map.set("reaction_json", JSON.parse(await fs.promises.readFile("./src/json/reaction.json", "utf-8")));
     }catch(e){
-        console.error("index.js => client.once() \n リアクションの取得に失敗しました \n", e);
+        console.error("index.js => client.once() \n リアクションフォーマットの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -47,7 +48,7 @@ client.once('clientReady', async () => {
     try{
         map.set("collage_original_json", JSON.parse(await fs.promises.readFile("./src/json/collage-original.json", "utf-8")));
     }catch(e){
-        console.error("index.js => client.once() \n オリジナルコラ画像の取得に失敗しました \n", e);
+        console.error("index.js => client.once() \n オリジナルコラ画像フォーマットの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -56,7 +57,42 @@ client.once('clientReady', async () => {
         const files = ["./src/json/home.json", "./src/json/collage.json", "./src/json/ai.json", "./src/json/faq.json", "./src/json/omikuji.json", "./src/json/read.json"];
         map.set("gui_json", (await Promise.all(files.map(file => fs.promises.readFile(file, "utf-8")))).flatMap(json => JSON.parse(json)));
     }catch(e){
-        console.error("index.js => client.once() \n GUIの取得に失敗しました \n", e);
+        console.error("index.js => client.once() \n GUIフォーマットの取得に失敗しました \n", e);
+        process.exit();
+    }
+
+    //アセット画像の取得
+    try{
+        const asset_images = new Map();
+        const assets_dir = "./assets";
+        const image_exts = [".png", ".jpg"];
+        const readAssets = async (dir) => {
+            const entries = await fs.promises.readdir(dir, {withFileTypes: true});
+            const promises = entries.map(async (entry) => {
+                const full_path = path.join(dir, entry.name);
+                
+                if(entry.isDirectory()){
+                    await readAssets(full_path);
+                    return;
+                }
+                
+                if(entry.isFile()){
+                    const ext = path.extname(entry.name).toLowerCase();
+                    if(image_exts.includes(ext)){
+                        const re_full_path = full_path.replace(/\\/g, "/");
+                        const buffer = await fs.promises.readFile(re_full_path);
+                        asset_images.set(re_full_path, buffer);
+                    }
+                }
+            });
+            await Promise.all(promises);
+        };
+
+        await readAssets(assets_dir);
+        map.set("asset_images", asset_images);
+        
+    }catch(e){
+        console.error("index.js => client.once() \n アセットのキャッシュに失敗しました \n", e);
         process.exit();
     }
 
@@ -168,6 +204,7 @@ client.on('interactionCreate', async (interaction) => {
         const time = helper.getTime(interaction);
         console.log(`#####\n${date.year}/${date.month}/${date.date}(${date.day}) ${time.hours}:${time.minutes}:${time.seconds}.${time.milliseconds}\n#####`);
         console.error("index.js => client.on(interactionCreate) \n", e);
+        await helper.sendGUI(interaction, gui.create(map, "null"));
         return;
     }
 
