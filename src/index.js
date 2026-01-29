@@ -1,7 +1,7 @@
 /*****************
     index.js
     スニャイヴ
-    2025/12/09
+    2025/12/16
 *****************/
 
 //環境変数の読み込み
@@ -20,6 +20,12 @@ const gui = require('./core/gui');
 const vc = require('./core/vc');
 const helper = require('./core/helper');
 
+const ai = require('./features/ai');
+const collage = require('./features/collage');
+const faq = require('./features/faq');
+const omikuji = require('./features/omikuji');
+const read = require('./features/read');
+
 const client = new Client({intents:[GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions], partials: [Partials.Message, Partials.Channel, Partials.Reaction]});
 const map = new Map();
 
@@ -28,11 +34,11 @@ client.login(process.env.BOT_TOKEN);
 
 //起動動作
 client.once('clientReady', async () => {
-    //READMEの取得
+    //コンフィグの取得
     try{
-        map.set("readme_md", await fs.promises.readFile("./README.md", "utf-8"));
+        map.set("config_json", JSON.parse(await fs.promises.readFile("./src/json/config.json", "utf-8")));
     }catch(e){
-        console.error("index.js => client.once() \n READMEの取得に失敗しました \n", e);
+        console.error("index.js => client.once() \n コンフィグの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -58,6 +64,14 @@ client.once('clientReady', async () => {
         map.set("gui_json", (await Promise.all(files.map(file => fs.promises.readFile(file, "utf-8")))).flatMap(json => JSON.parse(json)));
     }catch(e){
         console.error("index.js => client.once() \n GUIフォーマットの取得に失敗しました \n", e);
+        process.exit();
+    }
+
+    //READMEの取得
+    try{
+        map.set("readme_md", await fs.promises.readFile("./README.md", "utf-8"));
+    }catch(e){
+        console.error("index.js => client.once() \n READMEの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -96,19 +110,35 @@ client.once('clientReady', async () => {
         process.exit();
     }
 
+    //VOICEVOXスピーカーの取得
+    try{
+        map.set("voicevox_speakers", (await require("./integrations/voicevox").getSpeakers()).data);
+    }catch(e){
+        console.error("index.js => client.once() \n VOICEVOXスピーカーの取得に失敗しました \n", e);
+        process.exit();
+    }
+
+    //機能の登録
+    try{
+        map.set("feature_modules",
+            {
+                "ai": ai,
+                "collage" : collage,
+                "faq": faq,
+                "omikuji": omikuji,
+                "read": read
+            }
+        );
+    }catch(e){
+        console.error("index.js => client.once() \n 機能の登録に失敗しました \n", e);
+        process.exit();
+    }
+
     //コマンドの登録
     try{
         client.application.commands.set(cui.getSlashCmds(JSON.parse(await fs.promises.readFile("./src/json/slashcmd.json", "utf-8"))));
     }catch(e){
         console.error("index.js => client.once() \n コマンドの登録に失敗しました \n", e);
-        process.exit();
-    }
-
-    //スピーカーの取得
-    try{
-        map.set("voicevox_speakers", (await require("./integrations/voicevox").getSpeakers()).data);
-    }catch(e){
-        console.error("index.js => client.once() \n スピーカーの取得に失敗しました \n", e);
         process.exit();
     }
 
@@ -137,7 +167,7 @@ client.on('messageCreate', async (message) => {
         }
 
         //名前か返信に反応
-        if(helper.isContainBotName(message) || (message.reference && (await message.fetchReference())?.author.id===client.user.id)){
+        if(helper.isContainBotName(message, map) || (message.reference && (await message.fetchReference())?.author.id===client.user.id)){
             message.system_id = "ai_chat_public";
             await cui.msgCmd(message, map);
             return;
@@ -158,6 +188,41 @@ client.on('messageCreate', async (message) => {
     }
     
     return;
+});
+
+//リアクション動作
+client.on('messageReactionAdd', async (reaction, user) => {
+    try{
+        //データの補完
+        if(reaction.partial) await reaction.fetch();
+        if(user.partial) await user.fetch();
+        if(user.bot || reaction.count > 1) return;
+
+        const emoji = reaction.emoji.name;
+        const message = reaction.message;
+
+        //コラ画像リアクション
+        for(const element of map.get("collage_original_json")){
+            if(element.emoji === emoji){
+                message.react(reaction.emoji);
+                message.system_id = `collage_${element.type}_${message.id}_${user.id}_${emoji}`;
+                await gui.reaction(message, map);
+                return;
+            }
+        }
+
+        //その他リアクション
+        for(const element of map.get("reaction_json")){
+            if(element.emoji === emoji){
+                message.system_id = element.system_id;
+                await gui.reaction(message, map);
+                return;
+            }
+        }
+
+    }catch(e){
+        console.error("index.js => client.on(messageReactionAdd) \n", e);
+    }
 });
 
 //インタラクション動作
@@ -249,41 +314,6 @@ client.on('voiceStateUpdate', async (old_state, new_state) => {
     }
 
     return;
-});
-
-//リアクション動作
-client.on('messageReactionAdd', async (reaction, user) => {
-    try{
-        //データの補完
-        if(reaction.partial) await reaction.fetch();
-        if(user.partial) await user.fetch();
-        if(user.bot || reaction.count > 1) return;
-
-        const emoji = reaction.emoji.name;
-        const message = reaction.message;
-
-        //コラ画像リアクション
-        for(const element of map.get("collage_original_json")){
-            if(element.emoji === emoji){
-                message.react(reaction.emoji);
-                message.system_id = `collage_${element.type}_${message.id}_${user.id}_${emoji}`;
-                await gui.reaction(message, map);
-                return;
-            }
-        }
-
-        //その他リアクション
-        for(const element of map.get("reaction_json")){
-            if(element.emoji === emoji){
-                message.system_id = element.system_id;
-                await gui.reaction(message, map);
-                return;
-            }
-        }
-
-    }catch(e){
-        console.error("index.js => client.on(messageReactionAdd) \n", e);
-    }
 });
 
 //Discord.jsクライアントのエラー処理

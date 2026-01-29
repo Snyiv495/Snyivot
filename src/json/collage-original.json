@@ -146,6 +146,90 @@
             "stroke_style" : "#000000"
         }
     },
+    {
+        "emoji" : "takuoko",
+        "type" : "meme",
+        "name" : "takuoko.png",
+        "custom" : true,
+        "canvas" : {
+            "width" : 1800,
+            "height" : 1200
+        },
+        "bubble" : {
+            "x" : 250,
+            "y": 250,
+            "width": 700,
+            "height": 550,
+            "font_size" : 96,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000"
+        }
+    },
+    {
+        "emoji" : "wnpiyen",
+        "type" : "meme",
+        "name" : "wnpiyen.png",
+        "custom" : true,
+        "canvas" : {
+            "width" : 1536,
+            "height" : 1024
+        },
+        "bubble" : {
+            "x" : 265,
+            "y": 269,
+            "width": 570,
+            "height": 404,
+            "font_size" : 80,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000"
+        }
+    },
+    {
+        "emoji" : "Kyunchi",
+        "type" : "meme",
+        "name" : "Kyunchi.png",
+        "custom" : true,
+        "canvas" : {
+            "width" : 1536,
+            "height" : 1024
+        },
+        "bubble" : {
+            "x" : 75,
+            "y": 362,
+            "width": 850,
+            "height": 460,
+            "font_size" : 80,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000"
+        }
+    },
+    {
+        "emoji" : "zyururunchi",
+        "type" : "meme",
+        "name" : "zyururunchi.png",
+        "custom" : true,
+        "canvas" : {
+            "width" : 1536,
+            "height" : 1024
+        },
+        "bubble" : {
+            "x" : 150,
+            "y": 134,
+            "width": 850,
+            "height": 430,
+            "font_size" : 80,
+            "alignment_x" : "center",
+            "alignment_y" : "center",
+            "fill_style" : "#000000",
+            "stroke_style" : "#000000"
+        }
+    },
 
 
     {

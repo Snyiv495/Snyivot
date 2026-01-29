@@ -1,7 +1,7 @@
 /*****************
     helper.js
     スニャイヴ
-    2025/10/24
+    2025/12/16
 *****************/
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     isContainBotMention : isContainBotMention,
     isContainBotName : isContainBotName,
 
-    getFeatureModules : getFeatureModules,
+    getConfig : getConfig,
     getUserObj : getUserObj,
     getGuildObj : getGuildObj,
     getUserId : getUserId,
@@ -35,14 +35,6 @@ module.exports = {
 
 const {MessageFlags, EmbedBuilder} = require('discord.js');
 
-const ai = require("../features/ai");
-const collage = require("../features/collage");
-const faq = require("../features/faq");
-const omikuji = require("../features/omikuji");
-const read = require("../features/read");
-
-const bot_name = new RegExp(/(すにゃ|スニャ|すな|スナ|すに|スニ)(ぼっと|ボット|ぼ|ボ|bot|Bot|BOT)/);
-
 //チャンネルオブジェクトかの確認
 function isChannnel(trigger){
     return typeof trigger?.isTextBased === "function";
@@ -65,41 +57,39 @@ function isVoiceState(trigger){
 
 //Botのメンションを含むか確認
 function isContainBotMention(trigger){
-    const bot_mention = new RegExp(`^<@${process.env.BOT_ID}>.?|^@${trigger.guild.members.me.displayName}.?`);
+    const bot_mention_regex = new RegExp(`^<@${process.env.BOT_ID}>.?|^@${trigger.guild.members.me.displayName}.?`);
 
     if(isMessage(trigger)){
-        return bot_mention.test(trigger.content);
+        return bot_mention_regex.test(trigger.content);
     }
 
     if(isInteraction(trigger)){
-        return bot_mention.test(trigger.message);
+        return bot_mention_regex.test(trigger.message);
     }
 
     throw new Error("helper.js => isContainMention() \n trigger is not message or interaction");
 }
 
 //Botの名前を含むか確認
-function isContainBotName(trigger){
+function isContainBotName(trigger, map){
+    const bot_name_config = getConfig("BOT_NAME", map);
+    const bot_name_regex = new RegExp(`(${bot_name_config.keywords.join("|")})(${bot_name_config.suffixes.join("|")})`);
+
     if(isMessage(trigger)){
-        return bot_name.test(trigger.content);
+        return bot_name_regex.test(trigger.content);
     }
 
     if(isInteraction(trigger)){
-        return bot_name.test(trigger.message);
+        return bot_name_regex.test(trigger.message);
     }
 
     throw new Error("helper.js => isContainName() \n trigger is not message or interaction");
 }
 
-//実装機能モジュールの取得
-function getFeatureModules(){
-    return {
-        "ai": ai,
-        "collage" : collage,
-        "faq": faq,
-        "omikuji": omikuji,
-        "read": read
-    }
+//コンフィグを取得する
+function getConfig(config_name, map){
+    const config_json = map.get("config_json");
+    return config_json.find(config => config.name === config_name);
 }
 
 //ユーザーオブジェクトの取得
@@ -381,17 +371,19 @@ function replaceholder(string, replacement){
 //Botのメンションを除去
 function removeBotMention(message){
     if(isMessage(message)){
-        const bot_mention = new RegExp(`^<@${process.env.BOT_ID}>.?|^@${message.guild.members.me.displayName}.?`);
-        return message.content.replace(bot_mention, "");
+        const bot_mention_regex = new RegExp(`^<@${process.env.BOT_ID}>.?|^@${message.guild.members.me.displayName}.?`);
+        return message.content.replace(bot_mention_regex, "");
     }
 
     throw new Error("helper.js => removeBotMention() \n argment is not message");
 }
 
 //Botの名前を除去
-function removeBotName(message){
+function removeBotName(message, map){
     if(isMessage(message)){
-        return message.content.replace(bot_name, "");
+        const bot_name_config = getConfig("BOT_NAME", map);
+        const bot_name_regex = new RegExp(`(${bot_name_config.keywords.join("|")})(${bot_name_config.suffixes.join("|")})`);
+        return message.content.replace(bot_name_regex, "");
     }
 
     throw new Error("helper.js => removeBotName() \n argment is not message");

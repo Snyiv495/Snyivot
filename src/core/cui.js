@@ -1,7 +1,7 @@
 /*****************
     cui.js
     スニャイヴ
-    2025/10/21
+    2025/12/16
 *****************/
 
 module.exports = {
@@ -89,7 +89,7 @@ function getSlashCmds(json){
 async function slashCmd(interaction, map){
     try{
         const system_id = helper.getSystemId(interaction);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         //機能選択
         for(const prefix in feature_modules){
@@ -111,7 +111,7 @@ async function slashCmd(interaction, map){
 async function autoComplete(interaction, map){
     try{
         const system_id = helper.getSystemId(interaction);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         //機能選択
         for(const prefix in feature_modules){
@@ -133,7 +133,7 @@ async function autoComplete(interaction, map){
 async function msgCmd(message, map){
     try{
         const system_id = helper.getSystemId(message);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         //機能選択
         for(const prefix in feature_modules){

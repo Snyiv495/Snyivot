@@ -1,7 +1,7 @@
 /*****************
     gui.js
     スニャイヴ
-    2025/12/09
+    2025/12/16
 *****************/
 
 module.exports = {
@@ -230,7 +230,7 @@ async function nguild(trigger, map){
 async function menu(interaction, map){
     try{
         const system_id = helper.getSystemId(interaction);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         //機能の実行
         for(const prefix in feature_modules){
@@ -252,7 +252,7 @@ async function menu(interaction, map){
 async function button(interaction, map){
     try{
         const system_id = helper.getSystemId(interaction);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         //機能の実行
         for(const prefix in feature_modules){
@@ -274,7 +274,7 @@ async function button(interaction, map){
 async function modal(interaction, map){
     try{
         const system_id = helper.getSystemId(interaction);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
@@ -293,7 +293,7 @@ async function modal(interaction, map){
 async function reaction(message, map){
     try{
         const system_id = helper.getSystemId(message);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){

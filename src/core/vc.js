@@ -1,7 +1,7 @@
 /*****************
     vc.js
     スニャイヴ
-    2025/12/09
+    2025/12/16
 *****************/
 
 module.exports = {
@@ -38,7 +38,7 @@ async function connect(voice_channel){
 async function voiceStateCmd(old_state, new_state, map){
     try{
         const system_id = helper.getSystemId(old_state);
-        const feature_modules = helper.getFeatureModules();
+        const feature_modules = map.get("feature_modules");
 
         for(const prefix in feature_modules){
             if(system_id.startsWith(prefix)){
